@@ -272,6 +272,83 @@ body {
     opacity: 0.85;
   }
 
+  /* Album prints: a photo mounted on the page with gold photo corners */
+  .album-print {
+    position: relative;
+    display: block;
+    padding: 5px;
+    background: #fbf6ee;
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.6) inset,
+      0 1px 2px rgba(74, 52, 38, 0.18),
+      0 6px 14px -8px rgba(74, 52, 38, 0.45);
+    cursor: zoom-in;
+  }
+  .album-print:focus-visible {
+    outline: 2px solid var(--navy);
+    outline-offset: 3px;
+  }
+  .album-corner {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: linear-gradient(135deg, #c9a961 0%, var(--gold) 45%, var(--gold-deep) 100%);
+    filter: drop-shadow(0 1px 1px rgba(74, 52, 38, 0.35));
+  }
+  .album-corner-tl { top: -3px; left: -3px; clip-path: polygon(0 0, 100% 0, 0 100%); }
+  .album-corner-tr { top: -3px; right: -3px; clip-path: polygon(0 0, 100% 0, 100% 100%); }
+  .album-corner-bl { bottom: -3px; left: -3px; clip-path: polygon(0 0, 100% 100%, 0 100%); }
+  .album-corner-br { bottom: -3px; right: -3px; clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+
+  /* Full-screen photo viewer */
+  .photo-viewer {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: rgba(28, 22, 18, 0.94);
+    color: var(--ivory);
+    touch-action: pan-y;
+  }
+  .photo-viewer::backdrop {
+    background: rgba(28, 22, 18, 0.6);
+  }
+  .viewer-button {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 9999px;
+    border: 1px solid rgba(245, 235, 221, 0.35);
+    color: var(--ivory);
+    background: rgba(28, 22, 18, 0.4);
+  }
+  .viewer-button:hover {
+    border-color: var(--gold-soft);
+    color: var(--gold-soft);
+  }
+  .viewer-button:focus-visible {
+    outline: 2px solid var(--gold-soft);
+    outline-offset: 2px;
+  }
+  .viewer-count {
+    min-width: 4.75rem;
+    text-align: center;
+    font-family: var(--font-jost), "Jost", system-ui, sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--gold-soft);
+  }
+  .viewer-count:lang(my) {
+    font-family: var(--font-noto-myanmar), "Noto Serif Myanmar", serif;
+    letter-spacing: 0.05em;
+  }
+
   /* Countdown */
   .countdown-heading {
     font-family: var(--font-jost), "Jost", system-ui, sans-serif;
