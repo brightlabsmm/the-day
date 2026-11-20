@@ -6,7 +6,7 @@ import { t } from "@/lib/i18n/numerals";
 import { guestName } from "@/lib/i18n/strings";
 import { Opening } from "@/components/invite/opening";
 import { SleeveShell } from "@/components/invite/sleeve-parts";
-import { CoverPlaceholder } from "@/components/invite/cover-placeholder";
+import { InvitationBody } from "@/components/invite/invitation-body";
 import { markOpened } from "./actions";
 
 export default function InvitationPage(props: PageProps<"/w/[slug]">) {
@@ -42,7 +42,7 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
       coupleNames={{ one: t(wedding.partner_one_name, locale), two: t(wedding.partner_two_name, locale) }}
       onOpenAction={markOpened}
     >
-      <CoverPlaceholder invitation={invitation} locale={locale} />
+      <InvitationBody invitation={invitation} locale={locale} monogram={monogram} />
     </Opening>
   );
 }

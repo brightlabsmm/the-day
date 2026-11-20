@@ -143,6 +143,55 @@ body {
     letter-spacing: 0.28em;
     text-transform: uppercase;
   }
+  /* Cover typography */
+  .corner-label {
+    font-family: var(--font-jost), "Jost", system-ui, sans-serif;
+    font-size: 0.56rem;
+    font-weight: 500;
+    line-height: 1.55;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--navy);
+  }
+  .cover-tagline {
+    font-family: var(--font-jost), "Jost", system-ui, sans-serif;
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--navy);
+  }
+  .cover-tagline:lang(my) {
+    font-family: var(--font-noto-myanmar), "Noto Serif Myanmar", serif;
+    font-size: 0.8rem;
+    letter-spacing: 0;
+  }
+  .cover-name {
+    font-family: var(--font-cormorant), "Cormorant Garamond", serif;
+    font-size: clamp(2.1rem, 11cqi, 2.75rem);
+    font-weight: 700;
+    line-height: 1.12;
+  }
+  .cover-name:lang(my) {
+    font-family: var(--font-noto-myanmar), "Noto Serif Myanmar", serif;
+    font-size: clamp(1.7rem, 9cqi, 2.2rem);
+    line-height: 1.6;
+  }
+  .cover-info {
+    font-family: var(--font-cormorant), "Cormorant Garamond", serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--navy);
+    overflow-wrap: anywhere;
+  }
+  .cover-info:lang(my) {
+    font-family: var(--font-noto-myanmar), "Noto Serif Myanmar", serif;
+    font-size: 0.74rem;
+    font-weight: 500;
+    line-height: 1.75;
+  }
+
   /* Burmese has no capitals and breaks apart when letter-spaced */
   .label-caps:lang(my) {
     font-family: var(--font-noto-myanmar), "Noto Serif Myanmar", serif;

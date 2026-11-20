@@ -1,0 +1,23 @@
+import type { Invitation } from "@/lib/invitation";
+import type { Locale } from "@/lib/i18n/numerals";
+import { Cover } from "./cover";
+
+/** Everything under the sleeve, in reading order. Sections are added milestone by milestone. */
+export function InvitationBody({
+  invitation,
+  locale,
+  monogram,
+}: {
+  invitation: Invitation;
+  locale: Locale;
+  monogram: string;
+}) {
+  return (
+    <main
+      lang={locale}
+      className="mx-auto w-full max-w-[440px] px-3 pt-12 pb-16 sm:pt-16 sm:drop-shadow-[0_24px_40px_rgba(74,52,38,.18)]"
+    >
+      <Cover invitation={invitation} locale={locale} monogram={monogram} />
+    </main>
+  );
+}
