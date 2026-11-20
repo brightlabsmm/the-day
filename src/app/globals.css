@@ -272,6 +272,47 @@ body {
     opacity: 0.85;
   }
 
+  /* Countdown */
+  .countdown-heading {
+    font-family: var(--font-jost), "Jost", system-ui, sans-serif;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .countdown-heading:lang(my) {
+    font-family: var(--font-noto-myanmar), "Noto Serif Myanmar", serif;
+    font-size: 0.9rem;
+    letter-spacing: 0;
+  }
+  .countdown-number {
+    font-family: var(--font-cormorant), "Cormorant Garamond", serif;
+    font-size: clamp(2.1rem, 11vw, 2.75rem);
+    font-weight: 500;
+    line-height: 1;
+    font-variant-numeric: lining-nums tabular-nums;
+    color: var(--navy);
+  }
+  .countdown-number:lang(my) {
+    font-family: var(--font-noto-myanmar), "Noto Serif Myanmar", serif;
+    font-size: clamp(1.7rem, 8.5vw, 2.2rem);
+    line-height: 1.5;
+  }
+  .countdown-label {
+    font-family: var(--font-jost), "Jost", system-ui, sans-serif;
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold-deep);
+  }
+  .countdown-label:lang(my) {
+    font-family: var(--font-noto-myanmar), "Noto Serif Myanmar", serif;
+    font-size: 0.78rem;
+    letter-spacing: 0;
+  }
+
   /* Hairline outline button, like a printed label */
   .map-button {
     display: inline-flex;

@@ -16,6 +16,16 @@ const STRINGS = {
   venueLabel: { my: "မင်္ဂလာနေရာ", en: "Venue" },
   openMap: { my: "Google Maps တွင် ကြည့်ရန်", en: "Directions in Google Maps" },
   opensNewTab: { my: "(တဘ်အသစ်တွင် ဖွင့်မည်)", en: "(opens in a new tab)" },
+  countdownHeading: { my: "မင်္ဂလာနေ့သို့", en: "Counting down to our day" },
+  days: { my: "ရက်", en: "Days" },
+  hours: { my: "နာရီ", en: "Hours" },
+  minutes: { my: "မိနစ်", en: "Minutes" },
+  seconds: { my: "စက္ကန့်", en: "Seconds" },
+  countdownToday: { my: "ယနေ့ ကျွန်ုပ်တို့၏ မင်္ဂလာနေ့ ဖြစ်ပါသည်", en: "Today is our wedding day" },
+  countdownAfter: {
+    my: "ကြွရောက်ချီးမြှင့်ပေးကြသည့်အတွက် ကျေးဇူးအထူးတင်ရှိပါသည်",
+    en: "Thank you for celebrating with us",
+  },
 } as const satisfies Record<string, Record<Locale, string>>;
 
 export type StringKey = keyof typeof STRINGS;
