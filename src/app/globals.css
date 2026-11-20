@@ -192,6 +192,119 @@ body {
     line-height: 1.75;
   }
 
+  /* Inner cards (pages 3–4 of the printed invitation) */
+  .card-heading {
+    font-family: var(--font-cormorant), "Cormorant Garamond", serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--navy);
+  }
+  .card-heading:lang(my) {
+    font-family: var(--font-noto-myanmar), "Noto Serif Myanmar", serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.8;
+  }
+  .card-subheading {
+    font-family: var(--font-jost), "Jost", system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--gold-deep);
+  }
+  .card-subheading:lang(my) {
+    font-family: var(--font-noto-myanmar), "Noto Serif Myanmar", serif;
+    font-size: 0.95rem;
+    letter-spacing: 0;
+    font-weight: 700;
+  }
+  .card-body {
+    font-family: var(--font-cormorant), "Cormorant Garamond", serif;
+    font-size: 1.12rem;
+    line-height: 1.5;
+    color: var(--navy);
+  }
+  .card-body:lang(my) {
+    font-family: var(--font-noto-myanmar), "Noto Serif Myanmar", serif;
+    font-size: 0.9rem;
+    line-height: 2;
+  }
+  .card-gold-name {
+    font-family: var(--font-cormorant), "Cormorant Garamond", serif;
+    font-size: 1.85rem;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  .card-gold-name:lang(my) {
+    font-family: var(--font-noto-myanmar), "Noto Serif Myanmar", serif;
+    font-size: 1.35rem;
+    line-height: 1.9;
+  }
+  .card-label {
+    font-family: var(--font-cormorant), "Cormorant Garamond", serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .card-label:lang(my) {
+    font-family: var(--font-noto-myanmar), "Noto Serif Myanmar", serif;
+    font-size: 0.95rem;
+  }
+  .card-venue {
+    font-family: var(--font-cormorant), "Cormorant Garamond", serif;
+    font-size: 1.45rem;
+    font-weight: 500;
+    line-height: 1.25;
+  }
+  .card-venue:lang(my) {
+    font-family: var(--font-noto-myanmar), "Noto Serif Myanmar", serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1.9;
+  }
+  .card-icon > svg {
+    width: 30px;
+    height: 30px;
+    stroke-width: 1.1;
+    color: var(--navy);
+    opacity: 0.85;
+  }
+
+  /* Hairline outline button, like a printed label */
+  .map-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding: 0.55rem 1.1rem;
+    border: 1px solid var(--navy);
+    outline: 1px solid color-mix(in oklab, var(--navy) 35%, transparent);
+    outline-offset: 2px;
+    font-family: var(--font-jost), "Jost", system-ui, sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--navy);
+    transition: background-color 0.2s, color 0.2s;
+  }
+  .map-button:lang(my) {
+    font-family: var(--font-noto-myanmar), "Noto Serif Myanmar", serif;
+    font-size: 0.8rem;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .map-button:hover {
+    background-color: var(--navy);
+    color: var(--ivory);
+  }
+  .map-button:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+  }
+
   /* Burmese has no capitals and breaks apart when letter-spaced */
   .label-caps:lang(my) {
     font-family: var(--font-noto-myanmar), "Noto Serif Myanmar", serif;
