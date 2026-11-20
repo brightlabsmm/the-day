@@ -1,26 +1,130 @@
 @import "tailwindcss";
 
+/*
+ * THE DAY — stationery design tokens.
+ * The invitation is printed paper, so it keeps the same light palette in
+ * every colour scheme; there is intentionally no dark variant.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+
+  --ivory: #f5ebdd;
+  --paper: #ede0ca;
+  --paper-deep: #e3d3b8;
+  --cocoa: #4a3426;
+  --gold: #a8823f;
+  --gold-soft: #d9c49a;
+  --gold-deep: #7f6129;
+  --navy: #414a67;
+  --ink: #493b32;
+  --ink-soft: #6e5f53;
+
+  /* Hairline rules on paper */
+  --rule: color-mix(in oklab, var(--navy) 55%, transparent);
+  --rule-gold: color-mix(in oklab, var(--gold) 70%, transparent);
+
+  /* Paper grain: tiny SVG noise, no image download */
+  --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.42  0 0 0 0 0.3  0 0 0 0 0.18  0 0 0 .16 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  --fibres: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='.012 .09' numOctaves='2' seed='7'/><feColorMatrix values='0 0 0 0 0.62  0 0 0 0 0.48  0 0 0 0 0.3  0 0 0 .22 0'/></filter><rect width='100%' height='100%' filter='url(%23f)'/></svg>");
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ivory: var(--ivory);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-cocoa: var(--cocoa);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-deep: var(--gold-deep);
+  --color-navy: var(--navy);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+
+  --font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-myanmar: var(--font-noto-myanmar), "Noto Serif Myanmar", "Myanmar Text", serif;
+  --font-label: var(--font-jost), "Jost", system-ui, sans-serif;
+  --font-sans: var(--font-label);
+  --font-serif: var(--font-display);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--paper-deep);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper-deep);
+  color: var(--ink);
+  /* Latin glyphs from Cormorant; Burmese glyphs fall through to Noto Serif Myanmar */
+  font-family: var(--font-cormorant), var(--font-noto-myanmar), "Cormorant Garamond", Georgia, serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/*
+ * Blocks explicitly marked lang="my" (not the <html> default) get the
+ * Burmese face first and taller lines for stacked vowels and medials.
+ */
+[lang="my"]:not(html) {
+  font-family: var(--font-noto-myanmar), "Noto Serif Myanmar", "Myanmar Text", serif;
+  line-height: 1.9;
+  word-break: keep-all;
+}
+
+@layer components {
+  /* A sheet of warm, slightly uneven paper */
+  .paper {
+    background-color: var(--ivory);
+    background-image:
+      var(--grain),
+      var(--fibres),
+      radial-gradient(120% 90% at 50% 40%, transparent 55%, color-mix(in oklab, var(--paper-deep) 70%, transparent) 100%);
+    background-size: 240px 240px, 420px 420px, 100% 100%;
+    background-blend-mode: multiply, soft-light, normal;
+  }
+
+  /* Thin double-line frame, as on the inner cards */
+  .frame-double {
+    position: relative;
+    border: 1px solid var(--rule);
+    outline: 1px solid var(--rule);
+    outline-offset: -6px;
+  }
+
+  /* Gold foil — used for the couple's names only */
+  .foil {
+    color: var(--gold);
+    background-image: linear-gradient(
+      100deg,
+      var(--gold-deep) 0%,
+      #c4a15a 28%,
+      var(--gold) 46%,
+      #e2cc94 62%,
+      var(--gold-deep) 100%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Spaced small capitals, like "OUR SPECIAL DAY" */
+  .label-caps {
+    font-family: var(--font-jost), "Jost", system-ui, sans-serif;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
