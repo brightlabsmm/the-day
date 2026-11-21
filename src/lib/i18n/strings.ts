@@ -74,6 +74,7 @@ const STRINGS = {
   venueEyebrow: { my: "ကြွရောက်ရန်နေရာ", en: "Where to find us" },
   directions: { my: "လမ်းညွှန်ကြည့်ရန်", en: "Get directions" },
   galleryEyebrow: { my: "အမှတ်တရများ", en: "Memories" },
+  youAreInvited: { my: "ဖိတ်ကြားအပ်ပါသည်", en: "You are invited" },
   clickToOpen: { my: "ဖွင့်ရန် နှိပ်ပါ", en: "Click to open" },
   scratchTitle: { my: "ဖိတ်စာတစ်စောင် စောင့်နေပါသည်", en: "An invitation awaits" },
   scratchHint: { my: "ကုတ်၍ ဖွင့်ကြည့်ပါ", en: "Scratch to reveal" },

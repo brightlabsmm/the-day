@@ -163,6 +163,8 @@ export function Gate({ kind, slug, token, locale, monogram, coverSrc, guestLabel
               monogram={monogram}
               coverSrc={coverSrc}
               dateLabel={dateLabel}
+              names={names}
+              place={place}
             />
           )}
           <button
@@ -288,6 +290,8 @@ function ScratchFace({
   monogram,
   coverSrc,
   dateLabel,
+  names,
+  place,
 }: {
   opening: boolean;
   onOpen: () => void;
@@ -295,46 +299,47 @@ function ScratchFace({
   monogram: string;
   coverSrc: string | null;
   dateLabel: string;
+  names?: { one: string; two: string };
+  place?: string;
 }) {
+  const serif = { fontFamily: "var(--font-playfair), serif" } as const;
   return (
-    <div className="relative grid h-full w-full place-items-center bg-[#fbe4e7]">
+    <div className="relative grid h-full w-full place-items-center overflow-hidden bg-[#e9dfcc]">
       {coverSrc && <Image src={coverSrc} alt="" fill priority sizes="100vw" className="object-cover" />}
-      <div aria-hidden className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,243,245,.55),rgba(255,236,240,.35))]" />
+      <div aria-hidden className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,250,240,.35),rgba(255,250,240,.05) 45%,rgba(255,250,240,.5))]" />
+      {/* a thin arch and ring frame the scratch circle */}
+      <svg aria-hidden viewBox="0 0 300 560" preserveAspectRatio="xMidYMid meet" className="pointer-events-none absolute top-[6%] left-1/2 h-[64%] -translate-x-1/2 opacity-80">
+        <path d="M20 540 V150 A130 130 0 0 1 280 150 V540" fill="none" stroke="#fffaf0" strokeOpacity=".85" strokeWidth="1.5" />
+        <circle cx="150" cy="300" r="118" fill="none" stroke="#fffaf0" strokeOpacity=".7" strokeWidth="1.2" />
+      </svg>
 
       <div className="relative flex flex-col items-center px-4 text-center">
-        <p
-          className="text-[clamp(1.2rem,4.5vw,1.7rem)] tracking-[0.12em] text-[#a93a55] italic [&:lang(my)]:not-italic [&:lang(my)]:tracking-normal"
-          style={{ fontFamily: "var(--font-playfair), serif" }}
-        >
-          {s("scratchTitle", locale)}
-        </p>
+        <p className="text-[0.7rem] tracking-[0.34em] text-[#5b4a2c] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case">{s("scratchTitle", locale)}</p>
 
-        <div className="relative mt-6 size-[min(74vw,300px)]">
+        <div className="relative mt-5 size-[min(62vw,260px)]">
           {/* what is under the coating */}
-          <div className="absolute inset-0 grid place-items-center rounded-full bg-[#fff6f5] shadow-[0_10px_30px_rgba(169,58,85,.25)]">
-            <div className="text-[#94283f]">
-              <p className="text-[clamp(2rem,9vw,3rem)] leading-none" style={{ fontFamily: "var(--font-playfair), serif" }}>
-                {monogram.replace("&", " & ")}
-              </p>
-              <p className="mt-3 text-[0.8rem] tracking-[0.16em] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case">
-                {dateLabel}
+          <div className="absolute inset-0 grid place-items-center rounded-full bg-[#fffaf0] shadow-[0_10px_30px_rgba(91,74,44,.3)]">
+            <div className="px-3 text-[#5b4a2c]">
+              <p className="text-[clamp(1.5rem,7vw,2.1rem)] leading-tight" style={serif}>
+                {names ? `${names.one} & ${names.two}` : monogram.replace("&", " & ")}
               </p>
             </div>
           </div>
           <ScratchCanvas locale={locale} done={opening} onReveal={onOpen} />
         </div>
 
-        <p className="mt-6 text-[0.72rem] tracking-[0.28em] text-[#a93a55] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case">
-          {s("scratchHint", locale)}
-        </p>
         <button
           type="button"
           onClick={onOpen}
           disabled={opening}
-          className="mt-4 rounded-full border border-[#a93a55] px-6 py-2 text-[0.72rem] tracking-[0.2em] text-[#a93a55] uppercase transition hover:bg-[#a93a55] hover:text-white [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case"
+          className="mt-8 rounded-full bg-[#b79b63] px-9 py-3.5 text-[0.75rem] tracking-[0.24em] text-white uppercase shadow-[0_12px_26px_-12px_rgba(91,74,44,.9)] transition hover:bg-[#9c8147] [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case"
         >
-          {s("clickToOpen", locale)}
+          {s("youAreInvited", locale)}
         </button>
+        <p className="mt-5 text-[1.05rem] text-[#5b4a2c]" style={serif}>
+          {dateLabel}
+        </p>
+        {place && <p className="mt-1 text-[0.95rem] text-[#5b4a2c]/85" style={serif}>{place}</p>}
       </div>
     </div>
   );
@@ -345,7 +350,7 @@ function ScratchCanvas({ locale, done, onReveal }: { locale: Locale; done: boole
   const last = useRef<{ x: number; y: number } | null>(null);
   const moves = useRef(0);
   const fired = useRef(false);
-  const text = s("scratchTouch", locale);
+  const text = s("scratchHint", locale);
 
   useEffect(() => {
     const canvas = ref.current;
@@ -358,31 +363,28 @@ function ScratchCanvas({ locale, done, onReveal }: { locale: Locale; done: boole
     if (!ctx) return;
 
     const g = ctx.createRadialGradient(size * 0.35, size * 0.3, size * 0.05, size / 2, size / 2, size * 0.75);
-    g.addColorStop(0, "#f08ba1");
-    g.addColorStop(0.55, "#d9546f");
-    g.addColorStop(1, "#b32b4a");
+    g.addColorStop(0, "#f7efdc");
+    g.addColorStop(0.55, "#e6d3a8");
+    g.addColorStop(1, "#c9ad76");
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, size, size);
 
-    // a heart outline
+    // a light dusting of sparkles
     const c = size / 2;
     const k = size / 300;
-    ctx.save();
-    ctx.translate(c, c - 22 * k);
-    ctx.scale(k, k);
-    ctx.strokeStyle = "rgba(255,255,255,.8)";
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.moveTo(0, 26);
-    ctx.bezierCurveTo(-52, -6, -30, -44, 0, -18);
-    ctx.bezierCurveTo(30, -44, 52, -6, 0, 26);
-    ctx.stroke();
-    ctx.restore();
-
-    ctx.fillStyle = "rgba(255,255,255,.75)";
-    ctx.font = `${15 * k}px system-ui, sans-serif`;
+    for (let i = 0; i < 90; i++) {
+      const x = ((Math.sin(i * 12.9898) * 43758.5453) % 1 + 1) % 1;
+      const y = ((Math.sin(i * 78.233) * 12345.6789) % 1 + 1) % 1;
+      ctx.fillStyle = `rgba(255,255,255,${0.25 + (i % 4) * 0.12})`;
+      ctx.beginPath();
+      ctx.arc(x * size, y * size, (0.8 + (i % 3) * 0.7) * k, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.fillStyle = "rgba(91,74,44,.85)";
+    ctx.font = `${12 * k}px system-ui, sans-serif`;
     ctx.textAlign = "center";
-    ctx.fillText(text, c, c + 52 * k);
+    (ctx as CanvasRenderingContext2D & { letterSpacing?: string }).letterSpacing = `${3 * k}px`;
+    ctx.fillText(text.toUpperCase(), c, c + 4 * k);
   }, [text]);
 
   const coverage = useCallback(() => {
@@ -440,7 +442,7 @@ function ScratchCanvas({ locale, done, onReveal }: { locale: Locale; done: boole
       }}
       onPointerMove={scratch}
       onPointerUp={() => (last.current = null)}
-      className={`absolute inset-0 size-full touch-none cursor-pointer rounded-full shadow-[inset_0_0_0_2px_rgba(255,255,255,.5)] transition-opacity duration-700 ${done ? "opacity-0" : "opacity-100"}`}
+      className={`absolute inset-0 size-full touch-none cursor-pointer rounded-full shadow-[inset_0_0_0_2px_rgba(255,255,255,.7)] transition-opacity duration-700 ${done ? "opacity-0" : "opacity-100"}`}
     />
   );
 }
@@ -962,7 +964,7 @@ function ArtDecoFace({ opening, onOpen, locale, names, dateLabel, place }: FaceP
         {Array.from({ length: 13 }, (_, i) => {
           const a = (-90 + i * 15) * (Math.PI / 180);
           const x = side === "l" ? 200 : 0;
-          return <line key={i} x1={x} y1="200" x2={x + Math.cos(a + (side === "l" ? Math.PI : 0)) * 260} y2={200 + Math.sin(a + (side === "l" ? Math.PI : 0)) * 260} />;
+          return <line key={i} x1={x} y1="200" x2={(x + Math.cos(a + (side === "l" ? Math.PI : 0)) * 260).toFixed(1)} y2={(200 + Math.sin(a + (side === "l" ? Math.PI : 0)) * 260).toFixed(1)} />;
         })}
         {[30, 60, 90, 120].map((r) => (
           <circle key={r} cx={side === "l" ? 200 : 0} cy="200" r={r} />

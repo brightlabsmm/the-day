@@ -35,6 +35,8 @@ export function ScratchPage({ invitation, locale, monogram, token, onOpenAction,
       coverSrc={v.cover?.src ?? null}
       guestLabel={guestName(guest, locale)}
       dateLabel={v.dateShort}
+      names={v.names}
+      place={v.venues[0] ? t(v.venues[0].venue_name, locale) : ""}
       onOpenAction={onOpenAction}
       preview={preview}
     >

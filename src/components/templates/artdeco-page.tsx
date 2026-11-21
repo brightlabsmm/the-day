@@ -27,7 +27,7 @@ function Decor() {
       <g stroke="#d4af37" strokeWidth=".8" fill="none">
         {Array.from({ length: 25 }, (_, i) => {
           const a = (Math.PI * i) / 24;
-          return <line key={i} x1="200" y1="200" x2={200 - Math.cos(a) * 200} y2={200 - Math.sin(a) * 190} />;
+          return <line key={i} x1="200" y1="200" x2={(200 - Math.cos(a) * 200).toFixed(1)} y2={(200 - Math.sin(a) * 190).toFixed(1)} />;
         })}
         {[40, 80, 120, 160].map((r) => (
           <path key={r} d={`M${200 - r} 200 A${r} ${r} 0 0 1 ${200 + r} 200`} />
