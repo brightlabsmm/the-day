@@ -14,6 +14,7 @@ export function PhotoGrid({
   mono = false,
   arch = false,
   rounded = false,
+  polaroid = false,
 }: {
   photos: AlbumPhoto[];
   locale: Locale;
@@ -23,6 +24,8 @@ export function PhotoGrid({
   arch?: boolean;
   /** Softly rounded corners (Silk). */
   rounded?: boolean;
+  /** White instant-photo frames, slightly tilted (Polaroid). */
+  polaroid?: boolean;
 }) {
   const [index, setIndex] = useState<number | null>(null);
   return (
@@ -31,7 +34,10 @@ export function PhotoGrid({
         {photos.map((p, i) => {
           const wide = p.kind === "spread" && !arch;
           return (
-            <li key={p.id} className={`${wide ? "col-span-2 md:col-span-3" : ""} ${arch ? "rounded-t-[999px] border border-[color:var(--gold-soft)] p-1.5" : ""}`}>
+            <li
+              key={p.id}
+              style={polaroid ? { transform: `rotate(${[-2.2, 1.6, -1, 2.4, -1.8, 1.2][i % 6]}deg)` } : undefined}
+              className={`${polaroid ? "bg-white p-2 pb-8 shadow-[0_10px_24px_-12px_rgba(60,40,20,.55)]" : ""} ${wide ? "col-span-2 md:col-span-3" : ""} ${arch ? "rounded-t-[999px] border border-[color:var(--gold-soft)] p-1.5" : ""}`}>
               <button
                 type="button"
                 onClick={() => setIndex(i)}

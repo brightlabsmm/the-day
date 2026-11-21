@@ -24,6 +24,7 @@ const PALETTES: Record<string, Palette> = {
   silk: { sky: ["#faf1e8", "#efd9c9"], sun: "#fffaf2", hills: ["#e9d8c8", "#cdb5a2", "#a99683"], bloom: ["#ffffff", "#f6e7dc", "#e7cdbd", "#cfd8c1"], suit: "#565a49", gown: "#ffffff" },
   midnight: { sky: ["#10193a", "#27386b"], sun: "#f3e2b0", hills: ["#1c2a55", "#2d3f78", "#41579a"], bloom: ["#f3e2b0", "#d9b66a", "#c7d2f2"], suit: "#0c1330", gown: "#f4efe3" },
   lantern: { sky: ["#2a1226", "#8a3b3b"], sun: "#ffd9a0", hills: ["#4a2038", "#7a3441", "#b5583f"], bloom: ["#ffb347", "#ffd9a0", "#f08a4b"], suit: "#26101f", gown: "#fff1de" },
+  polaroid: { sky: ["#f4ead8", "#e3d2b4"], sun: "#fff6e4", hills: ["#d9c7a4", "#b9a27c", "#8f7a58"], bloom: ["#e4684f", "#f3c9b9", "#ffffff"], suit: "#2f2d2a", gown: "#fffaf0" },
   scratch: { sky: ["#fde3e7", "#f6b8c6"], sun: "#fff6f2", hills: ["#e7a3b4", "#c97d94", "#9e5a75"], bloom: ["#ffd9df", "#f7a3b7", "#fff2f4"], suit: "#4a2b3a", gown: "#fff7f6" },
 };
 
@@ -103,6 +104,7 @@ const DEMOS = [
   { key: "silk", one: ["Aye Mon", "အေးမွန်"], two: ["Htoo Lwin", "ထူးလွင်"], mono: "A&H", tag: ["Quietly, beautifully, together", "တိတ်ဆိတ်စွာ လှပစွာ အတူတကွ"] },
   { key: "midnight", one: ["Thiri", "သီရိ"], two: ["Zaw Lin", "ဇော်လင်း"], mono: "T&Z", tag: ["Written in the stars", "ကြယ်စုံများတွင် ရေးထိုးခဲ့သည်"] },
   { key: "lantern", one: ["Nandar", "နန္ဒာ"], two: ["Kyaw Min", "ကျော်မင်း"], mono: "N&K", tag: ["Let our love light the way", "ကျွန်ုပ်တို့ချစ်ခြင်းက လမ်းပြပါစေ"] },
+  { key: "polaroid", one: ["Hnin", "ဆွေ"], two: ["Thant", "သန့်"], mono: "H&T", tag: ["Our favourite moments, developed", "ကျွန်ုပ်တို့ အကြိုက်ဆုံး အချိန်များ"] },
   { key: "scratch", one: ["Kaung Myat", "ကောင်းမြတ်"], two: ["Phoo Pwint", "ဖူးပွင့်"], mono: "K&P", tag: ["Love, one scratch at a time", "ချစ်ခြင်းမေတ္တာ"] },
 ] as const;
 

@@ -61,6 +61,12 @@ export const TEMPLATES = [
     mood: "Warm · festive · plum & amber",
   },
   {
+    key: "polaroid",
+    name: "Polaroid",
+    blurb: "A kraft-paper scrapbook of taped instant photos. Your cover photo develops on a polaroid; tap it to step into the album.",
+    mood: "Casual · scrapbook · photo-first",
+  },
+  {
     key: "scratch",
     name: "Scratch to Reveal",
     blurb: "A playful rose-pink invitation: scratch the heart to reveal it, then a calendar and hearts.",

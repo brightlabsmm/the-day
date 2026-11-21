@@ -22,6 +22,7 @@ import { WildflowerPage } from "@/components/templates/wildflower-page";
 import { ShuttersPage } from "@/components/templates/shutters-page";
 import { MidnightPage } from "@/components/templates/midnight-page";
 import { LanternPage } from "@/components/templates/lantern-page";
+import { PolaroidPage } from "@/components/templates/polaroid-page";
 import { SilkPage } from "@/components/templates/silk-page";
 import { TheatrePage } from "@/components/templates/theatre-page";
 import { markOpened } from "./actions";
@@ -111,6 +112,8 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
           <MidnightPage {...props} />
         ) : key === "lantern" ? (
           <LanternPage {...props} />
+        ) : key === "polaroid" ? (
+          <PolaroidPage {...props} />
         ) : (
           <ScratchPage {...props} />
         )}

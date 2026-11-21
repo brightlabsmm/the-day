@@ -675,3 +675,49 @@ html:has(.tpl) {
 .tpl-lantern .tpl-pill:focus-visible {
   background: var(--gold-deep);
 }
+
+/* Polaroid: kraft paper, ink black and tomato red. */
+.tpl-polaroid {
+  --ivory: #f3ecdd;
+  --paper: #e9dfc9;
+  --paper-deep: #dccfb2;
+  --navy: #2f2d2a;
+  --ink: #3a3733;
+  --ink-soft: #85796a;
+  --gold: #d4533b;
+  --gold-soft: #efc3b6;
+  --gold-deep: #b23a25;
+  --color-ivory: var(--ivory);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-navy: var(--navy);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-deep: var(--gold-deep);
+  --tpl-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  background:
+    repeating-linear-gradient(0deg, rgba(120, 90, 50, 0.04) 0 2px, transparent 2px 5px),
+    var(--ivory);
+}
+.tpl-polaroid .foil {
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  color: var(--navy);
+}
+.tpl-polaroid .tpl-card {
+  background: #fff;
+  border: 0;
+  border-radius: 0.25rem;
+  box-shadow: 0 12px 26px -16px rgba(60, 40, 20, 0.6);
+}
+.tpl-polaroid .tpl-pill {
+  background: var(--gold);
+  color: #fff;
+  box-shadow: 0 10px 22px -12px rgba(178, 58, 37, 0.8);
+}
+.tpl-polaroid .tpl-pill:hover,
+.tpl-polaroid .tpl-pill:focus-visible {
+  background: var(--gold-deep);
+}

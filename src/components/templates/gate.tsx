@@ -13,7 +13,7 @@ import type { Locale } from "@/lib/i18n/numerals";
 import { s } from "@/lib/i18n/strings";
 
 type Props = {
-  kind: "envelope" | "scratch" | "theatre" | "shutters" | "silk" | "midnight" | "lantern";
+  kind: "envelope" | "scratch" | "theatre" | "shutters" | "silk" | "midnight" | "lantern" | "polaroid";
   slug: string;
   token: string | null;
   locale: Locale;
@@ -112,12 +112,14 @@ export function Gate({ kind, slug, token, locale, monogram, coverSrc, guestLabel
           lang={locale}
           className="fixed inset-0 z-50 overflow-hidden"
           animate={{ opacity: phase === "opening" ? 0 : 1 }}
-          transition={{ duration: 0.7, delay: phase === "opening" ? (kind === "envelope" ? 1.1 : kind === "theatre" ? 1.5 : kind === "shutters" ? 1.9 : kind === "silk" ? 1.2 : kind === "midnight" ? 1.4 : kind === "lantern" ? 1.5 : 0.9) : 0, ease: "easeOut" }}
+          transition={{ duration: 0.7, delay: phase === "opening" ? (kind === "envelope" ? 1.1 : kind === "theatre" ? 1.5 : kind === "shutters" ? 1.9 : kind === "silk" ? 1.2 : kind === "midnight" ? 1.4 : kind === "lantern" ? 1.5 : kind === "polaroid" ? 1.1 : 0.9) : 0, ease: "easeOut" }}
           onAnimationComplete={() => {
             if (phase === "opening") finish();
           }}
         >
-          {kind === "lantern" ? (
+          {kind === "polaroid" ? (
+            <PolaroidFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} place={place} coverSrc={coverSrc} />
+          ) : kind === "lantern" ? (
             <LanternFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} place={place} />
           ) : kind === "midnight" ? (
             <MidnightFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} place={place} />
@@ -825,6 +827,65 @@ function LanternFace({
         <p className="mt-7 text-[0.75rem] tracking-[0.26em] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case">{dateLabel}</p>
         {place && <p className="mt-1 text-[0.7rem] tracking-[0.2em] text-[#f0c9a8] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case">{place}</p>}
         <p className="mt-8 text-[0.7rem] tracking-[0.3em] text-[#ffd08a] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case">{s("tapLantern", locale)}</p>
+      </div>
+    </div>
+  );
+}
+
+/* ── Polaroid ───────────────────────────────────────────────── */
+
+/** Kraft paper with a polaroid of the couple. The photo develops on arrival; tapping it flips it up and away. */
+function PolaroidFace({
+  opening,
+  onOpen,
+  locale,
+  names,
+  dateLabel,
+  place,
+  coverSrc,
+}: {
+  opening: boolean;
+  onOpen: () => void;
+  locale: Locale;
+  names?: { one: string; two: string };
+  dateLabel: string;
+  place?: string;
+  coverSrc: string | null;
+}) {
+  const script = { fontFamily: "var(--font-script), var(--font-cormorant), serif" } as const;
+  return (
+    <div
+      className="relative grid h-full w-full place-items-center overflow-hidden px-6 text-center text-[#2f2d2a]"
+      style={{
+        background: "radial-gradient(90% 70% at 50% 40%,#e9dcc2,#d3bf9b)",
+        transform: opening ? "translateY(-30%) scale(1.2)" : "none",
+        transition: "transform 1.1s cubic-bezier(.65,0,.3,1)",
+      }}
+    >
+      <style>{`@keyframes dev{from{filter:blur(14px) brightness(1.6) saturate(.2);opacity:.5}to{filter:none;opacity:1}}@media (prefers-reduced-motion:reduce){.dev{animation:none!important}}`}</style>
+      <button
+        type="button"
+        onClick={onOpen}
+        disabled={opening}
+        aria-label={s("enter", locale)}
+        className="relative block w-[min(72vw,19rem)] -rotate-3 bg-white p-3 pb-14 shadow-[0_28px_50px_-18px_rgba(60,40,20,.7)] transition hover:rotate-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d4533b]"
+      >
+        <span aria-hidden className="absolute -top-3 left-1/2 h-6 w-20 -translate-x-1/2 rotate-2 bg-[#e8d9a8]/80 shadow-sm" />
+        <span className="dev relative block aspect-square overflow-hidden bg-[#2f2d2a]" style={{ animation: "dev 2.4s ease-out both" }}>
+          {coverSrc ? (
+            <Image src={coverSrc} alt="" fill sizes="304px" priority className="object-cover" />
+          ) : (
+            <span className="absolute inset-0 bg-[linear-gradient(135deg,#e6c9a8,#c9a074)]" />
+          )}
+        </span>
+        <span className="absolute inset-x-3 bottom-3 block text-[1.55rem] leading-none text-[#2f2d2a]" style={script}>
+          {names ? `${names.one} & ${names.two}` : ""}
+        </span>
+      </button>
+      <div className="absolute inset-x-0 bottom-[9%] px-6">
+        <p className="text-[0.75rem] tracking-[0.26em] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case">{dateLabel}</p>
+        {place && <p className="mt-1 text-[0.7rem] tracking-[0.2em] text-[#6e5f4a] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case">{place}</p>}
+        <p className="mt-5 text-[0.7rem] tracking-[0.3em] text-[#b23a25] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case">{s("tapPolaroid", locale)}</p>
       </div>
     </div>
   );

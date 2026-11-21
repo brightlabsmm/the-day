@@ -40,7 +40,7 @@ Then open <http://localhost:3000/w/thukha-maythet?g=ko-aung-7k2f> for the demo i
 | `pnpm db:reset` | Re-apply migrations and seed, then run `seed:media` |
 | `pnpm db:types` | Regenerate `src/lib/supabase/database.types.ts` |
 | `pnpm seed:media` | Upload demo photos and a placeholder gift QR |
-| `pnpm seed:showcase` | Create the eleven fictional demo weddings used by `/showcase` |
+| `pnpm seed:showcase` | Create the twelve fictional demo weddings used by `/showcase` |
 | `pnpm import:wedding <folder>` | Create or update a real wedding from `wedding.json` plus its image files (see below) |
 | `pnpm seed:admin` | Create or reset the local dev admin (local Supabase only) |
 | `pnpm check:db` | Sanity-check the database setup |
@@ -61,9 +61,10 @@ Each wedding picks a design in the admin (**Details → Page design**):
 | `silk` | Blush silk drape lifts away from a calm ivory page: soft petals, a month calendar you can page through, boxed countdown, tap-to-expand schedule rows, rounded cards, sage green |
 | `midnight` | Deep navy night sky with twinkling gold stars; tap the moon to enter, constellation divider, month calendar, glowing cards |
 | `lantern` | Warm dusk of paper lanterns; tap the big lantern to release it, amber glow, plum cards |
+| `polaroid` | Kraft-paper scrapbook: the cover photo develops on a polaroid you tap to open, taped tilted polaroid photos, tomato-red accents |
 | `scratch` | Rose-pink, scratch-the-heart opening, calendar and hearts |
 
-All eleven share the same content, Burmese/English switch, countdown, schedule, photos, gift QR codes and wishes. The four newer designs also show, when filled in on the Details tab: **Our story**, **Dress code** (colour swatches), **RSVP** (accept or decline, number of guests, note; replies on the admin **RSVPs** tab), an **FAQ** accordion, and **Add to Google Calendar / .ics** buttons. They fade sections in on scroll, and schedule rows open on click to show the venue. They live in `src/components/invite` (classic) and `src/components/templates` (the others, with palettes in `src/app/templates.css`). `/showcase` shows all eleven side by side using fictional demo weddings created by `pnpm seed:showcase` (generated artwork, no real people).
+All twelve share the same content, Burmese/English switch, countdown, schedule, photos, gift QR codes and wishes. The four newer designs also show, when filled in on the Details tab: **Our story**, **Dress code** (colour swatches), **RSVP** (accept or decline, number of guests, note; replies on the admin **RSVPs** tab), an **FAQ** accordion, and **Add to Google Calendar / .ics** buttons. They fade sections in on scroll, and schedule rows open on click to show the venue. They live in `src/components/invite` (classic) and `src/components/templates` (the others, with palettes in `src/app/templates.css`). `/showcase` shows all twelve side by side using fictional demo weddings created by `pnpm seed:showcase` (generated artwork, no real people).
 
 ## Adding a real wedding
 
