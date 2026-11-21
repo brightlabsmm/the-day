@@ -349,6 +349,54 @@ body {
     letter-spacing: 0.05em;
   }
 
+  /* Language switch: a small paper tab, like a printed label */
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    padding: 2px 4px;
+    background: color-mix(in oklab, var(--ivory) 88%, transparent);
+    border: 1px solid color-mix(in oklab, var(--navy) 35%, transparent);
+    box-shadow: 0 2px 8px -4px rgba(74, 52, 38, 0.4);
+    backdrop-filter: blur(2px);
+  }
+  .lang-option {
+    display: grid;
+    place-items: center;
+    min-width: 44px;
+    min-height: 36px;
+    padding: 0 0.55rem;
+    color: var(--ink-soft);
+    font-family: var(--font-jost), "Jost", system-ui, sans-serif;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+  }
+  .lang-option:lang(my) {
+    font-family: var(--font-noto-myanmar), "Noto Serif Myanmar", serif;
+    font-size: 0.78rem;
+    letter-spacing: 0;
+  }
+  .lang-option[aria-current="true"] {
+    color: var(--navy);
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: var(--gold);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 5px;
+  }
+  .lang-option:hover {
+    color: var(--navy);
+  }
+  .lang-option:focus-visible {
+    outline: 2px solid var(--navy);
+    outline-offset: -2px;
+  }
+  .lang-sep {
+    width: 1px;
+    height: 14px;
+    background: color-mix(in oklab, var(--navy) 35%, transparent);
+  }
+
   /* Countdown */
   .countdown-heading {
     font-family: var(--font-jost), "Jost", system-ui, sans-serif;

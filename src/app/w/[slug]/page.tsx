@@ -1,5 +1,7 @@
 import { Suspense } from "react";
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
+import { LOCALE_COOKIE, resolveLocale } from "@/lib/i18n/locale";
 import { getInvitation } from "@/lib/invitation";
 import type { Locale } from "@/lib/i18n/numerals";
 import { t } from "@/lib/i18n/numerals";
@@ -7,6 +9,7 @@ import { guestName } from "@/lib/i18n/strings";
 import { Opening } from "@/components/invite/opening";
 import { SleeveShell } from "@/components/invite/sleeve-parts";
 import { InvitationBody } from "@/components/invite/invitation-body";
+import { LanguageSwitch } from "@/components/invite/language-switch";
 import { markOpened } from "./actions";
 
 export default function InvitationPage(props: PageProps<"/w/[slug]">) {
@@ -21,8 +24,7 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
   const { slug } = await params;
   const query = await searchParams;
   const token = typeof query.g === "string" ? query.g : undefined;
-  // Temporary until the language switcher lands (milestone 7).
-  const locale: Locale = query.lang === "en" ? "en" : "my";
+  const locale: Locale = resolveLocale(query.lang, (await cookies()).get(LOCALE_COOKIE)?.value);
 
   const invitation = await getInvitation(slug, token);
   if (!invitation) notFound();
@@ -33,6 +35,8 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
     `${t(wedding.partner_one_name, "en").charAt(0)}&${t(wedding.partner_two_name, "en").charAt(0)}`;
 
   return (
+    <>
+    <LanguageSwitch locale={locale} />
     <Opening
       slug={wedding.slug}
       token={guest ? (token ?? null) : null}
@@ -44,5 +48,6 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
     >
       <InvitationBody invitation={invitation} locale={locale} monogram={monogram} />
     </Opening>
+    </>
   );
 }
