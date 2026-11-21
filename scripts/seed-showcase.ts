@@ -193,6 +193,19 @@ function config(d: (typeof DEMOS)[number]) {
       { q: { en: "What time should I arrive?", my: "ဘယ်အချိန် ရောက်ရမလဲ?" }, a: { en: "Please arrive by 10:30 AM so you can find your seat before the ceremony.", my: "အခမ်းအနားမစမီ နေရာယူနိုင်ရန် နံနက် ၁၀:၃၀ တွင် ရောက်ပေးပါ။" } },
       { q: { en: "Is parking available?", my: "ကားရပ်နားရန် နေရာရှိပါသလား?" }, a: { en: "Yes, free parking is available at the venue.", my: "ရှိပါသည်။ နေရာတွင် အခမဲ့ရပ်နားနိုင်ပါသည်။" } },
     ],
+    good_to_know: [
+      { title: { en: "Parking", my: "ကားရပ်နားရန်" }, text: { en: "Free parking at the venue. Our ushers will guide you.", my: "နေရာတွင် အခမဲ့ရပ်နားနိုင်ပါသည်။" } },
+      { title: { en: "Getting there", my: "သွားရောက်ရန်" }, text: { en: "Taxis and ride-hailing drop off at the main entrance.", my: "ပင်မဝင်ပေါက်တွင် ဆင်းနိုင်ပါသည်။" } },
+      { title: { en: "Weather", my: "ရာသီဥတု" }, text: { en: "The ceremony is outdoors. Light layers are a good idea.", my: "အခမ်းအနားမှာ အပြင်တွင် ဖြစ်ပါသည်။" } },
+      { title: { en: "Children", my: "ကလေးများ" }, text: { en: "Children are welcome. A quiet room is available.", my: "ကလေးများ ကြိုဆိုပါသည်။" } },
+    ],
+    seating_enabled: true,
+    guests: [
+      { name: "Ko Aung", name_my: "ကိုအောင်", table: "1" },
+      { name: "Ma Hnin", name_my: "မဟိန်း", table: "1" },
+      { name: "Daw Mya", name_my: "ဒေါ်မြ", table: "2" },
+      { name: "U Kyaw", name_my: "ဦးကျော်", table: "3" },
+    ],
     story: [
       { label: { en: "WINTER 2020", my: "ဆောင်းရာသီ ၂၀၂၀" }, title: { en: "The First Hello", my: "ပထမဆုံး နှုတ်ဆက်ခြင်း" }, text: { en: "A quiet evening, a shared table, and the feeling that something had shifted.", my: "တိတ်ဆိတ်သော ညနေခင်းတစ်ခုတွင် စတင်ခဲ့ပါသည်။" } },
       { label: { en: "DECEMBER 2025", my: "ဒီဇင်ဘာ ၂၀၂၅" }, title: { en: "The Question", my: "မေးခွန်း" }, text: { en: "Under the candlelight, one knee down, and a yes before the question was finished.", my: "ဖယောင်းတိုင်အလင်းအောက်တွင် 'ဟုတ်ကဲ့' ဟု ပြန်ဖြေခဲ့ပါသည်။" } },

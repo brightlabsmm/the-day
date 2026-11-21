@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { requireAdmin } from "@/lib/admin/auth";
 import { AdminNav, I18nField, inputClass } from "@/components/admin/admin-nav";
 import { TEMPLATES } from "@/lib/templates";
-import { colorsToText, faqToText, storyToText } from "@/lib/admin/forms";
+import { colorsToText, faqToText, storyToText, tipsToText } from "@/lib/admin/forms";
 import { saveWeddingDetails } from "../../actions";
 
 export default function DetailsPage(props: PageProps<"/admin/[slug]/details">) {
@@ -81,6 +81,7 @@ async function Details({ params }: PageProps<"/admin/[slug]/details">) {
             type L = { my?: string; en?: string };
             const story = (Array.isArray(w.story) ? w.story : []) as { label?: L; title?: L; text?: L }[];
             const faq = (Array.isArray(w.faq) ? w.faq : []) as { q?: L; a?: L }[];
+            const tips = (Array.isArray(w.good_to_know) ? w.good_to_know : []) as { title?: L; text?: L }[];
             const dress = (w.dress_code ?? {}) as { text?: L; colors?: { hex: string; name?: L }[] };
             const area = "block w-full border border-navy/40 bg-white/70 px-3 py-2 font-mono text-sm outline-none focus:border-gold";
             return (
@@ -104,6 +105,11 @@ async function Details({ params }: PageProps<"/admin/[slug]/details">) {
                   <textarea name="faq_en" rows={8} placeholder="FAQ (English)" defaultValue={faqToText(faq, "en")} className={area} />
                   <textarea name="faq_my" rows={8} lang="my" placeholder="မေးလေ့ရှိသည်များ (မြန်မာ)" defaultValue={faqToText(faq, "my")} className={area} />
                 </div>
+                <p className="text-sm text-ink-soft">Good to know (parking, transport, weather, children...): first line is the title, then the text.</p>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  <textarea name="tips_en" rows={6} placeholder="Good to know (English)" defaultValue={tipsToText(tips, "en")} className={area} />
+                  <textarea name="tips_my" rows={6} lang="my" placeholder="သိထားသင့်သည်များ (မြန်မာ)" defaultValue={tipsToText(tips, "my")} className={area} />
+                </div>
               </>
             );
           })()}
@@ -124,6 +130,9 @@ async function Details({ params }: PageProps<"/admin/[slug]/details">) {
           </label>
           <label className="block">
             <input type="checkbox" name="wishes_editable" defaultChecked={w.wishes_editable} /> Guests can edit their wish
+          </label>
+          <label className="block">
+            <input type="checkbox" name="seating_enabled" defaultChecked={w.seating_enabled} /> Show &ldquo;Find your seat&rdquo; (guests search their name; set tables on the Guests tab)
           </label>
           <label className="block">
             <input type="checkbox" name="rsvp_enabled" defaultChecked={w.rsvp_enabled} /> Show the RSVP form (replies appear on the RSVPs tab)

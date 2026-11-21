@@ -67,7 +67,7 @@ Each wedding picks a design in the admin (**Details → Page design**):
 | `sunrise` | A sun rises over layered peach hills to open the page. Warm coral, soft cream and a hopeful new-day feel. |
 | `scratch` | Rose-pink, scratch-the-heart opening, calendar and hearts |
 
-All fifteen share the same content, Burmese/English switch, countdown, schedule, photos, gift QR codes and wishes. The four newer designs also show, when filled in on the Details tab: **Our story**, **Dress code** (colour swatches), **RSVP** (accept or decline, number of guests, note; replies on the admin **RSVPs** tab), an **FAQ** accordion, and **Add to Google Calendar / .ics** buttons. They fade sections in on scroll, and schedule rows open on click to show the venue. They live in `src/components/invite` (classic) and `src/components/templates` (the others, with palettes in `src/app/templates.css`). With five or more photos, the first three go in an overlapping **collage** under "Our story" (the rest in the gallery) with an original watercolour illustration tile among them (sea and sailboat, blossoms, dusk hills or night sky; drawn in code in `art.tsx`). Each design picks its own arrangement (`collage.tsx`: mosaic, scatter or stack). `/showcase` shows all fifteen side by side using fictional demo weddings created by `pnpm seed:showcase` (generated artwork, no real people).
+All fifteen share the same content, Burmese/English switch, countdown, schedule, photos, gift QR codes and wishes. The four newer designs also show, when filled in on the Details tab: **Our story**, **Dress code** (colour swatches), **RSVP** (accept or decline, number of guests, note; replies on the admin **RSVPs** tab), an **FAQ** accordion, a **Good to know** grid of tips (parking, transport, weather), **Find your seat** (guests type their name and see their table; turn it on in Details and set tables on the Guests tab), and **Add to Google Calendar / .ics** buttons. They fade sections in on scroll, and schedule rows open on click to show the venue. They live in `src/components/invite` (classic) and `src/components/templates` (the others, with palettes in `src/app/templates.css`). With five or more photos, the first three go in an overlapping **collage** under "Our story" (the rest in the gallery) with an original watercolour illustration tile among them (sea and sailboat, blossoms, dusk hills or night sky; drawn in code in `art.tsx`). Each design picks its own arrangement (`collage.tsx`: mosaic, scatter or stack). `/showcase` shows all fifteen side by side using fictional demo weddings created by `pnpm seed:showcase` (generated artwork, no real people).
 
 ## Adding a real wedding
 
@@ -77,7 +77,7 @@ Put the couple's details and images in a folder that is **not committed** (`priv
 pnpm import:wedding private/<couple>
 ```
 
-`wedding.json` holds names, `template_key`, an optional `music` file (mp3, m4a, aac or ogg), texts (`{"my": "...", "en": "..."}`), `cover_text` (top corner labels, script line and footer printed on the card), events (times in the wedding's timezone), photos and gift QR images. The script writes to whatever `NEXT_PUBLIC_SUPABASE_URL` points at, so use `.env.local` values for the project you mean. Re-running replaces events, photos and gift images but keeps guests and wishes. QR codes photographed from print need a white margin around them to scan; check each one with a phone before publishing.
+`wedding.json` holds names, `template_key`, an optional `music` file (mp3, m4a, aac or ogg), texts (`{"my": "...", "en": "..."}`), `good_to_know`, `seating_enabled` and `guests` (`[{"name", "name_my", "table"}]`), `cover_text` (top corner labels, script line and footer printed on the card), events (times in the wedding's timezone), photos and gift QR images. The script writes to whatever `NEXT_PUBLIC_SUPABASE_URL` points at, so use `.env.local` values for the project you mean. Re-running replaces events, photos and gift images but keeps guests and wishes. QR codes photographed from print need a white margin around them to scan; check each one with a phone before publishing.
 
 Open wishes walls rely on a honeypot field, a 30-second cooldown per browser and a limit of 30 public wishes per 10 minutes per wedding. Hide anything unwanted from the **Wishes** tab in the admin.
 
@@ -85,7 +85,7 @@ Open wishes walls rely on a honeypot field, a 30-second cooldown per browser and
 
 `/admin` (email + password). Per wedding:
 
-- **Guests**: add guests, copy their Burmese or English link, see who has opened.
+- **Guests**: add guests (with an optional table for "Find your seat"), copy their Burmese or English link, see who has opened.
 - **Details**: names, messages, family lineage, draft/published, wish settings.
 - **Events**: ceremony and reception times (entered in the wedding's timezone), venues, maps links.
 - **Media**: photos (max 8, cover, order), gift QR codes (display only), background music.
@@ -95,7 +95,7 @@ An account can use the admin only if it has a row in `admin_users`.
 
 ## How it is put together
 
-- `supabase/migrations/` holds the schema. Tables are admin-only under Row Level Security; guests reach data only through four `SECURITY DEFINER` functions (`get_invitation`, `mark_invitation_opened`, `get_wishes`, `submit_wish`) that check the guest token.
+- `supabase/migrations/` holds the schema. Tables are admin-only under Row Level Security; guests reach data only through `SECURITY DEFINER` functions (`get_invitation`, `mark_invitation_opened`, `get_wishes`, `submit_wish`, `submit_rsvp`, `find_seat`) that check the guest token or the wedding slug. `find_seat` returns only a name and table, at most six matches, and only when the couple switched seating on.
 - Translatable text is stored as `{"my": "...", "en": "..."}` and read with `t()`; a missing language falls back to the other.
 - `src/app/w/[slug]` is the guest page, `src/app/admin` the admin, `src/proxy.ts` refreshes the admin session. Every admin page and action re-checks the admin with `requireAdmin()`.
 - Uploads go through Server Actions (limit 16 MB). Photos are decoded, auto-rotated, resized to 2400 px and re-encoded as WebP, which also strips EXIF data such as GPS location.

@@ -23,6 +23,8 @@ const InvitationSchema = z.object({
     faq: z.array(z.record(z.string(), z.unknown())),
     story: z.array(z.record(z.string(), z.unknown())),
     rsvp_enabled: z.boolean(),
+    good_to_know: z.array(z.record(z.string(), z.unknown())).default([]),
+    seating_enabled: z.boolean().default(false),
     gift_methods: z.array(z.record(z.string(), z.unknown())),
     music_path: z.string().nullable(),
     music_title: z.string().nullable(),

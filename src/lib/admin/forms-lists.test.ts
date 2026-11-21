@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { colorsToText, dressCodeFromForm, faqFromForm, faqToText, parseBlocks, storyFromForm } from "./forms";
+import { colorsToText, dressCodeFromForm, faqFromForm, faqToText, parseBlocks, storyFromForm, tipsFromForm, tipsToText } from "./forms";
 
 const form = (o: Record<string, string>) => {
   const f = new FormData();
@@ -22,6 +22,14 @@ describe("list content from text boxes", () => {
     const text = "Q1\nA1\n\nQ2\nA2 line 1\nA2 line 2";
     const items = faqFromForm(form({ faq_en: text }));
     expect(faqToText(items, "en")).toBe(text);
+  });
+  it("builds good-to-know tips from two languages and round-trips them", () => {
+    const text = "Parking\nFree on site.\n\nWeather";
+    const tips = tipsFromForm(form({ tips_en: text, tips_my: "ကားရပ်ရန်\nအခမဲ့" }));
+    expect(tips).toHaveLength(2);
+    expect(tips[0]).toEqual({ title: { en: "Parking", my: "ကားရပ်ရန်" }, text: { en: "Free on site.", my: "အခမဲ့" } });
+    expect(tips[1]).toEqual({ title: { en: "Weather" }, text: {} });
+    expect(tipsToText(tipsFromForm(form({ tips_en: text })), "en")).toBe(text);
   });
   it("builds a story with label, title and text", () => {
     const [it] = storyFromForm(form({ story_en: "WINTER 2020\nThe First Hello\nA quiet evening.\nSecond line." }));

@@ -77,6 +77,24 @@ export function faqFromForm(form: FormData) {
   return items;
 }
 
+/** Good-to-know tips: first line of each block is the title, the rest is the text. */
+export function tipsFromForm(form: FormData) {
+  const blocks = Object.fromEntries(LANGS.map((l) => [l, parseBlocks(field(form, `tips_${l}`))])) as Record<Lang, string[][]>;
+  const n = Math.min(20, Math.max(blocks.en.length, blocks.my.length));
+  const items = [];
+  for (let i = 0; i < n; i++) {
+    const title: Record<string, string> = {};
+    const text: Record<string, string> = {};
+    for (const l of LANGS) {
+      const b = blocks[l][i];
+      if (b?.[0]) title[l] = b[0].slice(0, 120);
+      if (b && b.length > 1) text[l] = b.slice(1).join("\n").slice(0, 1000);
+    }
+    if (Object.keys(title).length) items.push({ title, text });
+  }
+  return items;
+}
+
 export function storyFromForm(form: FormData) {
   const blocks = Object.fromEntries(LANGS.map((l) => [l, parseBlocks(field(form, `story_${l}`))])) as Record<Lang, string[][]>;
   const n = Math.min(20, Math.max(blocks.en.length, blocks.my.length));
@@ -124,6 +142,9 @@ const get = (v: I18n, l: Lang) => v?.[l] ?? "";
 
 export function faqToText(faq: { q?: I18n; a?: I18n }[], l: Lang): string {
   return faq.map((f) => [get(f.q, l), get(f.a, l)].filter(Boolean).join("\n")).join("\n\n");
+}
+export function tipsToText(tips: { title?: I18n; text?: I18n }[], l: Lang): string {
+  return tips.map((t) => [get(t.title, l), get(t.text, l)].filter(Boolean).join("\n")).join("\n\n");
 }
 export function storyToText(story: { label?: I18n; title?: I18n; text?: I18n }[], l: Lang): string {
   return story.map((s) => [get(s.label, l), get(s.title, l), get(s.text, l)].join("\n").trimEnd()).join("\n\n");

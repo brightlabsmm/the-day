@@ -13,7 +13,7 @@ import { PlainCountdown } from "./plain-countdown";
 import { Schedule } from "./schedule";
 import { Venue } from "./venue";
 import { Reveal } from "./reveal";
-import { TplDressCode, TplFaq, TplRsvp } from "./extras";
+import { TplDressCode, TplFaq, TplSeat, TplTips, TplRsvp } from "./extras";
 import { TrackOpen } from "./track-open";
 import { RecordPlayer } from "./record-player";
 import { StoryPlayer, type Chapter } from "./story-player";
@@ -106,7 +106,9 @@ export function RecordPage({ invitation, locale, monogram, token, onOpenAction }
         <TplRsvp invitation={invitation} locale={locale} token={token} />
       </Reveal>
       <Reveal>
-        <TplFaq invitation={invitation} locale={locale} />
+        <TplTips invitation={invitation} locale={locale} />
+<TplSeat invitation={invitation} locale={locale} />
+<TplFaq invitation={invitation} locale={locale} />
       </Reveal>
       <Reveal>
         <GiftSection invitation={invitation} locale={locale} plain />

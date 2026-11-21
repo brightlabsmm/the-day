@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { requireAdmin } from "@/lib/admin/auth";
 import { AdminNav } from "@/components/admin/admin-nav";
 import { CopyButton } from "@/components/admin/copy-button";
-import { addGuest, deleteGuest } from "../actions";
+import { addGuest, deleteGuest, setGuestTable } from "../actions";
 
 export default function GuestsPage(props: PageProps<"/admin/[slug]">) {
   return (
@@ -23,7 +23,7 @@ async function Guests({ params }: PageProps<"/admin/[slug]">) {
 
   const { data: guests } = await supabase
     .from("guests")
-    .select("id, display_name, display_name_my, group_name, token, opened_at")
+    .select("id, display_name, display_name_my, group_name, table_name, token, opened_at")
     .eq("wedding_id", wedding.id)
     .order("created_at");
   const site = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
@@ -43,6 +43,7 @@ async function Guests({ params }: PageProps<"/admin/[slug]">) {
         <input name="name" required maxLength={80} placeholder="Name (English)" className={input} />
         <input name="nameMy" maxLength={80} placeholder="အမည် (မြန်မာ)" lang="my" className={input} />
         <input name="group" maxLength={60} placeholder="Group" className={input} />
+        <input name="table" maxLength={40} placeholder="Table (optional)" className={`${input} w-40`} />
         <button className="label-caps border border-navy bg-navy px-5 py-2 text-ivory">Add guest</button>
       </form>
 
@@ -60,6 +61,11 @@ async function Guests({ params }: PageProps<"/admin/[slug]">) {
                   {g.group_name ?? "—"} · {g.opened_at ? `opened ${new Date(g.opened_at).toLocaleString()}` : "not opened"}
                 </p>
               </div>
+              <form action={setGuestTable} className="flex items-center gap-1">
+                <input type="hidden" name="id" value={g.id} />
+                <input name="table" defaultValue={g.table_name ?? ""} maxLength={40} placeholder="Table" aria-label={`Table for ${g.display_name}`} className="w-24 border border-navy/30 bg-white/70 px-2 py-1 text-sm outline-none focus:border-gold" />
+                <button className="label-caps text-xs underline">Save</button>
+              </form>
               <CopyButton text={link("my")} label="Copy မြန်မာ link" />
               <CopyButton text={link("en")} label="Copy EN link" />
               <form action={deleteGuest}>

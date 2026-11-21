@@ -7,7 +7,7 @@ import { requireAdmin } from "@/lib/admin/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { generateGuestToken } from "@/lib/tokens";
 import { templateKey } from "@/lib/templates";
-import { dressCodeFromForm, faqFromForm, i18nFromForm, localInputToIso, storyFromForm } from "@/lib/admin/forms";
+import { dressCodeFromForm, faqFromForm, i18nFromForm, localInputToIso, storyFromForm, tipsFromForm } from "@/lib/admin/forms";
 
 const Credentials = z.object({ email: z.email(), password: z.string().min(1).max(200) });
 
@@ -31,6 +31,7 @@ const GuestInput = z.object({
   name: z.string().trim().min(1).max(80),
   nameMy: z.string().trim().max(80),
   group: z.string().trim().max(60),
+  table: z.string().trim().max(40),
 });
 
 export async function addGuest(form: FormData) {
@@ -40,9 +41,10 @@ export async function addGuest(form: FormData) {
     name: form.get("name"),
     nameMy: form.get("nameMy") ?? "",
     group: form.get("group") ?? "",
+    table: form.get("table") ?? "",
   });
   if (!parsed.success) return;
-  const { slug, name, nameMy, group } = parsed.data;
+  const { slug, name, nameMy, group, table } = parsed.data;
 
   const { data: wedding } = await supabase.from("weddings").select("id").eq("slug", slug).single();
   if (!wedding) return;
@@ -54,10 +56,21 @@ export async function addGuest(form: FormData) {
       display_name: name,
       display_name_my: nameMy || null,
       group_name: group || null,
+      table_name: table || null,
       token: generateGuestToken(name),
     });
     if (!error || error.code !== "23505") break;
   }
+  revalidatePath("/admin/[slug]", "page");
+}
+
+/** Sets or clears a guest's table for the "Find your seat" lookup. */
+export async function setGuestTable(form: FormData) {
+  const { supabase } = await requireAdmin();
+  const id = z.uuid().safeParse(form.get("id"));
+  const table = z.string().trim().max(40).safeParse(form.get("table") ?? "");
+  if (!id.success || !table.success) return;
+  await supabase.from("guests").update({ table_name: table.data || null }).eq("id", id.data);
   revalidatePath("/admin/[slug]", "page");
 }
 
@@ -120,6 +133,8 @@ export async function saveWeddingDetails(form: FormData) {
       rsvp_enabled: form.get("rsvp_enabled") === "on",
       dress_code: dressCodeFromForm(form),
       faq: faqFromForm(form),
+      good_to_know: tipsFromForm(form),
+      seating_enabled: form.get("seating_enabled") === "on",
       story: storyFromForm(form),
       wishes_editable: form.get("wishes_editable") === "on",
     })

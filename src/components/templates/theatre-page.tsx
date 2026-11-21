@@ -13,7 +13,7 @@ import { PlainCountdown } from "./plain-countdown";
 import { Schedule } from "./schedule";
 import { Venue } from "./venue";
 import { Reveal } from "./reveal";
-import { TplDressCode, TplFaq, TplRsvp, TplStory } from "./extras";
+import { TplDressCode, TplFaq, TplSeat, TplTips, TplRsvp, TplStory } from "./extras";
 import { TplFooter, TplGallery, navItemsFor } from "./sections";
 import { viewOf, type TemplateProps } from "./view";
 
@@ -86,7 +86,9 @@ export function TheatrePage({ invitation, locale, monogram, token, onOpenAction,
         <Reveal><Venue invitation={invitation} locale={locale} /></Reveal>
         <Reveal><TplDressCode invitation={invitation} locale={locale} /></Reveal>
         <Reveal><TplRsvp invitation={invitation} locale={locale} token={token} /></Reveal>
-        <Reveal><TplFaq invitation={invitation} locale={locale} /></Reveal>
+        <Reveal><TplTips invitation={invitation} locale={locale} />
+<TplSeat invitation={invitation} locale={locale} />
+<TplFaq invitation={invitation} locale={locale} /></Reveal>
         <Reveal><GiftSection invitation={invitation} locale={locale} plain /></Reveal>
         <Reveal><WishesSection invitation={invitation} locale={locale} token={token} plain /></Reveal>
         <ClosingQuote invitation={invitation} locale={locale} />

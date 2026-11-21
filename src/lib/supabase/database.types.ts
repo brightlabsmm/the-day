@@ -39,14 +39,14 @@ export type Database = {
                   ]
                 },"guests": {
                   Row: {
-                    "created_at": string,"display_name": string,"display_name_my": string | null,"group_name": string | null,"id": string,"opened_at": string | null,"phone": string | null,"token": string,"wedding_id": string
+                    "created_at": string,"display_name": string,"display_name_my": string | null,"group_name": string | null,"id": string,"opened_at": string | null,"phone": string | null,"table_name": string | null,"token": string,"wedding_id": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "created_at"?: string,"display_name": string,"display_name_my"?: string | null,"group_name"?: string | null,"id"?: string,"opened_at"?: string | null,"phone"?: string | null,"token": string,"wedding_id": string
+                    "created_at"?: string,"display_name": string,"display_name_my"?: string | null,"group_name"?: string | null,"id"?: string,"opened_at"?: string | null,"phone"?: string | null,"table_name"?: string | null,"token": string,"wedding_id": string
                   }
                   Update: {
-                    "created_at"?: string,"display_name"?: string,"display_name_my"?: string | null,"group_name"?: string | null,"id"?: string,"opened_at"?: string | null,"phone"?: string | null,"token"?: string,"wedding_id"?: string
+                    "created_at"?: string,"display_name"?: string,"display_name_my"?: string | null,"group_name"?: string | null,"id"?: string,"opened_at"?: string | null,"phone"?: string | null,"table_name"?: string | null,"token"?: string,"wedding_id"?: string
                   }
                   Relationships: [
                     {
@@ -125,14 +125,14 @@ isOneToOne: false
                   ]
                 },"weddings": {
                   Row: {
-                    "closing_quote": NonNullable<Json>,"cover_text": NonNullable<Json>,"created_at": string,"dress_code": NonNullable<Json>,"family": NonNullable<Json>,"faq": NonNullable<Json>,"gift_methods": NonNullable<Json>,"id": string,"invitation_text": NonNullable<Json>,"monogram": string | null,"music_path": string | null,"music_title": string | null,"note": NonNullable<Json>,"partner_one_name": NonNullable<Json>,"partner_two_name": NonNullable<Json>,"public_wishes": boolean,"rsvp_enabled": boolean,"slug": string,"status": string,"story": NonNullable<Json>,"tagline": NonNullable<Json>,"template_key": string,"theme": NonNullable<Json>,"timezone": string,"updated_at": string,"wishes_editable": boolean,"wishes_enabled": boolean
+                    "closing_quote": NonNullable<Json>,"cover_text": NonNullable<Json>,"created_at": string,"dress_code": NonNullable<Json>,"family": NonNullable<Json>,"faq": NonNullable<Json>,"gift_methods": NonNullable<Json>,"good_to_know": NonNullable<Json>,"id": string,"invitation_text": NonNullable<Json>,"monogram": string | null,"music_path": string | null,"music_title": string | null,"note": NonNullable<Json>,"partner_one_name": NonNullable<Json>,"partner_two_name": NonNullable<Json>,"public_wishes": boolean,"rsvp_enabled": boolean,"seating_enabled": boolean,"slug": string,"status": string,"story": NonNullable<Json>,"tagline": NonNullable<Json>,"template_key": string,"theme": NonNullable<Json>,"timezone": string,"updated_at": string,"wishes_editable": boolean,"wishes_enabled": boolean
                   }
                   ComputedFields: never
                   Insert: {
-                    "closing_quote"?: NonNullable<Json>,"cover_text"?: NonNullable<Json>,"created_at"?: string,"dress_code"?: NonNullable<Json>,"family"?: NonNullable<Json>,"faq"?: NonNullable<Json>,"gift_methods"?: NonNullable<Json>,"id"?: string,"invitation_text"?: NonNullable<Json>,"monogram"?: string | null,"music_path"?: string | null,"music_title"?: string | null,"note"?: NonNullable<Json>,"partner_one_name": NonNullable<Json>,"partner_two_name": NonNullable<Json>,"public_wishes"?: boolean,"rsvp_enabled"?: boolean,"slug": string,"status"?: string,"story"?: NonNullable<Json>,"tagline"?: NonNullable<Json>,"template_key"?: string,"theme"?: NonNullable<Json>,"timezone"?: string,"updated_at"?: string,"wishes_editable"?: boolean,"wishes_enabled"?: boolean
+                    "closing_quote"?: NonNullable<Json>,"cover_text"?: NonNullable<Json>,"created_at"?: string,"dress_code"?: NonNullable<Json>,"family"?: NonNullable<Json>,"faq"?: NonNullable<Json>,"gift_methods"?: NonNullable<Json>,"good_to_know"?: NonNullable<Json>,"id"?: string,"invitation_text"?: NonNullable<Json>,"monogram"?: string | null,"music_path"?: string | null,"music_title"?: string | null,"note"?: NonNullable<Json>,"partner_one_name": NonNullable<Json>,"partner_two_name": NonNullable<Json>,"public_wishes"?: boolean,"rsvp_enabled"?: boolean,"seating_enabled"?: boolean,"slug": string,"status"?: string,"story"?: NonNullable<Json>,"tagline"?: NonNullable<Json>,"template_key"?: string,"theme"?: NonNullable<Json>,"timezone"?: string,"updated_at"?: string,"wishes_editable"?: boolean,"wishes_enabled"?: boolean
                   }
                   Update: {
-                    "closing_quote"?: NonNullable<Json>,"cover_text"?: NonNullable<Json>,"created_at"?: string,"dress_code"?: NonNullable<Json>,"family"?: NonNullable<Json>,"faq"?: NonNullable<Json>,"gift_methods"?: NonNullable<Json>,"id"?: string,"invitation_text"?: NonNullable<Json>,"monogram"?: string | null,"music_path"?: string | null,"music_title"?: string | null,"note"?: NonNullable<Json>,"partner_one_name"?: NonNullable<Json>,"partner_two_name"?: NonNullable<Json>,"public_wishes"?: boolean,"rsvp_enabled"?: boolean,"slug"?: string,"status"?: string,"story"?: NonNullable<Json>,"tagline"?: NonNullable<Json>,"template_key"?: string,"theme"?: NonNullable<Json>,"timezone"?: string,"updated_at"?: string,"wishes_editable"?: boolean,"wishes_enabled"?: boolean
+                    "closing_quote"?: NonNullable<Json>,"cover_text"?: NonNullable<Json>,"created_at"?: string,"dress_code"?: NonNullable<Json>,"family"?: NonNullable<Json>,"faq"?: NonNullable<Json>,"gift_methods"?: NonNullable<Json>,"good_to_know"?: NonNullable<Json>,"id"?: string,"invitation_text"?: NonNullable<Json>,"monogram"?: string | null,"music_path"?: string | null,"music_title"?: string | null,"note"?: NonNullable<Json>,"partner_one_name"?: NonNullable<Json>,"partner_two_name"?: NonNullable<Json>,"public_wishes"?: boolean,"rsvp_enabled"?: boolean,"seating_enabled"?: boolean,"slug"?: string,"status"?: string,"story"?: NonNullable<Json>,"tagline"?: NonNullable<Json>,"template_key"?: string,"theme"?: NonNullable<Json>,"timezone"?: string,"updated_at"?: string,"wishes_editable"?: boolean,"wishes_enabled"?: boolean
                   }
                   Relationships: [
                     
@@ -169,7 +169,10 @@ isOneToOne: false
             [_ in never]: never
           }
           Functions: {
-            "get_invitation":
+            "find_seat":
+{ Args: { "p_query": string,"p_slug": string }; Returns: Json
+                           },
+"get_invitation":
 { Args: { "p_slug": string,"p_token"?: string }; Returns: Json
                            },
 "get_public_wishes":

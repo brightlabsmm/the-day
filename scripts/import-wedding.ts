@@ -14,6 +14,7 @@ import sharp from "sharp";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import { localInputToIso } from "../src/lib/admin/forms";
+import { generateGuestToken } from "../src/lib/tokens";
 
 const i18n = z.record(z.string(), z.string());
 const Config = z.object({
@@ -36,6 +37,10 @@ const Config = z.object({
   rsvp_enabled: z.boolean().default(false),
   dress_code: z.record(z.string(), z.unknown()).default({}),
   faq: z.array(z.record(z.string(), z.unknown())).default([]),
+  good_to_know: z.array(z.record(z.string(), z.unknown())).default([]),
+  seating_enabled: z.boolean().default(false),
+  // Guests with a table, for "Find your seat". Matched by English name; existing guests keep their link.
+  guests: z.array(z.object({ name: z.string().min(1).max(80), name_my: z.string().max(80).optional(), table: z.string().max(40) })).default([]),
   story: z.array(z.record(z.string(), z.unknown())).default([]),
   events: z.array(
     z.object({
@@ -93,6 +98,8 @@ export async function importWedding(dir: string) {
         rsvp_enabled: cfg.rsvp_enabled,
         dress_code: cfg.dress_code as never,
         faq: cfg.faq as never,
+        good_to_know: cfg.good_to_know as never,
+        seating_enabled: cfg.seating_enabled,
         story: cfg.story as never,
       },
       { onConflict: "slug" },
@@ -102,6 +109,16 @@ export async function importWedding(dir: string) {
   if (error) throw error;
   const id = w.id;
   console.log(`✓ wedding ${cfg.slug} (${id})`);
+
+  // Guests with tables
+  for (const g of cfg.guests) {
+    const { data: existing } = await db.from("guests").select("id").eq("wedding_id", id).eq("display_name", g.name).maybeSingle();
+    if (existing) {
+      await db.from("guests").update({ table_name: g.table, display_name_my: g.name_my ?? null }).eq("id", existing.id);
+    } else {
+      await db.from("guests").insert({ wedding_id: id, display_name: g.name, display_name_my: g.name_my ?? null, table_name: g.table, token: generateGuestToken(g.name) });
+    }
+  }
 
   // Events
   await db.from("wedding_events").delete().eq("wedding_id", id);
