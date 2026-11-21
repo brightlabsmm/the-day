@@ -38,13 +38,14 @@ export const hasDress = (i: Invitation) => {
 };
 
 /** "Our story": dated chapters down the page. */
-export function TplStory({ invitation, locale }: { invitation: Invitation; locale: Locale }) {
+export function TplStory({ invitation, locale, collage }: { invitation: Invitation; locale: Locale; collage?: React.ReactNode }) {
   const items = Story.safeParse(invitation.wedding.story).data ?? [];
   if (items.length === 0) return null;
   return (
     <section id="story" aria-labelledby="story-heading" lang={locale} className="tpl-section">
       <div className="tpl-narrow">
         <Head id="story-heading" eyebrow={s("storyEyebrow", locale)} heading={s("storyHeading", locale)} />
+        {collage && <div className="mt-12">{collage}</div>}
         <ol className="mt-12 space-y-12">
           {items.map((it, i) => (
             <li key={i}>

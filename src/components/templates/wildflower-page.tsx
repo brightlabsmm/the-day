@@ -1,3 +1,4 @@
+import { splitPhotos } from "./split";
 import { t, formatNumber } from "@/lib/i18n/numerals";
 import { oneTime, zonedParts } from "@/lib/i18n/datetime";
 import { s } from "@/lib/i18n/strings";
@@ -7,7 +8,7 @@ import { WishesSection } from "@/components/invite/wishes-section";
 import { ClosingQuote } from "@/components/invite/closing-quote";
 import { TemplateNav } from "./nav";
 import { PlainCountdown } from "./plain-countdown";
-import { PhotoGrid } from "./photo-grid";
+import { PhotoCollage } from "./collage";
 import { OgeeFrame } from "./ogee-frame";
 import { Peach, WildflowerBorder } from "./wildflowers";
 import { Reveal } from "./reveal";
@@ -19,6 +20,7 @@ import { viewOf, type TemplateProps } from "./view";
 /** Peach and olive: watercolour wildflowers around the names, scalloped frames for each section. */
 export function WildflowerPage({ invitation, locale, monogram, token, onOpenAction }: TemplateProps) {
   const v = viewOf(invitation, locale);
+  const split = splitPhotos(v.gallery);
   const { wedding } = invitation;
   const [m1, m2] = monogram.split("&");
   const message = t(wedding.invitation_text, locale);
@@ -87,7 +89,7 @@ export function WildflowerPage({ invitation, locale, monogram, token, onOpenActi
       )}
 
       <Reveal>
-        <TplStory invitation={invitation} locale={locale} />
+        <TplStory invitation={invitation} locale={locale} collage={split.story.length ? <PhotoCollage photos={split.story} locale={locale} art="bloom" layout="scatter" frame="white" /> : null} />
       </Reveal>
 
       {v.gallery.length > 0 && (
@@ -98,7 +100,7 @@ export function WildflowerPage({ invitation, locale, monogram, token, onOpenActi
                 {s("storyHeading", locale)}
               </h2>
               <p className="tpl-mono mt-2 mb-10">{s("momentsSubtitle", locale)}</p>
-              <PhotoGrid photos={v.gallery} locale={locale} arch />
+              <PhotoCollage photos={split.rest} locale={locale} art="bloom" layout="scatter" frame="white" />
             </div>
           </section>
         </Reveal>

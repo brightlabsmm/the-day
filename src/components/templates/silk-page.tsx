@@ -6,11 +6,12 @@ import { GiftSection } from "@/components/invite/gift-section";
 import { WishesSection } from "@/components/invite/wishes-section";
 import { ClosingQuote } from "@/components/invite/closing-quote";
 import { Flourish } from "@/components/ornaments";
+import { splitPhotos } from "./split";
 import { Gate } from "./gate";
 import { TemplateNav } from "./nav";
 import { BrowseCalendar } from "./browse-calendar";
 import { PlainCountdown } from "./plain-countdown";
-import { PhotoGrid } from "./photo-grid";
+import { PhotoCollage } from "./collage";
 import { Schedule } from "./schedule";
 import { Venue } from "./venue";
 import { Reveal } from "./reveal";
@@ -49,6 +50,7 @@ function Petals() {
 /** Blush silk lifts away from an ivory page: petals, a calendar to page through, rounded cards. */
 export function SilkPage({ invitation, locale, monogram, token, onOpenAction, preview }: TemplateProps) {
   const v = viewOf(invitation, locale);
+  const split = splitPhotos(v.gallery);
   const { wedding, guest } = invitation;
   const [m1, m2] = monogram.split("&");
   const message = t(wedding.invitation_text, locale);
@@ -131,7 +133,7 @@ export function SilkPage({ invitation, locale, monogram, token, onOpenAction, pr
         )}
 
         <Reveal>
-          <TplStory invitation={invitation} locale={locale} />
+          <TplStory invitation={invitation} locale={locale} collage={split.story.length ? <PhotoCollage photos={split.story} locale={locale} art="bloom" layout="stack" frame="plain" /> : null} />
         </Reveal>
         <div className="bg-[color:var(--paper)]">
           <Reveal>
@@ -146,7 +148,7 @@ export function SilkPage({ invitation, locale, monogram, token, onOpenAction, pr
                 <h2 id="gallery-heading" className="tpl-h2 mb-10 uppercase [&:lang(my)]:normal-case">
                   {s("glimpseJourney", locale)}
                 </h2>
-                <PhotoGrid photos={v.gallery} locale={locale} rounded />
+                <PhotoCollage photos={split.rest} locale={locale} art="bloom" layout="stack" frame="plain" />
               </div>
             </section>
           </Reveal>

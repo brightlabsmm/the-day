@@ -5,6 +5,8 @@ import { InvitationMessage } from "@/components/invite/invitation-message";
 import { GiftSection } from "@/components/invite/gift-section";
 import { WishesSection } from "@/components/invite/wishes-section";
 import { ClosingQuote } from "@/components/invite/closing-quote";
+import { PhotoCollage } from "./collage";
+import { splitPhotos } from "./split";
 import { Gate } from "./gate";
 import { TemplateNav } from "./nav";
 import { MonthCalendar } from "./calendar";
@@ -19,6 +21,7 @@ import { viewOf, type TemplateProps } from "./view";
 /** Rose-pink, playful: scratch the heart to reveal, then calendar and hearts. */
 export function ScratchPage({ invitation, locale, monogram, token, onOpenAction, preview }: TemplateProps) {
   const v = viewOf(invitation, locale);
+  const split = splitPhotos(v.gallery);
   const { wedding, guest } = invitation;
   const message = t(wedding.invitation_text, locale);
 
@@ -78,10 +81,10 @@ export function ScratchPage({ invitation, locale, monogram, token, onOpenAction,
           </section>
         )}
 
-        <Reveal><TplStory invitation={invitation} locale={locale} /></Reveal>
+        <Reveal><TplStory invitation={invitation} locale={locale} collage={split.story.length ? <PhotoCollage photos={split.story} locale={locale} art="bloom" layout="mosaic" frame="white" /> : null} /></Reveal>
 
         <Reveal><Schedule invitation={invitation} locale={locale} /></Reveal>
-        <Reveal><TplGallery photos={v.gallery} locale={locale} /></Reveal>
+        <Reveal><TplGallery photos={split.rest} locale={locale} collage={{ art: "bloom", layout: "mosaic", frame: "white" }} /></Reveal>
         <Reveal><Venue invitation={invitation} locale={locale} /></Reveal>
         <Reveal><TplDressCode invitation={invitation} locale={locale} /></Reveal>
         <Reveal><TplRsvp invitation={invitation} locale={locale} token={token} /></Reveal>

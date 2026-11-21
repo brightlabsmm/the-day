@@ -2,12 +2,24 @@ import type { Locale } from "@/lib/i18n/numerals";
 import { s } from "@/lib/i18n/strings";
 import type { AlbumPhoto } from "@/lib/album";
 import { PhotoGrid } from "./photo-grid";
+import { PhotoCollage, type CollageLayout } from "./collage";
+import type { ArtKind } from "./art";
 import type { NavItem } from "./nav";
 import type { TemplateView } from "./view";
 import type { Invitation } from "@/lib/invitation";
 import { hasDress, hasFaq, hasStory } from "./extras";
 
-export function TplGallery({ photos, locale, mono = false }: { photos: AlbumPhoto[]; locale: Locale; mono?: boolean }) {
+export function TplGallery({
+  photos,
+  locale,
+  mono = false,
+  collage,
+}: {
+  photos: AlbumPhoto[];
+  locale: Locale;
+  mono?: boolean;
+  collage?: { art: ArtKind; layout: CollageLayout; frame?: "plain" | "white" };
+}) {
   if (photos.length === 0) return null;
   return (
     <section id="gallery" aria-labelledby="gallery-heading" lang={locale} className="tpl-section">
@@ -16,7 +28,7 @@ export function TplGallery({ photos, locale, mono = false }: { photos: AlbumPhot
         <h2 id="gallery-heading" className="tpl-h2 mb-10 sm:mb-14">
           {s("galleryHeading", locale)}
         </h2>
-        <PhotoGrid photos={photos} locale={locale} mono={mono} />
+        {collage ? <PhotoCollage photos={photos} locale={locale} {...collage} /> : <PhotoGrid photos={photos} locale={locale} mono={mono} />}
       </div>
     </section>
   );

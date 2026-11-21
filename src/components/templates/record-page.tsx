@@ -1,3 +1,4 @@
+import { splitPhotos } from "./split";
 import Image from "next/image";
 import { z } from "zod";
 import { t } from "@/lib/i18n/numerals";
@@ -25,6 +26,7 @@ const Story = z.array(z.object({ label: text.optional(), title: text.optional(),
 /** Seaside blues: a spinning record plays the song, and the story plays track by track. */
 export function RecordPage({ invitation, locale, monogram, token, onOpenAction }: TemplateProps) {
   const v = viewOf(invitation, locale);
+  const split = splitPhotos(v.gallery);
   const { wedding } = invitation;
   const chapters: Chapter[] = (Story.safeParse(wedding.story).data ?? [])
     .map((c) => ({ label: t(c.label, locale), title: t(c.title, locale), text: t(c.text, locale) }))
@@ -92,7 +94,7 @@ export function RecordPage({ invitation, locale, monogram, token, onOpenAction }
         <Schedule invitation={invitation} locale={locale} />
       </Reveal>
       <Reveal>
-        <TplGallery photos={v.gallery} locale={locale} />
+        <TplGallery photos={split.rest} locale={locale} collage={{ art: "sea", layout: "mosaic", frame: "white" }} />
       </Reveal>
       <Reveal>
         <Venue invitation={invitation} locale={locale} />

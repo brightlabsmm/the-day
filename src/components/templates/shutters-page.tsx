@@ -5,10 +5,11 @@ import { InvitationMessage } from "@/components/invite/invitation-message";
 import { GiftSection } from "@/components/invite/gift-section";
 import { WishesSection } from "@/components/invite/wishes-section";
 import { ClosingQuote } from "@/components/invite/closing-quote";
+import { splitPhotos } from "./split";
 import { Gate } from "./gate";
 import { TemplateNav } from "./nav";
 import { PlainCountdown } from "./plain-countdown";
-import { PhotoGrid } from "./photo-grid";
+import { PhotoCollage } from "./collage";
 import { Schedule } from "./schedule";
 import { Venue } from "./venue";
 import { Reveal } from "./reveal";
@@ -23,6 +24,7 @@ const BOUGAINVILLEA = ["#d9487a", "#e8709a", "#f2a3bf", "#b8316a", "#f7c9d9"];
 /** Blue wooden shutters open onto the invitation: whitewash, bougainvillea and arched windows. */
 export function ShuttersPage({ invitation, locale, monogram, token, onOpenAction, preview }: TemplateProps) {
   const v = viewOf(invitation, locale);
+  const split = splitPhotos(v.gallery);
   const { wedding, guest } = invitation;
   const message = t(wedding.invitation_text, locale);
   const place = v.venues[0] ? t(v.venues[0].venue_name, locale) : "";
@@ -101,7 +103,7 @@ export function ShuttersPage({ invitation, locale, monogram, token, onOpenAction
         )}
 
         <Reveal>
-          <TplStory invitation={invitation} locale={locale} />
+          <TplStory invitation={invitation} locale={locale} collage={split.story.length ? <PhotoCollage photos={split.story} locale={locale} art="sea" layout="mosaic" frame="white" /> : null} />
         </Reveal>
         <Reveal>
           <Schedule invitation={invitation} locale={locale} />
@@ -115,7 +117,7 @@ export function ShuttersPage({ invitation, locale, monogram, token, onOpenAction
                 <h2 id="gallery-heading" className="tpl-h2 mb-10">
                   {s("galleryHeading", locale)}
                 </h2>
-                <PhotoGrid photos={v.gallery} locale={locale} arch />
+                <PhotoCollage photos={split.rest} locale={locale} art="sea" layout="mosaic" frame="white" />
               </div>
             </section>
           </Reveal>
