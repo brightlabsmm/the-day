@@ -58,9 +58,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="my"
+      // Browser extensions add attributes to <html> and <body> before React loads; ignore those differences.
+      suppressHydrationWarning
       className={`${cormorant.variable} ${notoMyanmar.variable} ${jost.variable} ${playfair.variable} ${greatVibes.variable} ${pacifico.variable} ${dmMono.variable} h-full`}
     >
-      <body className="min-h-full">{children}</body>
+      <body className="min-h-full" suppressHydrationWarning>
+        {children}
+      </body>
     </html>
   );
 }
