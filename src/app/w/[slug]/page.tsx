@@ -23,6 +23,9 @@ import { ShuttersPage } from "@/components/templates/shutters-page";
 import { MidnightPage } from "@/components/templates/midnight-page";
 import { LanternPage } from "@/components/templates/lantern-page";
 import { PolaroidPage } from "@/components/templates/polaroid-page";
+import { BotanicalPage } from "@/components/templates/botanical-page";
+import { ArtDecoPage } from "@/components/templates/artdeco-page";
+import { SunrisePage } from "@/components/templates/sunrise-page";
 import { SilkPage } from "@/components/templates/silk-page";
 import { TheatrePage } from "@/components/templates/theatre-page";
 import { markOpened } from "./actions";
@@ -114,6 +117,12 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
           <LanternPage {...props} />
         ) : key === "polaroid" ? (
           <PolaroidPage {...props} />
+        ) : key === "botanical" ? (
+          <BotanicalPage {...props} />
+        ) : key === "artdeco" ? (
+          <ArtDecoPage {...props} />
+        ) : key === "sunrise" ? (
+          <SunrisePage {...props} />
         ) : (
           <ScratchPage {...props} />
         )}

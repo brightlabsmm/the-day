@@ -25,6 +25,9 @@ const PALETTES: Record<string, Palette> = {
   midnight: { sky: ["#10193a", "#27386b"], sun: "#f3e2b0", hills: ["#1c2a55", "#2d3f78", "#41579a"], bloom: ["#f3e2b0", "#d9b66a", "#c7d2f2"], suit: "#0c1330", gown: "#f4efe3" },
   lantern: { sky: ["#2a1226", "#8a3b3b"], sun: "#ffd9a0", hills: ["#4a2038", "#7a3441", "#b5583f"], bloom: ["#ffb347", "#ffd9a0", "#f08a4b"], suit: "#26101f", gown: "#fff1de" },
   polaroid: { sky: ["#f4ead8", "#e3d2b4"], sun: "#fff6e4", hills: ["#d9c7a4", "#b9a27c", "#8f7a58"], bloom: ["#e4684f", "#f3c9b9", "#ffffff"], suit: "#2f2d2a", gown: "#fffaf0" },
+  botanical: { sky: ["#eef3e4", "#cfdcc0"], sun: "#fbfdf5", hills: ["#c9d8b4", "#9db688", "#6f8f62"], bloom: ["#ffffff", "#dfe9cf", "#f3d9d0"], suit: "#2f4a34", gown: "#fbfdf6" },
+  artdeco: { sky: ["#151515", "#2b2618"], sun: "#f2d479", hills: ["#2a2a2a", "#3b3417", "#5a4d22"], bloom: ["#f2d479", "#d4af37", "#ece6d6"], suit: "#0b0b0d", gown: "#f5efe0" },
+  sunrise: { sky: ["#ffe9d6", "#f7bfa2"], sun: "#fff2dc", hills: ["#f6cba9", "#e9a481", "#cf7a5a"], bloom: ["#fff2dc", "#f7bfa2", "#e8825a"], suit: "#5a3a36", gown: "#fffaf2" },
   scratch: { sky: ["#fde3e7", "#f6b8c6"], sun: "#fff6f2", hills: ["#e7a3b4", "#c97d94", "#9e5a75"], bloom: ["#ffd9df", "#f7a3b7", "#fff2f4"], suit: "#4a2b3a", gown: "#fff7f6" },
 };
 
@@ -105,6 +108,9 @@ const DEMOS = [
   { key: "midnight", one: ["Thiri", "သီရိ"], two: ["Zaw Lin", "ဇော်လင်း"], mono: "T&Z", tag: ["Written in the stars", "ကြယ်စုံများတွင် ရေးထိုးခဲ့သည်"] },
   { key: "lantern", one: ["Nandar", "နန္ဒာ"], two: ["Kyaw Min", "ကျော်မင်း"], mono: "N&K", tag: ["Let our love light the way", "ကျွန်ုပ်တို့ချစ်ခြင်းက လမ်းပြပါစေ"] },
   { key: "polaroid", one: ["Hnin", "ဆွေ"], two: ["Thant", "သန့်"], mono: "H&T", tag: ["Our favourite moments, developed", "ကျွန်ုပ်တို့ အကြိုက်ဆုံး အချိန်များ"] },
+  { key: "botanical", one: ["Hnin Hnin", "ဟိန်းဟိန်း"], two: ["Zaw Zaw", "ဇော်ဇော်"], mono: "H&Z", tag: ["Rooted in love, growing together", "ချစ်ခြင်းအမြစ်တွယ်ကာ အတူကြီးထွားကြစို့"] },
+  { key: "artdeco", one: ["Aung Aung", "အောင်အောင်"], two: ["Moe Moe", "မိုးမိုး"], mono: "A&M", tag: ["A night to remember, gilded forever", "မှတ်မိနေမည့်ညတစ်ညကို ရွှေစင်ဖြင့်"] },
+  { key: "sunrise", one: ["Su Mon", "စုမွန်"], two: ["Lin Htet", "လင်းထက်"], mono: "S&L", tag: ["Every sunrise, together", "နေထွက်တိုင်း အတူတကွ"] },
   { key: "scratch", one: ["Kaung Myat", "ကောင်းမြတ်"], two: ["Phoo Pwint", "ဖူးပွင့်"], mono: "K&P", tag: ["Love, one scratch at a time", "ချစ်ခြင်းမေတ္တာ"] },
 ] as const;
 

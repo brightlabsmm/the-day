@@ -13,7 +13,7 @@ import type { Locale } from "@/lib/i18n/numerals";
 import { s } from "@/lib/i18n/strings";
 
 type Props = {
-  kind: "envelope" | "scratch" | "theatre" | "shutters" | "silk" | "midnight" | "lantern" | "polaroid";
+  kind: "envelope" | "scratch" | "theatre" | "shutters" | "silk" | "midnight" | "lantern" | "polaroid" | "botanical" | "artdeco" | "sunrise";
   slug: string;
   token: string | null;
   locale: Locale;
@@ -112,12 +112,18 @@ export function Gate({ kind, slug, token, locale, monogram, coverSrc, guestLabel
           lang={locale}
           className="fixed inset-0 z-50 overflow-hidden"
           animate={{ opacity: phase === "opening" ? 0 : 1 }}
-          transition={{ duration: 0.7, delay: phase === "opening" ? (kind === "envelope" ? 1.1 : kind === "theatre" ? 1.5 : kind === "shutters" ? 1.9 : kind === "silk" ? 1.2 : kind === "midnight" ? 1.4 : kind === "lantern" ? 1.5 : kind === "polaroid" ? 1.1 : 0.9) : 0, ease: "easeOut" }}
+          transition={{ duration: 0.7, delay: phase === "opening" ? (kind === "envelope" ? 1.1 : kind === "theatre" ? 1.5 : kind === "shutters" ? 1.9 : kind === "silk" ? 1.2 : kind === "midnight" ? 1.4 : kind === "lantern" ? 1.5 : kind === "polaroid" ? 1.1 : kind === "botanical" ? 1.3 : kind === "artdeco" ? 1.2 : kind === "sunrise" ? 1.6 : 0.9) : 0, ease: "easeOut" }}
           onAnimationComplete={() => {
             if (phase === "opening") finish();
           }}
         >
-          {kind === "polaroid" ? (
+          {kind === "botanical" ? (
+            <BotanicalFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} place={place} />
+          ) : kind === "artdeco" ? (
+            <ArtDecoFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} place={place} />
+          ) : kind === "sunrise" ? (
+            <SunriseFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} place={place} />
+          ) : kind === "polaroid" ? (
             <PolaroidFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} place={place} coverSrc={coverSrc} />
           ) : kind === "lantern" ? (
             <LanternFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} place={place} />
@@ -887,6 +893,107 @@ function PolaroidFace({
         {place && <p className="mt-1 text-[0.7rem] tracking-[0.2em] text-[#6e5f4a] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case">{place}</p>}
         <p className="mt-5 text-[0.7rem] tracking-[0.3em] text-[#b23a25] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case">{s("tapPolaroid", locale)}</p>
       </div>
+    </div>
+  );
+}
+
+/* ── Botanical, Art Deco, Sunrise ───────────────────────────── */
+
+type FaceProps = {
+  opening: boolean;
+  onOpen: () => void;
+  locale: Locale;
+  names?: { one: string; two: string };
+  dateLabel: string;
+  place?: string;
+};
+
+function FaceText({ locale, names, dateLabel, place, tap, tone }: Omit<FaceProps, "opening" | "onOpen"> & { tap: string; tone: { accent: string; soft: string } }) {
+  const serif = { fontFamily: "var(--font-cormorant), serif" } as const;
+  return (
+    <>
+      <p className="text-[clamp(2.2rem,8vw,3.6rem)] leading-[1.15] tracking-[0.08em] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case" style={serif}>
+        {names?.one}
+      </p>
+      <p className="my-1 text-[1.1rem] italic" style={{ ...serif, color: tone.accent }}>
+        {s("and", locale)}
+      </p>
+      <p className="text-[clamp(2.2rem,8vw,3.6rem)] leading-[1.15] tracking-[0.08em] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case" style={serif}>
+        {names?.two}
+      </p>
+      <p className="mt-7 text-[0.75rem] tracking-[0.26em] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case">{dateLabel}</p>
+      {place && <p className="mt-1 text-[0.7rem] tracking-[0.2em] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case" style={{ color: tone.soft }}>{place}</p>}
+      <p className="mt-8 text-[0.7rem] tracking-[0.3em] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case" style={{ color: tone.accent }}>{tap}</p>
+    </>
+  );
+}
+
+/** Two leafy halves slide apart like a garden gate. */
+function BotanicalFace({ opening, onOpen, locale, names, dateLabel, place }: FaceProps) {
+  const leaf = (flip: boolean) => (
+    <svg aria-hidden viewBox="0 0 200 400" preserveAspectRatio="xMidYMid slice" className="size-full" style={flip ? { transform: "scaleX(-1)" } : undefined}>
+      <rect width="200" height="400" fill="#dfe8d0" />
+      {Array.from({ length: 16 }, (_, i) => (
+        <ellipse key={i} cx={20 + ((i * 53) % 150)} cy={14 + i * 25} rx="42" ry="14" fill={i % 3 === 0 ? "#6f8f62" : i % 3 === 1 ? "#8aa877" : "#a9c096"} transform={`rotate(${-32 + ((i * 37) % 64)} ${20 + ((i * 53) % 150)} ${14 + i * 25})`} opacity=".92" />
+      ))}
+      <path d="M0 0 C60 120 20 260 90 400" stroke="#4f6f48" strokeWidth="3" fill="none" />
+    </svg>
+  );
+  const move = (dir: number) => ({ transform: opening ? `translateX(${dir * 100}%)` : "none", transition: "transform 1.3s cubic-bezier(.65,0,.3,1)" });
+  return (
+    <div className="relative grid h-full w-full place-items-center overflow-hidden bg-[#f4f6ee] text-[#2f4a34]">
+      <div className="absolute inset-y-0 left-0 w-1/2" style={move(-1)}>{leaf(false)}</div>
+      <div className="absolute inset-y-0 right-0 w-1/2" style={move(1)}>{leaf(true)}</div>
+      <button type="button" onClick={onOpen} disabled={opening} aria-label={s("enter", locale)} className="relative rounded-[1.5rem_0.4rem_1.5rem_0.4rem] bg-[#f4f6ee]/95 px-10 py-9 text-center shadow-[0_20px_40px_-20px_rgba(47,74,52,.6)] transition focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#3f6b45]" style={{ opacity: opening ? 0 : 1, transition: "opacity .5s" }}>
+        <FaceText locale={locale} names={names} dateLabel={dateLabel} place={place} tap={s("tapBotanical", locale)} tone={{ accent: "#3f6b45", soft: "#6f8574" }} />
+      </button>
+    </div>
+  );
+}
+
+/** A black-and-gold sunburst gate that splits down the middle. */
+function ArtDecoFace({ opening, onOpen, locale, names, dateLabel, place }: FaceProps) {
+  const burst = (side: "l" | "r") => (
+    <svg aria-hidden viewBox="0 0 200 400" preserveAspectRatio="xMidYMid slice" className="size-full">
+      <rect width="200" height="400" fill="#0b0b0d" />
+      <g stroke="#d4af37" strokeWidth="1.2" opacity=".85" fill="none">
+        {Array.from({ length: 13 }, (_, i) => {
+          const a = (-90 + i * 15) * (Math.PI / 180);
+          const x = side === "l" ? 200 : 0;
+          return <line key={i} x1={x} y1="200" x2={x + Math.cos(a + (side === "l" ? Math.PI : 0)) * 260} y2={200 + Math.sin(a + (side === "l" ? Math.PI : 0)) * 260} />;
+        })}
+        {[30, 60, 90, 120].map((r) => (
+          <circle key={r} cx={side === "l" ? 200 : 0} cy="200" r={r} />
+        ))}
+      </g>
+      <rect x="1" y="1" width="198" height="398" fill="none" stroke="#d4af37" strokeWidth="2" />
+    </svg>
+  );
+  const move = (dir: number) => ({ transform: opening ? `translateX(${dir * 100}%)` : "none", transition: "transform 1.2s cubic-bezier(.7,0,.3,1)" });
+  return (
+    <div className="relative grid h-full w-full place-items-center overflow-hidden bg-[#0b0b0d] text-[#ece6d6]">
+      <div className="absolute inset-y-0 left-0 w-1/2" style={move(-1)}>{burst("l")}</div>
+      <div className="absolute inset-y-0 right-0 w-1/2" style={move(1)}>{burst("r")}</div>
+      <button type="button" onClick={onOpen} disabled={opening} aria-label={s("enter", locale)} className="relative border border-[#d4af37] bg-[#0b0b0d] px-10 py-9 text-center outline outline-1 outline-offset-4 outline-[#d4af37]/50 transition focus-visible:outline-2" style={{ opacity: opening ? 0 : 1, transition: "opacity .5s" }}>
+        <FaceText locale={locale} names={names} dateLabel={dateLabel} place={place} tap={s("tapArtDeco", locale)} tone={{ accent: "#d4af37", soft: "#a49d8a" }} />
+      </button>
+    </div>
+  );
+}
+
+/** A sun climbs over layered hills; the whole sky then fades away. */
+function SunriseFace({ opening, onOpen, locale, names, dateLabel, place }: FaceProps) {
+  return (
+    <div className="relative grid h-full w-full place-items-center overflow-hidden text-[#5a3a36]" style={{ background: "linear-gradient(180deg,#ffe9d6,#f7bfa2 70%,#f09a78)" }}>
+      <div aria-hidden className="absolute bottom-[26%] left-1/2 size-56 rounded-full bg-[radial-gradient(circle,#fffbe8,#ffd9a0_60%,#ffb98a)] shadow-[0_0_90px_30px_rgba(255,200,140,.6)]" style={{ transform: `translate(-50%, ${opening ? "-160%" : "40%"})`, transition: "transform 1.6s cubic-bezier(.4,0,.2,1)" }} />
+      <svg aria-hidden viewBox="0 0 400 200" preserveAspectRatio="none" className="absolute inset-x-0 bottom-0 h-[34%] w-full">
+        <path d="M0 80 C80 40 140 90 220 60 C300 30 360 70 400 56 V200 H0Z" fill="#e9a481" />
+        <path d="M0 120 C90 90 150 130 230 108 C310 86 360 120 400 110 V200 H0Z" fill="#cf7a5a" />
+        <path d="M0 160 C100 140 170 170 250 154 C320 140 370 160 400 152 V200 H0Z" fill="#a95a41" />
+      </svg>
+      <button type="button" onClick={onOpen} disabled={opening} aria-label={s("enter", locale)} className="relative -mt-20 text-center focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-[#c4603a]" style={{ opacity: opening ? 0 : 1, transition: "opacity .6s" }}>
+        <FaceText locale={locale} names={names} dateLabel={dateLabel} place={place} tap={s("tapSunrise", locale)} tone={{ accent: "#c4603a", soft: "#a07a70" }} />
+      </button>
     </div>
   );
 }

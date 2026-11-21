@@ -67,6 +67,24 @@ export const TEMPLATES = [
     mood: "Casual · scrapbook · photo-first",
   },
   {
+    key: "botanical",
+    name: "Botanical",
+    blurb: "Sage-green leaves part like a garden gate. Leafy sprigs frame the names, with a calm cream page and green accents.",
+    mood: "Fresh · greenery · sage",
+  },
+  {
+    key: "artdeco",
+    name: "Art Deco",
+    blurb: "Black and gold geometry. A sunburst gate splits open to a glamorous page of fans, gold lines and bold lettering.",
+    mood: "Glamorous · black & gold · 1920s",
+  },
+  {
+    key: "sunrise",
+    name: "Sunrise",
+    blurb: "A sun rises over layered peach hills to open the page. Warm coral, soft cream and a hopeful new-day feel.",
+    mood: "Hopeful · peach & coral · new day",
+  },
+  {
     key: "scratch",
     name: "Scratch to Reveal",
     blurb: "A playful rose-pink invitation: scratch the heart to reveal it, then a calendar and hearts.",

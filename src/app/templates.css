@@ -721,3 +721,47 @@ html:has(.tpl) {
 .tpl-polaroid .tpl-pill:focus-visible {
   background: var(--gold-deep);
 }
+
+/* Botanical */
+.tpl-botanical {
+  --ivory: #f4f6ee; --paper: #e8ede0; --paper-deep: #d8e0cb; --navy: #2f4a34; --ink: #34443a; --ink-soft: #6f8574;
+  --gold: #5f8a5a; --gold-soft: #c5d6bb; --gold-deep: #3f6b45;
+  --color-ivory: var(--ivory); --color-paper: var(--paper); --color-paper-deep: var(--paper-deep);
+  --color-navy: var(--navy); --color-ink: var(--ink); --color-ink-soft: var(--ink-soft);
+  --color-gold: var(--gold); --color-gold-soft: var(--gold-soft); --color-gold-deep: var(--gold-deep);
+  --tpl-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+}
+.tpl-botanical .foil { background: none; -webkit-text-fill-color: currentColor; color: var(--navy); }
+.tpl-botanical .tpl-card { background: #fff; border-color: color-mix(in oklab, var(--gold) 30%, transparent); border-radius: 1.5rem 0.4rem 1.5rem 0.4rem; }
+.tpl-botanical .tpl-pill { background: var(--gold); color: #fff; }
+.tpl-botanical .tpl-pill:hover, .tpl-botanical .tpl-pill:focus-visible { background: var(--gold-deep); }
+
+/* Art Deco */
+.tpl-artdeco {
+  --ivory: #0b0b0d; --paper: #141417; --paper-deep: #1d1d22; --navy: #e9c872; --ink: #ece6d6; --ink-soft: #a49d8a;
+  --gold: #d4af37; --gold-soft: #5a4d22; --gold-deep: #f2d479;
+  --color-ivory: var(--ivory); --color-paper: var(--paper); --color-paper-deep: var(--paper-deep);
+  --color-navy: var(--navy); --color-ink: var(--ink); --color-ink-soft: var(--ink-soft);
+  --color-gold: var(--gold); --color-gold-soft: var(--gold-soft); --color-gold-deep: var(--gold-deep);
+  --tpl-display: var(--font-playfair), "Playfair Display", Georgia, serif;
+}
+.tpl-artdeco .foil { background: none; -webkit-text-fill-color: currentColor; color: var(--navy); }
+.tpl-artdeco .tpl-card { background: var(--paper); border: 1px solid var(--gold); border-radius: 0; outline: 1px solid color-mix(in oklab, var(--gold) 40%, transparent); outline-offset: 4px; }
+.tpl-artdeco .tpl-pill { background: var(--gold); color: #0b0b0d; border-radius: 0; box-shadow: 0 0 0 1px var(--gold-deep); }
+.tpl-artdeco .tpl-pill:hover, .tpl-artdeco .tpl-pill:focus-visible { background: var(--gold-deep); }
+.tpl-artdeco .tpl-display { text-transform: uppercase; letter-spacing: 0.04em; }
+.tpl-artdeco .tpl-display:lang(my) { text-transform: none; letter-spacing: 0; }
+
+/* Sunrise */
+.tpl-sunrise {
+  --ivory: #fff7ee; --paper: #fdeadb; --paper-deep: #f8d9c2; --navy: #7a3b3b; --ink: #5a3a36; --ink-soft: #a07a70;
+  --gold: #e8825a; --gold-soft: #f5c7b0; --gold-deep: #c4603a;
+  --color-ivory: var(--ivory); --color-paper: var(--paper); --color-paper-deep: var(--paper-deep);
+  --color-navy: var(--navy); --color-ink: var(--ink); --color-ink-soft: var(--ink-soft);
+  --color-gold: var(--gold); --color-gold-soft: var(--gold-soft); --color-gold-deep: var(--gold-deep);
+  --tpl-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+}
+.tpl-sunrise .foil { background: none; -webkit-text-fill-color: currentColor; color: var(--navy); }
+.tpl-sunrise .tpl-card { background: #fff; border: 0; border-radius: 1.75rem; box-shadow: 0 16px 30px -18px rgba(196, 96, 58, 0.5); }
+.tpl-sunrise .tpl-pill { background: var(--gold); color: #fff; }
+.tpl-sunrise .tpl-pill:hover, .tpl-sunrise .tpl-pill:focus-visible { background: var(--gold-deep); }
