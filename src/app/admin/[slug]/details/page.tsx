@@ -31,6 +31,18 @@ async function Details({ params }: PageProps<"/admin/[slug]/details">) {
           Monogram
           <input name="monogram" maxLength={12} defaultValue={w.monogram ?? ""} className={`${inputClass} mt-1 max-w-40`} />
         </label>
+        {(["partner_one", "partner_two"] as const).map((side, n) => {
+          const f = ((w.family as Record<string, { lineage?: unknown; credentials?: string }>)[side] ?? {});
+          return (
+            <div key={side} className="space-y-2 border border-navy/20 p-3">
+              <I18nField name={`${side}_lineage`} label={`Partner ${n + 1} family lineage (optional)`} value={f.lineage} multiline />
+              <label className="label-caps block">
+                Partner {n + 1} credentials (optional, e.g. B.E.(Civil))
+                <input name={`${side}_credentials`} maxLength={60} defaultValue={f.credentials ?? ""} className={`${inputClass} mt-1 max-w-72`} />
+              </label>
+            </div>
+          );
+        })}
         <I18nField name="tagline" label="Tagline" value={w.tagline} />
         <I18nField name="invitation_text" label="Invitation message" value={w.invitation_text} multiline />
         <I18nField name="note" label="Note on the details card" value={w.note} multiline />

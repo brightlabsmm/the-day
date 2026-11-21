@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { LOCALE_COOKIE, resolveLocale } from "@/lib/i18n/locale";
@@ -13,6 +14,34 @@ import { LanguageSwitch } from "@/components/invite/language-switch";
 import { MusicPlayer } from "@/components/invite/music-player";
 import { mediaUrl } from "@/lib/media";
 import { markOpened } from "./actions";
+
+/**
+ * Link previews (Messenger, Viber, Telegram). Deliberately generic: the
+ * guest's name is never put in metadata, and the page is not indexed.
+ */
+export async function generateMetadata({ params }: PageProps<"/w/[slug]">): Promise<Metadata> {
+  const { slug } = await params;
+  const invitation = await getInvitation(slug, undefined);
+  if (!invitation) return { title: "Invitation", robots: { index: false, follow: false } };
+
+  const { wedding, photos } = invitation;
+  const names = `${t(wedding.partner_one_name, "en")} & ${t(wedding.partner_two_name, "en")}`;
+  const title = `${names} — Wedding Invitation`;
+  const description = t(wedding.tagline, "en") || "You are warmly invited to our wedding.";
+  const cover = photos.find((p) => p.is_cover) ?? photos[0];
+  return {
+    title,
+    description,
+    robots: { index: false, follow: false },
+    openGraph: {
+      type: "website",
+      title,
+      description,
+      images: cover ? [{ url: mediaUrl(cover.storage_path), width: cover.width, height: cover.height }] : undefined,
+    },
+    twitter: { card: cover ? "summary_large_image" : "summary", title, description },
+  };
+}
 
 export default function InvitationPage(props: PageProps<"/w/[slug]">) {
   return (
@@ -38,21 +67,21 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
 
   return (
     <>
-    <LanguageSwitch locale={locale} />
-    {wedding.music_path && (
-      <MusicPlayer src={mediaUrl(wedding.music_path)} title={wedding.music_title} locale={locale} />
-    )}
-    <Opening
-      slug={wedding.slug}
-      token={guest ? (token ?? null) : null}
-      locale={locale}
-      monogram={monogram}
-      guestLabel={guestName(guest, locale)}
-      coupleNames={{ one: t(wedding.partner_one_name, locale), two: t(wedding.partner_two_name, locale) }}
-      onOpenAction={markOpened}
-    >
-      <InvitationBody invitation={invitation} locale={locale} monogram={monogram} token={guest ? (token ?? null) : null} />
-    </Opening>
+      <LanguageSwitch locale={locale} />
+      {wedding.music_path && (
+        <MusicPlayer src={mediaUrl(wedding.music_path)} title={wedding.music_title} locale={locale} />
+      )}
+      <Opening
+        slug={wedding.slug}
+        token={guest ? (token ?? null) : null}
+        locale={locale}
+        monogram={monogram}
+        guestLabel={guestName(guest, locale)}
+        coupleNames={{ one: t(wedding.partner_one_name, locale), two: t(wedding.partner_two_name, locale) }}
+        onOpenAction={markOpened}
+      >
+        <InvitationBody invitation={invitation} locale={locale} monogram={monogram} token={guest ? (token ?? null) : null} />
+      </Opening>
     </>
   );
 }

@@ -72,6 +72,15 @@ export async function deleteGuest(form: FormData) {
 
 const Slug = z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/).max(60);
 
+function familySide(form: FormData, side: "partner_one" | "partner_two") {
+  const lineage = i18nFromForm(form, `${side}_lineage`);
+  const credentials = String(form.get(`${side}_credentials`) ?? "").trim().slice(0, 60);
+  return {
+    ...(Object.keys(lineage).length ? { lineage } : {}),
+    ...(credentials ? { credentials } : {}),
+  };
+}
+
 export async function saveWeddingDetails(form: FormData) {
   const { supabase } = await requireAdmin();
   const slug = Slug.safeParse(form.get("slug"));
@@ -94,6 +103,10 @@ export async function saveWeddingDetails(form: FormData) {
       invitation_text: i18nFromForm(form, "invitation_text"),
       note: i18nFromForm(form, "note"),
       closing_quote: i18nFromForm(form, "closing_quote"),
+      family: {
+        partner_one: familySide(form, "partner_one"),
+        partner_two: familySide(form, "partner_two"),
+      },
       wishes_enabled: form.get("wishes_enabled") === "on",
       wishes_editable: form.get("wishes_editable") === "on",
     })

@@ -4,6 +4,10 @@ const supabaseUrl = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "http://127.
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
+  experimental: {
+    // Admin uploads (photos, music up to 15 MB) arrive through Server Actions.
+    serverActions: { bodySizeLimit: "16mb" },
+  },
   partialPrefetching: true,
   turbopack: {
     rules: {
