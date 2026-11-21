@@ -48,6 +48,15 @@ const STRINGS = {
   wishErrorClosed: { my: "ဆုတောင်းစကား လက်ခံခြင်း ပိတ်ထားပါသည်။", en: "Wishes are closed." },
   wishErrorSent: { my: "သင့်ဆုတောင်းစကားကို ပေးပို့ပြီးဖြစ်ပါသည်။", en: "You have already sent a wish." },
   wishErrorGeneric: { my: "ပေးပို့၍မရပါ။ ထပ်ကြိုးစားပါ။", en: "Could not send. Please try again." },
+  giftHeading: { my: "မင်္ဂလာလက်ဆောင်", en: "Wedding Gift" },
+  giftIntro: {
+    my: "လာရောက်ကြွချီးမြှင့်ခြင်းသာ အဖိုးတန်ဆုံး လက်ဆောင်ဖြစ်ပါသည်။ ချစ်ခင်စွာ ပေးပို့လိုပါက အောက်ပါ QR ကို အသုံးပြုနိုင်ပါသည်။",
+    en: "Your presence is the greatest gift. If you wish to send a gift, you may use the QR codes below.",
+  },
+  giftAccountName: { my: "အကောင့်အမည်", en: "Account name" },
+  giftQrAlt: { my: "QR ကုဒ်", en: "QR code" },
+  musicPlay: { my: "သီချင်း ဖွင့်ရန်", en: "Play music" },
+  musicPause: { my: "သီချင်း ရပ်ရန်", en: "Pause music" },
 } as const satisfies Record<string, Record<Locale, string>>;
 
 export type StringKey = keyof typeof STRINGS;

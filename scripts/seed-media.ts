@@ -7,7 +7,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 const WEDDING_ID = "00000000-0000-4000-8000-000000000001";
 const DIR = path.join(process.cwd(), "supabase/seed-media");
@@ -59,6 +59,25 @@ async function main() {
     if (insErr) throw insErr;
     console.log(`✓ ${p.file} → ${storagePath} (${meta.width}×${meta.height})`);
   }
+
+  await seedGiftDemo(db);
+}
+
+/** Placeholder gift QR (not a real code) so the gift section can be previewed. */
+async function seedGiftDemo(db: SupabaseClient) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="480"><rect width="480" height="480" fill="#fff"/><rect x="24" y="24" width="432" height="432" fill="none" stroke="#414a67" stroke-width="6" stroke-dasharray="14 10"/><text x="240" y="230" font-family="sans-serif" font-size="40" text-anchor="middle" fill="#414a67">DEMO</text><text x="240" y="280" font-family="sans-serif" font-size="40" text-anchor="middle" fill="#414a67">QR CODE</text></svg>`;
+  const png = await sharp(Buffer.from(svg)).png().toBuffer();
+  const qrPath = `${WEDDING_ID}/gifts/demo-qr.png`;
+  const { error: upErr } = await db.storage
+    .from("wedding-media")
+    .upload(qrPath, png, { contentType: "image/png", upsert: true, cacheControl: "31536000" });
+  if (upErr) throw upErr;
+  const { error } = await db
+    .from("weddings")
+    .update({ gift_methods: [{ label: "KBZPay (demo)", account_name: "Thukha", qr_path: qrPath }] })
+    .eq("id", WEDDING_ID);
+  if (error) throw error;
+  console.log(`✓ demo gift QR → ${qrPath}`);
 }
 
 main().catch((e) => {

@@ -10,6 +10,8 @@ import { Opening } from "@/components/invite/opening";
 import { SleeveShell } from "@/components/invite/sleeve-parts";
 import { InvitationBody } from "@/components/invite/invitation-body";
 import { LanguageSwitch } from "@/components/invite/language-switch";
+import { MusicPlayer } from "@/components/invite/music-player";
+import { mediaUrl } from "@/lib/media";
 import { markOpened } from "./actions";
 
 export default function InvitationPage(props: PageProps<"/w/[slug]">) {
@@ -37,6 +39,9 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
   return (
     <>
     <LanguageSwitch locale={locale} />
+    {wedding.music_path && (
+      <MusicPlayer src={mediaUrl(wedding.music_path)} title={wedding.music_title} locale={locale} />
+    )}
     <Opening
       slug={wedding.slug}
       token={guest ? (token ?? null) : null}

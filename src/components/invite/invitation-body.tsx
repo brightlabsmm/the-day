@@ -5,6 +5,7 @@ import { InvitationMessage } from "./invitation-message";
 import { WeddingDetails } from "./wedding-details";
 import { Countdown } from "./countdown";
 import { GallerySection } from "./gallery-section";
+import { GiftSection } from "./gift-section";
 import { WishesSection } from "./wishes-section";
 import { formatLongDate, formatTimeRange } from "@/lib/i18n/datetime";
 
@@ -38,6 +39,7 @@ export function InvitationBody({
         />
       )}
       <GallerySection invitation={invitation} locale={locale} />
+      <GiftSection invitation={invitation} locale={locale} />
       <WishesSection invitation={invitation} locale={locale} token={token} />
     </main>
   );
