@@ -633,3 +633,45 @@ html:has(.tpl) {
 .tpl-midnight .tpl-pill:focus-visible {
   background: var(--gold-deep);
 }
+
+/* Lantern: dusk plum with amber light. */
+.tpl-lantern {
+  --ivory: #240f20;
+  --paper: #311629;
+  --paper-deep: #411f36;
+  --navy: #ffe6c2;
+  --ink: #f6e6da;
+  --ink-soft: #cfa7a3;
+  --gold: #ffb347;
+  --gold-soft: #6b4a4f;
+  --gold-deep: #ffd08a;
+  --color-ivory: var(--ivory);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-navy: var(--navy);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-deep: var(--gold-deep);
+  --tpl-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  background: radial-gradient(90% 40% at 50% 0%, rgba(255, 179, 71, 0.12), transparent 70%), var(--ivory);
+}
+.tpl-lantern .foil {
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  color: var(--navy);
+}
+.tpl-lantern .tpl-card {
+  background: color-mix(in oklab, var(--paper) 85%, transparent);
+  border-color: color-mix(in oklab, var(--gold) 35%, transparent);
+}
+.tpl-lantern .tpl-pill {
+  background: var(--gold);
+  color: #2a1020;
+  box-shadow: 0 0 30px -6px rgba(255, 179, 71, 0.75);
+}
+.tpl-lantern .tpl-pill:hover,
+.tpl-lantern .tpl-pill:focus-visible {
+  background: var(--gold-deep);
+}

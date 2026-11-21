@@ -130,6 +130,7 @@ const STRINGS = {
   tapToOpenShutters: { my: "ဖွင့်ရန် နှိပ်ပါ", en: "Tap to open" },
   shuttersWelcome: { my: "ကြိုဆိုပါသည်", en: "Welcome" },
   tapMoon: { my: "လကို နှိပ်ပါ", en: "Tap the moon" },
+  tapLantern: { my: "မီးအိမ်ကို နှိပ်ပါ", en: "Tap the lantern" },
   enter: { my: "ဝင်ရောက်ရန်", en: "Enter" },
   countingDown: { my: "ရက်စွဲရောက်ရန်", en: "Counting down" },
   untilWeSay: { my: "ကတိသစ္စာပြုသည့်နေ့အထိ", en: "Until we say I do" },

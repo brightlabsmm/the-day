@@ -13,7 +13,7 @@ import type { Locale } from "@/lib/i18n/numerals";
 import { s } from "@/lib/i18n/strings";
 
 type Props = {
-  kind: "envelope" | "scratch" | "theatre" | "shutters" | "silk" | "midnight";
+  kind: "envelope" | "scratch" | "theatre" | "shutters" | "silk" | "midnight" | "lantern";
   slug: string;
   token: string | null;
   locale: Locale;
@@ -112,12 +112,14 @@ export function Gate({ kind, slug, token, locale, monogram, coverSrc, guestLabel
           lang={locale}
           className="fixed inset-0 z-50 overflow-hidden"
           animate={{ opacity: phase === "opening" ? 0 : 1 }}
-          transition={{ duration: 0.7, delay: phase === "opening" ? (kind === "envelope" ? 1.1 : kind === "theatre" ? 1.5 : kind === "shutters" ? 1.9 : kind === "silk" ? 1.2 : kind === "midnight" ? 1.4 : 0.9) : 0, ease: "easeOut" }}
+          transition={{ duration: 0.7, delay: phase === "opening" ? (kind === "envelope" ? 1.1 : kind === "theatre" ? 1.5 : kind === "shutters" ? 1.9 : kind === "silk" ? 1.2 : kind === "midnight" ? 1.4 : kind === "lantern" ? 1.5 : 0.9) : 0, ease: "easeOut" }}
           onAnimationComplete={() => {
             if (phase === "opening") finish();
           }}
         >
-          {kind === "midnight" ? (
+          {kind === "lantern" ? (
+            <LanternFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} place={place} />
+          ) : kind === "midnight" ? (
             <MidnightFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} place={place} />
           ) : kind === "silk" ? (
             <SilkFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} place={place} />
@@ -749,6 +751,80 @@ function MidnightFace({
         <p className="mt-7 text-[0.75rem] tracking-[0.26em] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case">{dateLabel}</p>
         {place && <p className="mt-1 text-[0.7rem] tracking-[0.2em] text-[#b9c4e6] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case">{place}</p>}
         <p className="mt-8 text-[0.7rem] tracking-[0.3em] text-[#d9b66a] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case">{s("tapMoon", locale)}</p>
+      </div>
+    </div>
+  );
+}
+
+/* ── Lantern ────────────────────────────────────────────────── */
+
+const LANTERNS = Array.from({ length: 14 }, (_, i) => ({
+  x: unit(i * 9.1 + 1),
+  y: 8 + unit(i * 4.7 + 2) * 0.8,
+  s: 0.5 + unit(i * 3.3) / 100,
+  d: unit(i * 6.1) / 25,
+}));
+
+/** A dusk sky of paper lanterns. Tapping the big lantern lets it go and the whole sky rises away. */
+function LanternFace({
+  opening,
+  onOpen,
+  locale,
+  names,
+  dateLabel,
+  place,
+}: {
+  opening: boolean;
+  onOpen: () => void;
+  locale: Locale;
+  names?: { one: string; two: string };
+  dateLabel: string;
+  place?: string;
+}) {
+  const serif = { fontFamily: "var(--font-cormorant), serif" } as const;
+  const body = "radial-gradient(circle at 50% 40%,#fff1c9,#ffb347 55%,#d9692e)";
+  return (
+    <div
+      className="relative grid h-full w-full place-items-center overflow-hidden px-6 text-center text-[#ffe9cc]"
+      style={{
+        background: "linear-gradient(180deg,#1a0a1c 0%,#3a1630 45%,#8a3b3b 82%,#d9692e 100%)",
+        transform: opening ? "translateY(-105%)" : "translateY(0)",
+        transition: "transform 1.5s cubic-bezier(.55,0,.35,1)",
+      }}
+    >
+      <style>{`@keyframes lf{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}@media (prefers-reduced-motion:reduce){.lf{animation:none!important}}`}</style>
+      <div aria-hidden className="absolute inset-0">
+        {LANTERNS.map((l, i) => (
+          <span
+            key={i}
+            className="lf absolute block rounded-[42%_42%_38%_38%] shadow-[0_0_26px_6px_rgba(255,179,71,.5)]"
+            style={{ left: `${l.x}%`, top: `${l.y + (i % 5) * 14}%`, width: `${(l.s * 26).toFixed(1)}px`, height: `${(l.s * 34).toFixed(1)}px`, background: body, opacity: 0.55 + (i % 4) * 0.12, animation: `lf ${4 + (i % 4)}s ${l.d.toFixed(1)}s ease-in-out infinite` }}
+          />
+        ))}
+      </div>
+      <div className="relative">
+        <button
+          type="button"
+          onClick={onOpen}
+          disabled={opening}
+          aria-label={s("enter", locale)}
+          className="lf mx-auto mb-8 block h-28 w-[5.2rem] rounded-[42%_42%_38%_38%] shadow-[0_0_70px_14px_rgba(255,179,71,.55)] transition hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ffd08a]"
+          style={{ background: body, animation: "lf 5s ease-in-out infinite" }}
+        >
+          <span aria-hidden className="block size-full rounded-[inherit]" style={{ background: "repeating-linear-gradient(90deg,transparent 0 22%,rgba(120,50,20,.25) 22% 24%)" }} />
+        </button>
+        <p className="text-[clamp(2.2rem,8vw,3.6rem)] leading-[1.15] tracking-[0.08em] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case" style={serif}>
+          {names?.one}
+        </p>
+        <p className="my-1 text-[1.1rem] text-[#ffb347] italic" style={serif}>
+          {s("and", locale)}
+        </p>
+        <p className="text-[clamp(2.2rem,8vw,3.6rem)] leading-[1.15] tracking-[0.08em] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case" style={serif}>
+          {names?.two}
+        </p>
+        <p className="mt-7 text-[0.75rem] tracking-[0.26em] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case">{dateLabel}</p>
+        {place && <p className="mt-1 text-[0.7rem] tracking-[0.2em] text-[#f0c9a8] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case">{place}</p>}
+        <p className="mt-8 text-[0.7rem] tracking-[0.3em] text-[#ffd08a] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case">{s("tapLantern", locale)}</p>
       </div>
     </div>
   );

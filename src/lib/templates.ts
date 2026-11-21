@@ -55,6 +55,12 @@ export const TEMPLATES = [
     mood: "Elegant · night sky · navy & gold",
   },
   {
+    key: "lantern",
+    name: "Lantern",
+    blurb: "A warm dusk of paper lanterns. Tap the big lantern to release it and the sky rises away, revealing a glowing amber page.",
+    mood: "Warm · festive · plum & amber",
+  },
+  {
     key: "scratch",
     name: "Scratch to Reveal",
     blurb: "A playful rose-pink invitation: scratch the heart to reveal it, then a calendar and hearts.",
