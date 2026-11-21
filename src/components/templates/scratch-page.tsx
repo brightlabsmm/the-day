@@ -11,6 +11,8 @@ import { MonthCalendar } from "./calendar";
 import { PlainCountdown } from "./plain-countdown";
 import { Schedule } from "./schedule";
 import { Venue } from "./venue";
+import { Reveal } from "./reveal";
+import { TplDressCode, TplFaq, TplRsvp, TplStory } from "./extras";
 import { TplFooter, TplGallery, navItemsFor } from "./sections";
 import { viewOf, type TemplateProps } from "./view";
 
@@ -75,11 +77,16 @@ export function ScratchPage({ invitation, locale, monogram, token, onOpenAction 
           </section>
         )}
 
-        <Schedule invitation={invitation} locale={locale} />
-        <TplGallery photos={v.gallery} locale={locale} />
-        <Venue invitation={invitation} locale={locale} />
-        <GiftSection invitation={invitation} locale={locale} plain />
-        <WishesSection invitation={invitation} locale={locale} token={token} plain />
+        <Reveal><TplStory invitation={invitation} locale={locale} /></Reveal>
+
+        <Reveal><Schedule invitation={invitation} locale={locale} /></Reveal>
+        <Reveal><TplGallery photos={v.gallery} locale={locale} /></Reveal>
+        <Reveal><Venue invitation={invitation} locale={locale} /></Reveal>
+        <Reveal><TplDressCode invitation={invitation} locale={locale} /></Reveal>
+        <Reveal><TplRsvp invitation={invitation} locale={locale} token={token} /></Reveal>
+        <Reveal><TplFaq invitation={invitation} locale={locale} /></Reveal>
+        <Reveal><GiftSection invitation={invitation} locale={locale} plain /></Reveal>
+        <Reveal><WishesSection invitation={invitation} locale={locale} token={token} plain /></Reveal>
         <ClosingQuote invitation={invitation} locale={locale} />
         <p className="tpl-orn pb-2">♡ ♡ ♡</p>
         <TplFooter v={v} locale={locale} />

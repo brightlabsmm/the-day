@@ -7,6 +7,7 @@
 import { mkdtemp, writeFile, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
+import { execFileSync } from "node:child_process";
 import sharp from "sharp";
 import { importWedding } from "./import-wedding";
 
@@ -17,6 +18,7 @@ const PALETTES: Record<string, Palette> = {
   editorial: { sky: ["#d9d9d9", "#9d9d9d"], sun: "#f3f3f3", hills: ["#777", "#4d4d4d", "#2b2b2b"], bloom: ["#e8e8e8", "#bdbdbd", "#fafafa"], suit: "#161616", gown: "#f7f7f7" },
   envelope: { sky: ["#f7efe0", "#e8dcc3"], sun: "#fffaf0", hills: ["#b9c79a", "#93a878", "#6f8a58"], bloom: ["#f6e3d6", "#efd0bd", "#fffdf6"], suit: "#4a4a58", gown: "#fffdf7" },
   theatre: { sky: ["#3b1c1a", "#6a2b25"], sun: "#e9c279", hills: ["#7b2a30", "#5c1e27", "#3d1119"], bloom: ["#e8c987", "#c9a45a", "#fff1d0"], suit: "#161616", gown: "#fbf3e2" },
+  record: { sky: ["#e7f4f9", "#bfe0ec"], sun: "#fffdf4", hills: ["#d9cba7", "#7fb7c4", "#4c8ea3"], bloom: ["#ffffff", "#e8f6fb", "#cfe9f3"], suit: "#2e4378", gown: "#ffffff" },
   scratch: { sky: ["#fde3e7", "#f6b8c6"], sun: "#fff6f2", hills: ["#e7a3b4", "#c97d94", "#9e5a75"], bloom: ["#ffd9df", "#f7a3b7", "#fff2f4"], suit: "#4a2b3a", gown: "#fff7f6" },
 };
 
@@ -90,8 +92,50 @@ const DEMOS = [
   { key: "editorial", one: ["Zaw Lin", "ဇော်လင်း"], two: ["Su Hlaing", "စုလှိုင်"], mono: "Z&S", tag: ["Beloved / Timeless / Eternity", "ချစ်ခြင်း၊ ထာဝရ၊ အမြဲတမ်း"] },
   { key: "envelope", one: ["Htet Aung", "ထက်အောင်"], two: ["Nandar", "နန္ဒာ"], mono: "H&N", tag: ["Together, from this day on", "ယနေ့မှစ၍ အတူတကွ"] },
   { key: "theatre", one: ["Min Thu", "မင်းသူ"], two: ["Thazin", "သဇင်"], mono: "M&T", tag: ["Every love story deserves a stage", "ချစ်ဇာတ်လမ်းတိုင်း ဇာတ်ခုံတစ်ခု ရှိသင့်ပါသည်"] },
+  { key: "record", one: ["Nay Chi", "နေချီ"], two: ["Wai Yan", "ဝေယံ"], mono: "N&W", tag: ["Our song, our story", "ကျွန်ုပ်တို့၏ သီချင်း၊ ကျွန်ုပ်တို့၏ ဇာတ်လမ်း"] },
   { key: "scratch", one: ["Kaung Myat", "ကောင်းမြတ်"], two: ["Phoo Pwint", "ဖူးပွင့်"], mono: "K&P", tag: ["Love, one scratch at a time", "ချစ်ခြင်းမေတ္တာ"] },
 ] as const;
+
+/** A short, original ambient chord loop (no copyrighted music), as an .m4a. Needs macOS afconvert. */
+async function demoTrack(dir: string): Promise<string | null> {
+  const rate = 22050;
+  const seconds = 24;
+  const chords = [[261.63, 329.63, 392, 493.88], [220, 261.63, 329.63, 392], [174.61, 261.63, 329.63, 440], [196, 246.94, 293.66, 392]];
+  const pcm = Buffer.alloc(rate * seconds * 2);
+  for (let i = 0; i < rate * seconds; i++) {
+    const time = i / rate;
+    const idx = Math.floor(time / 6) % chords.length;
+    const local = (time % 6) / 6;
+    const env = Math.min(1, local * 6) * Math.min(1, (1 - local) * 6) ** 0.5; // soft in and out per chord
+    let v = 0;
+    for (const f of chords[idx]) v += Math.sin(2 * Math.PI * f * time) + 0.3 * Math.sin(2 * Math.PI * f * 2 * time + 0.5) + 0.12 * Math.sin(2 * Math.PI * f * 0.5 * time);
+    const edge = Math.min(1, time / 1.5, (seconds - time) / 1.5);
+    pcm.writeInt16LE(Math.round((v / 12) * env * edge * 28000), i * 2);
+  }
+  const header = Buffer.alloc(44);
+  header.write("RIFF", 0);
+  header.writeUInt32LE(36 + pcm.length, 4);
+  header.write("WAVEfmt ", 8);
+  header.writeUInt32LE(16, 16);
+  header.writeUInt16LE(1, 20);
+  header.writeUInt16LE(1, 22);
+  header.writeUInt32LE(rate, 24);
+  header.writeUInt32LE(rate * 2, 28);
+  header.writeUInt16LE(2, 32);
+  header.writeUInt16LE(16, 34);
+  header.write("data", 36);
+  header.writeUInt32LE(pcm.length, 40);
+  const wav = path.join(dir, "song.wav");
+  const m4a = path.join(dir, "song.m4a");
+  await writeFile(wav, Buffer.concat([header, pcm]));
+  try {
+    execFileSync("afconvert", ["-f", "m4af", "-d", "aac", wav, m4a]);
+    return "song.m4a";
+  } catch {
+    console.warn("afconvert not available: skipping the demo song");
+    return null;
+  }
+}
 
 function config(d: (typeof DEMOS)[number]) {
   return {
@@ -115,6 +159,26 @@ function config(d: (typeof DEMOS)[number]) {
     wishes_enabled: true,
     wishes_editable: false,
     public_wishes: true,
+    rsvp_enabled: true,
+    dress_code: {
+      text: { en: "Formal attire, please. Soft, natural tones photograph beautifully.", my: "ယဉ်ကျေးသော ဝတ်စုံများ ဝတ်ဆင်ပေးပါရန်။ ပျော့ပျောင်းသော သဘာဝအရောင်များ ပိုလှပါသည်။" },
+      colors: [
+        { hex: "#5e1a27", name: { en: "Burgundy", my: "ဘာဂန်ဒီ" } },
+        { hex: "#b8913f", name: { en: "Gold", my: "ရွှေ" } },
+        { hex: "#e6dccb", name: { en: "Champagne", my: "ရှမ်ပိန်း" } },
+        { hex: "#f6f0e4", name: { en: "Ivory", my: "ဆင်စွယ်" } },
+        { hex: "#2b2b2b", name: { en: "Charcoal", my: "မီးသွေး" } },
+      ],
+    },
+    faq: [
+      { q: { en: "What should I wear?", my: "ဘာဝတ်ရမလဲ?" }, a: { en: "Formal attire. Please see the dress code above.", my: "ယဉ်ကျေးသော ဝတ်စုံ။ အပေါ်ရှိ အရောင်များကို ကြည့်ပါ။" } },
+      { q: { en: "What time should I arrive?", my: "ဘယ်အချိန် ရောက်ရမလဲ?" }, a: { en: "Please arrive by 10:30 AM so you can find your seat before the ceremony.", my: "အခမ်းအနားမစမီ နေရာယူနိုင်ရန် နံနက် ၁၀:၃၀ တွင် ရောက်ပေးပါ။" } },
+      { q: { en: "Is parking available?", my: "ကားရပ်နားရန် နေရာရှိပါသလား?" }, a: { en: "Yes, free parking is available at the venue.", my: "ရှိပါသည်။ နေရာတွင် အခမဲ့ရပ်နားနိုင်ပါသည်။" } },
+    ],
+    story: [
+      { label: { en: "WINTER 2020", my: "ဆောင်းရာသီ ၂၀၂၀" }, title: { en: "The First Hello", my: "ပထမဆုံး နှုတ်ဆက်ခြင်း" }, text: { en: "A quiet evening, a shared table, and the feeling that something had shifted.", my: "တိတ်ဆိတ်သော ညနေခင်းတစ်ခုတွင် စတင်ခဲ့ပါသည်။" } },
+      { label: { en: "DECEMBER 2025", my: "ဒီဇင်ဘာ ၂၀၂၅" }, title: { en: "The Question", my: "မေးခွန်း" }, text: { en: "Under the candlelight, one knee down, and a yes before the question was finished.", my: "ဖယောင်းတိုင်အလင်းအောက်တွင် 'ဟုတ်ကဲ့' ဟု ပြန်ဖြေခဲ့ပါသည်။" } },
+    ],
     events: [
       { kind: "ceremony", title: { en: "Guest Arrival", my: "ဧည့်သည်များ လာရောက်ချိန်" }, starts_at_local: "2027-02-14T10:30", venue_name: { en: "Sample Garden Hotel", my: "နမူနာ ဥယျာဉ်ဟိုတယ်" }, venue_address: { en: "No. 1, Sample Road, Yangon", my: "နမူနာလမ်း၊ ရန်ကုန်မြို့" }, map_url: "https://www.google.com/maps/search/?api=1&query=Yangon" },
       { kind: "ceremony", title: { en: "Wedding Ceremony", my: "မင်္ဂလာအခမ်းအနား" }, starts_at_local: "2027-02-14T11:00", ends_at_local: "2027-02-14T12:00", venue_name: { en: "Sample Garden Hotel", my: "နမူနာ ဥယျာဉ်ဟိုတယ်" } },
@@ -143,7 +207,11 @@ async function main() {
       }
       const qr = `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="480"><rect width="480" height="480" fill="#fff"/><rect x="24" y="24" width="432" height="432" fill="none" stroke="#555" stroke-width="6" stroke-dasharray="14 10"/><text x="240" y="230" font-family="sans-serif" font-size="40" text-anchor="middle" fill="#555">DEMO</text><text x="240" y="280" font-family="sans-serif" font-size="40" text-anchor="middle" fill="#555">QR CODE</text></svg>`;
       await sharp(Buffer.from(qr)).png().toFile(path.join(dir, "qr.png"));
-      await writeFile(path.join(dir, "wedding.json"), JSON.stringify(config(d)));
+      const song = d.key === "record" ? await demoTrack(dir) : null;
+      await writeFile(
+        path.join(dir, "wedding.json"),
+        JSON.stringify({ ...config(d), ...(song ? { music: { file: song, title: "Demo ambient loop" } } : {}) }),
+      );
       await importWedding(dir);
     } finally {
       await rm(dir, { recursive: true, force: true });

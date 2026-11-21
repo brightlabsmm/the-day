@@ -337,3 +337,109 @@ html:has(.tpl) {
 .tpl-theatre .foil {
   background-image: linear-gradient(100deg, var(--gold-deep), #d8b765 50%, var(--gold-deep));
 }
+
+/* Scroll reveal: see components/templates/reveal.tsx */
+.tpl-reveal {
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.tpl-reveal[data-state="hidden"] {
+  opacity: 0;
+  transform: translateY(28px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tpl-reveal {
+    transition: none;
+  }
+  .tpl-reveal[data-state="hidden"] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Vinyl record: seaside blues. */
+.tpl-record {
+  --ivory: #f5fafc;
+  --paper: #e4f0f5;
+  --paper-deep: #cfe2ea;
+  --navy: #2e4378;
+  --ink: #33415f;
+  --ink-soft: #6f7f9c;
+  --gold: #3f5aa6;
+  --gold-soft: #b8c7e8;
+  --gold-deep: #2e4378;
+  --color-ivory: var(--ivory);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-navy: var(--navy);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-deep: var(--gold-deep);
+  --tpl-display: var(--font-playfair), "Playfair Display", Georgia, serif;
+}
+.tpl-record .foil {
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  color: var(--navy);
+}
+.tpl-brush {
+  font-family: var(--font-brush), "Pacifico", cursive;
+  line-height: 1.15;
+}
+.tpl-brush:lang(my) {
+  font-family: var(--font-myanmar);
+  font-weight: 700;
+  line-height: 1.5;
+}
+@keyframes tpl-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.tpl-vinyl {
+  animation: tpl-spin 5s linear infinite;
+  animation-play-state: paused;
+}
+.tpl-vinyl[data-playing="true"] {
+  animation-play-state: running;
+}
+@keyframes tpl-eq {
+  0%,
+  100% {
+    transform: scaleY(0.25);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+.tpl-eq span {
+  display: block;
+  width: 3px;
+  height: 14px;
+  border-radius: 2px;
+  background: currentColor;
+  transform-origin: bottom;
+  transform: scaleY(0.25);
+}
+.tpl-eq[data-on="true"] span {
+  animation: tpl-eq 0.9s ease-in-out infinite;
+}
+.tpl-eq[data-on="true"] span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.tpl-eq[data-on="true"] span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+.tpl-eq[data-on="true"] span:nth-child(4) {
+  animation-delay: 0.1s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tpl-vinyl[data-playing="true"] {
+    animation-duration: 20s;
+  }
+  .tpl-eq[data-on="true"] span {
+    animation: none;
+    transform: scaleY(0.6);
+  }
+}

@@ -17,6 +17,7 @@ import { templateKey } from "@/lib/templates";
 import { EditorialPage } from "@/components/templates/editorial-page";
 import { EnvelopePage } from "@/components/templates/envelope-page";
 import { ScratchPage } from "@/components/templates/scratch-page";
+import { RecordPage } from "@/components/templates/record-page";
 import { TheatrePage } from "@/components/templates/theatre-page";
 import { markOpened } from "./actions";
 
@@ -81,7 +82,7 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
     };
     return (
       <>
-        {wedding.music_path && (
+        {wedding.music_path && key !== "record" && (
           <MusicPlayer src={mediaUrl(wedding.music_path)} title={wedding.music_title} locale={locale} />
         )}
         {key === "editorial" ? (
@@ -90,6 +91,8 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
           <EnvelopePage {...props} />
         ) : key === "theatre" ? (
           <TheatrePage {...props} />
+        ) : key === "record" ? (
+          <RecordPage {...props} />
         ) : (
           <ScratchPage {...props} />
         )}

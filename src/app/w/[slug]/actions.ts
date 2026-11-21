@@ -119,3 +119,67 @@ export async function submitPublicWish(slug: string, _prev: WishState, form: For
   revalidatePath("/w/[slug]", "page");
   return { status: "ok" };
 }
+
+export type RsvpState = {
+  status: "idle" | "ok" | "error";
+  error?: "name" | "input" | "closed" | "busy" | "generic";
+  attending?: boolean;
+  updated?: boolean;
+};
+
+const RsvpInput = z.object({
+  slug: Input.shape.slug,
+  token: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/).max(64).nullable(),
+  name: z.string().trim().min(1).max(80),
+  attending: z.enum(["yes", "no"]),
+  party: z.coerce.number().int().min(1).max(10),
+  note: z.string().trim().max(300),
+});
+
+/**
+ * RSVP from anyone with the link. A guest with a personal link keeps one
+ * reply they can change; others add a reply each time. Same abuse controls
+ * as public wishes: honeypot, per-browser cooldown, per-wedding limit.
+ */
+export async function submitRsvp(slug: string, token: string, _prev: RsvpState, form: FormData): Promise<RsvpState> {
+  if (String(form.get("website") ?? "") !== "") return { status: "ok", attending: false };
+
+  const parsed = RsvpInput.safeParse({
+    slug,
+    token: token || null,
+    name: form.get("name"),
+    attending: form.get("attending"),
+    party: form.get("party") || 1,
+    note: form.get("note") ?? "",
+  });
+  if (!parsed.success) {
+    return { status: "error", error: parsed.error.issues[0]?.path[0] === "name" ? "name" : "input" };
+  }
+
+  const jar = await cookies();
+  if (jar.get("theday_rsvp_at")) return { status: "error", error: "busy" };
+
+  const d = parsed.data;
+  const { data, error } = await createSupabaseGuestClient().rpc("submit_rsvp", {
+    p_slug: d.slug,
+    p_token: d.token ?? "",
+    p_name: d.name,
+    p_attending: d.attending === "yes",
+    p_party_size: d.attending === "yes" ? d.party : 1,
+    p_note: d.note,
+  });
+  const res = data as { ok?: boolean; error?: string; updated?: boolean } | null;
+  if (error || !res || typeof res !== "object") return { status: "error", error: "generic" };
+  if (!res.ok) {
+    const map: Record<string, NonNullable<RsvpState["error"]>> = {
+      invalid_name: "name",
+      invalid_input: "input",
+      closed: "closed",
+      busy: "busy",
+    };
+    return { status: "error", error: map[res.error ?? ""] ?? "generic" };
+  }
+
+  jar.set("theday_rsvp_at", "1", { maxAge: 20, httpOnly: true, sameSite: "lax", path: "/" });
+  return { status: "ok", attending: d.attending === "yes", updated: !!res.updated };
+}

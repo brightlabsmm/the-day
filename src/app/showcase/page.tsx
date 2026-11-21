@@ -14,12 +14,12 @@ export default function ShowcasePage() {
         <p className="label-caps text-xs text-[#8a7766]">THE DAY · Bright Labs</p>
         <h1 className="font-display mt-3 text-[clamp(2.2rem,6vw,3.6rem)] leading-tight font-semibold">Choose your invitation</h1>
         <p className="mx-auto mt-4 max-w-xl text-lg text-[#6e5f53]">
-          Four designs for the same invitation, each in Burmese and English with a countdown, schedule, photos, gift QR
+          Six designs for the same invitation, each in Burmese and English with a countdown, schedule, photos, gift QR
           codes and a wishes wall. The couples shown are made up.
         </p>
       </header>
 
-      <ul className="mx-auto mt-14 grid max-w-6xl gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+      <ul className="mx-auto mt-14 grid max-w-6xl gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
         {TEMPLATES.map((t) => (
           <li key={t.key} className="flex flex-col items-center text-center">
             <div className="w-full max-w-[300px] rounded-[2.2rem] border-[7px] border-[#2a2420] bg-[#2a2420] shadow-[0_28px_50px_-24px_rgba(42,36,32,.6)]">

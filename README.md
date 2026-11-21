@@ -40,7 +40,7 @@ Then open <http://localhost:3000/w/thukha-maythet?g=ko-aung-7k2f> for the demo i
 | `pnpm db:reset` | Re-apply migrations and seed, then run `seed:media` |
 | `pnpm db:types` | Regenerate `src/lib/supabase/database.types.ts` |
 | `pnpm seed:media` | Upload demo photos and a placeholder gift QR |
-| `pnpm seed:showcase` | Create the five fictional demo weddings used by `/showcase` |
+| `pnpm seed:showcase` | Create the six fictional demo weddings used by `/showcase` |
 | `pnpm import:wedding <folder>` | Create or update a real wedding from `wedding.json` plus its image files (see below) |
 | `pnpm seed:admin` | Create or reset the local dev admin (local Supabase only) |
 | `pnpm check:db` | Sanity-check the database setup |
@@ -55,9 +55,10 @@ Each wedding picks a design in the admin (**Details → Page design**):
 | `editorial` | Black and white, full-screen photo, giant monogram and type |
 | `envelope` | Cream envelope with a wax seal, script lettering |
 | `theatre` | Velvet curtains and a spotlit stage, "Act I, II, III" programme, flip-card countdown |
+| `record` | Seaside blues: a spinning vinyl record that plays the wedding song, and the story as a track-by-track player |
 | `scratch` | Rose-pink, scratch-the-heart opening, calendar and hearts |
 
-All five share the same content, Burmese/English switch, countdown, schedule, photos, gift QR codes and wishes. They live in `src/components/invite` (classic) and `src/components/templates` (the others, with palettes in `src/app/templates.css`). `/showcase` shows all five side by side using fictional demo weddings created by `pnpm seed:showcase` (generated artwork, no real people).
+All six share the same content, Burmese/English switch, countdown, schedule, photos, gift QR codes and wishes. The four newer designs also show, when filled in on the Details tab: **Our story**, **Dress code** (colour swatches), **RSVP** (accept or decline, number of guests, note; replies on the admin **RSVPs** tab), an **FAQ** accordion, and **Add to Google Calendar / .ics** buttons. They fade sections in on scroll, and schedule rows open on click to show the venue. They live in `src/components/invite` (classic) and `src/components/templates` (the others, with palettes in `src/app/templates.css`). `/showcase` shows all six side by side using fictional demo weddings created by `pnpm seed:showcase` (generated artwork, no real people).
 
 ## Adding a real wedding
 
@@ -67,7 +68,7 @@ Put the couple's details and images in a folder that is **not committed** (`priv
 pnpm import:wedding private/<couple>
 ```
 
-`wedding.json` holds names, `template_key`, texts (`{"my": "...", "en": "..."}`), `cover_text` (top corner labels, script line and footer printed on the card), events (times in the wedding's timezone), photos and gift QR images. The script writes to whatever `NEXT_PUBLIC_SUPABASE_URL` points at, so use `.env.local` values for the project you mean. Re-running replaces events, photos and gift images but keeps guests and wishes. QR codes photographed from print need a white margin around them to scan; check each one with a phone before publishing.
+`wedding.json` holds names, `template_key`, an optional `music` file (mp3, m4a, aac or ogg), texts (`{"my": "...", "en": "..."}`), `cover_text` (top corner labels, script line and footer printed on the card), events (times in the wedding's timezone), photos and gift QR images. The script writes to whatever `NEXT_PUBLIC_SUPABASE_URL` points at, so use `.env.local` values for the project you mean. Re-running replaces events, photos and gift images but keeps guests and wishes. QR codes photographed from print need a white margin around them to scan; check each one with a phone before publishing.
 
 Open wishes walls rely on a honeypot field, a 30-second cooldown per browser and a limit of 30 public wishes per 10 minutes per wedding. Hide anything unwanted from the **Wishes** tab in the admin.
 

@@ -5,10 +5,11 @@ const TABS = [
   { href: "/details", label: "Details" },
   { href: "/events", label: "Events" },
   { href: "/media", label: "Media" },
+  { href: "/rsvps", label: "RSVPs" },
   { href: "/wishes", label: "Wishes" },
 ];
 
-export function AdminNav({ slug, current }: { slug: string; current: "" | "/details" | "/events" | "/media" | "/wishes" }) {
+export function AdminNav({ slug, current }: { slug: string; current: "" | "/details" | "/events" | "/media" | "/rsvps" | "/wishes" }) {
   return (
     <header>
       <Link href="/admin" className="label-caps text-ink-soft underline">

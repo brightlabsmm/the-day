@@ -25,6 +25,12 @@ export const TEMPLATES = [
     mood: "Dramatic · velvet · gold",
   },
   {
+    key: "record",
+    name: "Vinyl Record",
+    blurb: "A spinning record that plays your song, with the story told track by track. Breezy, seaside blues.",
+    mood: "Playful · seaside blue · music",
+  },
+  {
     key: "scratch",
     name: "Scratch to Reveal",
     blurb: "A playful rose-pink invitation: scratch the heart to reveal it, then a calendar and hearts.",

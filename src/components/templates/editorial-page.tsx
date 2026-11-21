@@ -9,7 +9,10 @@ import { TemplateNav } from "./nav";
 import { PlainCountdown } from "./plain-countdown";
 import { Schedule } from "./schedule";
 import { Venue } from "./venue";
+import { Reveal } from "./reveal";
+import { TplDressCode, TplFaq, TplRsvp, TplStory } from "./extras";
 import { TrackOpen } from "./track-open";
+import { Parallax } from "./parallax";
 import { TplFooter, TplGallery, navItemsFor } from "./sections";
 import { taglineWords, viewOf, type TemplateProps } from "./view";
 
@@ -60,8 +63,12 @@ export function EditorialPage({ invitation, locale, monogram, token, onOpenActio
             ))}
           </div>
           {feature && (
-            <div className="absolute top-1/2 left-1/2 aspect-[3/4] w-[clamp(7rem,30vw,19rem)] -translate-x-1/2 -translate-y-1/2 overflow-hidden shadow-2xl">
-              <Image src={feature.src} alt="" fill sizes="(max-width: 768px) 30vw, 300px" className="object-cover grayscale" />
+            <div className="absolute top-1/2 left-1/2 w-[clamp(7rem,30vw,19rem)] -translate-x-1/2 -translate-y-1/2">
+              <Parallax speed={0.18}>
+                <div className="relative aspect-[3/4] overflow-hidden shadow-2xl">
+                  <Image src={feature.src} alt="" fill sizes="(max-width: 768px) 30vw, 300px" className="object-cover grayscale" />
+                </div>
+              </Parallax>
             </div>
           )}
         </section>
@@ -81,11 +88,16 @@ export function EditorialPage({ invitation, locale, monogram, token, onOpenActio
         </section>
       )}
 
-      <Schedule invitation={invitation} locale={locale} />
-      <TplGallery photos={v.gallery} locale={locale} mono />
-      <Venue invitation={invitation} locale={locale} />
-      <GiftSection invitation={invitation} locale={locale} plain />
-      <WishesSection invitation={invitation} locale={locale} token={token} plain />
+      <Reveal><TplStory invitation={invitation} locale={locale} /></Reveal>
+
+      <Reveal><Schedule invitation={invitation} locale={locale} /></Reveal>
+      <Reveal><TplGallery photos={v.gallery} locale={locale} mono /></Reveal>
+      <Reveal><Venue invitation={invitation} locale={locale} /></Reveal>
+      <Reveal><TplDressCode invitation={invitation} locale={locale} /></Reveal>
+      <Reveal><TplRsvp invitation={invitation} locale={locale} token={token} /></Reveal>
+      <Reveal><TplFaq invitation={invitation} locale={locale} /></Reveal>
+      <Reveal><GiftSection invitation={invitation} locale={locale} plain /></Reveal>
+      <Reveal><WishesSection invitation={invitation} locale={locale} token={token} plain /></Reveal>
       <ClosingQuote invitation={invitation} locale={locale} />
       <TplFooter v={v} locale={locale} />
       <span className="sr-only">{t(wedding.partner_one_name, locale)}</span>

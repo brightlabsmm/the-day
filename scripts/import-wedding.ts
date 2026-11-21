@@ -20,7 +20,7 @@ const Config = z.object({
   slug: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/).max(60),
   status: z.enum(["draft", "published"]).default("published"),
   timezone: z.string().default("Asia/Yangon"),
-  template_key: z.enum(["classic", "editorial", "envelope", "scratch", "theatre"]).default("classic"),
+  template_key: z.enum(["classic", "editorial", "envelope", "scratch", "theatre", "record"]).default("classic"),
   partner_one_name: i18n,
   partner_two_name: i18n,
   monogram: z.string().nullable().default(null),
@@ -33,6 +33,10 @@ const Config = z.object({
   wishes_enabled: z.boolean().default(true),
   wishes_editable: z.boolean().default(false),
   public_wishes: z.boolean().default(false),
+  rsvp_enabled: z.boolean().default(false),
+  dress_code: z.record(z.string(), z.unknown()).default({}),
+  faq: z.array(z.record(z.string(), z.unknown())).default([]),
+  story: z.array(z.record(z.string(), z.unknown())).default([]),
   events: z.array(
     z.object({
       kind: z.enum(["ceremony", "reception", "other"]),
@@ -54,6 +58,8 @@ const Config = z.object({
     }),
   ),
   gifts: z.array(z.object({ label: z.string(), account_name: z.string().optional(), file: z.string() })).default([]),
+  /** Background music: an mp3, m4a, aac or ogg file in the folder. */
+  music: z.object({ file: z.string(), title: z.string().optional() }).optional(),
 });
 
 export async function importWedding(dir: string) {
@@ -84,6 +90,10 @@ export async function importWedding(dir: string) {
         wishes_enabled: cfg.wishes_enabled,
         wishes_editable: cfg.wishes_editable,
         public_wishes: cfg.public_wishes,
+        rsvp_enabled: cfg.rsvp_enabled,
+        dress_code: cfg.dress_code as never,
+        faq: cfg.faq as never,
+        story: cfg.story as never,
       },
       { onConflict: "slug" },
     )
@@ -117,7 +127,7 @@ export async function importWedding(dir: string) {
 
   // Replace stored media for this wedding
   await db.from("wedding_photos").delete().eq("wedding_id", id);
-  for (const folder of ["photos", "gifts"]) {
+  for (const folder of ["photos", "gifts", "music"]) {
     const { data: old } = await db.storage.from("wedding-media").list(`${id}/${folder}`);
     if (old?.length) await db.storage.from("wedding-media").remove(old.map((o) => `${id}/${folder}/${o.name}`));
   }
@@ -158,7 +168,20 @@ export async function importWedding(dir: string) {
     gifts.push({ label: g.label, ...(g.account_name ? { account_name: g.account_name } : {}), qr_path });
     console.log(`✓ gift QR ${g.label}`);
   }
-  const { error: gErr } = await db.from("weddings").update({ gift_methods: gifts }).eq("id", id);
+  let musicUpdate: { music_path: string | null; music_title: string | null } = { music_path: null, music_title: null };
+  if (cfg.music) {
+    const types: Record<string, [string, string]> = { ".mp3": ["audio/mpeg", "mp3"], ".m4a": ["audio/mp4", "m4a"], ".aac": ["audio/aac", "aac"], ".ogg": ["audio/ogg", "ogg"] };
+    const [contentType, ext] = types[path.extname(cfg.music.file).toLowerCase()] ?? [];
+    if (!contentType) throw new Error("music must be .mp3, .m4a, .aac or .ogg");
+    const music_path = `${id}/music/${crypto.randomUUID()}.${ext}`;
+    const { error: mErr } = await db.storage
+      .from("wedding-media")
+      .upload(music_path, await readFile(path.join(dir, cfg.music.file)), { contentType, cacheControl: "31536000" });
+    if (mErr) throw mErr;
+    musicUpdate = { music_path, music_title: cfg.music.title ?? null };
+    console.log(`✓ music ${cfg.music.file}`);
+  }
+  const { error: gErr } = await db.from("weddings").update({ gift_methods: gifts, ...musicUpdate }).eq("id", id);
   if (gErr) throw gErr;
   console.log(`Done. Open /w/${cfg.slug}`);
 }

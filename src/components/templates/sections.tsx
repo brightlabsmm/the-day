@@ -5,6 +5,7 @@ import { PhotoGrid } from "./photo-grid";
 import type { NavItem } from "./nav";
 import type { TemplateView } from "./view";
 import type { Invitation } from "@/lib/invitation";
+import { hasDress, hasFaq, hasStory } from "./extras";
 
 export function TplGallery({ photos, locale, mono = false }: { photos: AlbumPhoto[]; locale: Locale; mono?: boolean }) {
   if (photos.length === 0) return null;
@@ -36,9 +37,13 @@ export function TplFooter({ v, locale }: { v: TemplateView; locale: Locale }) {
 /** Section links for the top bar, only for sections that will actually be on the page. */
 export function navItemsFor(v: TemplateView, invitation: Invitation, locale: Locale): NavItem[] {
   const items: NavItem[] = [{ id: "invitation", label: s("navInvitation", locale) }];
+  if (hasStory(invitation)) items.push({ id: "story", label: s("navStory", locale) });
   if (invitation.events.length) items.push({ id: "schedule", label: s("navSchedule", locale) });
   if (v.gallery.length) items.push({ id: "gallery", label: s("navGallery", locale) });
   if (v.venues.length) items.push({ id: "venue", label: s("navVenue", locale) });
+  if (hasDress(invitation)) items.push({ id: "dress", label: s("navDress", locale) });
+  if (invitation.wedding.rsvp_enabled) items.push({ id: "rsvp", label: s("navRsvp", locale) });
+  if (hasFaq(invitation)) items.push({ id: "faq", label: s("navFaq", locale) });
   if (v.hasGift) items.push({ id: "gift", label: s("navGift", locale) });
   if (v.showWishes) items.push({ id: "wishes", label: s("navWishes", locale) });
   return items;

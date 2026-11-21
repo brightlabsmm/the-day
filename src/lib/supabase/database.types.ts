@@ -57,6 +57,32 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"rsvps": {
+                  Row: {
+                    "attending": boolean,"created_at": string,"guest_id": string | null,"id": string,"name": string,"note": string | null,"party_size": number,"updated_at": string,"wedding_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "attending": boolean,"created_at"?: string,"guest_id"?: string | null,"id"?: string,"name": string,"note"?: string | null,"party_size"?: number,"updated_at"?: string,"wedding_id": string
+                  }
+                  Update: {
+                    "attending"?: boolean,"created_at"?: string,"guest_id"?: string | null,"id"?: string,"name"?: string,"note"?: string | null,"party_size"?: number,"updated_at"?: string,"wedding_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "rsvps_guest_id_fkey"
+      columns: ["guest_id"]
+isOneToOne: false
+      referencedRelation: "guests"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "rsvps_wedding_id_fkey"
+      columns: ["wedding_id"]
+isOneToOne: false
+      referencedRelation: "weddings"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"wedding_events": {
                   Row: {
                     "created_at": string,"ends_at": string | null,"id": string,"kind": string,"map_url": string | null,"myanmar_date_text": NonNullable<Json>,"sort_order": number,"starts_at": string,"title": NonNullable<Json>,"venue_address": NonNullable<Json>,"venue_name": NonNullable<Json>,"wedding_id": string
@@ -99,14 +125,14 @@ isOneToOne: false
                   ]
                 },"weddings": {
                   Row: {
-                    "closing_quote": NonNullable<Json>,"cover_text": NonNullable<Json>,"created_at": string,"family": NonNullable<Json>,"gift_methods": NonNullable<Json>,"id": string,"invitation_text": NonNullable<Json>,"monogram": string | null,"music_path": string | null,"music_title": string | null,"note": NonNullable<Json>,"partner_one_name": NonNullable<Json>,"partner_two_name": NonNullable<Json>,"public_wishes": boolean,"slug": string,"status": string,"tagline": NonNullable<Json>,"template_key": string,"theme": NonNullable<Json>,"timezone": string,"updated_at": string,"wishes_editable": boolean,"wishes_enabled": boolean
+                    "closing_quote": NonNullable<Json>,"cover_text": NonNullable<Json>,"created_at": string,"dress_code": NonNullable<Json>,"family": NonNullable<Json>,"faq": NonNullable<Json>,"gift_methods": NonNullable<Json>,"id": string,"invitation_text": NonNullable<Json>,"monogram": string | null,"music_path": string | null,"music_title": string | null,"note": NonNullable<Json>,"partner_one_name": NonNullable<Json>,"partner_two_name": NonNullable<Json>,"public_wishes": boolean,"rsvp_enabled": boolean,"slug": string,"status": string,"story": NonNullable<Json>,"tagline": NonNullable<Json>,"template_key": string,"theme": NonNullable<Json>,"timezone": string,"updated_at": string,"wishes_editable": boolean,"wishes_enabled": boolean
                   }
                   ComputedFields: never
                   Insert: {
-                    "closing_quote"?: NonNullable<Json>,"cover_text"?: NonNullable<Json>,"created_at"?: string,"family"?: NonNullable<Json>,"gift_methods"?: NonNullable<Json>,"id"?: string,"invitation_text"?: NonNullable<Json>,"monogram"?: string | null,"music_path"?: string | null,"music_title"?: string | null,"note"?: NonNullable<Json>,"partner_one_name": NonNullable<Json>,"partner_two_name": NonNullable<Json>,"public_wishes"?: boolean,"slug": string,"status"?: string,"tagline"?: NonNullable<Json>,"template_key"?: string,"theme"?: NonNullable<Json>,"timezone"?: string,"updated_at"?: string,"wishes_editable"?: boolean,"wishes_enabled"?: boolean
+                    "closing_quote"?: NonNullable<Json>,"cover_text"?: NonNullable<Json>,"created_at"?: string,"dress_code"?: NonNullable<Json>,"family"?: NonNullable<Json>,"faq"?: NonNullable<Json>,"gift_methods"?: NonNullable<Json>,"id"?: string,"invitation_text"?: NonNullable<Json>,"monogram"?: string | null,"music_path"?: string | null,"music_title"?: string | null,"note"?: NonNullable<Json>,"partner_one_name": NonNullable<Json>,"partner_two_name": NonNullable<Json>,"public_wishes"?: boolean,"rsvp_enabled"?: boolean,"slug": string,"status"?: string,"story"?: NonNullable<Json>,"tagline"?: NonNullable<Json>,"template_key"?: string,"theme"?: NonNullable<Json>,"timezone"?: string,"updated_at"?: string,"wishes_editable"?: boolean,"wishes_enabled"?: boolean
                   }
                   Update: {
-                    "closing_quote"?: NonNullable<Json>,"cover_text"?: NonNullable<Json>,"created_at"?: string,"family"?: NonNullable<Json>,"gift_methods"?: NonNullable<Json>,"id"?: string,"invitation_text"?: NonNullable<Json>,"monogram"?: string | null,"music_path"?: string | null,"music_title"?: string | null,"note"?: NonNullable<Json>,"partner_one_name"?: NonNullable<Json>,"partner_two_name"?: NonNullable<Json>,"public_wishes"?: boolean,"slug"?: string,"status"?: string,"tagline"?: NonNullable<Json>,"template_key"?: string,"theme"?: NonNullable<Json>,"timezone"?: string,"updated_at"?: string,"wishes_editable"?: boolean,"wishes_enabled"?: boolean
+                    "closing_quote"?: NonNullable<Json>,"cover_text"?: NonNullable<Json>,"created_at"?: string,"dress_code"?: NonNullable<Json>,"family"?: NonNullable<Json>,"faq"?: NonNullable<Json>,"gift_methods"?: NonNullable<Json>,"id"?: string,"invitation_text"?: NonNullable<Json>,"monogram"?: string | null,"music_path"?: string | null,"music_title"?: string | null,"note"?: NonNullable<Json>,"partner_one_name"?: NonNullable<Json>,"partner_two_name"?: NonNullable<Json>,"public_wishes"?: boolean,"rsvp_enabled"?: boolean,"slug"?: string,"status"?: string,"story"?: NonNullable<Json>,"tagline"?: NonNullable<Json>,"template_key"?: string,"theme"?: NonNullable<Json>,"timezone"?: string,"updated_at"?: string,"wishes_editable"?: boolean,"wishes_enabled"?: boolean
                   }
                   Relationships: [
                     
@@ -164,6 +190,9 @@ isOneToOne: false
                            },
 "submit_public_wish":
 { Args: { "p_author_name": string,"p_message": string,"p_slug": string }; Returns: Json
+                           },
+"submit_rsvp":
+{ Args: { "p_attending": boolean,"p_name": string,"p_note": string,"p_party_size": number,"p_slug": string,"p_token": string }; Returns: Json
                            },
 "submit_wish":
 { Args: { "p_author_name": string,"p_message": string,"p_slug": string,"p_token": string }; Returns: Json

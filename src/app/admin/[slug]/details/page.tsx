@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { requireAdmin } from "@/lib/admin/auth";
 import { AdminNav, I18nField, inputClass } from "@/components/admin/admin-nav";
 import { TEMPLATES } from "@/lib/templates";
+import { colorsToText, faqToText, storyToText } from "@/lib/admin/forms";
 import { saveWeddingDetails } from "../../actions";
 
 export default function DetailsPage(props: PageProps<"/admin/[slug]/details">) {
@@ -74,6 +75,39 @@ async function Details({ params }: PageProps<"/admin/[slug]/details">) {
             );
           })()}
         </fieldset>
+        <fieldset className="space-y-3 border border-navy/20 p-3">
+          <legend className="label-caps px-1">Our story, dress code and FAQ (shown by the newer page designs)</legend>
+          {(() => {
+            type L = { my?: string; en?: string };
+            const story = (Array.isArray(w.story) ? w.story : []) as { label?: L; title?: L; text?: L }[];
+            const faq = (Array.isArray(w.faq) ? w.faq : []) as { q?: L; a?: L }[];
+            const dress = (w.dress_code ?? {}) as { text?: L; colors?: { hex: string; name?: L }[] };
+            const area = "block w-full border border-navy/40 bg-white/70 px-3 py-2 font-mono text-sm outline-none focus:border-gold";
+            return (
+              <>
+                <p className="text-sm text-ink-soft">
+                  Separate items with a blank line. Story: first line is the label (e.g. WINTER 2020), second the title,
+                  then the text. FAQ: first line is the question, then the answer. English and Burmese items line up by
+                  position.
+                </p>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  <textarea name="story_en" rows={8} placeholder="Story (English)" defaultValue={storyToText(story, "en")} className={area} />
+                  <textarea name="story_my" rows={8} lang="my" placeholder="ဇာတ်လမ်း (မြန်မာ)" defaultValue={storyToText(story, "my")} className={area} />
+                </div>
+                <I18nField name="dress_text" label="Dress code message" value={dress.text} multiline />
+                <p className="text-sm text-ink-soft">Dress code colours: one per line, as a hex colour then its name, e.g. #5e1a27 Burgundy</p>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  <textarea name="colors_en" rows={4} placeholder="#5e1a27 Burgundy" defaultValue={colorsToText(dress.colors ?? [], "en")} className={area} />
+                  <textarea name="colors_my" rows={4} lang="my" placeholder="#5e1a27 ဘာဂန်ဒီ" defaultValue={colorsToText(dress.colors ?? [], "my")} className={area} />
+                </div>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  <textarea name="faq_en" rows={8} placeholder="FAQ (English)" defaultValue={faqToText(faq, "en")} className={area} />
+                  <textarea name="faq_my" rows={8} lang="my" placeholder="မေးလေ့ရှိသည်များ (မြန်မာ)" defaultValue={faqToText(faq, "my")} className={area} />
+                </div>
+              </>
+            );
+          })()}
+        </fieldset>
         <I18nField name="closing_quote" label="Closing quote" value={w.closing_quote} multiline />
 
         <fieldset className="space-y-2">
@@ -90,6 +124,9 @@ async function Details({ params }: PageProps<"/admin/[slug]/details">) {
           </label>
           <label className="block">
             <input type="checkbox" name="wishes_editable" defaultChecked={w.wishes_editable} /> Guests can edit their wish
+          </label>
+          <label className="block">
+            <input type="checkbox" name="rsvp_enabled" defaultChecked={w.rsvp_enabled} /> Show the RSVP form (replies appear on the RSVPs tab)
           </label>
           <label className="block">
             <input type="checkbox" name="public_wishes" defaultChecked={w.public_wishes} /> Open wishes wall: anyone with the

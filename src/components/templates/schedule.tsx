@@ -62,10 +62,24 @@ export function Schedule({
                   )}
                 </p>
                 <span aria-hidden className="tpl-rail" />
-                <div>
-                  <h3 className="tpl-display text-[1.35rem] leading-snug text-[color:var(--navy)]">{t(e.title, locale)}</h3>
-                  {venue && <p className="mt-1 text-[0.95rem] text-[color:var(--ink-soft)]">{venue}</p>}
-                </div>
+                <details className="group">
+                  <summary className="cursor-pointer list-none">
+                    <h3 className="tpl-display inline text-[1.35rem] leading-snug text-[color:var(--navy)]">{t(e.title, locale)}</h3>
+                    <span aria-hidden className="ml-2 inline-block text-[color:var(--gold)] transition-transform group-open:rotate-45">+</span>
+                    {venue && <p className="mt-1 text-[0.95rem] text-[color:var(--ink-soft)]">{venue}</p>}
+                  </summary>
+                  {(t(e.venue_address, locale) || e.map_url) && (
+                    <div className="mt-3 text-[0.9rem] leading-relaxed text-[color:var(--ink-soft)]">
+                      {t(e.venue_address, locale) && <p className="whitespace-pre-line">{t(e.venue_address, locale)}</p>}
+                      {e.map_url && (
+                        <a href={e.map_url} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block underline">
+                          {s("directions", locale)}
+                          <span className="sr-only"> {s("opensNewTab", locale)}</span>
+                        </a>
+                      )}
+                    </div>
+                  )}
+                </details>
               </li>
             );
           })}

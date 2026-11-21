@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Great_Vibes, Jost, Noto_Serif_Myanmar, Playfair_Display } from "next/font/google";
+import { Cormorant_Garamond, Great_Vibes, Jost, Noto_Serif_Myanmar, Pacifico, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import "./templates.css";
 
@@ -29,6 +29,8 @@ const playfair = Playfair_Display({
 });
 const greatVibes = Great_Vibes({ variable: "--font-script", subsets: ["latin"], weight: "400", display: "swap" });
 
+const pacifico = Pacifico({ variable: "--font-brush", subsets: ["latin"], weight: "400", display: "swap" });
+
 const jost = Jost({
   variable: "--font-jost",
   subsets: ["latin"],
@@ -54,7 +56,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="my"
-      className={`${cormorant.variable} ${notoMyanmar.variable} ${jost.variable} ${playfair.variable} ${greatVibes.variable} h-full`}
+      className={`${cormorant.variable} ${notoMyanmar.variable} ${jost.variable} ${playfair.variable} ${greatVibes.variable} ${pacifico.variable} h-full`}
     >
       <body className="min-h-full">{children}</body>
     </html>

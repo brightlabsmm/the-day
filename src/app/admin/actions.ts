@@ -7,7 +7,7 @@ import { requireAdmin } from "@/lib/admin/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { generateGuestToken } from "@/lib/tokens";
 import { templateKey } from "@/lib/templates";
-import { i18nFromForm, localInputToIso } from "@/lib/admin/forms";
+import { dressCodeFromForm, faqFromForm, i18nFromForm, localInputToIso, storyFromForm } from "@/lib/admin/forms";
 
 const Credentials = z.object({ email: z.email(), password: z.string().min(1).max(200) });
 
@@ -117,6 +117,10 @@ export async function saveWeddingDetails(form: FormData) {
       },
       wishes_enabled: form.get("wishes_enabled") === "on",
       public_wishes: form.get("public_wishes") === "on",
+      rsvp_enabled: form.get("rsvp_enabled") === "on",
+      dress_code: dressCodeFromForm(form),
+      faq: faqFromForm(form),
+      story: storyFromForm(form),
       wishes_editable: form.get("wishes_editable") === "on",
     })
     .eq("slug", slug.data);
