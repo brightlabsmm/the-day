@@ -13,7 +13,7 @@ our own and are not copied.
 | Eden & Roc | watercolour floral arch frame | n/a | countdown, story, programme, dress code, venue, RSVP | `wildflower` (look), `lantern` (order) | order applied to `lantern`; `wildflower` now has the staged entrance: wreath with top and bottom foliage and ribbon bows grows in, then each line fades up |
 | Rose & King (portal) | page content not readable on inspection | | | | **not analysed** |
 | Rose & Christian | sheer silk photo, Enter pill and Skip | n/a | countdown, date calendar, gallery, dress code, RSVP, find your seat, venue | `silk` | order applied to `silk` |
-| Olivia & Adam | none | faded beach photo | story, venue, RSVP, what to wear, memories | `record` (look), `botanical` (order) | order applied to `botanical`; faded-photo hero **not done** |
+| Olivia & Adam | none | faded beach photo | story, venue, RSVP, what to wear, memories | `record` (look), `botanical` (order) | order applied to `botanical`; `record` hero now starts washed out in white and clears to the photo, with a cream line-art disc |
 | Rose & David | none | full-screen photo, centred names | programme, dress code, moments, RSVP, find your seat | `editorial` (look), `sunrise` (order) | order applied to `sunrise` |
 
 ## How section order works
@@ -26,7 +26,6 @@ fixed order.
 
 ## Not done
 
-- Faded full-photo hero (Olivia & Adam).
 - Rose & King portal page.
 - English/Thai language switch (ours is Burmese/English).
 - Section order for the older designs.

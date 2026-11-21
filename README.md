@@ -55,7 +55,7 @@ Each wedding picks a design in the admin (**Details → Page design**):
 | `editorial` | Black and white, full-screen photo, giant monogram and type |
 | `envelope` | Cream envelope with a wax seal, script lettering |
 | `theatre` | Velvet curtains and a spotlit stage, "Act I, II, III" programme, flip-card countdown |
-| `record` | Seaside blues: a spinning vinyl record that plays the wedding song, and the story as a track-by-track player |
+| `record` | Seaside blues: the hero starts washed out in white and clears to the cover photo, over a cream line-art record that spins and plays the wedding song, and the story as a track-by-track player |
 | `wildflower` | Peach and olive: a wildflower wreath (side garlands, foliage over the top and under the foot, ribbon bows) grows in around the names and each line fades up in turn, scalloped frames for countdown, programme, dress code and venue, arch-topped photos |
 | `shutters` | Blue wooden shutters swing open (on their own, on tap, or skipped) onto a sunlit view; whitewash, bougainvillea pink, arched window-frame photos |
 | `silk` | Blush silk drape lifts away from a calm ivory page: soft petals, a month calendar you can page through, boxed countdown, tap-to-expand schedule rows, rounded cards, sage green |

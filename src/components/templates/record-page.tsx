@@ -39,9 +39,10 @@ export function RecordPage({ invitation, locale, monogram, token, onOpenAction }
       <TemplateNav locale={locale} monogram={monogram} items={items} over="light" />
 
       <header id="top" className="relative grid min-h-svh place-items-center overflow-hidden px-6 pt-20 pb-16 text-center">
-        {v.cover && <Image src={v.cover.src} alt="" fill priority sizes="100vw" className="object-cover" />}
-        <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/55 to-[#f5fafc]" />
-        <div className="relative">
+        {v.cover && <Image src={v.cover.src} alt="" fill priority sizes="100vw" className="rec-photo object-cover" />}
+        <div aria-hidden className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,.82),rgba(255,255,255,.5)_38%,rgba(255,255,255,.14)_66%,rgba(245,250,252,.78))]" />
+        <div aria-hidden className="rec-veil absolute inset-0 bg-white" />
+        <div className="rec-text relative">
           <p className="tpl-eyebrow !text-[color:var(--navy)]">{s("recordIntro", locale)}</p>
           <div className="mt-8">
             <RecordPlayer
@@ -49,6 +50,7 @@ export function RecordPage({ invitation, locale, monogram, token, onOpenAction }
               title={wedding.music_title}
               monogram={monogram}
               locale={locale}
+              light
             />
           </div>
           <h1 className="tpl-brush mt-10 text-[clamp(2.6rem,10vw,6rem)] text-[color:var(--navy)]">

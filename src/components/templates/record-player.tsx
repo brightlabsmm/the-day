@@ -26,16 +26,20 @@ export function RecordPlayer({
   title,
   monogram,
   locale,
+  light = false,
 }: {
   src: string | null;
   title: string | null;
   monogram: string;
   locale: Locale;
+  /** A pale cream disc with fine navy grooves instead of black vinyl. */
+  light?: boolean;
 }) {
   const audio = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
   const label = s(playing ? "pauseSong" : "playSong", locale);
   const [a, b] = monogram.split("&");
+  const groove = light ? "#2e4378" : "#fff";
 
   async function toggle() {
     const el = audio.current;
@@ -66,12 +70,12 @@ export function RecordPlayer({
           onPause={() => setPlaying(false)}
         />
       )}
-      <div data-playing={playing} className="tpl-vinyl size-full rounded-full shadow-[0_18px_40px_-14px_rgba(30,45,90,.55)]">
+      <div data-playing={playing} className="tpl-vinyl size-full rounded-full shadow-[0_18px_40px_-14px_rgba(30,45,90,.55)]" style={light ? { boxShadow: "0 14px 34px -16px rgba(46,67,120,.45)" } : undefined}>
         <svg viewBox="0 0 200 200" className="size-full" aria-hidden>
           <defs>
             <radialGradient id="vinyl-body" cx="0.5" cy="0.5" r="0.5">
-              <stop offset="0" stopColor="#1b1f2b" />
-              <stop offset="1" stopColor="#0c0e14" />
+              <stop offset="0" stopColor={light ? "#fffdf8" : "#1b1f2b"} />
+              <stop offset="1" stopColor={light ? "#e9e1d0" : "#0c0e14"} />
             </radialGradient>
             <linearGradient id="vinyl-shine" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0" stopColor="#fff" stopOpacity="0.22" />
@@ -82,7 +86,7 @@ export function RecordPlayer({
           </defs>
           <circle cx="100" cy="100" r="99" fill="url(#vinyl-body)" />
           {Array.from({ length: 14 }, (_, i) => (
-            <circle key={i} cx="100" cy="100" r={44 + i * 3.8} fill="none" stroke="#fff" strokeOpacity={i % 3 === 0 ? 0.11 : 0.05} />
+            <circle key={i} cx="100" cy="100" r={44 + i * 3.8} fill="none" stroke={groove} strokeOpacity={light ? (i % 3 === 0 ? 0.3 : 0.16) : i % 3 === 0 ? 0.11 : 0.05} />
           ))}
           <circle cx="100" cy="100" r="99" fill="url(#vinyl-shine)" />
           {/* the label */}
@@ -93,7 +97,7 @@ export function RecordPlayer({
             <tspan fontSize="11" dy="-3"> &amp; </tspan>
             <tspan dy="3">{b}</tspan>
           </text>
-          <circle cx="100" cy="100" r="3" fill="#0c0e14" />
+          <circle cx="100" cy="100" r="3" fill={light ? "#2e4378" : "#0c0e14"} />
         </svg>
       </div>
 

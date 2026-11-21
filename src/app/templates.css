@@ -917,3 +917,28 @@ html:has(.tpl) {
 @media (prefers-reduced-motion: reduce) {
   .tpl-wildflower .wf-wreath, .tpl-wildflower .wf-frame, .tpl-wildflower .wf-line { animation: none; }
 }
+
+/* Record: the hero starts washed out in white and the photo clears as it loads. */
+@keyframes rec-clear {
+  from { opacity: 0.95; }
+  to { opacity: 0; }
+}
+@keyframes rec-settle {
+  from { transform: scale(1.09); }
+  to { transform: none; }
+}
+.tpl-record .rec-veil {
+  pointer-events: none;
+  animation: rec-clear 2.8s 0.3s ease-out both;
+}
+.tpl-record .rec-photo {
+  animation: rec-settle 3.6s ease-out both;
+}
+.tpl-record .rec-text h1,
+.tpl-record .rec-text .tpl-eyebrow {
+  text-shadow: 0 0 16px rgba(255, 255, 255, 0.95), 0 0 4px rgba(255, 255, 255, 0.8);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tpl-record .rec-veil { animation: none; opacity: 0; }
+  .tpl-record .rec-photo { animation: none; }
+}
