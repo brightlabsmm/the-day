@@ -72,7 +72,7 @@ export function TemplateNav({
         {monogram}
       </a>
 
-      <div className="hidden items-center gap-7 md:flex">{links}</div>
+      <div className="hidden items-center gap-5 whitespace-nowrap xl:gap-7 lg:flex">{links}</div>
 
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2" role="group" aria-label="ဘာသာစကား / Language">
@@ -97,7 +97,7 @@ export function TemplateNav({
         </div>
         <button
           type="button"
-          className="grid size-9 place-items-center md:hidden"
+          className="grid size-9 place-items-center lg:hidden"
           aria-expanded={open}
           aria-controls="tpl-menu"
           aria-label={open ? s("closeMenu", locale) : s("menu", locale)}
@@ -110,7 +110,7 @@ export function TemplateNav({
       {open && (
         <div
           id="tpl-menu"
-          className="absolute inset-x-0 top-full flex flex-col items-center gap-1 bg-[color:var(--ivory)] px-6 py-5 text-[color:var(--navy)] shadow-md md:hidden"
+          className="absolute inset-x-0 top-full flex flex-col items-center gap-1 bg-[color:var(--ivory)] px-6 py-5 text-[color:var(--navy)] shadow-md lg:hidden"
         >
           {links}
         </div>

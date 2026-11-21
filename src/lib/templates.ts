@@ -37,6 +37,12 @@ export const TEMPLATES = [
     mood: "Gentle · floral · peach & olive",
   },
   {
+    key: "shutters",
+    name: "Shutters",
+    blurb: "Blue wooden shutters swing open onto a sunlit sea view. Whitewash, bougainvillea pink and arched window frames.",
+    mood: "Mediterranean · blue & pink · sunny",
+  },
+  {
     key: "scratch",
     name: "Scratch to Reveal",
     blurb: "A playful rose-pink invitation: scratch the heart to reveal it, then a calendar and hearts.",

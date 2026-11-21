@@ -13,7 +13,7 @@ import type { Locale } from "@/lib/i18n/numerals";
 import { s } from "@/lib/i18n/strings";
 
 type Props = {
-  kind: "envelope" | "scratch" | "theatre";
+  kind: "envelope" | "scratch" | "theatre" | "shutters";
   slug: string;
   token: string | null;
   locale: Locale;
@@ -90,6 +90,14 @@ export function Gate({ kind, slug, token, locale, monogram, coverSrc, guestLabel
     finish();
   }, [finish, phase, record]);
 
+  // The shutters open by themselves after a moment, like a window being thrown open.
+  // This does not count as the guest opening their link; their first tap or scroll does.
+  useEffect(() => {
+    if (kind !== "shutters" || isOpen || phase !== "sealed") return;
+    const id = window.setTimeout(() => (reduceMotion ? finish() : setPhase("opening")), 1300);
+    return () => window.clearTimeout(id);
+  }, [kind, isOpen, phase, reduceMotion, finish]);
+
   return (
     <>
       <div inert={!isOpen} aria-hidden={!isOpen}>
@@ -104,12 +112,22 @@ export function Gate({ kind, slug, token, locale, monogram, coverSrc, guestLabel
           lang={locale}
           className="fixed inset-0 z-50 overflow-hidden"
           animate={{ opacity: phase === "opening" ? 0 : 1 }}
-          transition={{ duration: 0.7, delay: phase === "opening" ? (kind === "envelope" ? 1.1 : kind === "theatre" ? 1.5 : 0.9) : 0, ease: "easeOut" }}
+          transition={{ duration: 0.7, delay: phase === "opening" ? (kind === "envelope" ? 1.1 : kind === "theatre" ? 1.5 : kind === "shutters" ? 1.9 : 0.9) : 0, ease: "easeOut" }}
           onAnimationComplete={() => {
             if (phase === "opening") finish();
           }}
         >
-          {kind === "theatre" ? (
+          {kind === "shutters" ? (
+            <ShuttersFace
+              opening={phase === "opening"}
+              onOpen={begin}
+              locale={locale}
+              monogram={monogram}
+              names={names}
+              dateLabel={dateLabel}
+              place={place}
+            />
+          ) : kind === "theatre" ? (
             <TheatreFace
               opening={phase === "opening"}
               onOpen={begin}
@@ -497,6 +515,102 @@ function TheatreFace({
         className="absolute inset-x-0 top-0 h-[7%] border-b-2 border-[#c9a45a]/70 shadow-[0_8px_18px_rgba(0,0,0,.5)]"
         style={{ backgroundImage: VELVET, backgroundBlendMode: "multiply" }}
       />
+    </div>
+  );
+}
+
+/* ── Shutters ───────────────────────────────────────────────── */
+
+function ShutterDoor({ side, opening }: { side: "left" | "right"; opening: boolean }) {
+  const left = side === "left";
+  return (
+    <div
+      aria-hidden
+      className="tpl-planks absolute top-0 bottom-0 w-[47%] shadow-[inset_0_0_0_6px_#123a7a,inset_0_0_46px_rgba(0,0,0,.3),0_0_30px_rgba(0,0,0,.25)]"
+      style={{
+        [left ? "left" : "right"]: "3%",
+        transformOrigin: left ? "left center" : "right center",
+        transform: `perspective(1700px) rotateY(${opening ? (left ? -104 : 104) : 0}deg)`,
+        transition: "transform 1.8s cubic-bezier(.45,0,.2,1)",
+      }}
+    >
+      {/* brass hinges on the outer edge */}
+      {[10, 50, 90].map((top) => (
+        <span
+          key={top}
+          className="absolute h-[7%] w-[9%] rounded-sm bg-gradient-to-b from-[#e7c777] to-[#a8802f] shadow"
+          style={{ top: `${top}%`, [left ? "left" : "right"]: 0 }}
+        />
+      ))}
+      {/* the handle, on the inner edge */}
+      <svg viewBox="0 0 40 90" className="absolute top-1/2 h-[16%] -translate-y-1/2" style={{ [left ? "right" : "left"]: "6%" }}>
+        <defs>
+          <linearGradient id={`brass-${side}`} x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#f3d98f" />
+            <stop offset="1" stopColor="#a8802f" />
+          </linearGradient>
+        </defs>
+        <path d="M12 8h16v50l8 18" fill="none" stroke={`url(#brass-${side})`} strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="12" cy="10" r="6" fill={`url(#brass-${side})`} />
+      </svg>
+    </div>
+  );
+}
+
+function ShuttersFace({
+  opening,
+  onOpen,
+  locale,
+  monogram,
+  names,
+  dateLabel,
+  place,
+}: {
+  opening: boolean;
+  onOpen: () => void;
+  locale: Locale;
+  monogram: string;
+  names?: { one: string; two: string };
+  dateLabel: string;
+  place?: string;
+}) {
+  return (
+    <div className="relative h-full w-full overflow-hidden bg-[#f6f1e8]">
+      {/* the view behind the shutters: sun, sky and sea */}
+      <div aria-hidden className="absolute inset-0 bg-[linear-gradient(180deg,#eaf4fb,#c4dff1_55%,#8fbde0_55%,#6aa3d2)]" />
+      <div aria-hidden className="absolute top-[18%] left-1/2 size-[38vmin] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,#fffef2,rgba(255,250,220,0)_70%)]" />
+      <div className="absolute inset-x-0 top-[26%] px-6 text-center text-[#1e4f9c]">
+        <p className="text-[0.65rem] tracking-[0.3em] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case [&:lang(my)]:text-sm">{s("shuttersWelcome", locale)}</p>
+        <p className="tpl-script mt-3 text-[clamp(2.8rem,10vw,4.8rem)]">
+          {names?.one}
+          <span className="mx-[0.25em] text-[0.6em] text-[#d9487a]">&amp;</span>
+          {names?.two}
+        </p>
+        <p className="mt-4 text-[0.8rem] tracking-[0.24em] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case">{dateLabel}</p>
+        {place && <p className="mt-1 text-[0.7rem] tracking-[0.18em] text-[#6f819f] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case">{place}</p>}
+        <span className="sr-only">{monogram}</span>
+      </div>
+
+      {/* whitewashed wall either side of the doors */}
+      <div aria-hidden className="absolute inset-y-0 left-0 w-[3%] bg-[#f6f1e8]" />
+      <div aria-hidden className="absolute inset-y-0 right-0 w-[3%] bg-[#f6f1e8]" />
+
+      <button
+        type="button"
+        onClick={onOpen}
+        disabled={opening}
+        aria-label={s("openInvitation", locale)}
+        className="absolute inset-0 z-10 cursor-pointer focus-visible:outline focus-visible:outline-4 focus-visible:-outline-offset-8 focus-visible:outline-white"
+      >
+        <ShutterDoor side="left" opening={opening} />
+        <ShutterDoor side="right" opening={opening} />
+        <span
+          className="absolute inset-x-0 bottom-[9%] text-center text-[0.72rem] tracking-[0.28em] text-white/90 uppercase transition-opacity duration-500 [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case [&:lang(my)]:text-sm"
+          style={{ opacity: opening ? 0 : 1 }}
+        >
+          {s("tapToOpenShutters", locale)}
+        </span>
+      </button>
     </div>
   );
 }

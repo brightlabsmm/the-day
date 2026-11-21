@@ -127,6 +127,8 @@ const STRINGS = {
   programHeading: { my: "မင်္ဂလာနေ့ အစီအစဉ်", en: "Wedding Day Program" },
   withLove: { my: "ချစ်ခင်စွာဖြင့်", en: "With love," },
   cannotWait: { my: "သင်တို့နှင့်အတူ ပျော်ရွှင်ရန် မျှော်လင့်နေပါသည်။", en: "We cannot wait to celebrate with you." },
+  tapToOpenShutters: { my: "ဖွင့်ရန် နှိပ်ပါ", en: "Tap to open" },
+  shuttersWelcome: { my: "ကြိုဆိုပါသည်", en: "Welcome" },
 } as const satisfies Record<string, Record<Locale, string>>;
 
 export type StringKey = keyof typeof STRINGS;

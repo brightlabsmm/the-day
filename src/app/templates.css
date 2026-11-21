@@ -491,3 +491,37 @@ html:has(.tpl) {
   font-family: var(--font-myanmar);
   letter-spacing: 0.02em;
 }
+
+/* Shutters: whitewash, Aegean blue and bougainvillea pink. */
+.tpl-shutters {
+  --ivory: #fbf7f1;
+  --paper: #f1ebe0;
+  --paper-deep: #e6dccb;
+  --navy: #1e4f9c;
+  --ink: #2a3a56;
+  --ink-soft: #6f819f;
+  --gold: #d9487a;
+  --gold-soft: #f2b3c8;
+  --gold-deep: #a82c5a;
+  --color-ivory: var(--ivory);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-navy: var(--navy);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-deep: var(--gold-deep);
+  --tpl-display: var(--font-playfair), "Playfair Display", Georgia, serif;
+}
+.tpl-shutters .foil {
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  color: var(--navy);
+}
+.tpl-planks {
+  background-image:
+    repeating-linear-gradient(90deg, #1d54a9 0 18px, #153f87 18px 20px, #1f5cba 20px 38px, #153f87 38px 40px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(0, 0, 0, 0.2));
+  background-blend-mode: normal;
+}

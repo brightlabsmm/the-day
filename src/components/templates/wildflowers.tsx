@@ -20,7 +20,7 @@ const BLOOMS = ["#f1b5a5", "#f6d2c3", "#a9bbe0", "#f3d37b", "#fbe3da", "#c9b7e0"
 const LEAF = "#9fb08a";
 const STEM = "#8fa07c";
 
-function garland(side: "left" | "right", seed: number, h: number): ReactNode[] {
+function garland(side: "left" | "right", seed: number, h: number, blooms: string[] = BLOOMS): ReactNode[] {
   const r = rng(seed);
   const dir = side === "left" ? 1 : -1;
   const baseX = side === "left" ? 30 : 270;
@@ -43,7 +43,7 @@ function garland(side: "left" | "right", seed: number, h: number): ReactNode[] {
     // leaves along the branch
     out.push(<ellipse key={`l${i}`} cx={x + out_ * len * 0.45} cy={y - 7} rx="7" ry="2.6" fill={LEAF} opacity=".7" transform={`rotate(${out_ * -28} ${x + out_ * len * 0.45} ${y - 7})`} />);
     // the blossom: a ring of petals around a centre
-    const colour = BLOOMS[Math.floor(r() * BLOOMS.length)];
+    const colour = blooms[Math.floor(r() * blooms.length)];
     const petals = 5;
     const pr = 4.6 + r() * 4.2;
     for (let p = 0; p < petals; p++) {
@@ -52,7 +52,7 @@ function garland(side: "left" | "right", seed: number, h: number): ReactNode[] {
     }
     out.push(<circle key={`c${i}`} cx={ex} cy={ey} r={pr * 0.45} fill={r() > 0.5 ? "#e8b25a" : "#fff4e6"} opacity=".9" />);
     // a bud on the stem
-    if (r() > 0.55) out.push(<circle key={`bud${i}`} cx={x - out_ * 5} cy={y + 8} r={2.4 + r() * 2} fill={BLOOMS[Math.floor(r() * BLOOMS.length)]} opacity=".7" />);
+    if (r() > 0.55) out.push(<circle key={`bud${i}`} cx={x - out_ * 5} cy={y + 8} r={2.4 + r() * 2} fill={blooms[Math.floor(r() * blooms.length)]} opacity=".7" />);
     y += 17 + r() * 15;
     i++;
   }
@@ -60,7 +60,7 @@ function garland(side: "left" | "right", seed: number, h: number): ReactNode[] {
 }
 
 /** Two garlands, one down each side, to sit around a framed area. */
-export function WildflowerBorder({ seed = 3, height = 640 }: { seed?: number; height?: number }) {
+export function WildflowerBorder({ seed = 3, height = 640, blooms }: { seed?: number; height?: number; blooms?: string[] }) {
   return (
     <svg aria-hidden viewBox={`0 0 300 ${height}`} preserveAspectRatio="none" className="pointer-events-none absolute inset-0 size-full overflow-visible">
       <defs>
@@ -69,8 +69,8 @@ export function WildflowerBorder({ seed = 3, height = 640 }: { seed?: number; he
         </filter>
       </defs>
       <g filter={`url(#wc-${seed})`}>
-        {garland("left", seed, height)}
-        {garland("right", seed + 11, height)}
+        {garland("left", seed, height, blooms)}
+        {garland("right", seed + 11, height, blooms)}
       </g>
     </svg>
   );
