@@ -76,6 +76,53 @@ export function WildflowerBorder({ seed = 3, height = 640, blooms }: { seed?: nu
   );
 }
 
+/**
+ * The wreath's top and bottom: foliage sweeping over the head of the frame and a leaf sprig under
+ * its foot, with two pale ribbon bows. Same coordinates as WildflowerBorder (300 wide).
+ */
+export function WreathCaps({ seed = 5, height = 570 }: { seed?: number; height?: number }) {
+  const r = rng(seed * 7 + 3);
+  const items: ReactNode[] = [];
+  const sweep = (key: string, x0: number, y0: number, cx: number, cy: number, x1: number, y1: number) => {
+    items.push(<path key={`s${key}`} d={`M${x0} ${y0} Q${cx} ${cy} ${x1} ${y1}`} stroke={STEM} strokeWidth="1.2" fill="none" opacity=".8" />);
+    for (let k = 1; k <= 6; k++) {
+      const t = k / 7;
+      const x = (1 - t) * (1 - t) * x0 + 2 * (1 - t) * t * cx + t * t * x1;
+      const y = (1 - t) * (1 - t) * y0 + 2 * (1 - t) * t * cy + t * t * y1;
+      const side = k % 2 ? 1 : -1;
+      items.push(<ellipse key={`l${key}${k}`} cx={(x + side * 5).toFixed(1)} cy={(y - 3).toFixed(1)} rx="8" ry="2.8" fill={k % 3 ? LEAF : "#b7c6a0"} opacity=".72" transform={`rotate(${(side * 40 + (r() * 20 - 10)).toFixed(1)} ${(x + side * 5).toFixed(1)} ${(y - 3).toFixed(1)})`} />);
+      if (k % 2 === 0) {
+        const colour = BLOOMS[Math.floor(r() * BLOOMS.length)];
+        const pr = 3.2 + r() * 2.2;
+        for (let p = 0; p < 5; p++) {
+          const a = (p / 5) * Math.PI * 2 + r();
+          items.push(<circle key={`p${key}${k}${p}`} cx={(x - side * 4 + Math.cos(a) * pr).toFixed(1)} cy={(y - 6 + Math.sin(a) * pr).toFixed(1)} r={(pr * 0.85).toFixed(1)} fill={colour} opacity=".8" />);
+        }
+        items.push(<circle key={`c${key}${k}`} cx={(x - side * 4).toFixed(1)} cy={(y - 6).toFixed(1)} r={(pr * 0.4).toFixed(1)} fill="#f3d37b" opacity=".9" />);
+      }
+    }
+  };
+  // over the top of the frame
+  sweep("tl", 30, 150, 60, 52, 140, 34);
+  sweep("tr", 270, 150, 240, 52, 160, 34);
+  // under the foot of the frame
+  sweep("bl", 36, height - 86, 70, height - 26, 144, height - 30);
+  sweep("br", 264, height - 86, 230, height - 26, 156, height - 30);
+  const bow = (cx: number, cy: number, rot: number, key: string) => (
+    <g key={key} transform={`translate(${cx} ${cy}) rotate(${rot})`} opacity=".55">
+      <ellipse cx="-12" cy="0" rx="13" ry="6" fill="#fff" stroke="#e7d6cf" strokeWidth=".6" transform="rotate(-18 -12 0)" />
+      <ellipse cx="12" cy="0" rx="13" ry="6" fill="#fff" stroke="#e7d6cf" strokeWidth=".6" transform="rotate(18 12 0)" />
+      <circle r="3" fill="#f1dcd3" />
+    </g>
+  );
+  items.push(bow(62, 176, -28, "bow1"), bow(238, height - 150, 24, "bow2"));
+  return (
+    <svg aria-hidden viewBox={`0 0 300 ${height}`} preserveAspectRatio="none" className="pointer-events-none absolute inset-0 size-full overflow-visible">
+      <g filter={`url(#wc-${seed})`}>{items}</g>
+    </svg>
+  );
+}
+
 /** A small peach on a leafy twig. */
 export function Peach({ className = "" }: { className?: string }) {
   return (

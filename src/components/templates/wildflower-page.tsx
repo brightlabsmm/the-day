@@ -10,7 +10,7 @@ import { TemplateNav } from "./nav";
 import { PlainCountdown } from "./plain-countdown";
 import { PhotoCollage } from "./collage";
 import { OgeeFrame } from "./ogee-frame";
-import { Peach, WildflowerBorder } from "./wildflowers";
+import { Peach, WildflowerBorder, WreathCaps } from "./wildflowers";
 import { Reveal } from "./reveal";
 import { TplFaq, TplSeat, TplTips, TplRsvp, TplStory, dressOf } from "./extras";
 import { TrackOpen } from "./track-open";
@@ -40,19 +40,22 @@ export function WildflowerPage({ invitation, locale, monogram, token, onOpenActi
 
       <header id="top" className="px-4 pt-20 pb-6">
         <div className="relative mx-auto w-[min(96vw,30rem)]" style={{ aspectRatio: "300 / 570" }}>
-          <WildflowerBorder seed={5} height={570} />
+          <div className="wf-wreath absolute inset-0">
+            <WildflowerBorder seed={5} height={570} />
+            <WreathCaps seed={5} height={570} />
+          </div>
           <div className="absolute inset-0 grid place-items-center">
-            <OgeeFrame className="!w-[78%]">
-              <p className="tpl-mono !text-[0.58rem]">{s("theatreTogether", locale)}</p>
-              <p aria-hidden className="mt-2 text-[0.8rem] text-[color:var(--gold)]">♥ ♥ ♥</p>
-              <p className="tpl-display mx-auto mt-3 max-w-[15rem] text-[1.05rem] leading-snug text-[color:var(--navy)]">{s("pleasureOfCompany", locale)}</p>
+            <OgeeFrame className="wf-frame !w-[78%]">
+              <p className="wf-line tpl-mono !text-[0.58rem]" style={{ "--i": 0 } as React.CSSProperties}>{s("theatreTogether", locale)}</p>
+              <p aria-hidden className="wf-line mt-2 text-[0.8rem] text-[color:var(--gold)]" style={{ "--i": 1 } as React.CSSProperties}>♥ ♥ ♥</p>
+              <p className="wf-line tpl-display mx-auto mt-3 max-w-[15rem] text-[1.05rem] leading-snug text-[color:var(--navy)]" style={{ "--i": 2 } as React.CSSProperties}>{s("pleasureOfCompany", locale)}</p>
               <h1 className="tpl-script mt-3 text-[clamp(2.6rem,12vw,3.6rem)] text-[color:var(--navy)]">
-                {v.names.one}
-                <span className="block text-[0.5em] text-[color:var(--gold)]">&amp;</span>
-                {v.names.two}
+                <span className="wf-line block" style={{ "--i": 3 } as React.CSSProperties}>{v.names.one}</span>
+                <span className="wf-line block text-[0.5em] text-[color:var(--gold)]" style={{ "--i": 4 } as React.CSSProperties}>&amp;</span>
+                <span className="wf-line block" style={{ "--i": 5 } as React.CSSProperties}>{v.names.two}</span>
               </h1>
-              {date && <p className="tpl-mono mt-4">{date}</p>}
-              {place && <p className="tpl-mono mt-2 !text-[0.58rem] !tracking-[0.14em]">{place}</p>}
+              {date && <p className="wf-line tpl-mono mt-4" style={{ "--i": 6 } as React.CSSProperties}>{date}</p>}
+              {place && <p className="wf-line tpl-mono mt-2 !text-[0.58rem] !tracking-[0.14em]" style={{ "--i": 7 } as React.CSSProperties}>{place}</p>}
             </OgeeFrame>
           </div>
         </div>

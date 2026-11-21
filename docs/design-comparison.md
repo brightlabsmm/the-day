@@ -10,7 +10,7 @@ our own and are not copied.
 | Aria & Theo | dark olive curtains lit by a spotlight on the names, open by themselves, Skip | full-screen photo, script names on the left, date and venue columns at the bottom | dress code, programme, moments, RSVP, find your seat, venue | new `spotlight` | opening, hero and order built; order also applied to `artdeco` |
 | May & Jan | maroon velvet curtains, monogram crest, "Enter the theatre" | n/a | countdown, programme, dress code, gallery, venue, RSVP | `theatre` (look), `midnight` (order) | `theatre` already close; order applied to `midnight` |
 | Andrew & Rachel | scratch-to-reveal circle over a scenic photo, "You are invited" | n/a | story, date, venue | `scratch` | opening rebuilt: clear cover photo, arch and ring outline, champagne scratch circle revealing the names, gold "You are invited" pill, date and venue below |
-| Eden & Roc | watercolour floral arch frame | n/a | countdown, story, programme, dress code, venue, RSVP | `wildflower` (look), `lantern` (order) | order applied to `lantern`; floral-arch opening **not done** |
+| Eden & Roc | watercolour floral arch frame | n/a | countdown, story, programme, dress code, venue, RSVP | `wildflower` (look), `lantern` (order) | order applied to `lantern`; `wildflower` now has the staged entrance: wreath with top and bottom foliage and ribbon bows grows in, then each line fades up |
 | Rose & King (portal) | page content not readable on inspection | | | | **not analysed** |
 | Rose & Christian | sheer silk photo, Enter pill and Skip | n/a | countdown, date calendar, gallery, dress code, RSVP, find your seat, venue | `silk` | order applied to `silk` |
 | Olivia & Adam | none | faded beach photo | story, venue, RSVP, what to wear, memories | `record` (look), `botanical` (order) | order applied to `botanical`; faded-photo hero **not done** |
@@ -26,7 +26,6 @@ fixed order.
 
 ## Not done
 
-- Watercolour floral-arch opening (Eden & Roc).
 - Faded full-photo hero (Olivia & Adam).
 - Rose & King portal page.
 - English/Thai language switch (ours is Burmese/English).

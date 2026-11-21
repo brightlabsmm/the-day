@@ -894,3 +894,26 @@ html:has(.tpl) {
 .tpl-spotlight .tpl-order > :has(#faq) { order: 12; }
 .tpl-spotlight .tpl-order > :has(#gift) { order: 13; }
 .tpl-spotlight .tpl-order > :has(#wishes) { order: 14; }
+
+/* Wildflower: the card assembles itself. The wreath grows in, the frame fades up, then each line follows. */
+@keyframes wf-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes wf-grow {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: none; }
+}
+.tpl-wildflower .wf-wreath {
+  animation: wf-grow 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.tpl-wildflower .wf-frame {
+  animation: wf-grow 1.2s 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.tpl-wildflower .wf-line {
+  animation: wf-in 0.9s ease both;
+  animation-delay: calc(1s + var(--i, 0) * 0.42s);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tpl-wildflower .wf-wreath, .tpl-wildflower .wf-frame, .tpl-wildflower .wf-line { animation: none; }
+}
