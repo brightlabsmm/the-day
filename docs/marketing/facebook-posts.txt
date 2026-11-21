@@ -1,0 +1,371 @@
+THE DAY BY BRIGHT LABS — FACEBOOK POSTS KIT
+============================================
+
+Page: https://www.facebook.com/profile.php?id=61597006130300
+
+What is in this file
+  PART A  The three posts (English + Burmese), ready to paste
+  PART B  Photo suggestions for each post (real screenshots from /showcase)
+  PART C  Gemini prompts (text: polish and check Burmese + English)
+  PART D  ChatGPT prompts (images: one set for each post)
+  PART E  Posting order and boost checklist
+
+Notes
+  - The couples in the demo designs are fictional. Do not call them "our customers".
+  - No prices are included. If you add one, put it in the service post.
+  - The Burmese was drafted by an AI. Have a Burmese reader check spelling and
+    tone before you post or boost. PART C helps with this.
+  - AI image tools often garble Burmese letters. The image prompts in PART D ask
+    for pictures WITHOUT text. Add the words afterwards in Canva or Facebook.
+  - Product is not online yet (it runs on your computer), so every post ends
+    with "Message us". Do not boost with a website link until the site is live.
+
+
+==============================================================
+PART A — THE THREE POSTS
+==============================================================
+
+----------------------------------------------------------------
+POST 1 — INTRO POST (introduce the Page)
+----------------------------------------------------------------
+
+ENGLISH
+Hello! We're Bright Labs. 👋
+
+We build digital wedding invitations for Myanmar couples. Instead of printing
+hundreds of cards, send each guest their own invitation link that opens like a
+real card: with your names, date, venue and photos, in Burmese and English.
+
+We're just getting started. Follow this Page to see our designs, and message us
+if you're planning a wedding. 💍
+
+#BrightLabs #THEDAY #MyanmarWedding #DigitalInvitation
+
+BURMESE
+မင်္ဂလာပါ! Bright Labs ပါ။ 👋
+
+မြန်မာစုံတွဲများအတွက် ဒစ်ဂျစ်တယ် မင်္ဂလာဖိတ်စာများ ဖန်တီးပေးပါသည်။
+ကတ်ပေါင်းများစွာ ရိုက်နှိပ်မည့်အစား ဧည့်သည်တစ်ဦးချင်းစီကို ကိုယ်ပိုင်ဖိတ်စာလင့်ခ်
+ပို့နိုင်ပါသည်။ စုံတွဲအမည်၊ ရက်စွဲ၊ နေရာနှင့် ဓာတ်ပုံများပါဝင်ပြီး မြန်မာ/အင်္ဂလိပ်
+နှစ်ဘာသာ ဖတ်နိုင်ပါသည်။
+
+ကျွန်ုပ်တို့ စတင်ခါစပင်ဖြစ်ပါသည်။ ဒီဇိုင်းများ ကြည့်ရန် Page ကို Follow လုပ်ပါ။
+မင်္ဂလာဆောင်စီစဉ်နေပါက Message ပို့ပါ။ 💍
+
+
+----------------------------------------------------------------
+POST 2 — SERVICE POST (what customers get)
+----------------------------------------------------------------
+
+ENGLISH
+What's included in your THE DAY invitation 💌
+
+✅ A personal link for every guest, in Burmese and English
+✅ An opening that feels special: curtains, shutters, wax seal, scratch-to-reveal
+   or a silk drape
+✅ Live countdown to your day
+✅ Schedule, venue and a Google Maps button
+✅ Add to calendar
+✅ RSVP: see who is coming and how many
+✅ Dress code with colour swatches
+✅ Photo gallery
+✅ KBZPay / AYA QR codes for gifts
+✅ A wishes wall for guests' blessings
+✅ Nine designs to choose from
+
+Tell us your wedding date and we'll show you which design suits your style.
+Message us! 💬
+
+#WeddingInvitation #MyanmarWedding #DigitalInvitation
+
+BURMESE
+THE DAY မင်္ဂလာဖိတ်စာတွင် ပါဝင်သည်များ 💌
+
+✅ ဧည့်သည်တစ်ဦးချင်းစီအတွက် ကိုယ်ပိုင်လင့်ခ်၊ မြန်မာ/အင်္ဂလိပ် နှစ်ဘာသာ
+✅ ဖွင့်ကြည့်ချိန်တွင် ထူးခြားသော အလှစီမံမှု (ကော်ဇော၊ ပြတင်းပေါက်ကာ၊ ဖယောင်းတံဆိပ်၊
+   ကုတ်၍ဖွင့်ခြင်း၊ ပိုးသား)
+✅ မင်္ဂလာနေ့အထိ ရက်ရေတွက်စနစ်
+✅ အစီအစဉ်၊ နေရာနှင့် Google Maps ခလုတ်
+✅ ပြက္ခဒိန်တွင် ထည့်သွင်းနိုင်ခြင်း
+✅ RSVP: ဘယ်သူလာမည်၊ ဘယ်နှဦးလာမည် ကြည့်နိုင်ခြင်း
+✅ ဝတ်စုံအရောင်များ
+✅ ဓာတ်ပုံပြခန်း
+✅ လက်ဆောင်အတွက် KBZPay / AYA QR
+✅ ဆုမွန်ကောင်းတောင်းရန် နေရာ
+✅ ပုံစံ ကိုးမျိုးမှ ရွေးချယ်နိုင်ခြင်း
+
+မင်္ဂလာဆောင်ရက်ကို ပြောပြပါ။ သင့်အတွက် သင့်တော်သော ဒီဇိုင်းကို ပြပေးပါမည်။
+Message ပို့ပါ! 💬
+
+
+----------------------------------------------------------------
+POST 3 — ADVERTISEMENT POST (the one to boost)
+----------------------------------------------------------------
+
+ENGLISH
+Skip the printing. Send a wedding invitation they'll actually open. ✨
+
+Your guests tap a link and your invitation opens like a real card, with your
+names, photos, countdown and map, in Burmese and English. They can reply with
+their RSVP right there, and you see who's coming.
+
+🎨 Nine designs, from classic gold to modern black and white
+💌 One personal link for each guest
+
+Planning your wedding? Message us today and we'll show you the designs. 💬
+
+#WeddingInvitation #MyanmarWedding #DigitalInvitation #THEDAY
+
+BURMESE
+ကတ်ရိုက်နှိပ်ခြင်းမလိုဘဲ ဧည့်သည်များ ဖွင့်ကြည့်ချင်စိတ်ရှိစေမည့် မင်္ဂလာဖိတ်စာ ✨
+
+ဧည့်သည်က လင့်ခ်ကို နှိပ်လိုက်ရုံနှင့် ကတ်စစ်စစ်လို ပွင့်လာပါမည်။ စုံတွဲအမည်၊
+ဓာတ်ပုံ၊ ရက်ရေတွက်စနစ်နှင့် မြေပုံပါဝင်ပြီး မြန်မာ/အင်္ဂလိပ် နှစ်ဘာသာဖြစ်ပါသည်။
+RSVP ကိုလည်း ထိုနေရာမှ ပြန်ကြားနိုင်ပြီး ဘယ်သူလာမည်ကို သင်မြင်နိုင်ပါသည်။
+
+🎨 ရွှေရောင်ရိုးရာမှ ခေတ်မီအဖြူအမည်းအထိ ဒီဇိုင်း ကိုးမျိုး
+💌 ဧည့်သည်တစ်ဦးချင်းစီအတွက် ကိုယ်ပိုင်လင့်ခ်
+
+မင်္ဂလာဆောင်စီစဉ်နေပါသလား။ ယနေ့ Message ပို့ပါ၊ ဒီဇိုင်းများ ပြပေးပါမည်။ 💬
+
+
+==============================================================
+PART B — PHOTO SUGGESTIONS (use your real screenshots)
+==============================================================
+
+How to take them
+  1. Run the app (pnpm dev) and open http://localhost:3000/showcase
+  2. Click "Phone" so previews are phone-sized. Click "Replay from the opening"
+     to see each opening again.
+  3. Take screenshots at 1080 x 1350 (portrait) for the feed. Keep the status
+     bar and browser chrome out of the picture.
+  4. Open a design in its own page for a full-screen shot:
+       http://localhost:3000/w/showcase-theatre?lang=en
+       http://localhost:3000/w/showcase-shutters?lang=en
+       http://localhost:3000/w/showcase-silk?lang=en
+       http://localhost:3000/w/showcase-envelope?lang=en
+       http://localhost:3000/w/showcase-wildflower?lang=en
+       http://localhost:3000/w/showcase-record?lang=en
+       http://localhost:3000/w/showcase-editorial?lang=en
+       http://localhost:3000/w/showcase-scratch?lang=en
+       http://localhost:3000/w/showcase-classic?lang=en
+
+POST 1 (intro) — 1 image
+  - Best: the Theatre curtain screen (dark stage, velvet curtains) or the
+    Shutters opening. Strong, memorable, makes people curious.
+  - Add your Bright Labs logo in a corner and the line "Digital wedding
+    invitations for Myanmar" in Canva.
+
+POST 2 (service) — carousel of 5 to 8 images, one feature each
+  1. The opening of any design (Silk drape with "Enter")
+  2. The countdown (Theatre flip cards or Silk boxed countdown)
+  3. The schedule with an opened row (Silk) or "Act I, II, III" (Theatre)
+  4. The calendar card (Silk) with the wedding day circled
+  5. The RSVP form (any new design)
+  6. The dress code colour swatches
+  7. The gift QR codes (KBZPay / AYA demo QR)
+  8. The wishes wall form
+  Add a short title bar on each ("Countdown", "RSVP", "Gift QR"...).
+
+POST 3 (advertisement) — 1 strong image, or a 3-image carousel
+  - Single image: Shutters opening (blue + pink, bright, eye-catching in a feed)
+    or Theatre curtains.
+  - Carousel of 3 openings: Theatre, Shutters, Silk. Last card: "Message us".
+  - Keep text on the picture to a few words. Facebook shows ads with less text
+    more widely.
+
+Photo rules
+  - Use only the fictional demo couples. Never use a real couple's photo or a
+    real person's face without written permission.
+  - Do not show the real QR codes of any real couple.
+
+
+==============================================================
+PART C — GEMINI PROMPTS (TEXT: BURMESE + ENGLISH)
+==============================================================
+
+How to use: open Gemini, paste one prompt, then paste the post text where it says
+[PASTE POST TEXT HERE]. Ask for changes in the same chat.
+
+----------------------------------------------------------------
+C1. Check and polish the Burmese (use for all three posts)
+----------------------------------------------------------------
+You are a native Burmese copywriter for Facebook ads in Myanmar. Below is a
+Facebook post about a digital wedding invitation service called "THE DAY" by
+"Bright Labs". The Burmese was machine-written.
+
+Task:
+1. Rewrite the Burmese so it sounds natural, warm and polite, the way a modern
+   Myanmar wedding business would speak. Avoid stiff, word-for-word translation.
+2. Use common wedding words that Myanmar couples really use (for example
+   မင်္ဂလာဖိတ်စာ, မင်္ဂလာဆောင်, စုံတွဲ, ဧည့်သည်).
+3. Keep it short and easy to read on a phone. Keep the emojis and line breaks.
+4. Keep these names in English exactly: THE DAY, Bright Labs, RSVP, KBZPay, AYA,
+   Google Maps, Message.
+5. Do NOT add prices, discounts, awards or customer claims that are not in the
+   text.
+6. Give me 2 versions: (a) polite and formal, (b) friendly and lively.
+7. List any word you were unsure about so I can double-check it.
+
+Post:
+[PASTE POST TEXT HERE]
+
+----------------------------------------------------------------
+C2. Make the English shorter and punchier
+----------------------------------------------------------------
+Rewrite the Facebook post below in simple, friendly English for an audience in
+Myanmar who may read English as a second language. Use short sentences and
+common words. Keep emojis, line breaks and hashtags. Keep it under 120 words.
+Do not invent features, prices or claims. Give me 3 options.
+
+Post:
+[PASTE POST TEXT HERE]
+
+----------------------------------------------------------------
+C3. Three headline ideas for the advertisement post (Burmese + English)
+----------------------------------------------------------------
+Write 10 short Facebook ad headlines (under 8 words each) for a digital wedding
+invitation service in Myanmar called THE DAY by Bright Labs. Benefits: no
+printing, one personal link per guest, opens like a real card, Burmese and
+English, RSVP, countdown, map. Give each headline in English and in natural
+Burmese. Mark the 3 you think would get the most clicks and say why. Do not
+claim prices, discounts or "number one".
+
+----------------------------------------------------------------
+C4. Reply script for people who message the Page (Burmese + English)
+----------------------------------------------------------------
+Write a short Messenger auto-reply and 5 quick replies for the Facebook Page of
+"Bright Labs - THE DAY", a digital wedding invitation service in Myanmar.
+Give each in English and natural Burmese. The first reply should greet the
+person and ask: (1) wedding date, (2) city, (3) whether they want Burmese,
+English or both, (4) their preferred style (classic gold, modern black and
+white, romantic, playful). Quick replies: what is included, how many designs,
+how long it takes (leave a placeholder [X days]), how to pay (leave a
+placeholder [payment info]), and can I see a sample. Keep the tone polite and
+warm.
+
+----------------------------------------------------------------
+C5. One more post idea (for later)
+----------------------------------------------------------------
+Write a Facebook post titled "How it works in 3 steps" for THE DAY by Bright
+Labs: 1) choose a design, 2) send us your names, date, venue and photos, 3) we
+give you a personal link for each guest. English and natural Burmese, with
+emojis, under 100 words each. Do not mention prices or delivery times.
+
+
+==============================================================
+PART D — CHATGPT PROMPTS (IMAGES, one set per post)
+==============================================================
+
+How to use: paste a prompt into ChatGPT (image generation). If the first result
+is not right, say what to change ("warmer", "less text", "show only one hand").
+Download, then add logo and words in Canva.
+
+General rules for every prompt (already included below)
+  - NO text, letters or numbers inside the picture (AI garbles Burmese).
+  - Fictional people only. No celebrity or real person likeness.
+  - Myanmar-friendly: warm, respectful, wedding-appropriate.
+  - A phone showing the invitation is fine but leave the screen as abstract
+    colour, because you will paste your real screenshot onto it.
+
+----------------------------------------------------------------
+D1. POST 1 — INTRO (1080 x 1080, square)
+----------------------------------------------------------------
+Create a square 1:1 photo-style image for a Facebook page intro. A hand holds a
+modern smartphone in front of a soft cream background. The phone screen shows an
+elegant, abstract wedding invitation opening: two velvet burgundy curtains
+parting on a dark stage with a warm gold spotlight (no readable text on the
+screen). Beside the phone: a small dried flower sprig and a gold ring on a linen
+napkin. Soft natural window light, shallow depth of field, premium and warm
+mood, plenty of empty space at the top for adding a logo later. No text, no
+letters, no numbers, no logos anywhere in the image.
+
+----------------------------------------------------------------
+D2. POST 2 — SERVICE (carousel, 8 images, 1080 x 1350 portrait)
+----------------------------------------------------------------
+Make a consistent set of 8 portrait 4:5 flat-lay style images. Same style for
+all: pale cream and sage-green background, soft shadows, a smartphone lying on
+linen with an abstract elegant wedding invitation on the screen (colour and
+shapes only, no readable text). Each image focuses on one feature using props
+and an abstract screen:
+ 1. a silk drape lifting to reveal an ivory page (opening animation)
+ 2. four soft flip-cards showing numbers as plain blocks of colour (countdown)
+ 3. a small calendar page with one date circled in sage green
+ 4. a clipboard with a simple timeline and three small dots (schedule)
+ 5. a rounded card with two big buttons, one filled sage green and one outline
+    (RSVP)
+ 6. five round colour swatches in burgundy, gold, champagne, ivory and charcoal
+    (dress code)
+ 7. two square QR-code-like patterns on a white card next to a small gift box
+    (gifts)
+ 8. a handwritten-style note card with a small heart and a few lines drawn as
+    scribbles (wishes wall)
+Keep the same lighting and colour palette in all 8. Leave the top 15% of every
+image empty for a title to be added later. No readable text, no letters, no
+numbers, no logos.
+
+----------------------------------------------------------------
+D3. POST 3 — ADVERTISEMENT (1080 x 1350 portrait, and a 1200 x 630 landscape)
+----------------------------------------------------------------
+Option A — hero image (portrait 4:5):
+A photo-style image of a young Myanmar couple, seen from behind, standing on a
+sunlit whitewashed Mediterranean-style terrace, opening two blue wooden window
+shutters with brass handles together, pink bougainvillea flowers around the
+window, bright blue sky and sea in the distance. The woman wears a soft ivory
+dress, the man a light traditional or smart outfit. Warm, joyful, cinematic,
+natural light, shallow depth of field. Leave empty space at the bottom 25% for
+text to be added later. No visible faces, no text, no letters, no logos.
+
+Option B — hero image, dramatic (portrait 4:5):
+A photo-style image of velvet burgundy theatre curtains slightly parted, a warm
+gold spotlight on a small round wooden table holding an ivory envelope with a
+gold wax seal and a smartphone leaning against it, glowing screen with abstract
+colour only. Rich, elegant, luxury wedding mood, dark background with warm gold
+highlights, plenty of empty space at the top. No text, no letters, no numbers,
+no logos.
+
+Option C — landscape link-style ad (1200 x 630):
+A wide 1.91:1 image: a phone on the left showing an abstract elegant wedding
+invitation (colour and shapes only), on the right an open ivory envelope with
+loose dried flowers and a gold ring, soft cream background, airy and minimal,
+generous empty space on the right third for text. No text, no letters, no logos.
+
+Cover photo for the Page (820 x 312 safe area, 1640 x 624 recommended):
+A wide, minimal banner: a soft cream and blush gradient with a delicate row of
+small dried flowers along the bottom edge and a thin gold line, large empty
+space in the centre-left for the Bright Labs logo. No text.
+
+Profile picture (square, safe in a circle):
+A simple circular emblem on cream: a small gold heart-shaped ring with a tiny
+sparkle above it, flat and clean, no text.
+
+
+==============================================================
+PART E — POSTING ORDER AND BOOST CHECKLIST
+==============================================================
+
+Order
+  Day 1  Post 1 (Intro). Pin it. Invite friends and family to follow the Page.
+  Day 3  Post 2 (Service carousel).
+  Day 5  Post 3 (Advertisement). Boost this one.
+
+Before you boost
+  [ ] Messages are answered (use the reply script in PART C4; turn on Instant
+      reply: Page > Settings > Messaging > Response assistant).
+  [ ] "Send message" button is on the Page.
+  [ ] You can really deliver an invitation to a customer.
+  [ ] The Burmese was checked by a Burmese reader.
+  [ ] Pictures show only fictional couples.
+
+Boost settings (set them yourself, then check the total before paying)
+  Goal       Get more messages (Messenger or WhatsApp)
+  Location   Myanmar (or Yangon / Mandalay / Naypyidaw)
+  Age        22 to 40
+  Language   Burmese
+  Interests  Weddings, bridal, engagement (keep broad at first)
+  Budget     Start small for 5 to 7 days. Raise it only if you get messages.
+  Payment    Your own method. Review the total, then press Boost.
+
+After 1 to 2 days (Insights or Ads Manager)
+  - Look at messages received and cost per message.
+  - If cost is high, change the picture first, then the headline.
