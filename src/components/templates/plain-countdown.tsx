@@ -22,8 +22,8 @@ export function PlainCountdown({
 }: {
   targetIso: string;
   locale: Locale;
-  /** "cards" shows each number on a framed flip card. */
-  variant?: "plain" | "cards";
+  /** "cards" shows each number on a framed flip card; "compact" is small, with dividers. */
+  variant?: "plain" | "cards" | "compact";
   /** Accessible description of the date being counted down to. */
   label: string;
 }) {
@@ -54,6 +54,24 @@ export function PlainCountdown({
                 </span>
               </span>
               <span className="tpl-eyebrow mt-3 !text-[0.6rem]">· {s(unit, locale)} ·</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (variant === "compact") {
+    return (
+      <div>
+        <p className="sr-only">{label}</p>
+        <div aria-hidden className="mx-auto flex justify-center">
+          {UNITS.map((unit, i) => (
+            <div key={unit} className={`flex flex-col items-center px-[0.6rem] ${i > 0 ? "border-l border-[color:var(--navy)]/30" : ""}`}>
+              <span className="tpl-display text-[clamp(1.35rem,6vw,1.9rem)] leading-none font-bold tabular-nums">
+                {before ? formatNumber(before[unit], locale, unit === "days" ? 0 : 2) : "––"}
+              </span>
+              <span className="tpl-mono mt-1.5 !text-[0.55rem] !tracking-[0.14em]">{s(unit, locale)}</span>
             </div>
           ))}
         </div>

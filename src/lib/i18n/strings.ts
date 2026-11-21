@@ -121,6 +121,12 @@ const STRINGS = {
   nowPlaying: { my: "ယခု ဖော်ပြနေသည်", en: "Now playing" },
   chapter: { my: "အပိုင်း", en: "Track" },
   scrollJourney: { my: "ကျွန်ုပ်တို့၏ ခရီးကို ဆက်ကြည့်ပါ", en: "Scroll to discover our journey" },
+  pleasureOfCompany: { my: "မင်္ဂလာပွဲသို့ ကြွရောက်ချီးမြှင့်ပေးပါရန် လေးစားစွာ ဖိတ်ကြားပါသည်", en: "request the pleasure of your company" },
+  countdownScript: { my: "ရက်စွဲရောက်ရန်", en: "Countdown" },
+  momentsSubtitle: { my: "ကျွန်ုပ်တို့ကို ဖန်တီးခဲ့သော အချိန်လေးများ", en: "A collection of moments that made us" },
+  programHeading: { my: "မင်္ဂလာနေ့ အစီအစဉ်", en: "Wedding Day Program" },
+  withLove: { my: "ချစ်ခင်စွာဖြင့်", en: "With love," },
+  cannotWait: { my: "သင်တို့နှင့်အတူ ပျော်ရွှင်ရန် မျှော်လင့်နေပါသည်။", en: "We cannot wait to celebrate with you." },
 } as const satisfies Record<string, Record<Locale, string>>;
 
 export type StringKey = keyof typeof STRINGS;

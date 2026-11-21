@@ -19,6 +19,7 @@ const PALETTES: Record<string, Palette> = {
   envelope: { sky: ["#f7efe0", "#e8dcc3"], sun: "#fffaf0", hills: ["#b9c79a", "#93a878", "#6f8a58"], bloom: ["#f6e3d6", "#efd0bd", "#fffdf6"], suit: "#4a4a58", gown: "#fffdf7" },
   theatre: { sky: ["#3b1c1a", "#6a2b25"], sun: "#e9c279", hills: ["#7b2a30", "#5c1e27", "#3d1119"], bloom: ["#e8c987", "#c9a45a", "#fff1d0"], suit: "#161616", gown: "#fbf3e2" },
   record: { sky: ["#e7f4f9", "#bfe0ec"], sun: "#fffdf4", hills: ["#d9cba7", "#7fb7c4", "#4c8ea3"], bloom: ["#ffffff", "#e8f6fb", "#cfe9f3"], suit: "#2e4378", gown: "#ffffff" },
+  wildflower: { sky: ["#fcf3ea", "#f3dccb"], sun: "#fff6ec", hills: ["#c7d0a8", "#9fb08a", "#6f8460"], bloom: ["#f1b5a5", "#a9bbe0", "#f6d2c3", "#f3d37b"], suit: "#55573c", gown: "#fff9f2" },
   scratch: { sky: ["#fde3e7", "#f6b8c6"], sun: "#fff6f2", hills: ["#e7a3b4", "#c97d94", "#9e5a75"], bloom: ["#ffd9df", "#f7a3b7", "#fff2f4"], suit: "#4a2b3a", gown: "#fff7f6" },
 };
 
@@ -93,6 +94,7 @@ const DEMOS = [
   { key: "envelope", one: ["Htet Aung", "ထက်အောင်"], two: ["Nandar", "နန္ဒာ"], mono: "H&N", tag: ["Together, from this day on", "ယနေ့မှစ၍ အတူတကွ"] },
   { key: "theatre", one: ["Min Thu", "မင်းသူ"], two: ["Thazin", "သဇင်"], mono: "M&T", tag: ["Every love story deserves a stage", "ချစ်ဇာတ်လမ်းတိုင်း ဇာတ်ခုံတစ်ခု ရှိသင့်ပါသည်"] },
   { key: "record", one: ["Nay Chi", "နေချီ"], two: ["Wai Yan", "ဝေယံ"], mono: "N&W", tag: ["Our song, our story", "ကျွန်ုပ်တို့၏ သီချင်း၊ ကျွန်ုပ်တို့၏ ဇာတ်လမ်း"] },
+  { key: "wildflower", one: ["Su Su", "စုစု"], two: ["Min Min", "မင်းမင်း"], mono: "S&M", tag: ["Grown together, in bloom", "အတူတကွ ပွင့်လန်းခဲ့သည်"] },
   { key: "scratch", one: ["Kaung Myat", "ကောင်းမြတ်"], two: ["Phoo Pwint", "ဖူးပွင့်"], mono: "K&P", tag: ["Love, one scratch at a time", "ချစ်ခြင်းမေတ္တာ"] },
 ] as const;
 

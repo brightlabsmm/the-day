@@ -31,6 +31,12 @@ export const TEMPLATES = [
     mood: "Playful · seaside blue · music",
   },
   {
+    key: "wildflower",
+    name: "Wildflower",
+    blurb: "Soft peach and olive. Watercolour wildflowers frame the names, and each section sits in a scalloped frame.",
+    mood: "Gentle · floral · peach & olive",
+  },
+  {
     key: "scratch",
     name: "Scratch to Reveal",
     blurb: "A playful rose-pink invitation: scratch the heart to reveal it, then a calendar and hearts.",

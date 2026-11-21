@@ -14,7 +14,7 @@ export default function ShowcasePage() {
         <p className="label-caps text-xs text-[#8a7766]">THE DAY · Bright Labs</p>
         <h1 className="font-display mt-3 text-[clamp(2.2rem,6vw,3.6rem)] leading-tight font-semibold">Choose your invitation</h1>
         <p className="mx-auto mt-4 max-w-xl text-lg text-[#6e5f53]">
-          Six designs for the same invitation, each in Burmese and English with a countdown, schedule, photos, gift QR
+          Seven designs for the same invitation, each in Burmese and English with a countdown, schedule, photos, gift QR
           codes and a wishes wall. The couples shown are made up.
         </p>
       </header>

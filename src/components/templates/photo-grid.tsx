@@ -12,25 +12,28 @@ export function PhotoGrid({
   photos,
   locale,
   mono = false,
+  arch = false,
 }: {
   photos: AlbumPhoto[];
   locale: Locale;
   /** Show the photos in black and white (Editorial). */
   mono?: boolean;
+  /** Arch-topped frames with a thin outline (Wildflower). */
+  arch?: boolean;
 }) {
   const [index, setIndex] = useState<number | null>(null);
   return (
     <>
       <ul className="grid grid-cols-2 gap-2 sm:gap-4 md:grid-cols-3">
         {photos.map((p, i) => {
-          const wide = p.kind === "spread";
+          const wide = p.kind === "spread" && !arch;
           return (
-            <li key={p.id} className={wide ? "col-span-2 md:col-span-3" : ""}>
+            <li key={p.id} className={`${wide ? "col-span-2 md:col-span-3" : ""} ${arch ? "rounded-t-[999px] border border-[color:var(--gold-soft)] p-1.5" : ""}`}>
               <button
                 type="button"
                 onClick={() => setIndex(i)}
                 aria-label={`${s("viewPhoto", locale)}${p.alt ? `: ${p.alt}` : ""}`}
-                className={`tpl-grid-photo ${wide ? "aspect-[16/9]" : "aspect-[4/5]"}`}
+                className={`tpl-grid-photo ${wide ? "aspect-[16/9]" : arch ? "aspect-[3/4] rounded-t-[999px]" : "aspect-[4/5]"}`}
               >
                 <Image
                   src={p.src}

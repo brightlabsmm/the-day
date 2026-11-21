@@ -443,3 +443,51 @@ html:has(.tpl) {
     transform: scaleY(0.6);
   }
 }
+
+/* Wildflower: peach, olive and cream. */
+.tpl-wildflower {
+  --ivory: #fbf5ee;
+  --paper: #f6ebdf;
+  --paper-deep: #eedcc8;
+  --navy: #55573c;
+  --ink: #494b33;
+  --ink-soft: #7d806a;
+  --gold: #d99a7c;
+  --gold-soft: #f4c9a4;
+  --gold-deep: #b9735a;
+  --color-ivory: var(--ivory);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-navy: var(--navy);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-deep: var(--gold-deep);
+  --tpl-display: var(--font-playfair), "Playfair Display", Georgia, serif;
+}
+.tpl-wildflower .foil {
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  color: var(--navy);
+}
+.tpl-mono {
+  font-family: var(--font-mono-label), "DM Mono", ui-monospace, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.tpl-mono:lang(my) {
+  font-family: var(--font-myanmar);
+  letter-spacing: 0.02em;
+  text-transform: none;
+  font-size: 0.85rem;
+}
+.tpl-wildflower .tpl-eyebrow {
+  font-family: var(--font-mono-label), "DM Mono", ui-monospace, monospace;
+  letter-spacing: 0.22em;
+}
+.tpl-wildflower .tpl-eyebrow:lang(my) {
+  font-family: var(--font-myanmar);
+  letter-spacing: 0.02em;
+}

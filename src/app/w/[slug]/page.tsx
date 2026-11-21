@@ -18,6 +18,7 @@ import { EditorialPage } from "@/components/templates/editorial-page";
 import { EnvelopePage } from "@/components/templates/envelope-page";
 import { ScratchPage } from "@/components/templates/scratch-page";
 import { RecordPage } from "@/components/templates/record-page";
+import { WildflowerPage } from "@/components/templates/wildflower-page";
 import { TheatrePage } from "@/components/templates/theatre-page";
 import { markOpened } from "./actions";
 
@@ -93,6 +94,8 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
           <TheatrePage {...props} />
         ) : key === "record" ? (
           <RecordPage {...props} />
+        ) : key === "wildflower" ? (
+          <WildflowerPage {...props} />
         ) : (
           <ScratchPage {...props} />
         )}

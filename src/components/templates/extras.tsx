@@ -25,6 +25,11 @@ function Head({ id, eyebrow, heading }: { id: string; eyebrow: string; heading: 
   );
 }
 
+/** The parsed dress code, or null when none is set. */
+export function dressOf(i: Invitation) {
+  return hasDress(i) ? Dress.parse(i.wedding.dress_code) : null;
+}
+
 export const hasStory = (i: Invitation) => (Story.safeParse(i.wedding.story).data?.length ?? 0) > 0;
 export const hasFaq = (i: Invitation) => (Faq.safeParse(i.wedding.faq).data?.length ?? 0) > 0;
 export const hasDress = (i: Invitation) => {
