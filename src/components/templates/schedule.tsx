@@ -15,7 +15,7 @@ export function Schedule({
   invitation: Invitation;
   locale: Locale;
   /** "acts" labels each event as Act I, II, III. */
-  variant?: "timeline" | "acts";
+  variant?: "timeline" | "acts" | "rows";
 }) {
   const { events, wedding } = invitation;
   if (events.length === 0) return null;
@@ -28,6 +28,40 @@ export function Schedule({
         <h2 id="schedule-heading" className="tpl-h2">
           {s("scheduleHeading", locale)}
         </h2>
+        {variant === "rows" ? (
+          <>
+            <p className="mx-auto mt-3 max-w-md text-center text-[0.95rem] text-[color:var(--ink-soft)]">{s("scheduleTapHint", locale)}</p>
+            <ul className="mt-10 divide-y divide-[color:var(--navy)]/15 border-y border-[color:var(--navy)]/15 text-left">
+              {events.map((e) => {
+                const venue = t(e.venue_name, locale);
+                const address = t(e.venue_address, locale);
+                return (
+                  <li key={e.id}>
+                    <details className="group">
+                      <summary className="grid cursor-pointer list-none grid-cols-[6.5rem_1fr_auto] items-center gap-4 py-5">
+                        <span className="tpl-display text-[1.05rem] text-[color:var(--ink-soft)] italic">{oneTime(e.starts_at, tz, locale)}</span>
+                        <span className="tpl-display text-[1.2rem] text-[color:var(--navy)]">{t(e.title, locale)}</span>
+                        <span aria-hidden className="text-[color:var(--gold)] transition-transform group-open:rotate-90">›</span>
+                      </summary>
+                      {(venue || address || e.map_url) && (
+                        <div className="pb-5 pl-[7.5rem] text-[0.92rem] leading-relaxed text-[color:var(--ink-soft)]">
+                          {venue && <p>{venue}</p>}
+                          {address && <p className="whitespace-pre-line">{address}</p>}
+                          {e.map_url && (
+                            <a href={e.map_url} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block underline">
+                              {s("directions", locale)}
+                              <span className="sr-only"> {s("opensNewTab", locale)}</span>
+                            </a>
+                          )}
+                        </div>
+                      )}
+                    </details>
+                  </li>
+                );
+              })}
+            </ul>
+          </>
+        ) : null}
         {variant === "acts" ? (
           <>
             <p className="mt-3 text-center text-[0.95rem] text-[color:var(--ink-soft)]">{s("scheduleActs", locale)}</p>
@@ -45,7 +79,7 @@ export function Schedule({
             </ol>
           </>
         ) : null}
-        <ol className={`tpl-timeline mt-12 ${variant === "acts" ? "hidden" : ""}`}>
+        <ol className={`tpl-timeline mt-12 ${variant === "acts" || variant === "rows" ? "hidden" : ""}`}>
           {events.map((e) => {
             const start = oneTime(e.starts_at, tz, locale);
             const end = e.ends_at ? oneTime(e.ends_at, tz, locale) : null;

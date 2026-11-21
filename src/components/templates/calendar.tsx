@@ -2,11 +2,11 @@ import type { Locale } from "@/lib/i18n/numerals";
 import { formatNumber } from "@/lib/i18n/numerals";
 import { zonedParts } from "@/lib/i18n/datetime";
 
-const MY_MONTHS = ["ဇန်နဝါရီ", "ဖေဖော်ဝါရီ", "မတ်", "ဧပြီ", "မေ", "ဇွန်", "ဇူလိုင်", "ဩဂုတ်", "စက်တင်ဘာ", "အောက်တိုဘာ", "နိုဝင်ဘာ", "ဒီဇင်ဘာ"];
-const EN_MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+export const MY_MONTHS = ["ဇန်နဝါရီ", "ဖေဖော်ဝါရီ", "မတ်", "ဧပြီ", "မေ", "ဇွန်", "ဇူလိုင်", "ဩဂုတ်", "စက်တင်ဘာ", "အောက်တိုဘာ", "နိုဝင်ဘာ", "ဒီဇင်ဘာ"];
+export const EN_MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 // Monday first
-const MY_DAYS = ["လာ", "ဂါ", "ဟူး", "ကြာ", "သော", "နေ", "နွေ"];
-const EN_DAYS = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"];
+export const MY_DAYS = ["လာ", "ဂါ", "ဟူး", "ကြာ", "သော", "နေ", "နွေ"];
+export const EN_DAYS = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"];
 
 /** A month grid with the wedding day circled. Display-only. */
 export function MonthCalendar({ iso, timeZone, locale }: { iso: string; timeZone: string; locale: Locale }) {

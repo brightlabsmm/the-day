@@ -129,6 +129,15 @@ const STRINGS = {
   cannotWait: { my: "သင်တို့နှင့်အတူ ပျော်ရွှင်ရန် မျှော်လင့်နေပါသည်။", en: "We cannot wait to celebrate with you." },
   tapToOpenShutters: { my: "ဖွင့်ရန် နှိပ်ပါ", en: "Tap to open" },
   shuttersWelcome: { my: "ကြိုဆိုပါသည်", en: "Welcome" },
+  enter: { my: "ဝင်ရောက်ရန်", en: "Enter" },
+  countingDown: { my: "ရက်စွဲရောက်ရန်", en: "Counting down" },
+  untilWeSay: { my: "ကတိသစ္စာပြုသည့်နေ့အထိ", en: "Until we say I do" },
+  scheduleTapHint: { my: "အချိန်တိုင်းကို မှတ်သားထားပါသည်။ အသေးစိတ်ကြည့်ရန် အတန်းကို နှိပ်ပါ။", en: "Each moment timed so you don't miss a thing. Tap any row for details." },
+  ourPalette: { my: "ကျွန်ုပ်တို့၏ အရောင်များ", en: "Our palette" },
+  glimpseJourney: { my: "ကျွန်ုပ်တို့ခရီးကို အနည်းငယ် ကြည့်ရှုရန်", en: "A glimpse of our journey" },
+  prevMonth: { my: "ယခင်လ", en: "Previous month" },
+  nextMonth: { my: "နောက်လ", en: "Next month" },
+  celebrateWithYou: { my: "သင်တို့နှင့်အတူ ပျော်ရွှင်ရန် မျှော်လင့်ပါသည်", en: "We can't wait to celebrate with you" },
 } as const satisfies Record<string, Record<Locale, string>>;
 
 export type StringKey = keyof typeof STRINGS;

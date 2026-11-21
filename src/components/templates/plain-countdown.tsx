@@ -22,8 +22,8 @@ export function PlainCountdown({
 }: {
   targetIso: string;
   locale: Locale;
-  /** "cards" shows each number on a framed flip card; "compact" is small, with dividers. */
-  variant?: "plain" | "cards" | "compact";
+  /** "cards" shows each number on a framed flip card; "compact" is small, with dividers; "boxed" is a hairline-bordered strip. */
+  variant?: "plain" | "cards" | "compact" | "boxed";
   /** Accessible description of the date being counted down to. */
   label: string;
 }) {
@@ -54,6 +54,24 @@ export function PlainCountdown({
                 </span>
               </span>
               <span className="tpl-eyebrow mt-3 !text-[0.6rem]">· {s(unit, locale)} ·</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (variant === "boxed") {
+    return (
+      <div>
+        <p className="sr-only">{label}</p>
+        <div aria-hidden className="mx-auto grid max-w-lg grid-cols-4 overflow-hidden rounded-lg border border-[color:var(--navy)]/20 bg-white/50">
+          {UNITS.map((unit, i) => (
+            <div key={unit} className={`flex flex-col items-center py-5 ${i > 0 ? "border-l border-[color:var(--navy)]/20" : ""}`}>
+              <span className="tpl-display text-[clamp(1.8rem,7vw,2.8rem)] leading-none tabular-nums">
+                {before ? formatNumber(before[unit], locale, unit === "days" ? 0 : 2) : "––"}
+              </span>
+              <span className="tpl-eyebrow mt-2 !text-[0.58rem]">{s(unit, locale)}</span>
             </div>
           ))}
         </div>

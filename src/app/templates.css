@@ -525,3 +525,63 @@ html:has(.tpl) {
     linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(0, 0, 0, 0.2));
   background-blend-mode: normal;
 }
+
+/* Silk: ivory, blush and sage. */
+.tpl-silk {
+  --ivory: #faf6ef;
+  --paper: #f3ece1;
+  --paper-deep: #e8dfd0;
+  --navy: #565a49;
+  --ink: #4a4d3f;
+  --ink-soft: #8a8c7a;
+  --gold: #7b8c6c;
+  --gold-soft: #c9d1bd;
+  --gold-deep: #5f6f52;
+  --color-ivory: var(--ivory);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-navy: var(--navy);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-deep: var(--gold-deep);
+  --tpl-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+}
+.tpl-silk .foil {
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  color: var(--navy);
+}
+.tpl-card {
+  border: 1px solid color-mix(in oklab, var(--navy) 18%, transparent);
+  border-radius: 1.25rem;
+  background: color-mix(in oklab, #fff 55%, var(--ivory));
+  padding: clamp(1.25rem, 4vw, 2rem);
+}
+.tpl-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  border-radius: 9999px;
+  background: var(--gold);
+  color: #fff;
+  padding: 0.85rem 2.2rem;
+  font-family: var(--font-jost), system-ui, sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  box-shadow: 0 10px 22px -12px rgba(95, 111, 82, 0.8);
+  transition: transform 0.2s, background 0.2s;
+}
+.tpl-pill:hover,
+.tpl-pill:focus-visible {
+  background: var(--gold-deep);
+  transform: translateY(-1px);
+}
+.tpl-pill:lang(my) {
+  font-family: var(--font-myanmar);
+  letter-spacing: 0.02em;
+  text-transform: none;
+  font-size: 0.95rem;
+}

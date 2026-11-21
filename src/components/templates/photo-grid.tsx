@@ -13,6 +13,7 @@ export function PhotoGrid({
   locale,
   mono = false,
   arch = false,
+  rounded = false,
 }: {
   photos: AlbumPhoto[];
   locale: Locale;
@@ -20,6 +21,8 @@ export function PhotoGrid({
   mono?: boolean;
   /** Arch-topped frames with a thin outline (Wildflower). */
   arch?: boolean;
+  /** Softly rounded corners (Silk). */
+  rounded?: boolean;
 }) {
   const [index, setIndex] = useState<number | null>(null);
   return (
@@ -33,7 +36,7 @@ export function PhotoGrid({
                 type="button"
                 onClick={() => setIndex(i)}
                 aria-label={`${s("viewPhoto", locale)}${p.alt ? `: ${p.alt}` : ""}`}
-                className={`tpl-grid-photo ${wide ? "aspect-[16/9]" : arch ? "aspect-[3/4] rounded-t-[999px]" : "aspect-[4/5]"}`}
+                className={`tpl-grid-photo ${wide ? "aspect-[16/9]" : arch ? "aspect-[3/4] rounded-t-[999px]" : "aspect-[4/5]"} ${rounded ? "rounded-2xl" : ""}`}
               >
                 <Image
                   src={p.src}

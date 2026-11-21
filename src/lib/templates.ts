@@ -43,6 +43,12 @@ export const TEMPLATES = [
     mood: "Mediterranean · blue & pink · sunny",
   },
   {
+    key: "silk",
+    name: "Silk",
+    blurb: "Blush silk lifts away from a calm ivory page. Soft petals, a calendar you can page through, rounded cards and sage green.",
+    mood: "Minimal · blush silk · sage",
+  },
+  {
     key: "scratch",
     name: "Scratch to Reveal",
     blurb: "A playful rose-pink invitation: scratch the heart to reveal it, then a calendar and hearts.",

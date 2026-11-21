@@ -13,7 +13,7 @@ import type { Locale } from "@/lib/i18n/numerals";
 import { s } from "@/lib/i18n/strings";
 
 type Props = {
-  kind: "envelope" | "scratch" | "theatre" | "shutters";
+  kind: "envelope" | "scratch" | "theatre" | "shutters" | "silk";
   slug: string;
   token: string | null;
   locale: Locale;
@@ -112,12 +112,14 @@ export function Gate({ kind, slug, token, locale, monogram, coverSrc, guestLabel
           lang={locale}
           className="fixed inset-0 z-50 overflow-hidden"
           animate={{ opacity: phase === "opening" ? 0 : 1 }}
-          transition={{ duration: 0.7, delay: phase === "opening" ? (kind === "envelope" ? 1.1 : kind === "theatre" ? 1.5 : kind === "shutters" ? 1.9 : 0.9) : 0, ease: "easeOut" }}
+          transition={{ duration: 0.7, delay: phase === "opening" ? (kind === "envelope" ? 1.1 : kind === "theatre" ? 1.5 : kind === "shutters" ? 1.9 : kind === "silk" ? 1.2 : 0.9) : 0, ease: "easeOut" }}
           onAnimationComplete={() => {
             if (phase === "opening") finish();
           }}
         >
-          {kind === "shutters" ? (
+          {kind === "silk" ? (
+            <SilkFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} place={place} />
+          ) : kind === "shutters" ? (
             <ShuttersFace
               opening={phase === "opening"}
               onOpen={begin}
@@ -611,6 +613,64 @@ function ShuttersFace({
           {s("tapToOpenShutters", locale)}
         </span>
       </button>
+    </div>
+  );
+}
+
+/* ── Silk ───────────────────────────────────────────────────── */
+
+const SILK =
+  "linear-gradient(112deg,rgba(255,255,255,.42) 0 7%,transparent 17% 29%,rgba(255,255,255,.3) 37%,transparent 49% 60%,rgba(255,255,255,.36) 69%,transparent 81% 100%)," +
+  "linear-gradient(76deg,rgba(176,128,106,.3) 0 9%,transparent 23% 39%,rgba(176,128,106,.22) 51%,transparent 65% 79%,rgba(176,128,106,.26) 89%,transparent 100%)," +
+  "linear-gradient(180deg,#ebcbb9,#d6a891)";
+
+/** A drape of blush silk with the names on it. It lifts away when the guest enters. */
+function SilkFace({
+  opening,
+  onOpen,
+  locale,
+  names,
+  dateLabel,
+  place,
+}: {
+  opening: boolean;
+  onOpen: () => void;
+  locale: Locale;
+  names?: { one: string; two: string };
+  dateLabel: string;
+  place?: string;
+}) {
+  return (
+    <div
+      className="relative grid h-full w-full place-items-center px-6 text-center text-[#fff8f1]"
+      style={{
+        backgroundImage: SILK,
+        transform: opening ? "translateY(-104%)" : "translateY(0)",
+        transition: "transform 1.2s cubic-bezier(.65,0,.3,1)",
+      }}
+    >
+      <div aria-hidden className="absolute inset-0 bg-[radial-gradient(70%_60%_at_50%_45%,rgba(255,255,255,.28),transparent_70%)]" />
+      <div className="relative [text-shadow:0_1px_12px_rgba(110,66,48,.6)]">
+        <p className="text-[clamp(2.2rem,8vw,3.6rem)] leading-[1.15] tracking-[0.08em] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case" style={{ fontFamily: "var(--font-cormorant), serif" }}>
+          {names?.one}
+        </p>
+        <p className="my-1 text-[1.1rem] italic" style={{ fontFamily: "var(--font-cormorant), serif" }}>
+          {s("and", locale)}
+        </p>
+        <p className="text-[clamp(2.2rem,8vw,3.6rem)] leading-[1.15] tracking-[0.08em] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case" style={{ fontFamily: "var(--font-cormorant), serif" }}>
+          {names?.two}
+        </p>
+        <p className="mt-8 text-[0.75rem] tracking-[0.26em] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case">{dateLabel}</p>
+        {place && <p className="mt-1 text-[0.7rem] tracking-[0.2em] opacity-90 uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case">{place}</p>}
+        <button
+          type="button"
+          onClick={onOpen}
+          disabled={opening}
+          className="mt-10 inline-flex items-center gap-3 rounded-full bg-[#7b8c6c] px-9 py-3.5 text-[0.72rem] tracking-[0.24em] text-white uppercase shadow-[0_12px_26px_-12px_rgba(70,90,60,.9)] transition hover:bg-[#5f6f52] [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case [&:lang(my)]:text-sm"
+        >
+          {s("enter", locale)} <span aria-hidden>→</span>
+        </button>
+      </div>
     </div>
   );
 }
