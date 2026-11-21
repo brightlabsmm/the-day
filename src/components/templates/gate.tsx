@@ -13,7 +13,7 @@ import type { Locale } from "@/lib/i18n/numerals";
 import { s } from "@/lib/i18n/strings";
 
 type Props = {
-  kind: "envelope" | "scratch" | "theatre" | "shutters" | "silk";
+  kind: "envelope" | "scratch" | "theatre" | "shutters" | "silk" | "midnight";
   slug: string;
   token: string | null;
   locale: Locale;
@@ -112,12 +112,14 @@ export function Gate({ kind, slug, token, locale, monogram, coverSrc, guestLabel
           lang={locale}
           className="fixed inset-0 z-50 overflow-hidden"
           animate={{ opacity: phase === "opening" ? 0 : 1 }}
-          transition={{ duration: 0.7, delay: phase === "opening" ? (kind === "envelope" ? 1.1 : kind === "theatre" ? 1.5 : kind === "shutters" ? 1.9 : kind === "silk" ? 1.2 : 0.9) : 0, ease: "easeOut" }}
+          transition={{ duration: 0.7, delay: phase === "opening" ? (kind === "envelope" ? 1.1 : kind === "theatre" ? 1.5 : kind === "shutters" ? 1.9 : kind === "silk" ? 1.2 : kind === "midnight" ? 1.4 : 0.9) : 0, ease: "easeOut" }}
           onAnimationComplete={() => {
             if (phase === "opening") finish();
           }}
         >
-          {kind === "silk" ? (
+          {kind === "midnight" ? (
+            <MidnightFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} place={place} />
+          ) : kind === "silk" ? (
             <SilkFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} place={place} />
           ) : kind === "shutters" ? (
             <ShuttersFace
@@ -670,6 +672,83 @@ function SilkFace({
         >
           {s("enter", locale)} <span aria-hidden>→</span>
         </button>
+      </div>
+    </div>
+  );
+}
+
+/* ── Midnight ───────────────────────────────────────────────── */
+
+const unit = (n: number) => {
+  const f = (Math.sin(n) * 43758.5453) % 1;
+  return Math.round((f < 0 ? f + 1 : f) * 1000) / 10;
+};
+const STARS = Array.from({ length: 60 }, (_, i) => ({
+  x: unit(i * 12.9898),
+  y: unit(i * 78.233 + 3),
+  r: 1 + ((i * 13) % 5) / 2,
+  d: ((i * 17) % 30) / 10,
+}));
+
+/** A night sky with twinkling stars. Tapping the moon zooms into it and the sky fades to the page. */
+function MidnightFace({
+  opening,
+  onOpen,
+  locale,
+  names,
+  dateLabel,
+  place,
+}: {
+  opening: boolean;
+  onOpen: () => void;
+  locale: Locale;
+  names?: { one: string; two: string };
+  dateLabel: string;
+  place?: string;
+}) {
+  const serif = { fontFamily: "var(--font-cormorant), serif" } as const;
+  return (
+    <div
+      className="relative grid h-full w-full place-items-center overflow-hidden px-6 text-center text-[#f3e7c6]"
+      style={{
+        background: "radial-gradient(120% 90% at 50% 0%,#27386b 0%,#10193a 55%,#070b1d 100%)",
+        transform: opening ? "scale(1.35)" : "scale(1)",
+        transition: "transform 1.4s cubic-bezier(.65,0,.3,1)",
+      }}
+    >
+      <style>{`@keyframes tw{0%,100%{opacity:.25}50%{opacity:1}}@media (prefers-reduced-motion:reduce){.tw{animation:none!important}}`}</style>
+      <div aria-hidden className="absolute inset-0">
+        {STARS.map((st, i) => (
+          <span
+            key={i}
+            className="tw absolute rounded-full bg-[#fff4d0]"
+            style={{ left: `${st.x}%`, top: `${st.y}%`, width: `${(st.r * 1.6).toFixed(1)}px`, height: `${(st.r * 1.6).toFixed(1)}px`, animation: `tw ${2.4 + (i % 4)}s ${st.d}s ease-in-out infinite` }}
+          />
+        ))}
+      </div>
+      <div className="relative">
+        <button
+          type="button"
+          onClick={onOpen}
+          disabled={opening}
+          aria-label={s("enter", locale)}
+          className="mx-auto mb-8 block size-24 rounded-full shadow-[0_0_60px_10px_rgba(243,226,176,.45)] transition hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f3e2b0]"
+          style={{ background: "radial-gradient(circle at 36% 34%,#fff8e0,#f3e2b0 55%,#c9ad6b)" }}
+        >
+          <span aria-hidden className="block size-full rounded-full" style={{ background: "radial-gradient(circle at 70% 62%,rgba(150,120,60,.35) 0 14%,transparent 15%),radial-gradient(circle at 30% 70%,rgba(150,120,60,.25) 0 10%,transparent 11%)" }} />
+        </button>
+        <p className="text-[clamp(2.2rem,8vw,3.6rem)] leading-[1.15] tracking-[0.08em] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case" style={serif}>
+          {names?.one}
+        </p>
+        <p className="my-1 text-[1.1rem] text-[#d9b66a] italic" style={serif}>
+          {s("and", locale)}
+        </p>
+        <p className="text-[clamp(2.2rem,8vw,3.6rem)] leading-[1.15] tracking-[0.08em] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case" style={serif}>
+          {names?.two}
+        </p>
+        <p className="mt-7 text-[0.75rem] tracking-[0.26em] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case">{dateLabel}</p>
+        {place && <p className="mt-1 text-[0.7rem] tracking-[0.2em] text-[#b9c4e6] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case">{place}</p>}
+        <p className="mt-8 text-[0.7rem] tracking-[0.3em] text-[#d9b66a] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case">{s("tapMoon", locale)}</p>
       </div>
     </div>
   );

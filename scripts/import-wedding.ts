@@ -20,7 +20,7 @@ const Config = z.object({
   slug: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/).max(60),
   status: z.enum(["draft", "published"]).default("published"),
   timezone: z.string().default("Asia/Yangon"),
-  template_key: z.enum(["classic", "editorial", "envelope", "scratch", "theatre", "record", "wildflower", "shutters", "silk"]).default("classic"),
+  template_key: z.enum(["classic", "editorial", "envelope", "scratch", "theatre", "record", "wildflower", "shutters", "silk", "midnight"]).default("classic"),
   partner_one_name: i18n,
   partner_two_name: i18n,
   monogram: z.string().nullable().default(null),

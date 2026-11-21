@@ -65,7 +65,7 @@ export function PlainCountdown({
     return (
       <div>
         <p className="sr-only">{label}</p>
-        <div aria-hidden className="mx-auto grid max-w-lg grid-cols-4 overflow-hidden rounded-lg border border-[color:var(--navy)]/20 bg-white/50">
+        <div aria-hidden className="mx-auto grid max-w-lg grid-cols-4 overflow-hidden rounded-lg border border-[color:var(--navy)]/20 bg-[color:var(--paper)]/60">
           {UNITS.map((unit, i) => (
             <div key={unit} className={`flex flex-col items-center py-5 ${i > 0 ? "border-l border-[color:var(--navy)]/20" : ""}`}>
               <span className="tpl-display text-[clamp(1.8rem,7vw,2.8rem)] leading-none tabular-nums">

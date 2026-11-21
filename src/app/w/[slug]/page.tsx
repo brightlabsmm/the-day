@@ -20,6 +20,7 @@ import { ScratchPage } from "@/components/templates/scratch-page";
 import { RecordPage } from "@/components/templates/record-page";
 import { WildflowerPage } from "@/components/templates/wildflower-page";
 import { ShuttersPage } from "@/components/templates/shutters-page";
+import { MidnightPage } from "@/components/templates/midnight-page";
 import { SilkPage } from "@/components/templates/silk-page";
 import { TheatrePage } from "@/components/templates/theatre-page";
 import { markOpened } from "./actions";
@@ -105,6 +106,8 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
           <ShuttersPage {...props} />
         ) : key === "silk" ? (
           <SilkPage {...props} />
+        ) : key === "midnight" ? (
+          <MidnightPage {...props} />
         ) : (
           <ScratchPage {...props} />
         )}

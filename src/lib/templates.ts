@@ -49,6 +49,12 @@ export const TEMPLATES = [
     mood: "Minimal · blush silk · sage",
   },
   {
+    key: "midnight",
+    name: "Midnight",
+    blurb: "A deep navy night sky with twinkling gold stars. Tap the moon to step inside; constellation lines, a calendar and a calm, glowing page.",
+    mood: "Elegant · night sky · navy & gold",
+  },
+  {
     key: "scratch",
     name: "Scratch to Reveal",
     blurb: "A playful rose-pink invitation: scratch the heart to reveal it, then a calendar and hearts.",

@@ -129,6 +129,7 @@ const STRINGS = {
   cannotWait: { my: "သင်တို့နှင့်အတူ ပျော်ရွှင်ရန် မျှော်လင့်နေပါသည်။", en: "We cannot wait to celebrate with you." },
   tapToOpenShutters: { my: "ဖွင့်ရန် နှိပ်ပါ", en: "Tap to open" },
   shuttersWelcome: { my: "ကြိုဆိုပါသည်", en: "Welcome" },
+  tapMoon: { my: "လကို နှိပ်ပါ", en: "Tap the moon" },
   enter: { my: "ဝင်ရောက်ရန်", en: "Enter" },
   countingDown: { my: "ရက်စွဲရောက်ရန်", en: "Counting down" },
   untilWeSay: { my: "ကတိသစ္စာပြုသည့်နေ့အထိ", en: "Until we say I do" },

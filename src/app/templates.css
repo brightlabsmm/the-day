@@ -585,3 +585,51 @@ html:has(.tpl) {
   text-transform: none;
   font-size: 0.95rem;
 }
+
+/* Midnight: navy night sky, gold stars. */
+.tpl-midnight {
+  --ivory: #0d1530;
+  --paper: #131d3f;
+  --paper-deep: #1a2650;
+  --navy: #f3e7c6;
+  --ink: #e3e6f2;
+  --ink-soft: #9aa8d0;
+  --gold: #d9b66a;
+  --gold-soft: #5a5a6e;
+  --gold-deep: #f0d58f;
+  --color-ivory: var(--ivory);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-navy: var(--navy);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-deep: var(--gold-deep);
+  --tpl-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  background:
+    radial-gradient(1.5px 1.5px at 12% 18%, rgba(255, 244, 208, 0.8), transparent),
+    radial-gradient(1px 1px at 78% 8%, rgba(255, 244, 208, 0.7), transparent),
+    radial-gradient(1.5px 1.5px at 88% 42%, rgba(255, 244, 208, 0.6), transparent),
+    radial-gradient(1px 1px at 25% 64%, rgba(255, 244, 208, 0.6), transparent),
+    radial-gradient(1.5px 1.5px at 60% 86%, rgba(255, 244, 208, 0.7), transparent),
+    var(--ivory);
+}
+.tpl-midnight .foil {
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  color: var(--navy);
+}
+.tpl-midnight .tpl-card {
+  background: color-mix(in oklab, var(--paper) 80%, transparent);
+  border-color: color-mix(in oklab, var(--gold) 35%, transparent);
+}
+.tpl-midnight .tpl-pill {
+  background: var(--gold);
+  color: #0d1530;
+  box-shadow: 0 0 28px -6px rgba(217, 182, 106, 0.7);
+}
+.tpl-midnight .tpl-pill:hover,
+.tpl-midnight .tpl-pill:focus-visible {
+  background: var(--gold-deep);
+}
