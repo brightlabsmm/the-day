@@ -46,7 +46,7 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
       coupleNames={{ one: t(wedding.partner_one_name, locale), two: t(wedding.partner_two_name, locale) }}
       onOpenAction={markOpened}
     >
-      <InvitationBody invitation={invitation} locale={locale} monogram={monogram} />
+      <InvitationBody invitation={invitation} locale={locale} monogram={monogram} token={guest ? (token ?? null) : null} />
     </Opening>
     </>
   );

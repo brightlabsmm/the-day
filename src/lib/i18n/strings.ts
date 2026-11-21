@@ -32,6 +32,22 @@ const STRINGS = {
     my: "ကြွရောက်ချီးမြှင့်ပေးကြသည့်အတွက် ကျေးဇူးအထူးတင်ရှိပါသည်",
     en: "Thank you for celebrating with us",
   },
+  wishesHeading: { my: "ဆုမွန်ကောင်းများ", en: "Wishes for the Couple" },
+  wishesIntro: { my: "မင်္ဂလာမောင်နှံအတွက် ဆုတောင်းစကား တစ်ခွန်း ချန်ထားခဲ့ပါ", en: "Leave a blessing for the couple" },
+  wishName: { my: "အမည်", en: "Your name" },
+  wishMessage: { my: "ဆုတောင်းစကား", en: "Your message" },
+  wishSend: { my: "ပေးပို့ရန်", en: "Send wishes" },
+  wishUpdate: { my: "ပြင်ဆင်ရန်", en: "Update my wish" },
+  wishSending: { my: "ပေးပို့နေသည်…", en: "Sending…" },
+  wishThanks: { my: "ကျေးဇူးတင်ပါသည်။ သင့်ဆုတောင်းစကားကို လက်ခံရရှိပါပြီ။", en: "Thank you — your wish has been received." },
+  wishUpdated: { my: "သင့်ဆုတောင်းစကားကို ပြင်ဆင်ပြီးပါပြီ။", en: "Your wish has been updated." },
+  wishYou: { my: "သင်", en: "You" },
+  wishEmpty: { my: "ပထမဆုံး ဆုတောင်းစကားကို သင်ပေးပို့နိုင်ပါသည်။", en: "Be the first to leave a wish." },
+  wishErrorName: { my: "အမည် ၁ မှ ၈၀ လုံးအတွင်း ထည့်ပါ။", en: "Please enter a name (1–80 characters)." },
+  wishErrorMessage: { my: "ဆုတောင်းစကားကို ၁ မှ ၅၀၀ လုံးအတွင်း ရေးပါ။", en: "Please write a message (1–500 characters)." },
+  wishErrorClosed: { my: "ဆုတောင်းစကား လက်ခံခြင်း ပိတ်ထားပါသည်။", en: "Wishes are closed." },
+  wishErrorSent: { my: "သင့်ဆုတောင်းစကားကို ပေးပို့ပြီးဖြစ်ပါသည်။", en: "You have already sent a wish." },
+  wishErrorGeneric: { my: "ပေးပို့၍မရပါ။ ထပ်ကြိုးစားပါ။", en: "Could not send. Please try again." },
 } as const satisfies Record<string, Record<Locale, string>>;
 
 export type StringKey = keyof typeof STRINGS;
