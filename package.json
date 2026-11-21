@@ -13,6 +13,7 @@
     "db:reset": "supabase db reset && pnpm seed:media",
     "db:types": "supabase gen types typescript --local > src/lib/supabase/database.types.ts",
     "seed:media": "tsx --env-file=.env.local scripts/seed-media.ts",
+    "seed:admin": "tsx --env-file=.env.local scripts/seed-admin.ts",
     "check:db": "tsx --env-file=.env.local scripts/check-db.ts"
   },
   "dependencies": {
