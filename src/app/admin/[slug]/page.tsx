@@ -1,7 +1,7 @@
 import { Suspense } from "react";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireAdmin } from "@/lib/admin/auth";
+import { AdminNav } from "@/components/admin/admin-nav";
 import { CopyButton } from "@/components/admin/copy-button";
 import { addGuest, deleteGuest } from "../actions";
 
@@ -32,10 +32,8 @@ async function Guests({ params }: PageProps<"/admin/[slug]">) {
 
   return (
     <>
-      <Link href="/admin" className="label-caps text-ink-soft underline">
-        ← Weddings
-      </Link>
-      <h1 className="font-display mt-2 text-3xl font-semibold">Guests · /{wedding.slug}</h1>
+      <AdminNav slug={wedding.slug} current="" />
+      <h2 className="font-display mt-6 text-2xl font-semibold">Guests</h2>
       <p className="text-ink-soft">
         {opened} of {guests?.length ?? 0} opened
       </p>

@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { generateGuestToken } from "@/lib/tokens";
+import { i18nFromForm, localInputToIso } from "@/lib/admin/forms";
 
 const Credentials = z.object({ email: z.email(), password: z.string().min(1).max(200) });
 
@@ -65,4 +66,108 @@ export async function deleteGuest(form: FormData) {
   if (!id.success) return;
   await supabase.from("guests").delete().eq("id", id.data);
   revalidatePath("/admin/[slug]", "page");
+}
+
+// ── Wedding details ─────────────────────────────────────────────
+
+const Slug = z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/).max(60);
+
+export async function saveWeddingDetails(form: FormData) {
+  const { supabase } = await requireAdmin();
+  const slug = Slug.safeParse(form.get("slug"));
+  const status = z.enum(["draft", "published"]).safeParse(form.get("status"));
+  const names = {
+    partner_one_name: i18nFromForm(form, "partner_one_name"),
+    partner_two_name: i18nFromForm(form, "partner_two_name"),
+  };
+  if (!slug.success || !status.success) return;
+  // Both partners need a name in at least one language.
+  if (!Object.keys(names.partner_one_name).length || !Object.keys(names.partner_two_name).length) return;
+
+  await supabase
+    .from("weddings")
+    .update({
+      status: status.data,
+      ...names,
+      monogram: String(form.get("monogram") ?? "").trim().slice(0, 12) || null,
+      tagline: i18nFromForm(form, "tagline"),
+      invitation_text: i18nFromForm(form, "invitation_text"),
+      note: i18nFromForm(form, "note"),
+      closing_quote: i18nFromForm(form, "closing_quote"),
+      wishes_enabled: form.get("wishes_enabled") === "on",
+      wishes_editable: form.get("wishes_editable") === "on",
+    })
+    .eq("slug", slug.data);
+  revalidatePath("/admin/[slug]", "layout");
+  revalidatePath("/w/[slug]", "page");
+}
+
+// ── Events ──────────────────────────────────────────────────────
+
+const EventInput = z.object({
+  slug: Slug,
+  id: z.uuid().optional(),
+  kind: z.enum(["ceremony", "reception", "other"]),
+  starts: z.string().min(1),
+  ends: z.string(),
+  mapUrl: z.string().trim().max(500),
+  sortOrder: z.coerce.number().int().min(0).max(99),
+});
+
+export async function saveEvent(form: FormData) {
+  const { supabase } = await requireAdmin();
+  const parsed = EventInput.safeParse({
+    slug: form.get("slug"),
+    id: form.get("id") || undefined,
+    kind: form.get("kind"),
+    starts: form.get("starts"),
+    ends: form.get("ends") ?? "",
+    mapUrl: form.get("mapUrl") ?? "",
+    sortOrder: form.get("sortOrder") || 0,
+  });
+  if (!parsed.success) return;
+  const e = parsed.data;
+  if (e.mapUrl && !/^https:\/\//.test(e.mapUrl)) return;
+
+  const { data: wedding } = await supabase.from("weddings").select("id, timezone").eq("slug", e.slug).single();
+  if (!wedding) return;
+  const startsAt = localInputToIso(e.starts, wedding.timezone);
+  const endsAt = e.ends ? localInputToIso(e.ends, wedding.timezone) : null;
+  if (!startsAt || (e.ends && !endsAt) || (endsAt && endsAt <= startsAt)) return;
+
+  const row = {
+    kind: e.kind,
+    title: i18nFromForm(form, "title"),
+    starts_at: startsAt,
+    ends_at: endsAt,
+    myanmar_date_text: i18nFromForm(form, "myanmar_date_text"),
+    venue_name: i18nFromForm(form, "venue_name"),
+    venue_address: i18nFromForm(form, "venue_address"),
+    map_url: e.mapUrl || null,
+    sort_order: e.sortOrder,
+  };
+  if (e.id) await supabase.from("wedding_events").update(row).eq("id", e.id).eq("wedding_id", wedding.id);
+  else await supabase.from("wedding_events").insert({ ...row, wedding_id: wedding.id });
+  revalidatePath("/admin/[slug]/events", "page");
+  revalidatePath("/w/[slug]", "page");
+}
+
+export async function deleteEvent(form: FormData) {
+  const { supabase } = await requireAdmin();
+  const id = z.uuid().safeParse(form.get("id"));
+  if (!id.success) return;
+  await supabase.from("wedding_events").delete().eq("id", id.data);
+  revalidatePath("/admin/[slug]/events", "page");
+  revalidatePath("/w/[slug]", "page");
+}
+
+// ── Wishes moderation ───────────────────────────────────────────
+
+export async function setWishHidden(form: FormData) {
+  const { supabase } = await requireAdmin();
+  const id = z.uuid().safeParse(form.get("id"));
+  if (!id.success) return;
+  await supabase.from("wishes").update({ is_hidden: form.get("hidden") === "true" }).eq("id", id.data);
+  revalidatePath("/admin/[slug]/wishes", "page");
+  revalidatePath("/w/[slug]", "page");
 }
