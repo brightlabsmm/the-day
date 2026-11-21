@@ -11,6 +11,8 @@ export type TemplateProps = {
   /** The guest's personal link token, when there is one. */
   token: string | null;
   onOpenAction: (slug: string, token: string) => Promise<void>;
+  /** Embedded in the showcase: always start at the opening and never remember it was opened. */
+  preview?: boolean;
 };
 
 const toAlbum = (p: Invitation["photos"][number], locale: Locale): AlbumPhoto => ({

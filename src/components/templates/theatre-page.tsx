@@ -16,7 +16,7 @@ import { TplFooter, TplGallery, navItemsFor } from "./sections";
 import { viewOf, type TemplateProps } from "./view";
 
 /** Velvet curtains and a spotlit stage; the day follows in acts. */
-export function TheatrePage({ invitation, locale, monogram, token, onOpenAction }: TemplateProps) {
+export function TheatrePage({ invitation, locale, monogram, token, onOpenAction, preview }: TemplateProps) {
   const v = viewOf(invitation, locale);
   const { wedding, guest } = invitation;
   const message = t(wedding.invitation_text, locale);
@@ -35,6 +35,7 @@ export function TheatrePage({ invitation, locale, monogram, token, onOpenAction 
       names={v.names}
       place={place}
       onOpenAction={onOpenAction}
+      preview={preview}
     >
       <div className="tpl tpl-theatre" lang={locale}>
         <TemplateNav locale={locale} monogram={monogram} items={navItemsFor(v, invitation, locale)} over="dark" />

@@ -62,6 +62,8 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
   const { slug } = await params;
   const query = await searchParams;
   const token = typeof query.g === "string" ? query.g : undefined;
+  // The showcase embeds pages with ?preview=1 so every preview starts at its opening screen.
+  const preview = query.preview === "1";
   const locale: Locale = resolveLocale(query.lang, (await cookies()).get(LOCALE_COOKIE)?.value);
 
   const invitation = await getInvitation(slug, token);
@@ -80,6 +82,7 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
       monogram,
       token: guest ? (token ?? null) : null,
       onOpenAction: markOpened,
+      preview,
     };
     return (
       <>
@@ -117,6 +120,7 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
         guestLabel={guestName(guest, locale)}
         coupleNames={{ one: t(wedding.partner_one_name, locale), two: t(wedding.partner_two_name, locale) }}
         onOpenAction={markOpened}
+        preview={preview}
       >
         <InvitationBody invitation={invitation} locale={locale} monogram={monogram} token={guest ? (token ?? null) : null} />
       </Opening>

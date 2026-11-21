@@ -17,7 +17,7 @@ import { TplFooter, TplGallery, navItemsFor } from "./sections";
 import { viewOf, type TemplateProps } from "./view";
 
 /** Rose-pink, playful: scratch the heart to reveal, then calendar and hearts. */
-export function ScratchPage({ invitation, locale, monogram, token, onOpenAction }: TemplateProps) {
+export function ScratchPage({ invitation, locale, monogram, token, onOpenAction, preview }: TemplateProps) {
   const v = viewOf(invitation, locale);
   const { wedding, guest } = invitation;
   const message = t(wedding.invitation_text, locale);
@@ -33,6 +33,7 @@ export function ScratchPage({ invitation, locale, monogram, token, onOpenAction 
       guestLabel={guestName(guest, locale)}
       dateLabel={v.dateShort}
       onOpenAction={onOpenAction}
+      preview={preview}
     >
       <div className="tpl tpl-scratch" lang={locale}>
         <TemplateNav locale={locale} monogram={monogram} items={navItemsFor(v, invitation, locale)} over="dark" />

@@ -14,6 +14,8 @@ type Props = {
   guestLabel: string;
   coupleNames: { one: string; two: string };
   onOpenAction: (slug: string, token: string) => Promise<void>;
+  /** Showcase preview: ignore and never save the "already opened" flag. */
+  preview?: boolean;
   children: ReactNode;
 };
 
@@ -35,9 +37,10 @@ function useOpenedThisSession(slug: string) {
   );
 }
 
-export function Opening({ slug, token, locale, monogram, guestLabel, coupleNames, onOpenAction, children }: Props) {
+export function Opening({ slug, token, locale, monogram, guestLabel, coupleNames, onOpenAction, preview = false, children }: Props) {
   const reduceMotion = useReducedMotion();
-  const openedBefore = useOpenedThisSession(slug);
+  const openedBeforeStored = useOpenedThisSession(slug);
+  const openedBefore = openedBeforeStored && !preview;
   const [phase, setPhase] = useState<"sealed" | "opening" | "open">("sealed");
   const [scope, animate] = useAnimate();
   const [, startTransition] = useTransition();
@@ -54,12 +57,14 @@ export function Opening({ slug, token, locale, monogram, guestLabel, coupleNames
   }, [isOpen]);
 
   const finish = useCallback(() => {
-    try {
-      sessionStorage.setItem(storageKey(slug), "1");
-    } catch {}
+    if (!preview) {
+      try {
+        sessionStorage.setItem(storageKey(slug), "1");
+      } catch {}
+    }
     setPhase("open");
     window.scrollTo(0, 0);
-  }, [slug]);
+  }, [slug, preview]);
 
   const record = useCallback(() => {
     if (token) startTransition(() => onOpenAction(slug, token));

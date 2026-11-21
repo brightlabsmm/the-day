@@ -25,6 +25,8 @@ type Props = {
   names?: { one: string; two: string };
   place?: string;
   onOpenAction: (slug: string, token: string) => Promise<void>;
+  /** Showcase preview: ignore and never save the "already opened" flag. */
+  preview?: boolean;
   children: ReactNode;
 };
 
@@ -44,9 +46,9 @@ function useOpenedThisSession(slug: string) {
   );
 }
 
-export function Gate({ kind, slug, token, locale, monogram, coverSrc, guestLabel, dateLabel, names, place, onOpenAction, children }: Props) {
+export function Gate({ kind, slug, token, locale, monogram, coverSrc, guestLabel, dateLabel, names, place, onOpenAction, preview = false, children }: Props) {
   const reduceMotion = useReducedMotion();
-  const openedBefore = useOpenedThisSession(slug);
+  const openedBefore = useOpenedThisSession(slug) && !preview;
   const [phase, setPhase] = useState<"sealed" | "opening" | "open">("sealed");
   const [, startTransition] = useTransition();
   const isOpen = phase === "open" || openedBefore;
@@ -61,12 +63,14 @@ export function Gate({ kind, slug, token, locale, monogram, coverSrc, guestLabel
   }, [isOpen]);
 
   const finish = useCallback(() => {
-    try {
-      sessionStorage.setItem(storageKey(slug), "1");
-    } catch {}
+    if (!preview) {
+      try {
+        sessionStorage.setItem(storageKey(slug), "1");
+      } catch {}
+    }
     setPhase("open");
     window.scrollTo(0, 0);
-  }, [slug]);
+  }, [slug, preview]);
 
   // The open is recorded when the guest acts, not on page load, so link-preview bots do not count.
   const record = useCallback(() => {

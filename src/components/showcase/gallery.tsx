@@ -1,6 +1,6 @@
 "use client";
 
-import { Monitor, Smartphone, Tablet } from "lucide-react";
+import { Monitor, RotateCcw, Smartphone, Tablet } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 type Design = { key: string; name: string; mood: string; blurb: string };
@@ -14,6 +14,7 @@ const DEVICES = {
 type DeviceKey = keyof typeof DEVICES;
 
 function Preview({ design, device, lang }: { design: Design; device: DeviceKey; lang: "en" | "my" }) {
+  const [nonce, setNonce] = useState(0);
   const d = DEVICES[device];
   const box = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0);
@@ -30,19 +31,29 @@ function Preview({ design, device, lang }: { design: Design; device: DeviceKey; 
   }, [d.w]);
 
   return (
+    <div className="relative">
     <div className={`bg-[#2a2420] shadow-[0_28px_50px_-24px_rgba(42,36,32,.6)] ${d.radius} ${d.border} border-[#2a2420]`}>
       <div ref={box} className={`relative w-full overflow-hidden bg-white ${device === "phone" ? "rounded-[1.6rem]" : "rounded-md"}`} style={{ height: scale ? d.h * scale : undefined, aspectRatio: scale ? undefined : `${d.w} / ${d.h}` }}>
         {scale > 0 && (
           <iframe
-            key={`${design.key}-${device}-${lang}`}
+            key={`${design.key}-${device}-${lang}-${nonce}`}
             title={`${design.name} design preview, ${DEVICES[device].label.toLowerCase()}`}
-            src={`/w/showcase-${design.key}?lang=${lang}`}
+            src={`/w/showcase-${design.key}?lang=${lang}&preview=1`}
             loading="lazy"
             className="absolute top-0 left-0 origin-top-left border-0"
             style={{ width: d.w, height: d.h, transform: `scale(${scale})` }}
           />
         )}
       </div>
+    </div>
+    <button
+      type="button"
+      onClick={() => setNonce((n) => n + 1)}
+      className="mt-3 inline-flex items-center gap-2 text-sm text-[#6e5f53] underline underline-offset-4 hover:text-[#4a3a2e]"
+    >
+      <RotateCcw className="size-4" aria-hidden />
+      Replay from the opening
+    </button>
     </div>
   );
 }
