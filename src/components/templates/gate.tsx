@@ -13,7 +13,7 @@ import type { Locale } from "@/lib/i18n/numerals";
 import { s } from "@/lib/i18n/strings";
 
 type Props = {
-  kind: "envelope" | "scratch" | "theatre" | "shutters" | "silk" | "midnight" | "lantern" | "polaroid" | "botanical" | "artdeco" | "sunrise";
+  kind: "envelope" | "scratch" | "theatre" | "shutters" | "silk" | "midnight" | "lantern" | "polaroid" | "botanical" | "artdeco" | "sunrise" | "spotlight";
   slug: string;
   token: string | null;
   locale: Locale;
@@ -93,8 +93,8 @@ export function Gate({ kind, slug, token, locale, monogram, coverSrc, guestLabel
   // The shutters open by themselves after a moment, like a window being thrown open.
   // This does not count as the guest opening their link; their first tap or scroll does.
   useEffect(() => {
-    if (kind !== "shutters" || isOpen || phase !== "sealed") return;
-    const id = window.setTimeout(() => (reduceMotion ? finish() : setPhase("opening")), 1300);
+    if ((kind !== "shutters" && kind !== "spotlight") || isOpen || phase !== "sealed") return;
+    const id = window.setTimeout(() => (reduceMotion ? finish() : setPhase("opening")), kind === "spotlight" ? 3200 : 1300);
     return () => window.clearTimeout(id);
   }, [kind, isOpen, phase, reduceMotion, finish]);
 
@@ -112,12 +112,14 @@ export function Gate({ kind, slug, token, locale, monogram, coverSrc, guestLabel
           lang={locale}
           className="fixed inset-0 z-50 overflow-hidden"
           animate={{ opacity: phase === "opening" ? 0 : 1 }}
-          transition={{ duration: 0.7, delay: phase === "opening" ? (kind === "envelope" ? 1.1 : kind === "theatre" ? 1.5 : kind === "shutters" ? 1.9 : kind === "silk" ? 1.2 : kind === "midnight" ? 1.4 : kind === "lantern" ? 1.5 : kind === "polaroid" ? 1.1 : kind === "botanical" ? 1.3 : kind === "artdeco" ? 1.2 : kind === "sunrise" ? 1.6 : 0.9) : 0, ease: "easeOut" }}
+          transition={{ duration: 0.7, delay: phase === "opening" ? (kind === "envelope" ? 1.1 : kind === "theatre" ? 1.5 : kind === "shutters" ? 1.9 : kind === "silk" ? 1.2 : kind === "midnight" ? 1.4 : kind === "lantern" ? 1.5 : kind === "polaroid" ? 1.1 : kind === "botanical" ? 1.3 : kind === "artdeco" ? 1.2 : kind === "sunrise" ? 1.6 : kind === "spotlight" ? 1.5 : 0.9) : 0, ease: "easeOut" }}
           onAnimationComplete={() => {
             if (phase === "opening") finish();
           }}
         >
-          {kind === "botanical" ? (
+          {kind === "spotlight" ? (
+            <SpotlightFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} place={place} />
+          ) : kind === "botanical" ? (
             <BotanicalFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} place={place} />
           ) : kind === "artdeco" ? (
             <ArtDecoFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} place={place} />
@@ -993,6 +995,26 @@ function SunriseFace({ opening, onOpen, locale, names, dateLabel, place }: FaceP
       </svg>
       <button type="button" onClick={onOpen} disabled={opening} aria-label={s("enter", locale)} className="relative -mt-20 text-center focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-[#c4603a]" style={{ opacity: opening ? 0 : 1, transition: "opacity .6s" }}>
         <FaceText locale={locale} names={names} dateLabel={dateLabel} place={place} tap={s("tapSunrise", locale)} tone={{ accent: "#c4603a", soft: "#a07a70" }} />
+      </button>
+    </div>
+  );
+}
+
+/** Dark olive velvet curtains with a spotlight on the names. They open by themselves, or on tap. */
+function SpotlightFace({ opening, onOpen, locale, names }: FaceProps) {
+  const velvet =
+    "repeating-linear-gradient(90deg,rgba(0,0,0,.55) 0 6px,rgba(120,125,70,.16) 14px,rgba(0,0,0,.45) 26px),linear-gradient(180deg,#14150c,#272a15)";
+  const move = (dir: number) => ({ transform: opening ? `translateX(${dir * 101}%)` : "none", transition: "transform 1.5s cubic-bezier(.7,0,.25,1)" });
+  const serif = { fontFamily: "var(--font-playfair), serif" } as const;
+  return (
+    <div className="relative grid h-full w-full place-items-center overflow-hidden bg-[#0b0b07] text-[#e8d9a8]">
+      <div aria-hidden className="absolute inset-y-0 left-0 w-1/2" style={{ backgroundImage: velvet, ...move(-1) }} />
+      <div aria-hidden className="absolute inset-y-0 right-0 w-1/2" style={{ backgroundImage: velvet, ...move(1) }} />
+      <div aria-hidden className="pointer-events-none absolute top-1/2 left-1/2 size-[min(92vw,34rem)] -translate-x-1/2 -translate-y-1/2 rounded-full" style={{ background: "radial-gradient(circle,rgba(214,200,110,.5) 0%,rgba(150,150,60,.25) 45%,transparent 68%)", opacity: opening ? 0 : 1, transition: "opacity 1s" }} />
+      <button type="button" onClick={onOpen} disabled={opening} aria-label={s("enter", locale)} className="relative px-6 text-center focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-[#e8d9a8]" style={{ opacity: opening ? 0 : 1, transition: "opacity .6s" }}>
+        <p className="text-[clamp(1.9rem,8vw,3rem)] leading-tight" style={serif}>
+          {names ? `${names.one} & ${names.two}` : ""}
+        </p>
       </button>
     </div>
   );

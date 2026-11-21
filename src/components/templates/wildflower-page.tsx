@@ -162,11 +162,9 @@ export function WildflowerPage({ invitation, locale, monogram, token, onOpenActi
       <Reveal>
         <TplRsvp invitation={invitation} locale={locale} token={token} />
       </Reveal>
-      <Reveal>
-        <TplTips invitation={invitation} locale={locale} />
-<TplSeat invitation={invitation} locale={locale} />
-<TplFaq invitation={invitation} locale={locale} />
-      </Reveal>
+      <Reveal><TplTips invitation={invitation} locale={locale} /></Reveal>
+<Reveal><TplSeat invitation={invitation} locale={locale} /></Reveal>
+<Reveal><TplFaq invitation={invitation} locale={locale} /></Reveal>
       <Reveal>
         <GiftSection invitation={invitation} locale={locale} plain />
       </Reveal>

@@ -85,6 +85,12 @@ export const TEMPLATES = [
     mood: "Hopeful · peach & coral · new day",
   },
   {
+    key: "spotlight",
+    name: "Spotlight",
+    blurb: "Dark velvet curtains lit by a spotlight on your names open by themselves onto a full-screen photo, with names in script on the left and date and venue below.",
+    mood: "Cinematic · photo-first · olive & gold",
+  },
+  {
     key: "scratch",
     name: "Scratch to Reveal",
     blurb: "A playful rose-pink invitation: scratch the heart to reveal it, then a calendar and hearts.",

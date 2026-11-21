@@ -97,6 +97,7 @@ export function SilkPage({ invitation, locale, monogram, token, onOpenAction, pr
           </div>
         </header>
 
+        <div className="tpl-order">
         {v.hasLineage ? (
           <Reveal>
             <InvitationMessage invitation={invitation} locale={locale} plain />
@@ -113,7 +114,7 @@ export function SilkPage({ invitation, locale, monogram, token, onOpenAction, pr
 
         {when && (
           <Reveal>
-            <section aria-label={v.dateLong} className="px-4 pb-14 text-center">
+            <section id="calendar" aria-label={v.dateLong} className="px-4 pb-14 text-center">
               <BrowseCalendar year={when.year} month={when.month} day={when.day} locale={locale} />
               <p className="tpl-eyebrow mt-5">{s("celebrateWithYou", locale)} ♡</p>
             </section>
@@ -122,7 +123,7 @@ export function SilkPage({ invitation, locale, monogram, token, onOpenAction, pr
 
         {v.main && (
           <Reveal>
-            <section aria-labelledby="countdown-heading" lang={locale} className="px-4 pb-16 text-center text-[color:var(--navy)]">
+            <section id="countdown" aria-labelledby="countdown-heading" lang={locale} className="px-4 pb-16 text-center text-[color:var(--navy)]">
               <p className="tpl-eyebrow">{s("countingDown", locale)}</p>
               <h2 id="countdown-heading" className="tpl-h2 mb-8 italic [&:lang(my)]:not-italic">
                 {s("untilWeSay", locale)}
@@ -192,17 +193,16 @@ export function SilkPage({ invitation, locale, monogram, token, onOpenAction, pr
         <Reveal>
           <TplRsvp invitation={invitation} locale={locale} token={token} />
         </Reveal>
-        <Reveal>
-          <TplTips invitation={invitation} locale={locale} />
-<TplSeat invitation={invitation} locale={locale} />
-<TplFaq invitation={invitation} locale={locale} />
-        </Reveal>
+        <Reveal><TplTips invitation={invitation} locale={locale} /></Reveal>
+<Reveal><TplSeat invitation={invitation} locale={locale} /></Reveal>
+<Reveal><TplFaq invitation={invitation} locale={locale} /></Reveal>
         <Reveal>
           <GiftSection invitation={invitation} locale={locale} plain />
         </Reveal>
         <Reveal>
           <WishesSection invitation={invitation} locale={locale} token={token} plain />
         </Reveal>
+        </div>
         <ClosingQuote invitation={invitation} locale={locale} />
         <TrackOpen slug={wedding.slug} token={token} action={onOpenAction} />
         <TplFooter v={v} locale={locale} />

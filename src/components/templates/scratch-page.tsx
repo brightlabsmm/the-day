@@ -88,9 +88,9 @@ export function ScratchPage({ invitation, locale, monogram, token, onOpenAction,
         <Reveal><Venue invitation={invitation} locale={locale} /></Reveal>
         <Reveal><TplDressCode invitation={invitation} locale={locale} /></Reveal>
         <Reveal><TplRsvp invitation={invitation} locale={locale} token={token} /></Reveal>
-        <Reveal><TplTips invitation={invitation} locale={locale} />
-<TplSeat invitation={invitation} locale={locale} />
-<TplFaq invitation={invitation} locale={locale} /></Reveal>
+        <Reveal><TplTips invitation={invitation} locale={locale} /></Reveal>
+<Reveal><TplSeat invitation={invitation} locale={locale} /></Reveal>
+<Reveal><TplFaq invitation={invitation} locale={locale} /></Reveal>
         <Reveal><GiftSection invitation={invitation} locale={locale} plain /></Reveal>
         <Reveal><WishesSection invitation={invitation} locale={locale} token={token} plain /></Reveal>
         <ClosingQuote invitation={invitation} locale={locale} />

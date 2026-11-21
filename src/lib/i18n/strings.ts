@@ -146,6 +146,7 @@ const STRINGS = {
   seatError: { my: "ရှာမရပါ။ ပြန်စမ်းကြည့်ပါ။", en: "Could not search. Please try again." },
   navTips: { my: "သိထားရန်", en: "Good to know" },
   navSeat: { my: "နေရာ", en: "Seat" },
+  celebratingOn: { my: "မင်္ဂလာပွဲကျင်းပမည့်ရက်", en: "Are celebrating their wedding on" },
   enter: { my: "ဝင်ရောက်ရန်", en: "Enter" },
   countingDown: { my: "ရက်စွဲရောက်ရန်", en: "Counting down" },
   untilWeSay: { my: "ကတိသစ္စာပြုသည့်နေ့အထိ", en: "Until we say I do" },

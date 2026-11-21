@@ -40,7 +40,7 @@ Then open <http://localhost:3000/w/thukha-maythet?g=ko-aung-7k2f> for the demo i
 | `pnpm db:reset` | Re-apply migrations and seed, then run `seed:media` |
 | `pnpm db:types` | Regenerate `src/lib/supabase/database.types.ts` |
 | `pnpm seed:media` | Upload demo photos and a placeholder gift QR |
-| `pnpm seed:showcase` | Create the fifteen fictional demo weddings used by `/showcase` |
+| `pnpm seed:showcase` | Create the sixteen fictional demo weddings used by `/showcase` |
 | `pnpm import:wedding <folder>` | Create or update a real wedding from `wedding.json` plus its image files (see below) |
 | `pnpm seed:admin` | Create or reset the local dev admin (local Supabase only) |
 | `pnpm check:db` | Sanity-check the database setup |
@@ -65,9 +65,10 @@ Each wedding picks a design in the admin (**Details → Page design**):
 | `botanical` | Sage-green leaves part like a garden gate. Leafy sprigs frame the names, with a calm cream page and green accents. |
 | `artdeco` | Black and gold geometry. A sunburst gate splits open to a glamorous page of fans, gold lines and bold lettering. |
 | `sunrise` | A sun rises over layered peach hills to open the page. Warm coral, soft cream and a hopeful new-day feel. |
+| `spotlight` | Dark velvet curtains under a spotlight open by themselves onto a full-screen photo hero with script names on the left |
 | `scratch` | Rose-pink, scratch-the-heart opening, calendar and hearts |
 
-All fifteen share the same content, Burmese/English switch, countdown, schedule, photos, gift QR codes and wishes. The four newer designs also show, when filled in on the Details tab: **Our story**, **Dress code** (colour swatches), **RSVP** (accept or decline, number of guests, note; replies on the admin **RSVPs** tab), an **FAQ** accordion, a **Good to know** grid of tips (parking, transport, weather), **Find your seat** (guests type their name and see their table; turn it on in Details and set tables on the Guests tab), and **Add to Google Calendar / .ics** buttons. They fade sections in on scroll, and schedule rows open on click to show the venue. They live in `src/components/invite` (classic) and `src/components/templates` (the others, with palettes in `src/app/templates.css`). With five or more photos, the first three go in an overlapping **collage** under "Our story" (the rest in the gallery) with an original watercolour illustration tile among them (sea and sailboat, blossoms, dusk hills or night sky; drawn in code in `art.tsx`). Each design picks its own arrangement (`collage.tsx`: mosaic, scatter or stack). `/showcase` shows all fifteen side by side using fictional demo weddings created by `pnpm seed:showcase` (generated artwork, no real people).
+All sixteen share the same content, Burmese/English switch, countdown, schedule, photos, gift QR codes and wishes. The four newer designs also show, when filled in on the Details tab: **Our story**, **Dress code** (colour swatches), **RSVP** (accept or decline, number of guests, note; replies on the admin **RSVPs** tab), an **FAQ** accordion, a **Good to know** grid of tips (parking, transport, weather), **Find your seat** (guests type their name and see their table; turn it on in Details and set tables on the Guests tab), and **Add to Google Calendar / .ics** buttons. They fade sections in on scroll, and schedule rows open on click to show the venue. They live in `src/components/invite` (classic) and `src/components/templates` (the others, with palettes in `src/app/templates.css`). With five or more photos, the first three go in an overlapping **collage** under "Our story" (the rest in the gallery) with an original watercolour illustration tile among them (sea and sailboat, blossoms, dusk hills or night sky; drawn in code in `art.tsx`). Each design picks its own arrangement (`collage.tsx`: mosaic, scatter or stack). `/showcase` shows all sixteen side by side using fictional demo weddings created by `pnpm seed:showcase` (generated artwork, no real people).
 
 ## Adding a real wedding
 

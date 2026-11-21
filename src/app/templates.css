@@ -765,3 +765,132 @@ html:has(.tpl) {
 .tpl-sunrise .tpl-card { background: #fff; border: 0; border-radius: 1.75rem; box-shadow: 0 16px 30px -18px rgba(196, 96, 58, 0.5); }
 .tpl-sunrise .tpl-pill { background: var(--gold); color: #fff; }
 .tpl-sunrise .tpl-pill:hover, .tpl-sunrise .tpl-pill:focus-visible { background: var(--gold-deep); }
+
+/* Section order per design, following the reference it is modelled on (see docs/design-comparison.md). */
+.tpl-order { display: flex; flex-direction: column; }
+.tpl-silk .tpl-order > :has(#invitation) { order: 1; }
+.tpl-silk .tpl-order > :has(#countdown) { order: 2; }
+.tpl-silk .tpl-order > :has(#calendar) { order: 3; }
+.tpl-silk .tpl-order > :has(#gallery) { order: 4; }
+.tpl-silk .tpl-order > :has(#story) { order: 5; }
+.tpl-silk .tpl-order > :has(#dress) { order: 6; }
+.tpl-silk .tpl-order > :has(#rsvp) { order: 7; }
+.tpl-silk .tpl-order > :has(#seat) { order: 8; }
+.tpl-silk .tpl-order > :has(#venue) { order: 9; }
+.tpl-silk .tpl-order > :has(#schedule) { order: 10; }
+.tpl-silk .tpl-order > :has(#tips) { order: 11; }
+.tpl-silk .tpl-order > :has(#faq) { order: 12; }
+.tpl-silk .tpl-order > :has(#gift) { order: 13; }
+.tpl-silk .tpl-order > :has(#wishes) { order: 14; }
+.tpl-midnight .tpl-order > :has(#invitation) { order: 1; }
+.tpl-midnight .tpl-order > :has(#countdown) { order: 2; }
+.tpl-midnight .tpl-order > :has(#calendar) { order: 3; }
+.tpl-midnight .tpl-order > :has(#schedule) { order: 4; }
+.tpl-midnight .tpl-order > :has(#dress) { order: 5; }
+.tpl-midnight .tpl-order > :has(#gallery) { order: 6; }
+.tpl-midnight .tpl-order > :has(#story) { order: 7; }
+.tpl-midnight .tpl-order > :has(#venue) { order: 8; }
+.tpl-midnight .tpl-order > :has(#rsvp) { order: 9; }
+.tpl-midnight .tpl-order > :has(#seat) { order: 10; }
+.tpl-midnight .tpl-order > :has(#tips) { order: 11; }
+.tpl-midnight .tpl-order > :has(#faq) { order: 12; }
+.tpl-midnight .tpl-order > :has(#gift) { order: 13; }
+.tpl-midnight .tpl-order > :has(#wishes) { order: 14; }
+.tpl-lantern .tpl-order > :has(#invitation) { order: 1; }
+.tpl-lantern .tpl-order > :has(#countdown) { order: 2; }
+.tpl-lantern .tpl-order > :has(#story) { order: 3; }
+.tpl-lantern .tpl-order > :has(#schedule) { order: 4; }
+.tpl-lantern .tpl-order > :has(#dress) { order: 5; }
+.tpl-lantern .tpl-order > :has(#venue) { order: 6; }
+.tpl-lantern .tpl-order > :has(#calendar) { order: 7; }
+.tpl-lantern .tpl-order > :has(#gallery) { order: 8; }
+.tpl-lantern .tpl-order > :has(#rsvp) { order: 9; }
+.tpl-lantern .tpl-order > :has(#seat) { order: 10; }
+.tpl-lantern .tpl-order > :has(#tips) { order: 11; }
+.tpl-lantern .tpl-order > :has(#faq) { order: 12; }
+.tpl-lantern .tpl-order > :has(#gift) { order: 13; }
+.tpl-lantern .tpl-order > :has(#wishes) { order: 14; }
+.tpl-polaroid .tpl-order > :has(#invitation) { order: 1; }
+.tpl-polaroid .tpl-order > :has(#countdown) { order: 2; }
+.tpl-polaroid .tpl-order > :has(#calendar) { order: 3; }
+.tpl-polaroid .tpl-order > :has(#schedule) { order: 4; }
+.tpl-polaroid .tpl-order > :has(#gallery) { order: 5; }
+.tpl-polaroid .tpl-order > :has(#story) { order: 6; }
+.tpl-polaroid .tpl-order > :has(#venue) { order: 7; }
+.tpl-polaroid .tpl-order > :has(#tips) { order: 8; }
+.tpl-polaroid .tpl-order > :has(#rsvp) { order: 9; }
+.tpl-polaroid .tpl-order > :has(#seat) { order: 10; }
+.tpl-polaroid .tpl-order > :has(#faq) { order: 11; }
+.tpl-polaroid .tpl-order > :has(#dress) { order: 12; }
+.tpl-polaroid .tpl-order > :has(#gift) { order: 13; }
+.tpl-polaroid .tpl-order > :has(#wishes) { order: 14; }
+.tpl-botanical .tpl-order > :has(#invitation) { order: 1; }
+.tpl-botanical .tpl-order > :has(#story) { order: 2; }
+.tpl-botanical .tpl-order > :has(#venue) { order: 3; }
+.tpl-botanical .tpl-order > :has(#rsvp) { order: 4; }
+.tpl-botanical .tpl-order > :has(#dress) { order: 5; }
+.tpl-botanical .tpl-order > :has(#gallery) { order: 6; }
+.tpl-botanical .tpl-order > :has(#countdown) { order: 7; }
+.tpl-botanical .tpl-order > :has(#calendar) { order: 8; }
+.tpl-botanical .tpl-order > :has(#schedule) { order: 9; }
+.tpl-botanical .tpl-order > :has(#tips) { order: 10; }
+.tpl-botanical .tpl-order > :has(#seat) { order: 11; }
+.tpl-botanical .tpl-order > :has(#faq) { order: 12; }
+.tpl-botanical .tpl-order > :has(#gift) { order: 13; }
+.tpl-botanical .tpl-order > :has(#wishes) { order: 14; }
+.tpl-artdeco .tpl-order > :has(#invitation) { order: 1; }
+.tpl-artdeco .tpl-order > :has(#dress) { order: 2; }
+.tpl-artdeco .tpl-order > :has(#schedule) { order: 3; }
+.tpl-artdeco .tpl-order > :has(#gallery) { order: 4; }
+.tpl-artdeco .tpl-order > :has(#rsvp) { order: 5; }
+.tpl-artdeco .tpl-order > :has(#seat) { order: 6; }
+.tpl-artdeco .tpl-order > :has(#venue) { order: 7; }
+.tpl-artdeco .tpl-order > :has(#countdown) { order: 8; }
+.tpl-artdeco .tpl-order > :has(#calendar) { order: 9; }
+.tpl-artdeco .tpl-order > :has(#story) { order: 10; }
+.tpl-artdeco .tpl-order > :has(#tips) { order: 11; }
+.tpl-artdeco .tpl-order > :has(#faq) { order: 12; }
+.tpl-artdeco .tpl-order > :has(#gift) { order: 13; }
+.tpl-artdeco .tpl-order > :has(#wishes) { order: 14; }
+.tpl-sunrise .tpl-order > :has(#invitation) { order: 1; }
+.tpl-sunrise .tpl-order > :has(#schedule) { order: 2; }
+.tpl-sunrise .tpl-order > :has(#dress) { order: 3; }
+.tpl-sunrise .tpl-order > :has(#gallery) { order: 4; }
+.tpl-sunrise .tpl-order > :has(#rsvp) { order: 5; }
+.tpl-sunrise .tpl-order > :has(#seat) { order: 6; }
+.tpl-sunrise .tpl-order > :has(#venue) { order: 7; }
+.tpl-sunrise .tpl-order > :has(#countdown) { order: 8; }
+.tpl-sunrise .tpl-order > :has(#calendar) { order: 9; }
+.tpl-sunrise .tpl-order > :has(#story) { order: 10; }
+.tpl-sunrise .tpl-order > :has(#tips) { order: 11; }
+.tpl-sunrise .tpl-order > :has(#faq) { order: 12; }
+.tpl-sunrise .tpl-order > :has(#gift) { order: 13; }
+.tpl-sunrise .tpl-order > :has(#wishes) { order: 14; }
+
+/* Spotlight: dark olive, warm gold, photo-first. */
+.tpl-spotlight {
+  --ivory: #0f100a; --paper: #171910; --paper-deep: #20231a; --navy: #e8d9a8; --ink: #ece8d6; --ink-soft: #a9a58f;
+  --gold: #c9b36a; --gold-soft: #4d4a2a; --gold-deep: #e8d9a8;
+  --color-ivory: var(--ivory); --color-paper: var(--paper); --color-paper-deep: var(--paper-deep);
+  --color-navy: var(--navy); --color-ink: var(--ink); --color-ink-soft: var(--ink-soft);
+  --color-gold: var(--gold); --color-gold-soft: var(--gold-soft); --color-gold-deep: var(--gold-deep);
+  --tpl-display: var(--font-playfair), "Playfair Display", Georgia, serif;
+}
+.tpl-spotlight .foil { background: none; -webkit-text-fill-color: currentColor; color: var(--navy); }
+.tpl-spotlight .tpl-card { background: var(--paper); border-color: color-mix(in oklab, var(--gold) 30%, transparent); border-radius: 0.5rem; }
+.tpl-spotlight .tpl-pill { background: var(--gold); color: #0f100a; }
+.tpl-spotlight .tpl-pill:hover, .tpl-spotlight .tpl-pill:focus-visible { background: var(--gold-deep); }
+.tpl-spotlight .tpl-order > :has(#invitation) { order: 1; }
+.tpl-spotlight .tpl-order > :has(#dress) { order: 2; }
+.tpl-spotlight .tpl-order > :has(#schedule) { order: 3; }
+.tpl-spotlight .tpl-order > :has(#gallery) { order: 4; }
+.tpl-spotlight .tpl-order > :has(#rsvp) { order: 5; }
+.tpl-spotlight .tpl-order > :has(#seat) { order: 6; }
+.tpl-spotlight .tpl-order > :has(#venue) { order: 7; }
+.tpl-spotlight .tpl-order > :has(#countdown) { order: 8; }
+.tpl-spotlight .tpl-order > :has(#calendar) { order: 9; }
+.tpl-spotlight .tpl-order > :has(#story) { order: 10; }
+.tpl-spotlight .tpl-order > :has(#tips) { order: 11; }
+.tpl-spotlight .tpl-order > :has(#faq) { order: 12; }
+.tpl-spotlight .tpl-order > :has(#gift) { order: 13; }
+.tpl-spotlight .tpl-order > :has(#wishes) { order: 14; }
