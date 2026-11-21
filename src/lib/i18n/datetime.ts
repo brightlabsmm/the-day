@@ -58,7 +58,7 @@ function myPeriod(hour: number): string {
   return "ည";
 }
 
-function oneTime(iso: string, timeZone: string, locale: Locale): string {
+export function oneTime(iso: string, timeZone: string, locale: Locale): string {
   const d = zonedParts(iso, timeZone);
   if (locale === "my") {
     const h12 = d.hour % 12 || 12;

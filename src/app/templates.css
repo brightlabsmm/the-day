@@ -1,0 +1,339 @@
+/*
+ * Page designs besides "classic". Each design redefines the palette tokens on
+ * its wrapper, so the shared building blocks (wishes form, QR cards, ...)
+ * pick up the colours without extra work.
+ */
+
+.tpl {
+  --tpl-bg: var(--ivory);
+  background: var(--tpl-bg);
+  color: var(--ink);
+  min-height: 100svh;
+  overflow-x: clip;
+}
+
+/* ── Palettes ─────────────────────────────────────────────── */
+
+.tpl-editorial {
+  --ivory: #fbfaf8;
+  --paper: #f1efea;
+  --paper-deep: #e6e3dc;
+  --navy: #141414;
+  --ink: #262626;
+  --ink-soft: #707070;
+  --gold: #141414;
+  --gold-soft: #c9c6bf;
+  --gold-deep: #000;
+  --color-ivory: var(--ivory);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-navy: var(--navy);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-deep: var(--gold-deep);
+  --tpl-display: var(--font-playfair), "Playfair Display", Georgia, serif;
+}
+
+.tpl-envelope {
+  --ivory: #f8f3ea;
+  --paper: #efe6d6;
+  --paper-deep: #e4d7c1;
+  --navy: #5d4838;
+  --ink: #4f3e31;
+  --ink-soft: #8d7a68;
+  --gold: #b3935f;
+  --gold-soft: #dac9a5;
+  --gold-deep: #8a6d3f;
+  --color-ivory: var(--ivory);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-navy: var(--navy);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-deep: var(--gold-deep);
+  --tpl-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+}
+
+.tpl-scratch {
+  --ivory: #fff6f5;
+  --paper: #fbe4e7;
+  --paper-deep: #f5ced5;
+  --navy: #94283f;
+  --ink: #5e2b37;
+  --ink-soft: #a46b77;
+  --gold: #d46a83;
+  --gold-soft: #f0b9c4;
+  --gold-deep: #a93a55;
+  --color-ivory: var(--ivory);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-navy: var(--navy);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-deep: var(--gold-deep);
+  --tpl-display: var(--font-playfair), "Playfair Display", Georgia, serif;
+}
+
+/* ── Shared pieces ────────────────────────────────────────── */
+
+.tpl :where(h1, h2, h3, .tpl-display) {
+  font-family: var(--tpl-display);
+}
+.tpl :lang(my) {
+  font-family: var(--font-myanmar);
+}
+.tpl .tpl-display:lang(my),
+.tpl h1:lang(my),
+.tpl h2:lang(my),
+.tpl h3:lang(my) {
+  font-family: var(--font-myanmar);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.tpl-section {
+  padding: clamp(3.5rem, 9vw, 7rem) clamp(1.25rem, 5vw, 3rem);
+  scroll-margin-top: 4.5rem;
+}
+.tpl-narrow {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 44rem;
+}
+.tpl-wide {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 72rem;
+}
+.tpl-eyebrow {
+  font-family: var(--font-jost), system-ui, sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-align: center;
+}
+.tpl-eyebrow:lang(my) {
+  font-family: var(--font-myanmar);
+  letter-spacing: 0.04em;
+  text-transform: none;
+  font-size: 0.85rem;
+}
+.tpl-h2 {
+  text-align: center;
+  font-size: clamp(1.9rem, 5vw, 3rem);
+  line-height: 1.15;
+  color: var(--navy);
+  margin-top: 0.6rem;
+}
+.tpl-h2:lang(my) {
+  line-height: 1.6;
+}
+.tpl-lead {
+  font-size: 1.1rem;
+  line-height: 2;
+  text-align: center;
+  color: var(--ink);
+}
+.tpl-btn {
+  display: inline-block;
+  border: 1px solid var(--navy);
+  padding: 0.8rem 1.8rem;
+  font-family: var(--font-jost), system-ui, sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--navy);
+  transition: background 0.2s, color 0.2s;
+}
+.tpl-btn:hover,
+.tpl-btn:focus-visible {
+  background: var(--navy);
+  color: var(--ivory);
+}
+.tpl-btn:lang(my) {
+  font-family: var(--font-myanmar);
+  letter-spacing: 0.02em;
+  text-transform: none;
+  font-size: 0.9rem;
+}
+
+/* Navigation */
+.tpl-nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem clamp(1rem, 4vw, 2.5rem);
+  transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+}
+.tpl-nav[data-solid="true"] {
+  background: color-mix(in oklab, var(--ivory) 92%, transparent);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 1px 0 color-mix(in oklab, var(--navy) 12%, transparent);
+  color: var(--navy);
+}
+.tpl-nav[data-solid="false"][data-over="dark"] {
+  color: #fff;
+}
+.tpl-nav[data-solid="false"][data-over="light"] {
+  color: var(--navy);
+}
+.tpl-nav a,
+.tpl-nav button {
+  font-family: var(--font-jost), system-ui, sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.tpl-nav :lang(my) {
+  font-family: var(--font-myanmar);
+  letter-spacing: 0.02em;
+  text-transform: none;
+  font-size: 0.85rem;
+}
+
+/* Editorial hero */
+.tpl-hero-photo {
+  filter: grayscale(1) contrast(1.05);
+}
+.tpl-giant {
+  font-family: var(--tpl-display);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+.tpl-giant:lang(my) {
+  font-family: var(--font-myanmar);
+  font-weight: 700;
+  line-height: 1.5;
+  text-transform: none;
+}
+
+/* Timeline */
+.tpl-timeline li {
+  display: grid;
+  grid-template-columns: minmax(5.5rem, 8rem) 1px 1fr;
+  gap: 0 clamp(1rem, 3vw, 2rem);
+  padding-bottom: 2.25rem;
+}
+.tpl-timeline li > .tpl-rail {
+  background: color-mix(in oklab, var(--navy) 25%, transparent);
+  position: relative;
+}
+.tpl-timeline li > .tpl-rail::before {
+  content: "";
+  position: absolute;
+  top: 0.55rem;
+  left: 50%;
+  translate: -50% 0;
+  width: 9px;
+  height: 9px;
+  border-radius: 9999px;
+  background: var(--ivory);
+  border: 1px solid var(--navy);
+}
+
+/* Photo grid */
+.tpl-grid-photo {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  background: var(--paper);
+}
+.tpl-grid-photo img {
+  transition: transform 0.6s ease;
+}
+.tpl-grid-photo:hover img {
+  transform: scale(1.03);
+}
+
+/* Heart / hairline ornament lines */
+.tpl-orn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: var(--gold);
+  font-size: 0.9rem;
+}
+.tpl-orn::before,
+.tpl-orn::after {
+  content: "";
+  height: 1px;
+  width: 3.5rem;
+  background: color-mix(in oklab, currentColor 55%, transparent);
+}
+
+.tpl-script {
+  font-family: var(--font-script), "Great Vibes", cursive;
+  font-weight: 400;
+  line-height: 1.1;
+}
+.tpl-script:lang(my) {
+  font-family: var(--font-myanmar);
+  font-style: normal;
+  line-height: 1.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tpl-grid-photo img {
+    transition: none;
+  }
+}
+
+/* The classic gold-foil names become plain palette colours in the other designs. */
+.tpl-editorial .foil,
+.tpl-scratch .foil {
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  color: var(--navy);
+}
+.tpl-envelope .foil {
+  background-image: linear-gradient(100deg, var(--gold-deep), var(--gold) 50%, var(--gold-deep));
+}
+html:has(.tpl) {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html:has(.tpl) {
+    scroll-behavior: auto;
+  }
+}
+
+/* Theatre: cream house lights with burgundy and gold; the stage itself is dark. */
+.tpl-theatre {
+  --ivory: #f6f0e4;
+  --paper: #ece2d0;
+  --paper-deep: #e0d3bb;
+  --navy: #5e1a27;
+  --ink: #3d2a24;
+  --ink-soft: #8a7467;
+  --gold: #b8913f;
+  --gold-soft: #dcc690;
+  --gold-deep: #8d6c26;
+  --color-ivory: var(--ivory);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-navy: var(--navy);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-deep: var(--gold-deep);
+  --tpl-display: var(--font-playfair), "Playfair Display", Georgia, serif;
+}
+.tpl-theatre .foil {
+  background-image: linear-gradient(100deg, var(--gold-deep), #d8b765 50%, var(--gold-deep));
+}

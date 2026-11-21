@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Jost, Noto_Serif_Myanmar } from "next/font/google";
+import { Cormorant_Garamond, Great_Vibes, Jost, Noto_Serif_Myanmar, Playfair_Display } from "next/font/google";
 import "./globals.css";
+import "./templates.css";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -17,6 +18,16 @@ const notoMyanmar = Noto_Serif_Myanmar({
   weight: ["400", "500", "700"],
   display: "swap",
 });
+
+// Used only by the Editorial / Scratch / Envelope templates.
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  weight: ["400", "500", "700", "900"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+const greatVibes = Great_Vibes({ variable: "--font-script", subsets: ["latin"], weight: "400", display: "swap" });
 
 const jost = Jost({
   variable: "--font-jost",
@@ -43,7 +54,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="my"
-      className={`${cormorant.variable} ${notoMyanmar.variable} ${jost.variable} h-full`}
+      className={`${cormorant.variable} ${notoMyanmar.variable} ${jost.variable} ${playfair.variable} ${greatVibes.variable} h-full`}
     >
       <body className="min-h-full">{children}</body>
     </html>

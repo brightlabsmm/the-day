@@ -10,6 +10,7 @@ Built with Next.js 16 (App Router, Cache Components), React 19, Tailwind 4, Moti
 /w/<wedding-slug>?g=<guest-token>&lang=my|en
 ```
 
+- `g` is optional. Without it the invitation is public: "Dear Honoured Guest" on the sleeve and, if the wedding has **Open wishes wall** switched on, anyone can read and add wishes. Weddings that use personal links keep the wishes wall for guests with a valid token.
 - `g` is the guest's personal token (for example `ko-aung-7k2fp3qx`). Without a valid token the invitation still opens, but without the guest's name, the wishes wall or open tracking.
 - `lang` wins over the guest's saved choice (cookie). Burmese is the default.
 - A guest is marked as opened when they tap the seal, not on page load, so link-preview bots do not count.
@@ -39,8 +40,36 @@ Then open <http://localhost:3000/w/thukha-maythet?g=ko-aung-7k2f> for the demo i
 | `pnpm db:reset` | Re-apply migrations and seed, then run `seed:media` |
 | `pnpm db:types` | Regenerate `src/lib/supabase/database.types.ts` |
 | `pnpm seed:media` | Upload demo photos and a placeholder gift QR |
+| `pnpm seed:showcase` | Create the five fictional demo weddings used by `/showcase` |
+| `pnpm import:wedding <folder>` | Create or update a real wedding from `wedding.json` plus its image files (see below) |
 | `pnpm seed:admin` | Create or reset the local dev admin (local Supabase only) |
 | `pnpm check:db` | Sanity-check the database setup |
+
+## Page designs
+
+Each wedding picks a design in the admin (**Details → Page design**):
+
+| Design | Look |
+| --- | --- |
+| `classic` | Printed card in a paper sleeve, gold foil names, album page |
+| `editorial` | Black and white, full-screen photo, giant monogram and type |
+| `envelope` | Cream envelope with a wax seal, script lettering |
+| `theatre` | Velvet curtains and a spotlit stage, "Act I, II, III" programme, flip-card countdown |
+| `scratch` | Rose-pink, scratch-the-heart opening, calendar and hearts |
+
+All five share the same content, Burmese/English switch, countdown, schedule, photos, gift QR codes and wishes. They live in `src/components/invite` (classic) and `src/components/templates` (the others, with palettes in `src/app/templates.css`). `/showcase` shows all five side by side using fictional demo weddings created by `pnpm seed:showcase` (generated artwork, no real people).
+
+## Adding a real wedding
+
+Put the couple's details and images in a folder that is **not committed** (`private/` is gitignored; it can hold family names, payment QR codes and photos), then:
+
+```bash
+pnpm import:wedding private/<couple>
+```
+
+`wedding.json` holds names, `template_key`, texts (`{"my": "...", "en": "..."}`), `cover_text` (top corner labels, script line and footer printed on the card), events (times in the wedding's timezone), photos and gift QR images. The script writes to whatever `NEXT_PUBLIC_SUPABASE_URL` points at, so use `.env.local` values for the project you mean. Re-running replaces events, photos and gift images but keeps guests and wishes. QR codes photographed from print need a white margin around them to scan; check each one with a phone before publishing.
+
+Open wishes walls rely on a honeypot field, a 30-second cooldown per browser and a limit of 30 public wishes per 10 minutes per wedding. Hide anything unwanted from the **Wishes** tab in the admin.
 
 ## Admin
 

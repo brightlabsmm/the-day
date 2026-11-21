@@ -99,34 +99,34 @@ isOneToOne: false
                   ]
                 },"weddings": {
                   Row: {
-                    "closing_quote": NonNullable<Json>,"created_at": string,"family": NonNullable<Json>,"gift_methods": NonNullable<Json>,"id": string,"invitation_text": NonNullable<Json>,"monogram": string | null,"music_path": string | null,"music_title": string | null,"note": NonNullable<Json>,"partner_one_name": NonNullable<Json>,"partner_two_name": NonNullable<Json>,"slug": string,"status": string,"tagline": NonNullable<Json>,"template_key": string,"theme": NonNullable<Json>,"timezone": string,"updated_at": string,"wishes_editable": boolean,"wishes_enabled": boolean
+                    "closing_quote": NonNullable<Json>,"cover_text": NonNullable<Json>,"created_at": string,"family": NonNullable<Json>,"gift_methods": NonNullable<Json>,"id": string,"invitation_text": NonNullable<Json>,"monogram": string | null,"music_path": string | null,"music_title": string | null,"note": NonNullable<Json>,"partner_one_name": NonNullable<Json>,"partner_two_name": NonNullable<Json>,"public_wishes": boolean,"slug": string,"status": string,"tagline": NonNullable<Json>,"template_key": string,"theme": NonNullable<Json>,"timezone": string,"updated_at": string,"wishes_editable": boolean,"wishes_enabled": boolean
                   }
                   ComputedFields: never
                   Insert: {
-                    "closing_quote"?: NonNullable<Json>,"created_at"?: string,"family"?: NonNullable<Json>,"gift_methods"?: NonNullable<Json>,"id"?: string,"invitation_text"?: NonNullable<Json>,"monogram"?: string | null,"music_path"?: string | null,"music_title"?: string | null,"note"?: NonNullable<Json>,"partner_one_name": NonNullable<Json>,"partner_two_name": NonNullable<Json>,"slug": string,"status"?: string,"tagline"?: NonNullable<Json>,"template_key"?: string,"theme"?: NonNullable<Json>,"timezone"?: string,"updated_at"?: string,"wishes_editable"?: boolean,"wishes_enabled"?: boolean
+                    "closing_quote"?: NonNullable<Json>,"cover_text"?: NonNullable<Json>,"created_at"?: string,"family"?: NonNullable<Json>,"gift_methods"?: NonNullable<Json>,"id"?: string,"invitation_text"?: NonNullable<Json>,"monogram"?: string | null,"music_path"?: string | null,"music_title"?: string | null,"note"?: NonNullable<Json>,"partner_one_name": NonNullable<Json>,"partner_two_name": NonNullable<Json>,"public_wishes"?: boolean,"slug": string,"status"?: string,"tagline"?: NonNullable<Json>,"template_key"?: string,"theme"?: NonNullable<Json>,"timezone"?: string,"updated_at"?: string,"wishes_editable"?: boolean,"wishes_enabled"?: boolean
                   }
                   Update: {
-                    "closing_quote"?: NonNullable<Json>,"created_at"?: string,"family"?: NonNullable<Json>,"gift_methods"?: NonNullable<Json>,"id"?: string,"invitation_text"?: NonNullable<Json>,"monogram"?: string | null,"music_path"?: string | null,"music_title"?: string | null,"note"?: NonNullable<Json>,"partner_one_name"?: NonNullable<Json>,"partner_two_name"?: NonNullable<Json>,"slug"?: string,"status"?: string,"tagline"?: NonNullable<Json>,"template_key"?: string,"theme"?: NonNullable<Json>,"timezone"?: string,"updated_at"?: string,"wishes_editable"?: boolean,"wishes_enabled"?: boolean
+                    "closing_quote"?: NonNullable<Json>,"cover_text"?: NonNullable<Json>,"created_at"?: string,"family"?: NonNullable<Json>,"gift_methods"?: NonNullable<Json>,"id"?: string,"invitation_text"?: NonNullable<Json>,"monogram"?: string | null,"music_path"?: string | null,"music_title"?: string | null,"note"?: NonNullable<Json>,"partner_one_name"?: NonNullable<Json>,"partner_two_name"?: NonNullable<Json>,"public_wishes"?: boolean,"slug"?: string,"status"?: string,"tagline"?: NonNullable<Json>,"template_key"?: string,"theme"?: NonNullable<Json>,"timezone"?: string,"updated_at"?: string,"wishes_editable"?: boolean,"wishes_enabled"?: boolean
                   }
                   Relationships: [
                     
                   ]
                 },"wishes": {
                   Row: {
-                    "author_name": string,"created_at": string,"guest_id": string,"id": string,"is_hidden": boolean,"message": string,"updated_at": string,"wedding_id": string
+                    "author_name": string,"created_at": string,"guest_id": string | null,"id": string,"is_hidden": boolean,"message": string,"updated_at": string,"wedding_id": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "author_name": string,"created_at"?: string,"guest_id": string,"id"?: string,"is_hidden"?: boolean,"message": string,"updated_at"?: string,"wedding_id": string
+                    "author_name": string,"created_at"?: string,"guest_id"?: string | null,"id"?: string,"is_hidden"?: boolean,"message": string,"updated_at"?: string,"wedding_id": string
                   }
                   Update: {
-                    "author_name"?: string,"created_at"?: string,"guest_id"?: string,"id"?: string,"is_hidden"?: boolean,"message"?: string,"updated_at"?: string,"wedding_id"?: string
+                    "author_name"?: string,"created_at"?: string,"guest_id"?: string | null,"id"?: string,"is_hidden"?: boolean,"message"?: string,"updated_at"?: string,"wedding_id"?: string
                   }
                   Relationships: [
                     {
       foreignKeyName: "wishes_guest_id_fkey"
       columns: ["guest_id"]
-isOneToOne: true
+isOneToOne: false
       referencedRelation: "guests"
       referencedColumns: ["id"]
     },{
@@ -146,6 +146,11 @@ isOneToOne: false
             "get_invitation":
 { Args: { "p_slug": string,"p_token"?: string }; Returns: Json
                            },
+"get_public_wishes":
+{ Args: { "p_slug": string }; Returns: {
+              "author_name": string,"created_at": string,"message": string
+            }[]
+                           },
 "get_wishes":
 { Args: { "p_slug": string,"p_token": string }; Returns: {
               "author_name": string,"created_at": string,"is_mine": boolean,"message": string
@@ -156,6 +161,9 @@ isOneToOne: false
                            },
 "mark_invitation_opened":
 { Args: { "p_slug": string,"p_token": string }; Returns: undefined
+                           },
+"submit_public_wish":
+{ Args: { "p_author_name": string,"p_message": string,"p_slug": string }; Returns: Json
                            },
 "submit_wish":
 { Args: { "p_author_name": string,"p_message": string,"p_slug": string,"p_token": string }; Returns: Json

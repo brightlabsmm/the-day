@@ -13,6 +13,11 @@ import { InvitationBody } from "@/components/invite/invitation-body";
 import { LanguageSwitch } from "@/components/invite/language-switch";
 import { MusicPlayer } from "@/components/invite/music-player";
 import { mediaUrl } from "@/lib/media";
+import { templateKey } from "@/lib/templates";
+import { EditorialPage } from "@/components/templates/editorial-page";
+import { EnvelopePage } from "@/components/templates/envelope-page";
+import { ScratchPage } from "@/components/templates/scratch-page";
+import { TheatrePage } from "@/components/templates/theatre-page";
 import { markOpened } from "./actions";
 
 /**
@@ -64,6 +69,33 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
   const monogram =
     wedding.monogram ??
     `${t(wedding.partner_one_name, "en").charAt(0)}&${t(wedding.partner_two_name, "en").charAt(0)}`;
+
+  const key = templateKey(wedding.template_key);
+  if (key !== "classic") {
+    const props = {
+      invitation,
+      locale,
+      monogram,
+      token: guest ? (token ?? null) : null,
+      onOpenAction: markOpened,
+    };
+    return (
+      <>
+        {wedding.music_path && (
+          <MusicPlayer src={mediaUrl(wedding.music_path)} title={wedding.music_title} locale={locale} />
+        )}
+        {key === "editorial" ? (
+          <EditorialPage {...props} />
+        ) : key === "envelope" ? (
+          <EnvelopePage {...props} />
+        ) : key === "theatre" ? (
+          <TheatrePage {...props} />
+        ) : (
+          <ScratchPage {...props} />
+        )}
+      </>
+    );
+  }
 
   return (
     <>

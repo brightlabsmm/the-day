@@ -82,7 +82,7 @@ function Print({
   );
 }
 
-function Viewer({
+export function Viewer({
   photos,
   index,
   locale,

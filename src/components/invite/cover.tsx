@@ -4,6 +4,7 @@
  * the couple's names in foil, and date / time / venue in three columns.
  */
 import Image from "next/image";
+import { z } from "zod";
 import { CalendarDays, Clock, MapPin } from "lucide-react";
 import type { Invitation } from "@/lib/invitation";
 import { t, type Locale } from "@/lib/i18n/numerals";
@@ -12,6 +13,25 @@ import { formatShortDate, formatTimeRange, weddingYear } from "@/lib/i18n/dateti
 import { mediaUrl } from "@/lib/media";
 import { DoubleRule, MonogramSeal } from "@/components/ornaments";
 import { GoldCord } from "./sleeve-parts";
+
+const text = z.object({ my: z.string().optional(), en: z.string().optional() }).partial();
+const CoverText = z
+  .object({ corner_left: text, corner_right: text, script: text, footer: text })
+  .partial();
+
+/** Lines of a stored label, split on line breaks. */
+function lines(value: string): string[] {
+  return value.split("\n").map((l) => l.trim()).filter(Boolean);
+}
+
+function Lines({ items }: { items: string[] }) {
+  return items.map((l, i) => (
+    <span key={i}>
+      {i > 0 && <br />}
+      {l}
+    </span>
+  ));
+}
 
 type Props = { invitation: Invitation; locale: Locale; monogram: string };
 
@@ -22,6 +42,12 @@ export function Cover({ invitation, locale, monogram }: Props) {
   const tz = wedding.timezone;
   const year = main ? weddingYear(main.starts_at, tz) : null;
   const tagline = t(wedding.tagline, locale);
+  // Wording printed on the card. Falls back to the stock labels when the couple has not set their own.
+  const ct = CoverText.safeParse(wedding.cover_text).data ?? {};
+  const left = lines(t(ct.corner_left, locale) || "Our\nSpecial\nDay");
+  const right = lines(t(ct.corner_right, locale) || `Our\nLove Story\n${year ? `Est. ${year}` : ""}`);
+  const script = t(ct.script, locale) || "Together Forever";
+  const footer = t(ct.footer, locale) || `The Day${year ? ` · ${year}` : ""}`;
 
   return (
     <section aria-labelledby="cover-title" className="paper frame-double @container relative px-[clamp(1rem,5vw,1.75rem)] pt-10 pb-7 text-navy">
@@ -32,11 +58,7 @@ export function Cover({ invitation, locale, monogram }: Props) {
         <div>
           <Rule />
           <p className="corner-label py-1.5">
-            Our
-            <br />
-            Special
-            <br />
-            Day
+            <Lines items={left} />
           </p>
           <Rule />
         </div>
@@ -46,18 +68,14 @@ export function Cover({ invitation, locale, monogram }: Props) {
         <div className="text-right">
           <Rule />
           <p className="corner-label py-1.5">
-            Our
-            <br />
-            Love Story
-            <br />
-            {year ? `Est. ${year}` : " "}
+            <Lines items={right} />
           </p>
           <Rule />
         </div>
       </header>
       <p className="font-display mt-2 text-center text-[1.05rem] text-ink-soft italic">
         <span aria-hidden className="mr-2 inline-block h-px w-6 bg-current align-middle opacity-60" />
-        Together Forever
+        {script}
         <span aria-hidden className="ml-2 inline-block h-px w-6 bg-current align-middle opacity-60" />
       </p>
 
@@ -133,7 +151,7 @@ export function Cover({ invitation, locale, monogram }: Props) {
       <div className="mt-4 flex items-center gap-3">
         <span className="h-px flex-1 bg-navy/50" />
         <p className="label-caps text-[0.55rem] text-ink-soft" lang="en">
-          The Day {year ? `· ${year}` : ""}
+          {footer}
         </p>
         <span className="h-px flex-1 bg-navy/50" />
       </div>

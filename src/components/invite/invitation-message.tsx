@@ -16,19 +16,29 @@ const Side = z
   .optional();
 const Family = z.object({ partner_one: Side, partner_two: Side }).partial();
 
-export function InvitationMessage({ invitation, locale }: { invitation: Invitation; locale: Locale }) {
+export function InvitationMessage({
+  invitation,
+  locale,
+  plain,
+}: {
+  invitation: Invitation;
+  locale: Locale;
+  plain?: boolean;
+}) {
   const { wedding } = invitation;
   const family = Family.safeParse(wedding.family).data ?? {};
   const message = t(wedding.invitation_text, locale);
-  const hasLineage = !!(t(family.partner_one?.lineage, locale) || t(family.partner_two?.lineage, locale));
+  // Lineage is personal wording in one language: it is never swapped for the other language.
+  const lineage = (side: "partner_one" | "partner_two") => family[side]?.lineage?.[locale] ?? "";
+  const hasLineage = !!(lineage("partner_one") || lineage("partner_two"));
 
   return (
-    <InnerCard id="invitation-heading" heading={s("invitationHeading", locale)} lang={locale}>
+    <InnerCard id="invitation-heading" anchor="invitation" plain={plain} heading={s("invitationHeading", locale)} lang={locale}>
       {hasLineage ? (
         <div className="mt-5">
-          <Partner lineage={t(family.partner_one?.lineage, locale)} name={t(wedding.partner_one_name, locale)} credentials={family.partner_one?.credentials} />
+          <Partner lineage={lineage("partner_one")} name={t(wedding.partner_one_name, locale)} credentials={family.partner_one?.credentials} />
           <p className="card-body my-3">{s("and", locale)}</p>
-          <Partner lineage={t(family.partner_two?.lineage, locale)} name={t(wedding.partner_two_name, locale)} credentials={family.partner_two?.credentials} />
+          <Partner lineage={lineage("partner_two")} name={t(wedding.partner_two_name, locale)} credentials={family.partner_two?.credentials} />
         </div>
       ) : (
         <div className="mt-5">

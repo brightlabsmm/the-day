@@ -11,12 +11,30 @@ export function InnerCard({
   heading,
   lang,
   children,
+  plain = false,
+  anchor,
 }: {
   id: string;
   heading: string;
   lang: string;
   children: ReactNode;
+  /** Page-designs other than "classic" show the same content without the paper card. */
+  plain?: boolean;
+  /** Element id for in-page navigation. */
+  anchor?: string;
 }) {
+  if (plain) {
+    return (
+      <section id={anchor} aria-labelledby={id} lang={lang} className="tpl-section">
+        <div className="tpl-narrow text-center">
+          <h2 id={id} className="tpl-h2">
+            {heading}
+          </h2>
+          {children}
+        </div>
+      </section>
+    );
+  }
   return (
     <section
       aria-labelledby={id}

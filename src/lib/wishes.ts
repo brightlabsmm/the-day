@@ -19,3 +19,13 @@ export async function getWishes(slug: string, token: string): Promise<Wish[]> {
   if (error) throw new Error(`get_wishes failed: ${error.message}`);
   return z.array(WishSchema).parse(data ?? []);
 }
+
+export type PublicWish = Omit<Wish, "is_mine">;
+const PublicWishSchema = WishSchema.omit({ is_mine: true });
+
+/** Wishes for a wedding with an open (no guest link) wishes wall. */
+export async function getPublicWishes(slug: string): Promise<PublicWish[]> {
+  const { data, error } = await createSupabaseGuestClient().rpc("get_public_wishes", { p_slug: slug });
+  if (error) throw new Error(`get_public_wishes failed: ${error.message}`);
+  return z.array(PublicWishSchema).parse(data ?? []);
+}

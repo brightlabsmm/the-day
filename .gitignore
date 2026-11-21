@@ -43,3 +43,6 @@ next-env.d.ts
 # demo wedding photos (real people) — kept out of git
 /supabase/seed-media/
 !.env.example
+
+# real couple data (names, QR codes, photos) — never committed
+/private/

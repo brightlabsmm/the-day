@@ -13,7 +13,7 @@ const Method = z.object({
 });
 
 /** Display-only gift QR codes (KBZPay, Wave, …). Nothing here moves money. */
-export function GiftSection({ invitation, locale }: { invitation: Invitation; locale: Locale }) {
+export function GiftSection({ invitation, locale, plain }: { invitation: Invitation; locale: Locale; plain?: boolean }) {
   const methods = invitation.wedding.gift_methods.flatMap((m) => {
     const parsed = Method.safeParse(m);
     return parsed.success ? [parsed.data] : [];
@@ -21,7 +21,7 @@ export function GiftSection({ invitation, locale }: { invitation: Invitation; lo
   if (methods.length === 0) return null;
 
   return (
-    <InnerCard id="gift-heading" heading={s("giftHeading", locale)} lang={locale}>
+    <InnerCard id="gift-heading" anchor="gift" plain={plain} heading={s("giftHeading", locale)} lang={locale}>
       <p className="card-body mt-5 text-ink">{s("giftIntro", locale)}</p>
       <ul className="mt-6 grid gap-6">
         {methods.map((m) => (

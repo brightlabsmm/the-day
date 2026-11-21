@@ -18,6 +18,7 @@ const InvitationSchema = z.object({
     family: z.record(z.string(), z.unknown()),
     note: i18n,
     closing_quote: i18n,
+    cover_text: z.record(z.string(), z.unknown()),
     gift_methods: z.array(z.record(z.string(), z.unknown())),
     music_path: z.string().nullable(),
     music_title: z.string().nullable(),
@@ -25,6 +26,7 @@ const InvitationSchema = z.object({
     timezone: z.string(),
     wishes_enabled: z.boolean(),
     wishes_editable: z.boolean(),
+    public_wishes: z.boolean(),
   }),
   events: z.array(
     z.object({

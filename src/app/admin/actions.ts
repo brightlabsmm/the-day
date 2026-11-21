@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { generateGuestToken } from "@/lib/tokens";
+import { templateKey } from "@/lib/templates";
 import { i18nFromForm, localInputToIso } from "@/lib/admin/forms";
 
 const Credentials = z.object({ email: z.email(), password: z.string().min(1).max(200) });
@@ -97,17 +98,25 @@ export async function saveWeddingDetails(form: FormData) {
     .from("weddings")
     .update({
       status: status.data,
+      template_key: templateKey(form.get("template_key")),
       ...names,
       monogram: String(form.get("monogram") ?? "").trim().slice(0, 12) || null,
       tagline: i18nFromForm(form, "tagline"),
       invitation_text: i18nFromForm(form, "invitation_text"),
       note: i18nFromForm(form, "note"),
       closing_quote: i18nFromForm(form, "closing_quote"),
+      cover_text: {
+        corner_left: i18nFromForm(form, "cover_corner_left"),
+        corner_right: i18nFromForm(form, "cover_corner_right"),
+        script: i18nFromForm(form, "cover_script"),
+        footer: i18nFromForm(form, "cover_footer"),
+      },
       family: {
         partner_one: familySide(form, "partner_one"),
         partner_two: familySide(form, "partner_two"),
       },
       wishes_enabled: form.get("wishes_enabled") === "on",
+      public_wishes: form.get("public_wishes") === "on",
       wishes_editable: form.get("wishes_editable") === "on",
     })
     .eq("slug", slug.data);
