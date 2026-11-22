@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { generateGuestToken, slugify } from "./tokens";
+import { generateGuestToken, generateWeddingCode, slugify } from "./tokens";
 
 const TOKEN_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
@@ -20,5 +20,17 @@ describe("guest tokens", () => {
   it("slugify strips accents and symbols and caps length", () => {
     expect(slugify("  Zoë & Co.  ")).toBe("zoe-co");
     expect(slugify("a".repeat(100)).length).toBe(40);
+  });
+});
+
+describe("wedding codes", () => {
+  it("is 12 unambiguous characters that pass the slug rule", () => {
+    const code = generateWeddingCode();
+    expect(code).toMatch(/^[2-9a-hjkmnp-z]{12}$/);
+    expect(code).toMatch(TOKEN_RE);
+  });
+  it("does not repeat", () => {
+    const set = new Set(Array.from({ length: 2000 }, () => generateWeddingCode()));
+    expect(set.size).toBe(2000);
   });
 });

@@ -25,3 +25,20 @@ function randomSuffix(length = 8): string {
 export function generateGuestToken(name: string): string {
   return `${slugify(name) || "guest"}-${randomSuffix()}`;
 }
+
+/**
+ * Wedding link code, used as the slug in /w/<code>: 12 random characters from
+ * the unambiguous alphabet (about 59 bits), e.g. "7k2fp3qxm8na". It says
+ * nothing about the couple, and links cannot be guessed or enumerated.
+ * Rejection sampling keeps every character equally likely.
+ */
+export function generateWeddingCode(length = 12): string {
+  const limit = 256 - (256 % ALPHABET.length);
+  let out = "";
+  while (out.length < length) {
+    for (const b of crypto.getRandomValues(new Uint8Array(length * 2))) {
+      if (b < limit && out.length < length) out += ALPHABET[b % ALPHABET.length];
+    }
+  }
+  return out;
+}

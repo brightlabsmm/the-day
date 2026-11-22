@@ -14,7 +14,7 @@ import { themeOf } from "@/lib/theme";
  */
 const FEATURED: { slug: string; design: string; story: string }[] = [
   {
-    slug: "kyawswarthin-ayethida",
+    slug: "g4tc58rfan5e",
     design: "Envelope",
     story:
       "Two civil engineers building a life together. Their invitation opens from a cream envelope sealed with their K&T monogram, onto a page where snow drifts down as guests scroll.",

@@ -4,21 +4,27 @@
  *
  *   pnpm import:wedding private/kyaw-aye
  *
+ * The guest link is /w/<slug>. Leave "slug" out of wedding.json for a new
+ * couple: a random 12-character code is generated (so the link does not
+ * reveal their names and cannot be guessed) and written back into the file,
+ * so later runs update the same wedding.
+ *
  * Uses SUPABASE_SECRET_KEY, so it writes to whatever NEXT_PUBLIC_SUPABASE_URL
  * points at (local by default). Run again to update: photos, events and gift
  * images are replaced; guests and wishes are left alone.
  */
-import { readFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import { localInputToIso } from "../src/lib/admin/forms";
-import { generateGuestToken } from "../src/lib/tokens";
+import { generateGuestToken, generateWeddingCode } from "../src/lib/tokens";
 
 const i18n = z.record(z.string(), z.string());
 const Config = z.object({
-  slug: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/).max(60),
+  /** Link code. Omit it for a new wedding and one is generated. */
+  slug: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/).max(60).optional(),
   status: z.enum(["draft", "published"]).default("published"),
   timezone: z.string().default("Asia/Yangon"),
   template_key: z.enum(["classic", "editorial", "envelope", "scratch", "theatre", "record", "wildflower", "shutters", "silk", "midnight", "lantern", "polaroid", "botanical", "artdeco", "sunrise", "spotlight"]).default("classic"),
@@ -73,7 +79,16 @@ export async function importWedding(dir: string) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SECRET_KEY;
   if (!url || !key) throw new Error("Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SECRET_KEY (see .env.local)");
-  const cfg = Config.parse(JSON.parse(await readFile(path.join(dir, "wedding.json"), "utf8")));
+  const file = path.join(dir, "wedding.json");
+  const raw = JSON.parse(await readFile(file, "utf8")) as Record<string, unknown>;
+  const parsed = Config.parse(raw);
+  if (!parsed.slug) {
+    // First import: give the couple a random link code and save it, so reruns update this wedding.
+    parsed.slug = generateWeddingCode();
+    await writeFile(file, `${JSON.stringify({ slug: parsed.slug, ...raw }, null, 2)}\n`, "utf8");
+    console.log(`✓ new link code ${parsed.slug} saved to wedding.json`);
+  }
+  const cfg = { ...parsed, slug: parsed.slug };
   const db = createClient(url, key, { auth: { persistSession: false } });
   console.log(`Target: ${url}`);
 

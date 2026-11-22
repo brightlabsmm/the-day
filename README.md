@@ -78,6 +78,8 @@ Put the couple's details and images in a folder that is **not committed** (`priv
 pnpm import:wedding private/<couple>
 ```
 
+Leave `slug` out of a new couple's `wedding.json`: the first import gives them a random 12-character link code (for example `/w/g4tc58rfan5e`, so the link does not show their names and cannot be guessed) and writes it back into the file, so later imports update the same wedding. Keep that file; the code is how the wedding is found.
+
 `wedding.json` holds names, `template_key`, an optional `music` file (mp3, m4a, aac or ogg), texts (`{"my": "...", "en": "..."}`), `good_to_know`, `seating_enabled` and `guests` (`[{"name", "name_my", "table"}]`), `cover_text` (top corner labels, script line and footer printed on the card), events (times in the wedding's timezone), photos and gift QR images. The script writes to whatever `NEXT_PUBLIC_SUPABASE_URL` points at, so use `.env.local` values for the project you mean. Re-running replaces events, photos and gift images but keeps guests and wishes. QR codes photographed from print need a white margin around them to scan; check each one with a phone before publishing.
 
 Open wishes walls rely on a honeypot field, a 30-second cooldown per browser and a limit of 30 public wishes per 10 minutes per wedding. Hide anything unwanted from the **Wishes** tab in the admin.
