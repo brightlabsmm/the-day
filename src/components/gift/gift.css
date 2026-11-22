@@ -1,0 +1,432 @@
+/*
+ * Gift invitation pages (/g/<slug>): midnight pond, gold leaf, blush lotus.
+ * Display type is Cinzel; Burmese text switches to the Myanmar serif.
+ */
+
+.gift-root {
+  --g-gold: #e5c16c;
+  --g-gold-bright: #f8e2a2;
+  --g-gold-dim: #9e7d36;
+  --g-pink: #e6a8b8;
+  --g-ink: #f7f2e8;
+  /* Shared tokens, so the language switch picks up the night palette. */
+  --ivory: #07121c;
+  --navy: #f8e2a2;
+  --ink-soft: #b9ad8d;
+  --gold: #e5c16c;
+  color: var(--g-ink);
+  font-family: var(--font-jost), system-ui, sans-serif;
+  background: radial-gradient(circle at 50% 42%, #0e2433 0%, #07121c 52%, #03070c 100%) fixed, #03070c;
+  overflow-x: clip;
+}
+.gift-root :lang(my),
+.gift-root:lang(my) {
+  font-family: var(--font-myanmar);
+}
+
+.gift-display {
+  font-family: var(--font-cinzel), "Cinzel", Georgia, serif;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+.gift-caps {
+  font-family: var(--font-cinzel), "Cinzel", Georgia, serif;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.gift-serif {
+  font-family: var(--font-cormorant), Georgia, serif;
+}
+.gift-num {
+  font-family: var(--font-cinzel), "Cinzel", Georgia, serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+/* Burmese reads poorly in capitals-and-tracking display styles. */
+.gift-display:lang(my),
+.gift-caps:lang(my),
+.gift-serif:lang(my) {
+  font-family: var(--font-myanmar);
+  font-style: normal;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.7;
+}
+
+/* ── Chrome ─────────────────────────────────────────────── */
+
+.gift-pillbar {
+  background: rgba(2, 8, 14, 0.7);
+  border: 1px solid rgba(229, 193, 108, 0.32);
+  backdrop-filter: blur(10px);
+}
+.gift-mode {
+  color: rgba(243, 220, 160, 0.8);
+  transition: background 0.25s, color 0.25s;
+}
+.gift-mode:hover {
+  color: var(--g-gold-bright);
+}
+.gift-mode[aria-pressed="true"] {
+  background: var(--g-gold);
+  color: #07121c;
+  box-shadow: 0 0 18px -4px rgba(229, 193, 108, 0.8);
+}
+.gift-gold-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(90deg, #fde7a8, var(--g-gold) 50%, #d8a943);
+  color: #07121c;
+  font-weight: 600;
+  box-shadow: 0 0 25px rgba(229, 193, 108, 0.4);
+  transition: filter 0.2s, transform 0.2s;
+}
+.gift-gold-btn:hover,
+.gift-gold-btn:focus-visible {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+.gift-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 9999px;
+  border: 1px solid var(--g-gold);
+  background: rgba(229, 193, 108, 0.2);
+  padding: 0.4rem 0.8rem;
+  font-size: 0.72rem;
+  color: var(--g-gold-bright);
+  transition: background 0.2s, color 0.2s;
+}
+.gift-chip:hover {
+  background: var(--g-gold);
+  color: #07121c;
+}
+.gift-toast {
+  background: rgba(2, 8, 14, 0.95);
+  border: 1px solid rgba(229, 193, 108, 0.7);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+/* In the header's right-hand group instead of fixed to the corner. */
+.gift-root .lang-option:lang(my) { font-size: 0.72rem; }
+.gift-root .lang-switch {
+  position: static;
+  height: 2.25rem;
+  border-radius: 9999px;
+  border-color: rgba(229, 193, 108, 0.35);
+  backdrop-filter: blur(10px);
+}
+.gift-root :focus-visible {
+  outline: 2px solid var(--g-gold-bright);
+  outline-offset: 3px;
+}
+
+/* ── Ambient: motes, ripples, slow rings ────────────────── */
+
+@keyframes gift-mote {
+  0% { transform: translate3d(0, 0, 0); opacity: 0; }
+  15% { opacity: 0.85; }
+  85% { opacity: 0.5; }
+  100% { transform: translate3d(14px, -110px, 0); opacity: 0; }
+}
+.gift-motes > span {
+  position: absolute;
+  border-radius: 9999px;
+  background: var(--g-gold-bright);
+  box-shadow: 0 0 8px 2px rgba(248, 226, 162, 0.5);
+  animation: gift-mote 10s ease-in-out infinite;
+}
+
+@keyframes gift-ripple {
+  0% { transform: scale(0.35); opacity: 0.65; }
+  100% { transform: scale(1.65); opacity: 0; }
+}
+.gift-ripples > span {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(229, 193, 108, 0.25);
+  border-radius: 9999px;
+  animation: gift-ripple 9s ease-out infinite;
+}
+.gift-ripples > span:nth-child(2) { animation-delay: 3s; }
+.gift-ripples > span:nth-child(3) { animation-delay: 6s; }
+
+@keyframes gift-turn { to { transform: rotate(360deg); } }
+@keyframes gift-turn-back { to { transform: rotate(-360deg); } }
+@keyframes gift-aura {
+  0%, 100% { opacity: 0.45; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.06); }
+}
+.gift-spin-slow { animation: gift-turn 75s linear infinite; }
+.gift-spin-reverse { animation: gift-turn-back 55s linear infinite; }
+
+/* ── Lotus petals ───────────────────────────────────────── */
+
+.gift-petal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 13.6%;
+  height: 26.4%;
+  margin-left: -6.8%;
+  margin-top: -26.4%;
+  transform-origin: 50% 100%;
+  transform: rotate(var(--a));
+}
+/*
+ * Each petal is drawn three times (see PetalLayer in views.tsx): a right half,
+ * a left half and a face with the number and icon. With all right halves under
+ * all left halves, every petal passes under the next one and 12 under 1, so the
+ * ring is one woven loop. The halves share the petal's shape, and the clip-path
+ * only cuts along its centre line (the outer sides are left open for the glow).
+ */
+.gift-petal-shape {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%;
+  /* Opaque, so a petal hides the one it passes over (the original blurred what lay behind it). */
+  background: linear-gradient(180deg, #6a6548 0%, #4a4a3b 52%, #162c3a 100%);
+  border: 1px solid rgba(229, 193, 108, 0.6);
+  box-shadow: 0 0 22px rgba(229, 193, 108, 0.16), inset 0 0 18px rgba(248, 226, 162, 0.2);
+  color: var(--g-gold-bright);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), background 0.45s, box-shadow 0.45s, border-color 0.45s;
+}
+button.gift-petal-shape[data-half="right"] { clip-path: inset(-40% -40% -40% 50%); }
+button.gift-petal-shape[data-half="left"] { clip-path: inset(-40% 50% -40% -40%); }
+button.gift-petal-shape:focus-visible { outline: none; }
+
+/* The face carries only the number and icon: no petal drawing of its own. */
+.gift-petal-face {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 24%;
+  background: none;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.gift-petal-shape[data-hot="true"] {
+  transform: translateY(-10px) scale(1.05);
+  border-color: var(--g-gold-bright);
+  background: linear-gradient(180deg, #8c8359 0%, #5d5a45 55%, #1c3748 100%);
+  box-shadow: 0 0 32px rgba(248, 226, 162, 0.45), inset 0 0 22px rgba(248, 226, 162, 0.35);
+}
+.gift-petal-shape[data-open="true"] {
+  transform: translateY(-14px) scale(1.03);
+  border-color: var(--g-gold-bright);
+  background: linear-gradient(180deg, #b9ab76 0%, #8a7468 52%, #22394a 100%);
+  box-shadow: 0 0 28px rgba(248, 226, 162, 0.4);
+  color: #07121c;
+}
+.gift-petal-face[data-hot="true"],
+.gift-petal-face[data-open="true"] {
+  background: none;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.gift-core {
+  border: 2px solid rgba(229, 193, 108, 0.7);
+  background: radial-gradient(circle at 50% 25%, rgba(253, 230, 138, 0.25), rgba(15, 23, 42, 0.92) 60%, #020617);
+  box-shadow: 0 0 40px rgba(229, 193, 108, 0.45);
+  transition: scale 0.3s;
+}
+/* `scale`, not `transform`: Tailwind's -translate-* utilities use the separate `translate` property. */
+.gift-core:hover { scale: 1.05; }
+.gift-core-aura {
+  border: 1px solid rgba(248, 226, 162, 0.4);
+  animation: gift-aura 3.8s ease-in-out infinite;
+}
+
+/* ── Astrolabe ──────────────────────────────────────────── */
+
+.gift-star {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: clamp(2.6rem, 11vw, 3.4rem);
+  height: clamp(2.6rem, 11vw, 3.4rem);
+  transform: translate(-50%, -50%);
+  border-radius: 9999px;
+  background: rgba(10, 25, 36, 0.88);
+  border: 1.5px solid rgba(229, 193, 108, 0.65);
+  box-shadow: 0 0 18px rgba(229, 193, 108, 0.25);
+  color: var(--g-gold-bright);
+  transition: background 0.35s, box-shadow 0.35s, border-color 0.35s;
+}
+.gift-star:hover,
+.gift-star:focus-visible {
+  border-color: var(--g-gold-bright);
+  background: rgba(34, 62, 82, 0.95);
+  box-shadow: 0 0 28px rgba(248, 226, 162, 0.65);
+  outline: none;
+}
+.gift-star[data-open="true"] {
+  background: linear-gradient(135deg, var(--g-gold), #b38936);
+  border-color: #fff3cf;
+  color: #07121c;
+  box-shadow: 0 0 24px rgba(248, 226, 162, 0.6);
+}
+.gift-sun {
+  border: 2px solid var(--g-gold-bright);
+  background: linear-gradient(45deg, #020617, #1e1b4b 55%, rgba(120, 53, 15, 0.45));
+  box-shadow: 0 0 45px rgba(248, 226, 162, 0.4);
+  transition: scale 0.3s;
+}
+.gift-sun:hover { scale: 1.05; }
+
+/* ── Oracle cards ───────────────────────────────────────── */
+
+.gift-card-wrap { perspective: 900px; }
+.gift-card {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  border-radius: 0.8rem;
+  transition: transform 0.3s;
+}
+.gift-card:hover { transform: translateY(-4px); }
+.gift-card-inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.gift-card[data-open="true"] .gift-card-inner { transform: rotateY(180deg); }
+.gift-card-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.4rem;
+  border-radius: 0.8rem;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  color: var(--g-gold);
+}
+.gift-card-back {
+  border: 1px solid rgba(229, 193, 108, 0.4);
+  background:
+    repeating-linear-gradient(45deg, rgba(229, 193, 108, 0.05) 0 2px, transparent 2px 9px),
+    linear-gradient(180deg, #102332, #071018);
+}
+.gift-card:hover .gift-card-back { border-color: var(--g-gold-bright); }
+.gift-card-front {
+  transform: rotateY(180deg);
+  border: 1px solid var(--g-gold-bright);
+  background: linear-gradient(180deg, rgba(253, 230, 138, 0.25), #0f172a);
+  box-shadow: 0 0 20px rgba(248, 226, 162, 0.3);
+  color: var(--g-gold-bright);
+}
+.gift-card-sigil {
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(229, 193, 108, 0.35);
+}
+.gift-card-note {
+  max-width: 100%;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 0.72rem;
+  font-style: italic;
+  color: rgba(247, 242, 232, 0.8);
+}
+/* A revealed card shows its whole code (never cut off with "…"), in an upright monospace face. */
+.gift-card-front .gift-card-note {
+  font-family: var(--font-mono-label), ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-style: normal;
+  font-size: 0.6rem;
+  line-height: 1.25;
+  letter-spacing: 0;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.gift-card-back .gift-card-note:lang(my) { font-size: 0.7rem; }
+
+/* ── Dialogs ────────────────────────────────────────────── */
+
+.gift-dialog {
+  width: calc(100% - 2rem);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--g-ink);
+  overflow: visible;
+}
+.gift-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+}
+.gift-dialog[open] { animation: gift-pop 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+@keyframes gift-pop {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+.gift-dialog-panel {
+  border-radius: 1rem;
+  border: 1px solid rgba(229, 193, 108, 0.5);
+  background: linear-gradient(180deg, #0f2230, #060d14);
+  box-shadow: 0 0 50px rgba(229, 193, 108, 0.25);
+}
+.gift-invite { background: linear-gradient(180deg, #152836, #0b1822 50%, #060c14); border-radius: 1rem; }
+.gift-medallion {
+  border: 1px solid rgba(229, 193, 108, 0.4);
+  background: rgba(229, 193, 108, 0.12);
+  box-shadow: inset 0 0 14px rgba(229, 193, 108, 0.18);
+}
+.gift-seal {
+  border: 2px solid var(--g-gold);
+  background: radial-gradient(circle at 35% 30%, #be123c, #7f1d1d 60%, #4c0519);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5), inset 0 0 12px rgba(0, 0, 0, 0.35);
+}
+.gift-oracle {
+  border: 1px solid rgba(229, 193, 108, 0.6);
+  background: linear-gradient(90deg, #1e1b4b, #3b0764);
+  transition: filter 0.2s;
+}
+.gift-oracle:hover { filter: brightness(1.12); }
+.gift-input {
+  display: block;
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(229, 193, 108, 0.35);
+  background: rgba(2, 8, 14, 0.8);
+  padding: 0.65rem 0.9rem;
+  font-size: 0.9rem;
+  color: #fff;
+}
+.gift-input:focus { border-color: var(--g-gold-bright); outline: none; }
+.gift-input option { background: #07121c; }
+
+@media (prefers-reduced-motion: reduce) {
+  .gift-motes > span,
+  .gift-ripples > span,
+  .gift-spin-slow,
+  .gift-spin-reverse,
+  .gift-core-aura,
+  .gift-dialog[open] {
+    animation: none;
+  }
+  .gift-ripples > span { opacity: 0; }
+  .gift-card-inner,
+  .gift-petal-shape { transition: none; }
+}
+
+/* In Burmese a revealed card names the gift's category (the exact code is in its popup and the vault). */
+.gift-card-front .gift-card-note:lang(my) {
+  font-family: var(--font-myanmar);
+  font-size: 0.7rem;
+  line-height: 1.55;
+}

@@ -35,7 +35,61 @@ export type Database = {
                     "created_at"?: string,"role"?: string,"user_id"?: string
                   }
                   Relationships: [
-                    
+
+                  ]
+                },"gift_campaigns": {
+                  Row: {
+                    "created_at": string,"default_view": string,"id": string,"invite_enabled": boolean,"invite_intentions": Json,"invite_text": Json,"invite_title": Json,"shop_url": string | null,"slug": string,"status": string,"subtitle": Json,"title": Json,"updated_at": string,"vip_code": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"default_view"?: string,"id"?: string,"invite_enabled"?: boolean,"invite_intentions"?: Json,"invite_text"?: Json,"invite_title"?: Json,"shop_url"?: string | null,"slug": string,"status"?: string,"subtitle"?: Json,"title"?: Json,"updated_at"?: string,"vip_code"?: string | null
+                  }
+                  Update: {
+                    "created_at"?: string,"default_view"?: string,"id"?: string,"invite_enabled"?: boolean,"invite_intentions"?: Json,"invite_text"?: Json,"invite_title"?: Json,"shop_url"?: string | null,"slug"?: string,"status"?: string,"subtitle"?: Json,"title"?: Json,"updated_at"?: string,"vip_code"?: string | null
+                  }
+                  Relationships: [
+
+                  ]
+                },"gift_items": {
+                  Row: {
+                    "campaign_id": string,"category": Json,"code": string | null,"created_at": string,"description": Json,"detail_text": Json,"detail_title": Json,"icon": string,"id": string,"kind": string,"position": number,"title": Json
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "campaign_id": string,"category"?: Json,"code"?: string | null,"created_at"?: string,"description"?: Json,"detail_text"?: Json,"detail_title"?: Json,"icon"?: string,"id"?: string,"kind"?: string,"position": number,"title"?: Json
+                  }
+                  Update: {
+                    "campaign_id"?: string,"category"?: Json,"code"?: string | null,"created_at"?: string,"description"?: Json,"detail_text"?: Json,"detail_title"?: Json,"icon"?: string,"id"?: string,"kind"?: string,"position"?: number,"title"?: Json
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "gift_items_campaign_id_fkey"
+      columns: ["campaign_id"]
+isOneToOne: false
+      referencedRelation: "gift_campaigns"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"gift_signups": {
+                  Row: {
+                    "campaign_id": string,"contact": string,"created_at": string,"id": string,"intention": string | null,"name": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "campaign_id": string,"contact": string,"created_at"?: string,"id"?: string,"intention"?: string | null,"name": string
+                  }
+                  Update: {
+                    "campaign_id"?: string,"contact"?: string,"created_at"?: string,"id"?: string,"intention"?: string | null,"name"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "gift_signups_campaign_id_fkey"
+      columns: ["campaign_id"]
+isOneToOne: false
+      referencedRelation: "gift_campaigns"
+      referencedColumns: ["id"]
+    }
                   ]
                 },"guests": {
                   Row: {
@@ -172,6 +226,9 @@ isOneToOne: false
             "find_seat":
 { Args: { "p_query": string,"p_slug": string }; Returns: Json
                            },
+"get_gift_campaign":
+{ Args: { "p_slug": string }; Returns: Json
+                           },
 "get_invitation":
 { Args: { "p_slug": string,"p_token"?: string }; Returns: Json
                            },
@@ -190,6 +247,9 @@ isOneToOne: false
                            },
 "mark_invitation_opened":
 { Args: { "p_slug": string,"p_token": string }; Returns: undefined
+                           },
+"submit_gift_signup":
+{ Args: { "p_contact": string,"p_intention": string,"p_name": string,"p_slug": string }; Returns: Json
                            },
 "submit_public_wish":
 { Args: { "p_author_name": string,"p_message": string,"p_slug": string }; Returns: Json

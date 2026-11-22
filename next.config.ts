@@ -4,6 +4,8 @@ const supabaseUrl = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "http://127.
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
+  // Lets phones and other computers on the same Wi-Fi/LAN open the dev server (pnpm dev:lan).
+  allowedDevOrigins: ["192.168.*.*", "10.*.*.*", "172.*.*.*"],
   experimental: {
     // Admin uploads (photos, music up to 15 MB) arrive through Server Actions.
     serverActions: { bodySizeLimit: "16mb" },

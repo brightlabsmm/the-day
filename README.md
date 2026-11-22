@@ -16,6 +16,20 @@ Built with Next.js 16 (App Router, Cache Components), React 19, Tailwind 4, Moti
 - A guest is marked as opened when they tap the seal, not on page load, so link-preview bots do not count.
 - Previews (Open Graph) show the couple's names and cover photo, never a guest name. Pages are `noindex`.
 
+## Gift invitations
+
+A separate product from weddings: a premium page with twelve gifts ("blessings") to unlock, at
+
+```
+/g/<campaign-slug>?lang=my|en
+```
+
+- Visitors pick a gift in one of three views: **lotus petals** on a pond, an **astrolabe** of stars, or a table of **oracle cards**. Each gift shows a description, an optional code to copy and, depending on its kind, a tone to play (`audio`), a quoted excerpt (`book`) or a card to flip (`oracle`). The centre of the lotus/astrolabe opens the last gift.
+- What a visitor has unlocked is remembered in their browser only (localStorage). **My Gifts Vault** lists their codes.
+- The **E-Invitation** form saves name, contact and intention to `gift_signups` (honeypot, 30 s cookie cooldown, 40 per 10 minutes per campaign) and shows the campaign's VIP code.
+- Admins create and edit campaigns under **/admin → Gift invitations** (twelve gift slots each; a slot with no title is hidden) and read sign-ups there. Tables are admin-only; visitors only use `get_gift_campaign` and `submit_gift_signup`.
+- The seed includes a demo, `/g/lotus-sanctuary`. Without a database, `/dev/gift?lang=en` previews it in development.
+
 ## Run it locally
 
 Requirements: Node 22+, pnpm, Docker (for the local Supabase stack).
