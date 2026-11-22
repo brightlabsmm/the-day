@@ -23,7 +23,7 @@ export function FaqList({ items }: { items: FaqItem[] }) {
                 onClick={() => setOpen(isOpen ? null : i)}
                 className="flex w-full items-center justify-between gap-6 py-5 text-left"
               >
-                <span className="tpl-display text-[1.1rem] leading-snug text-[color:var(--navy)]">{item.q}</span>
+                <span className="tpl-display text-[1.1rem] leading-snug text-[color:var(--navy)] [&:lang(my)]:text-[0.95rem]">{item.q}</span>
                 <Plus aria-hidden className={`size-5 shrink-0 text-[color:var(--gold)] transition-transform duration-300 ${isOpen ? "rotate-45" : ""}`} />
               </button>
             </h3>

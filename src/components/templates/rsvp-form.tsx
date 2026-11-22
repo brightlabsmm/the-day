@@ -21,7 +21,7 @@ export function RsvpForm({ slug, token, locale, defaultName }: { slug: string; t
 
   if (state.status === "ok") {
     return (
-      <p role="status" className="tpl-display mt-8 text-center text-[1.3rem] text-[color:var(--navy)]">
+      <p role="status" className={`tpl-display mt-8 text-center text-[color:var(--navy)] ${locale === "my" ? "text-[1.05rem]" : "text-[1.3rem]"}`}>
         {state.updated ? s("rsvpUpdated", locale) : s(state.attending ? "rsvpThanksYes" : "rsvpThanksNo", locale)}
       </p>
     );

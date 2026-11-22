@@ -8,7 +8,7 @@
  */
 import Image from "next/image";
 import { motion, useReducedMotion } from "motion/react";
-import { createContext, useCallback, useContext, useEffect, useRef, useState, useSyncExternalStore, useTransition, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useRef, useState, useTransition, type ReactNode } from "react";
 import type { Locale } from "@/lib/i18n/numerals";
 import { s } from "@/lib/i18n/strings";
 
@@ -34,28 +34,11 @@ type Props = {
 const GateOpenContext = createContext(true);
 export const useGateOpen = () => useContext(GateOpenContext);
 
-const storageKey = (slug: string) => `theday:opened:${slug}`;
-
-function useOpenedThisSession(slug: string) {
-  return useSyncExternalStore(
-    () => () => {},
-    () => {
-      try {
-        return sessionStorage.getItem(storageKey(slug)) === "1";
-      } catch {
-        return false;
-      }
-    },
-    () => false,
-  );
-}
-
-export function Gate({ kind, slug, token, locale, monogram, coverSrc, guestLabel, dateLabel, names, place, onOpenAction, preview = false, children }: Props) {
+export function Gate({ kind, slug, token, locale, monogram, coverSrc, guestLabel, dateLabel, names, place, onOpenAction, preview: _preview = false, children }: Props) {
   const reduceMotion = useReducedMotion();
-  const openedBefore = useOpenedThisSession(slug) && !preview;
   const [phase, setPhase] = useState<"sealed" | "opening" | "open">("sealed");
   const [, startTransition] = useTransition();
-  const isOpen = phase === "open" || openedBefore;
+  const isOpen = phase === "open";
 
   useEffect(() => {
     if (isOpen) return;
@@ -67,14 +50,9 @@ export function Gate({ kind, slug, token, locale, monogram, coverSrc, guestLabel
   }, [isOpen]);
 
   const finish = useCallback(() => {
-    if (!preview) {
-      try {
-        sessionStorage.setItem(storageKey(slug), "1");
-      } catch {}
-    }
     setPhase("open");
     window.scrollTo(0, 0);
-  }, [slug, preview]);
+  }, []);
 
   // The open is recorded when the guest acts, not on page load, so link-preview bots do not count.
   const record = useCallback(() => {
@@ -274,10 +252,13 @@ function EnvelopeFace({
       </button>
 
       <div className="absolute inset-x-0 bottom-[12%] text-center text-[#6a5340]">
-        <p className="tpl-display text-[clamp(1.5rem,5vw,2.2rem)]" style={{ fontFamily: "var(--font-cormorant), serif" }}>
+        <p
+          className={`tpl-display ${locale === "my" ? "text-[clamp(1.05rem,3.4vw,1.4rem)] leading-snug" : "text-[clamp(1.5rem,5vw,2.2rem)]"}`}
+          style={{ fontFamily: locale === "my" ? "var(--font-myanmar)" : "var(--font-cormorant), serif" }}
+        >
           {s("clickToOpen", locale)}
         </p>
-        <p className="mt-2 text-[0.85rem] opacity-70">
+        <p className={`mt-2 opacity-70 ${locale === "my" ? "text-[0.75rem]" : "text-[0.85rem]"}`}>
           {s("dear", locale)} {guestLabel}
         </p>
       </div>

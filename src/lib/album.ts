@@ -33,3 +33,8 @@ export function albumRows(photos: AlbumPhoto[]): AlbumRow[] {
 }
 
 export { isPortrait };
+
+/** Couple, traditional and album-spread photos — not solo portraits. */
+export function togetherPhotos(photos: AlbumPhoto[]): AlbumPhoto[] {
+  return photos.filter((p) => p.kind !== "portrait");
+}

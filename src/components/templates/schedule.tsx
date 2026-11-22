@@ -87,7 +87,7 @@ export function Schedule({
             const venue = t(e.venue_name, locale);
             return (
               <li key={e.id}>
-                <p className="tpl-display text-right text-[1.05rem] leading-snug text-[color:var(--ink-soft)]">
+                <p className={`tpl-display text-right leading-snug text-[color:var(--ink-soft)] ${locale === "my" ? "text-[0.9rem]" : "text-[1.05rem]"}`}>
                   {start}
                   {end && (
                     <>
@@ -99,7 +99,7 @@ export function Schedule({
                 <span aria-hidden className="tpl-rail" />
                 <details className="group">
                   <summary className="cursor-pointer list-none">
-                    <h3 className="tpl-display inline text-[1.35rem] leading-snug text-[color:var(--navy)]">{t(e.title, locale)}</h3>
+                    <h3 className={`tpl-display inline leading-snug text-[color:var(--navy)] ${locale === "my" ? "text-[1.05rem]" : "text-[1.35rem]"}`}>{t(e.title, locale)}</h3>
                     <span aria-hidden className="ml-2 inline-block text-[color:var(--gold)] transition-transform group-open:rotate-45">+</span>
                     {venue && <p className="mt-1 text-[0.95rem] text-[color:var(--ink-soft)]">{venue}</p>}
                   </summary>

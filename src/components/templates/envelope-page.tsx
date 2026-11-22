@@ -2,10 +2,12 @@ import { MapPin } from "lucide-react";
 import { formatNumber, t } from "@/lib/i18n/numerals";
 import { zonedParts } from "@/lib/i18n/datetime";
 import { guestName, s } from "@/lib/i18n/strings";
+import { mediaUrl } from "@/lib/media";
 import { InvitationMessage } from "@/components/invite/invitation-message";
 import { GiftSection } from "@/components/invite/gift-section";
 import { WishesSection } from "@/components/invite/wishes-section";
 import { ClosingQuote } from "@/components/invite/closing-quote";
+import { togetherPhotos } from "@/lib/album";
 import { PhotoCollage } from "./collage";
 import { splitPhotos } from "./split";
 import { Gate } from "./gate";
@@ -17,6 +19,7 @@ import { TplFooter, navItemsFor } from "./sections";
 import { viewOf, type TemplateProps } from "./view";
 import { InView, ScrollMotionRoot, Stagger, StaggerItem } from "./scroll-motion";
 import { EnvelopeGallery, EnvelopeHero, EnvelopeLetter } from "./envelope-parts";
+import { OriginalSound } from "./original-sound";
 
 /**
  * Cream envelope sealed with wax; inside, a soft page with script lettering.
@@ -30,8 +33,9 @@ export function EnvelopePage({ invitation, locale, monogram, token, onOpenAction
   const message = t(wedding.invitation_text, locale);
   // Without a written story, every photo goes on the wall instead of a story collage.
   const story = hasStory(invitation);
-  const split = splitPhotos(v.gallery);
-  const wall = story ? split.rest : v.gallery;
+  const together = togetherPhotos(v.gallery);
+  const split = splitPhotos(together);
+  const wall = story ? split.rest : together;
   const day = v.main ? zonedParts(v.main.starts_at, v.tz).day : null;
   const myanmarDate = v.main ? t(v.main.myanmar_date_text, locale) : "";
 
@@ -62,14 +66,20 @@ export function EnvelopePage({ invitation, locale, monogram, token, onOpenAction
             cover={v.cover ? { src: v.cover.src, alt: v.cover.alt } : null}
           />
 
+          <OriginalSound
+            src={wedding.music_path ? mediaUrl(wedding.music_path) : null}
+            title={wedding.music_title}
+            locale={locale}
+          />
+
           {/* The letter: family lineage when written, otherwise the couple's invitation */}
           <EnvelopeLetter id={v.hasLineage ? undefined : "invitation"} monogram={monogram}>
             {v.hasLineage ? (
               <InvitationMessage invitation={invitation} locale={locale} plain />
             ) : (
               <>
-                <p className="tpl-script text-[clamp(2.6rem,8vw,4.2rem)] text-[color:var(--navy)]">{s("youreInvited", locale)}</p>
-                {message && <p className="mx-auto mt-5 max-w-lg text-[1.15rem] leading-[2] text-[color:var(--ink)] italic">{message}</p>}
+                <p className={`tpl-script text-[color:var(--navy)] ${locale === "my" ? "text-[clamp(1.55rem,5vw,2.35rem)]" : "text-[clamp(2.6rem,8vw,4.2rem)]"}`}>{s("youreInvited", locale)}</p>
+                {message && <p className={`mx-auto mt-5 max-w-lg text-[color:var(--ink)] italic ${locale === "my" ? "text-[0.95rem] leading-[1.9] not-italic" : "text-[1.15rem] leading-[2]"}`}>{message}</p>}
                 <span className="mx-auto mt-7 block h-px w-20 bg-[color:var(--gold)]" aria-hidden />
                 <p className="tpl-eyebrow mt-6">
                   {v.names.one} &amp; {v.names.two}
@@ -100,9 +110,9 @@ export function EnvelopePage({ invitation, locale, monogram, token, onOpenAction
                         {formatNumber(day, locale, 2)}
                       </p>
                     )}
-                    <p className="tpl-display mt-3 text-[1.35rem] text-[color:var(--navy)]">{v.dateLong}</p>
-                    <p className="mt-1 text-[color:var(--ink-soft)]">{v.timeRange}</p>
-                    {myanmarDate && <p className="mt-3 text-[0.95rem] text-[color:var(--ink-soft)]">{myanmarDate}</p>}
+                    <p className={`tpl-display mt-3 text-[color:var(--navy)] ${locale === "my" ? "text-[1.05rem]" : "text-[1.35rem]"}`}>{v.dateLong}</p>
+                    <p className={`mt-1 text-[color:var(--ink-soft)] ${locale === "my" ? "text-[0.9rem]" : ""}`}>{v.timeRange}</p>
+                    {myanmarDate && <p className={`mt-3 text-[color:var(--ink-soft)] ${locale === "my" ? "text-[0.82rem]" : "text-[0.95rem]"}`}>{myanmarDate}</p>}
                   </StaggerItem>
 
                   <StaggerItem from="right" className="tpl-card bg-[color:var(--ivory)] px-6 py-9 text-center">
@@ -112,7 +122,7 @@ export function EnvelopePage({ invitation, locale, monogram, token, onOpenAction
                       <div className="mt-3 space-y-8">
                         {v.venues.map((e) => (
                           <div key={e.id}>
-                            <p className="tpl-display text-[1.6rem] leading-snug text-[color:var(--navy)]">{t(e.venue_name, locale)}</p>
+                            <p className={`tpl-display leading-snug text-[color:var(--navy)] ${locale === "my" ? "text-[1.15rem]" : "text-[1.6rem]"}`}>{t(e.venue_name, locale)}</p>
                             {t(e.venue_address, locale) && (
                               <p className="mx-auto mt-2 max-w-xs whitespace-pre-line text-[color:var(--ink-soft)]">{t(e.venue_address, locale)}</p>
                             )}

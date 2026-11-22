@@ -33,7 +33,7 @@ export function PlainCountdown({
 
   if (state && state.phase !== "before") {
     return (
-      <p className="tpl-display text-center text-[clamp(1.4rem,4vw,2.4rem)]">
+      <p className={`tpl-display text-center ${locale === "my" ? "text-[clamp(1.05rem,3vw,1.55rem)]" : "text-[clamp(1.4rem,4vw,2.4rem)]"}`}>
         {s(state.phase === "today" ? "countdownToday" : "countdownAfter", locale)}
       </p>
     );

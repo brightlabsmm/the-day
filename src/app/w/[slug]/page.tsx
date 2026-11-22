@@ -98,7 +98,7 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
     };
     return (
       <>
-        {wedding.music_path && key !== "record" && (
+        {wedding.music_path && key !== "record" && key !== "envelope" && (
           <MusicPlayer src={mediaUrl(wedding.music_path)} title={wedding.music_title} locale={locale} />
         )}
         {theme.snow && <Snowfall />}

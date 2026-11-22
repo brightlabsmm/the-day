@@ -38,7 +38,7 @@ export function TplGallery({
 export function TplFooter({ v, locale }: { v: TemplateView; locale: Locale }) {
   return (
     <footer lang={locale} className="px-6 pt-6 pb-14 text-center">
-      <p className="tpl-display text-[1.3rem] text-[color:var(--navy)]">{s("closingThanks", locale)}</p>
+      <p className={`tpl-display text-[color:var(--navy)] ${locale === "my" ? "text-[1.05rem]" : "text-[1.3rem]"}`}>{s("closingThanks", locale)}</p>
       <p className="tpl-eyebrow mt-6">
         {v.names.one} &amp; {v.names.two}
         {v.year ? ` • ${v.year}` : ""}

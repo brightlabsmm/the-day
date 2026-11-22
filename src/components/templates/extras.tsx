@@ -56,7 +56,7 @@ export function TplStory({ invitation, locale, collage }: { invitation: Invitati
               <Reveal>
                 <div className="text-center">
                   {t(it.label, locale) && <p className="tpl-eyebrow !text-[color:var(--gold-deep)]">{t(it.label, locale)}</p>}
-                  <h3 className="tpl-display mt-2 text-[1.6rem] leading-snug text-[color:var(--navy)]">{t(it.title, locale)}</h3>
+                  <h3 className={`tpl-display mt-2 leading-snug text-[color:var(--navy)] ${locale === "my" ? "text-[1.1rem]" : "text-[1.6rem]"}`}>{t(it.title, locale)}</h3>
                   <p className="mx-auto mt-3 max-w-lg leading-[2] whitespace-pre-line text-[color:var(--ink-soft)]">{t(it.text, locale)}</p>
                 </div>
               </Reveal>
@@ -169,7 +169,7 @@ export function TplTips({ invitation, locale }: { invitation: Invitation; locale
         <ul className="mx-auto mt-10 grid max-w-3xl gap-4 sm:grid-cols-2">
           {items.map((x, i) => (
             <li key={i} className="tpl-card text-left">
-              <h3 className="tpl-display text-[1.2rem] text-[color:var(--navy)]">{x.title}</h3>
+              <h3 className={`tpl-display text-[color:var(--navy)] ${locale === "my" ? "text-[1.02rem]" : "text-[1.2rem]"}`}>{x.title}</h3>
               {x.text && <p className="mt-2 leading-[1.9] whitespace-pre-line text-[color:var(--ink-soft)]">{x.text}</p>}
             </li>
           ))}
