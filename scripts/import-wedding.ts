@@ -31,6 +31,8 @@ const Config = z.object({
   note: i18n.default({}),
   closing_quote: i18n.default({}),
   cover_text: z.record(z.string(), z.unknown()).default({}),
+  /** Extras such as { "snow": true, "hide": ["schedule"] }; see src/lib/theme.ts. */
+  theme: z.object({ snow: z.boolean().optional(), hide: z.array(z.enum(["schedule"])).optional() }).default({}),
   wishes_enabled: z.boolean().default(true),
   wishes_editable: z.boolean().default(false),
   public_wishes: z.boolean().default(false),
@@ -92,6 +94,7 @@ export async function importWedding(dir: string) {
         note: cfg.note,
         closing_quote: cfg.closing_quote,
         cover_text: cfg.cover_text as never,
+        theme: cfg.theme as never,
         wishes_enabled: cfg.wishes_enabled,
         wishes_editable: cfg.wishes_editable,
         public_wishes: cfg.public_wishes,

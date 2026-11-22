@@ -3,6 +3,7 @@ import { t, type Locale } from "@/lib/i18n/numerals";
 import { s } from "@/lib/i18n/strings";
 import { oneTime } from "@/lib/i18n/datetime";
 import { formatNumber } from "@/lib/i18n/numerals";
+import { isHidden } from "@/lib/theme";
 
 const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
 
@@ -18,7 +19,7 @@ export function Schedule({
   variant?: "timeline" | "acts" | "rows";
 }) {
   const { events, wedding } = invitation;
-  if (events.length === 0) return null;
+  if (events.length === 0 || isHidden(invitation, "schedule")) return null;
   const tz = wedding.timezone;
 
   return (

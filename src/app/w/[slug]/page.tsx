@@ -12,6 +12,8 @@ import { SleeveShell } from "@/components/invite/sleeve-parts";
 import { InvitationBody } from "@/components/invite/invitation-body";
 import { LanguageSwitch } from "@/components/invite/language-switch";
 import { MusicPlayer } from "@/components/invite/music-player";
+import { Snowfall } from "@/components/invite/snowfall";
+import { themeOf } from "@/lib/theme";
 import { mediaUrl } from "@/lib/media";
 import { templateKey } from "@/lib/templates";
 import { EditorialPage } from "@/components/templates/editorial-page";
@@ -79,6 +81,7 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
   if (!invitation) notFound();
 
   const { wedding, guest } = invitation;
+  const theme = themeOf(invitation);
   const monogram =
     wedding.monogram ??
     `${t(wedding.partner_one_name, "en").charAt(0)}&${t(wedding.partner_two_name, "en").charAt(0)}`;
@@ -98,6 +101,7 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
         {wedding.music_path && key !== "record" && (
           <MusicPlayer src={mediaUrl(wedding.music_path)} title={wedding.music_title} locale={locale} />
         )}
+        {theme.snow && <Snowfall />}
         {key === "editorial" ? (
           <EditorialPage {...props} />
         ) : key === "envelope" ? (
@@ -139,6 +143,7 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
       {wedding.music_path && (
         <MusicPlayer src={mediaUrl(wedding.music_path)} title={wedding.music_title} locale={locale} />
       )}
+      {theme.snow && <Snowfall />}
       <Opening
         slug={wedding.slug}
         token={guest ? (token ?? null) : null}

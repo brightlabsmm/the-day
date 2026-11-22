@@ -8,7 +8,7 @@
  */
 import Image from "next/image";
 import { motion, useReducedMotion } from "motion/react";
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore, useTransition, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useRef, useState, useSyncExternalStore, useTransition, type ReactNode } from "react";
 import type { Locale } from "@/lib/i18n/numerals";
 import { s } from "@/lib/i18n/strings";
 
@@ -29,6 +29,10 @@ type Props = {
   preview?: boolean;
   children: ReactNode;
 };
+
+/** True once the guest has opened the gate, so page content can start its entrance then, not behind the overlay. */
+const GateOpenContext = createContext(true);
+export const useGateOpen = () => useContext(GateOpenContext);
 
 const storageKey = (slug: string) => `theday:opened:${slug}`;
 
@@ -101,7 +105,7 @@ export function Gate({ kind, slug, token, locale, monogram, coverSrc, guestLabel
   return (
     <>
       <div inert={!isOpen} aria-hidden={!isOpen}>
-        {children}
+        <GateOpenContext value={isOpen}>{children}</GateOpenContext>
       </div>
 
       {!isOpen && (

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -12,6 +13,7 @@ import {
   Ticket,
 } from "lucide-react";
 import { FACEBOOK_URL, SiteFooter, SiteHeader } from "@/components/site-chrome";
+import { FeaturedCouples } from "@/components/featured-couples";
 
 
 const FEATURES = [
@@ -77,6 +79,11 @@ export default function Home() {
           <HeroPhone />
         </div>
       </section>
+
+      {/* Real couples */}
+      <Suspense fallback={null}>
+        <FeaturedCouples />
+      </Suspense>
 
       {/* Features */}
       <section className="py-16 sm:py-20">

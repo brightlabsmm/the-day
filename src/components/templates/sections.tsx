@@ -7,6 +7,7 @@ import type { ArtKind } from "./art";
 import type { NavItem } from "./nav";
 import type { TemplateView } from "./view";
 import type { Invitation } from "@/lib/invitation";
+import { isHidden } from "@/lib/theme";
 import { hasDress, hasFaq, hasSeat, hasStory, hasTips } from "./extras";
 
 export function TplGallery({
@@ -50,7 +51,7 @@ export function TplFooter({ v, locale }: { v: TemplateView; locale: Locale }) {
 export function navItemsFor(v: TemplateView, invitation: Invitation, locale: Locale): NavItem[] {
   const items: NavItem[] = [{ id: "invitation", label: s("navInvitation", locale) }];
   if (hasStory(invitation)) items.push({ id: "story", label: s("navStory", locale) });
-  if (invitation.events.length) items.push({ id: "schedule", label: s("navSchedule", locale) });
+  if (invitation.events.length && !isHidden(invitation, "schedule")) items.push({ id: "schedule", label: s("navSchedule", locale) });
   if (v.gallery.length) items.push({ id: "gallery", label: s("navGallery", locale) });
   if (v.venues.length) items.push({ id: "venue", label: s("navVenue", locale) });
   if (hasDress(invitation)) items.push({ id: "dress", label: s("navDress", locale) });
