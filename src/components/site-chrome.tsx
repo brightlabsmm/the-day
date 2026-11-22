@@ -3,11 +3,12 @@ import { MessageCircle } from "lucide-react";
 
 export const FACEBOOK_URL = "https://www.facebook.com/profile.php?id=61597006130300";
 
-type Page = "home" | "showcase";
+type Page = "home" | "showcase" | "pricing";
 
-/** Brand header shared by the marketing pages (/ and /showcase). */
+/** Brand header shared by the marketing pages (/, /showcase and /pricing). */
 export function SiteHeader({ current }: { current: Page }) {
-  const link = "hidden rounded-full px-3 py-2 text-[#5c5048] hover:text-[#1f1b18] sm:inline";
+  const link =
+    "hidden rounded-full px-3 py-2 text-[#5c5048] hover:text-[#1f1b18] sm:inline aria-[current=page]:text-[#1f1b18] aria-[current=page]:underline aria-[current=page]:decoration-[#a8823f] aria-[current=page]:underline-offset-[6px]";
   return (
     <header className="site-chrome mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-5 sm:px-8">
       <Link href="/" className="script text-3xl leading-none text-[#1f1b18]" aria-label="The Day, home">
@@ -17,9 +18,12 @@ export function SiteHeader({ current }: { current: Page }) {
         <Link
           href="/showcase"
           aria-current={current === "showcase" ? "page" : undefined}
-          className={`${link} aria-[current=page]:text-[#1f1b18] aria-[current=page]:underline aria-[current=page]:decoration-[#a8823f] aria-[current=page]:underline-offset-[6px]`}
+          className={link}
         >
           Designs
+        </Link>
+        <Link href="/pricing" aria-current={current === "pricing" ? "page" : undefined} className={link}>
+          Pricing
         </Link>
         <Link href={current === "home" ? "#how" : "/#how"} className={link}>
           How it works
@@ -37,7 +41,7 @@ export function SiteHeader({ current }: { current: Page }) {
   );
 }
 
-/** Brand footer shared by the marketing pages (/ and /showcase). */
+/** Brand footer shared by the marketing pages (/, /showcase and /pricing). */
 export function SiteFooter() {
   return (
     <footer className="site-chrome border-t border-[#2f2925]/10 bg-[#fbf8f2] text-[#6e5f53]">
@@ -54,6 +58,9 @@ export function SiteFooter() {
           </Link>
           <Link href="/showcase" className="hover:text-[#1f1b18]">
             Designs
+          </Link>
+          <Link href="/pricing" className="hover:text-[#1f1b18]">
+            Pricing
           </Link>
           <Link href="/#how" className="hover:text-[#1f1b18]">
             How it works

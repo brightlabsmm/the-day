@@ -493,6 +493,8 @@ body {
 /* Landing page (/) — matches the brand cover: handwritten script and spaced capitals */
 .landing {
   font-family: var(--font-cormorant), var(--font-noto-myanmar), "Cormorant Garamond", Georgia, serif;
+  /* Cormorant defaults to old-style figures; prices read better with lining figures */
+  font-variant-numeric: lining-nums;
 }
 .landing .script,
 .site-chrome .script {
