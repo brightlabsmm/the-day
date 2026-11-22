@@ -11,6 +11,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { createContext, useCallback, useContext, useEffect, useRef, useState, useTransition, type ReactNode } from "react";
 import type { Locale } from "@/lib/i18n/numerals";
 import { s } from "@/lib/i18n/strings";
+import { GATE_OPENED_EVENT } from "@/components/invite/music-player";
 
 type Props = {
   kind: "envelope" | "scratch" | "theatre" | "shutters" | "silk" | "midnight" | "lantern" | "polaroid" | "botanical" | "artdeco" | "sunrise" | "spotlight";
@@ -61,6 +62,7 @@ export function Gate({ kind, slug, token, locale, monogram, coverSrc, guestLabel
 
   const begin = useCallback(() => {
     if (phase !== "sealed") return;
+    window.dispatchEvent(new Event(GATE_OPENED_EVENT));
     record();
     if (reduceMotion) finish();
     else setPhase("opening");
@@ -68,6 +70,7 @@ export function Gate({ kind, slug, token, locale, monogram, coverSrc, guestLabel
 
   const skip = useCallback(() => {
     if (phase === "open") return;
+    window.dispatchEvent(new Event(GATE_OPENED_EVENT));
     record();
     finish();
   }, [finish, phase, record]);
@@ -186,6 +189,11 @@ function WaxSeal({ monogram }: { monogram: string }) {
         textAnchor="middle"
         fontSize="25"
         fill="#8a6736"
+        // Constrains the monogram to a safe width inside the circle (diameter ~71) regardless of
+        // which font is active: the fallback serif can render wider than Playfair Display before
+        // it finishes loading, which would otherwise push letters outside the wax seal for a moment.
+        textLength="54"
+        lengthAdjust="spacingAndGlyphs"
         style={{ fontFamily: "var(--font-playfair), serif", textShadow: "0 1px 0 rgba(255,240,205,.6)" }}
       >
         {monogram.replace("&", " & ")}

@@ -5,6 +5,7 @@ import { motion, useAnimate, useReducedMotion } from "motion/react";
 import type { Locale } from "@/lib/i18n/numerals";
 import { s } from "@/lib/i18n/strings";
 import { CardFace, SleeveFront, STAGE } from "./sleeve-parts";
+import { GATE_OPENED_EVENT } from "./music-player";
 
 type Props = {
   slug: string;
@@ -72,6 +73,7 @@ export function Opening({ slug, token, locale, monogram, guestLabel, coupleNames
 
   const open = useCallback(async () => {
     if (phase !== "sealed") return;
+    window.dispatchEvent(new Event(GATE_OPENED_EVENT));
     setPhase("opening");
     record();
 
@@ -92,6 +94,7 @@ export function Opening({ slug, token, locale, monogram, guestLabel, coupleNames
 
   const skip = useCallback(() => {
     if (phase === "open") return;
+    window.dispatchEvent(new Event(GATE_OPENED_EVENT));
     record();
     finish();
   }, [finish, phase, record]);

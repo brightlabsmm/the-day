@@ -22,21 +22,28 @@ export function GiftSection({ invitation, locale, plain }: { invitation: Invitat
 
   return (
     <InnerCard id="gift-heading" anchor="gift" plain={plain} heading={s("giftHeading", locale)} lang={locale}>
-      <p className="card-body mt-5 text-ink">{s("giftIntro", locale)}</p>
-      <ul className="mt-6 grid gap-6">
+      <p className="card-body mx-auto mt-5 max-w-md text-ink">{s("giftIntro", locale)}</p>
+      <ul
+        className={`mx-auto mt-8 grid max-w-xl gap-3 sm:gap-6 ${methods.length > 1 ? "grid-cols-2" : "max-w-xs grid-cols-1"}`}
+      >
         {methods.map((m) => (
-          <li key={m.qr_path} className="flex flex-col items-center">
+          <li
+            key={m.qr_path}
+            className="flex flex-col items-center gap-3 rounded-2xl border border-navy/15 bg-ivory/70 px-3 py-4 sm:gap-4 sm:px-5 sm:py-6"
+          >
             <p className="label-caps text-navy">{m.label}</p>
-            <Image
-              src={mediaUrl(m.qr_path)}
-              alt={`${s("giftQrAlt", locale)} — ${m.label}`}
-              width={240}
-              height={240}
-              className="mt-3 size-48 border border-navy/30 bg-white p-2"
-            />
+            <div className="relative aspect-square w-full max-w-[11rem] overflow-hidden rounded-lg border border-navy/25 bg-white p-2 shadow-[0_6px_16px_-10px_rgba(0,0,0,.35)]">
+              <Image
+                src={mediaUrl(m.qr_path)}
+                alt={`${s("giftQrAlt", locale)} — ${m.label}`}
+                fill
+                sizes="(max-width: 640px) 40vw, 176px"
+                className="object-contain p-1"
+              />
+            </div>
             {m.account_name && (
-              <p className="card-body mt-3 text-ink">
-                <span className="text-ink-soft">{s("giftAccountName", locale)}: </span>
+              <p className="card-body text-center text-[0.95rem] text-ink">
+                <span className="block text-ink-soft">{s("giftAccountName", locale)}</span>
                 {m.account_name}
               </p>
             )}

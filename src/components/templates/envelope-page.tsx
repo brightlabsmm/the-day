@@ -2,7 +2,6 @@ import { MapPin } from "lucide-react";
 import { formatNumber, t } from "@/lib/i18n/numerals";
 import { zonedParts } from "@/lib/i18n/datetime";
 import { guestName, s } from "@/lib/i18n/strings";
-import { mediaUrl } from "@/lib/media";
 import { InvitationMessage } from "@/components/invite/invitation-message";
 import { GiftSection } from "@/components/invite/gift-section";
 import { WishesSection } from "@/components/invite/wishes-section";
@@ -19,7 +18,6 @@ import { TplFooter, navItemsFor } from "./sections";
 import { viewOf, type TemplateProps } from "./view";
 import { InView, ScrollMotionRoot, Stagger, StaggerItem } from "./scroll-motion";
 import { EnvelopeGallery, EnvelopeHero, EnvelopeLetter } from "./envelope-parts";
-import { OriginalSound } from "./original-sound";
 
 /**
  * Cream envelope sealed with wax; inside, a soft page with script lettering.
@@ -66,11 +64,6 @@ export function EnvelopePage({ invitation, locale, monogram, token, onOpenAction
             cover={v.cover ? { src: v.cover.src, alt: v.cover.alt } : null}
           />
 
-          <OriginalSound
-            src={wedding.music_path ? mediaUrl(wedding.music_path) : null}
-            title={wedding.music_title}
-            locale={locale}
-          />
 
           {/* The letter: family lineage when written, otherwise the couple's invitation */}
           <EnvelopeLetter id={v.hasLineage ? undefined : "invitation"} monogram={monogram}>
