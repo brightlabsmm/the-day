@@ -129,7 +129,7 @@ export function EnvelopeHero({
               </div>
               <motion.span
                 initial={{ scale: 0, rotate: -40 }}
-                animate={open ? { scale: 1, rotate: -8 } : { scale: 0, rotate: -40 }}
+                animate={open ? { scale: 1, rotate: 0 } : { scale: 0, rotate: -40 }}
                 transition={{ type: "spring", stiffness: 180, damping: 14, delay: 0.9 }}
                 className="seal seal-mark tpl-display absolute -bottom-7 left-1/2 -ml-9 grid size-[4.5rem] place-items-center rounded-full pt-[0.45em] pl-[0.1em] text-[1.1rem] leading-none font-semibold tracking-wide"
                 aria-hidden
