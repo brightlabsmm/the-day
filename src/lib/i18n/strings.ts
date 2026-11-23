@@ -71,7 +71,7 @@ const STRINGS = {
   menu: { my: "မီနူး", en: "Menu" },
   closeMenu: { my: "မီနူးပိတ်ရန်", en: "Close menu" },
   featureEyebrow: { my: "", en: "Our love story" },
-  featureLine: { my: "ကျွန်ုပ်တို့၏ ချစ်ခရီးလမ်း၊ တစ်သက်တာ ယနေ့မှ အစပြု၍", en: "Building a lifetime together" },
+  featureLine: { my: "နှစ်ယောက်အတူ တစ်သက်တာလုံးအတွက် ဘဝတစ်ခုကို တည်ဆောက်မယ်။", en: "Building a lifetime together" },
   youreInvited: { my: "ကြိုဆိုပါသည်", en: "You're Invited!" },
   weddingInvitationLabel: { my: "မင်္ဂလာဖိတ်ကြားလွှာ", en: "Wedding Invitation" },
   scheduleHeading: { my: "မင်္ဂလာအစီအစဉ်", en: "The Schedule" },
