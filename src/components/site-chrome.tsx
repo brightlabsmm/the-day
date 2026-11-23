@@ -2,6 +2,7 @@ import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 
 export const FACEBOOK_URL = "https://www.facebook.com/profile.php?id=61597006130300";
+export const BRAND_URL = "https://the-day.brightlabsmm.com";
 
 type Page = "home" | "showcase" | "pricing";
 

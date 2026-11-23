@@ -37,6 +37,7 @@ export function EnvelopeHero({
   timeRange,
   venue,
   cover,
+  backdrop = null,
 }: {
   locale: Locale;
   names: { one: string; two: string };
@@ -45,6 +46,8 @@ export function EnvelopeHero({
   timeRange: string;
   venue: string;
   cover: { src: string; alt: string } | null;
+  /** Soft artwork behind the whole cover (see wedding-backgrounds.ts). */
+  backdrop?: string | null;
 }) {
   const open = useGateOpen();
   const ref = useRef<HTMLElement>(null);
@@ -59,7 +62,14 @@ export function EnvelopeHero({
 
   return (
     <header ref={ref} id="top" className="env-hero relative overflow-hidden">
-      <div className="tpl-wide grid min-h-[100svh] items-center gap-8 px-[clamp(1.25rem,5vw,3rem)] pt-20 pb-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:pt-20">
+      {backdrop && (
+        <div aria-hidden className="pointer-events-none absolute inset-0">
+          {/* Mirrored on large screens so the building sits behind the photo and the quiet sky behind the names. */}
+          <Image src={backdrop} alt="" fill priority sizes="100vw" className="object-cover object-left opacity-40 lg:-scale-x-100 lg:object-right lg:opacity-60" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[color:var(--paper)]/45 via-[color:var(--paper)]/60 to-[color:var(--paper)] lg:bg-gradient-to-r lg:from-[color:var(--paper)]/85 lg:via-[color:var(--paper)]/35 lg:to-[color:var(--paper)]/10" />
+        </div>
+      )}
+      <div className="tpl-wide relative grid min-h-[100svh] items-center gap-8 px-[clamp(1.25rem,5vw,3rem)] pt-20 pb-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:pt-20">
         {/* Words */}
         <motion.div style={{ y: textY, opacity: fade }} className="order-2 text-center lg:order-1 lg:text-left">
           {/* Keyed on `open` so the entrance always starts from the top once the envelope is opened. */}

@@ -17,6 +17,8 @@ import { TplDressCode, TplFaq, TplSeat, TplRsvp, TplStory, hasStory } from "./ex
 import { TplFooter, navItemsFor } from "./sections";
 import { viewOf, type TemplateProps } from "./view";
 import { InView, ScrollMotionRoot, Stagger, StaggerItem } from "./scroll-motion";
+import Image from "next/image";
+import { backgroundFor } from "@/lib/wedding-backgrounds";
 import { EnvelopeFeature, EnvelopeGallery, EnvelopeHero, EnvelopeLetter } from "./envelope-parts";
 
 /**
@@ -37,6 +39,7 @@ export function EnvelopePage({ invitation, locale, monogram, token, onOpenAction
   // album spread), so you choose it by putting it last among your wide photos in the admin.
   const feature = [...together].reverse().find((p) => p.kind !== "spread" && p.width >= p.height * 1.45) ?? null;
   const wall = (story ? split.rest : together).filter((p) => p !== feature);
+  const backdrop = backgroundFor(wedding.slug);
   const day = v.main ? zonedParts(v.main.starts_at, v.tz).day : null;
   const myanmarDate = v.main ? t(v.main.myanmar_date_text, locale) : "";
 
@@ -65,6 +68,7 @@ export function EnvelopePage({ invitation, locale, monogram, token, onOpenAction
             timeRange={v.timeRange}
             venue={v.venues[0] ? t(v.venues[0].venue_name, locale) : ""}
             cover={v.cover ? { src: v.cover.src, alt: v.cover.alt } : null}
+            backdrop={backdrop}
           />
 
 
@@ -172,10 +176,18 @@ export function EnvelopePage({ invitation, locale, monogram, token, onOpenAction
           <InView>
             <WishesSection invitation={invitation} locale={locale} token={token} plain />
           </InView>
-          <InView amount={0.4}>
-            <ClosingQuote invitation={invitation} locale={locale} />
-            <TplFooter v={v} locale={locale} thanks={false} />
-          </InView>
+          <div className="relative isolate overflow-hidden pt-10">
+            {backdrop && (
+              <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+                <Image src={backdrop} alt="" fill sizes="100vw" className="object-cover object-right-bottom opacity-45" />
+                <div className="absolute inset-0 bg-gradient-to-b from-[color:var(--paper)] via-[color:var(--paper)]/65 to-[color:var(--paper)]/45" />
+              </div>
+            )}
+            <InView amount={0.4}>
+              <ClosingQuote invitation={invitation} locale={locale} />
+              <TplFooter v={v} locale={locale} thanks={false} strong />
+            </InView>
+          </div>
         </div>
       </ScrollMotionRoot>
     </Gate>
