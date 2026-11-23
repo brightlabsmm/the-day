@@ -56,7 +56,11 @@ export function InvitationMessage({
 function Partner({ lineage, name, credentials }: { lineage: string; name: string; credentials?: string }) {
   return (
     <div>
-      {lineage && <p className="card-body whitespace-pre-line">{lineage}</p>}
+      {lineage && (
+        <p className="card-body">
+          <Lineage text={lineage} />
+        </p>
+      )}
       <p className="card-gold-name foil mt-2">{name}</p>
       {credentials && (
         <p lang="en" className="font-display mt-0.5 text-[1.05rem] text-navy">
@@ -65,4 +69,24 @@ function Partner({ lineage, name, credentials }: { lineage: string; name: string
       )}
     </div>
   );
+}
+
+/**
+ * Lineage lines keep each whitespace-separated piece (a parent, or a pair such as
+ * "Ko A+Ma B,") on one line; a line only wraps between pieces, never inside a name.
+ */
+function Lineage({ text }: { text: string }) {
+  return text.split("\n").map((line, i) => (
+    <span key={i} className="block">
+      {line
+        .split(/\s+/)
+        .filter(Boolean)
+        .map((piece, j) => (
+          <span key={j}>
+            {j > 0 && " "}
+            <span className="whitespace-nowrap">{piece}</span>
+          </span>
+        ))}
+    </span>
+  ));
 }

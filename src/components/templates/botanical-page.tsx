@@ -15,7 +15,7 @@ import { PhotoCollage } from "./collage";
 import { Schedule } from "./schedule";
 import { Venue } from "./venue";
 import { Reveal } from "./reveal";
-import { TplFaq, TplSeat, TplTips, TplRsvp, TplStory, dressOf } from "./extras";
+import { TplFaq, TplSeat, TplRsvp, TplStory, dressOf } from "./extras";
 import { TrackOpen } from "./track-open";
 import { TplFooter, navItemsFor } from "./sections";
 import { viewOf, type TemplateProps } from "./view";
@@ -184,7 +184,6 @@ export function BotanicalPage({ invitation, locale, monogram, token, onOpenActio
         <Reveal>
           <TplRsvp invitation={invitation} locale={locale} token={token} />
         </Reveal>
-        <Reveal><TplTips invitation={invitation} locale={locale} /></Reveal>
 <Reveal><TplSeat invitation={invitation} locale={locale} /></Reveal>
 <Reveal><TplFaq invitation={invitation} locale={locale} /></Reveal>
         <Reveal>

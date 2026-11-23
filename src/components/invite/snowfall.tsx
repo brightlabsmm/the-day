@@ -7,7 +7,7 @@ import { useEffect, useRef } from "react";
  *
  * Each flake design is an SVG, rasterised once to an image and then drawn on a
  * single canvas, so even 80 spinning flakes stay smooth on phones. Flakes are
- * white with a soft cool-grey edge so they read clearly on cream paper. Snow
+ * white with a clear cool-grey border so they read clearly on cream paper. Snow
  * starts the first time the guest scrolls; scrolling makes it drift faster.
  * Purely decorative: no pointer events, hidden from screen readers, and off
  * for anyone who prefers reduced motion.
@@ -28,7 +28,7 @@ function flakeSvg(arm: string): string {
   // Under-stroke in cool grey gives the outline; white over it is the flake.
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
     <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-      <g stroke="rgb(96,112,138)" stroke-opacity="0.55" stroke-width="7.5">${arms}<circle cx="50" cy="50" r="5"/></g>
+      <g stroke="rgb(84,100,128)" stroke-opacity="0.9" stroke-width="7">${arms}<circle cx="50" cy="50" r="5"/></g>
       <g stroke="#ffffff" stroke-width="4.2">${arms}<circle cx="50" cy="50" r="5" fill="#fff"/></g>
     </g>
   </svg>`;
@@ -74,7 +74,7 @@ export function Snowfall() {
 
     const make = (anywhere: boolean): Flake => {
       const shaped = Math.random() < 0.62;
-      const size = shaped ? 14 + Math.random() * 20 : 4 + Math.random() * 5;
+      const size = shaped ? 9 + Math.random() * 11 : 3 + Math.random() * 3;
       return {
         x: Math.random() * w,
         y: anywhere ? Math.random() * h : -size - Math.random() * 40,
@@ -85,7 +85,7 @@ export function Snowfall() {
         phase: Math.random() * Math.PI * 2,
         spin: (Math.random() - 0.5) * 1.4,
         angle: Math.random() * Math.PI * 2,
-        alpha: 0.8 + Math.random() * 0.2,
+        alpha: 0.92 + Math.random() * 0.08,
         sprite: shaped ? Math.floor(Math.random() * sprites.length) : -1,
       };
     };
@@ -98,7 +98,7 @@ export function Snowfall() {
       el!.height = Math.round(h * dpr);
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
       // Keep existing flakes (phones resize as the address bar hides); only top up or trim.
-      const count = Math.round(Math.min(90, Math.max(40, (w * h) / 13000)));
+      const count = Math.round(0.7 * Math.min(90, Math.max(40, (w * h) / 13000)));
       if (flakes.length > count) flakes.length = count;
       while (flakes.length < count) flakes.push(make(true));
     }
@@ -128,10 +128,14 @@ export function Snowfall() {
           ctx!.beginPath();
           ctx!.arc(f.x, f.y, f.size / 2, 0, Math.PI * 2);
           ctx!.fillStyle = "#ffffff";
-          ctx!.shadowColor = "rgba(96,112,138,0.55)";
+          ctx!.shadowColor = "rgba(84,100,128,0.6)";
           ctx!.shadowBlur = 3;
           ctx!.fill();
           ctx!.shadowBlur = 0;
+          // A thin cool-grey rim so a white flake still shows on cream paper.
+          ctx!.lineWidth = 0.7;
+          ctx!.strokeStyle = "rgba(84,100,128,0.8)";
+          ctx!.stroke();
         }
       }
       ctx!.globalAlpha = 1;

@@ -13,11 +13,11 @@ import { Gate } from "./gate";
 import { TemplateNav } from "./nav";
 import { PlainCountdown } from "./plain-countdown";
 import { Schedule } from "./schedule";
-import { TplDressCode, TplFaq, TplSeat, TplTips, TplRsvp, TplStory, hasStory } from "./extras";
+import { TplDressCode, TplFaq, TplSeat, TplRsvp, TplStory, hasStory } from "./extras";
 import { TplFooter, navItemsFor } from "./sections";
 import { viewOf, type TemplateProps } from "./view";
 import { InView, ScrollMotionRoot, Stagger, StaggerItem } from "./scroll-motion";
-import { EnvelopeGallery, EnvelopeHero, EnvelopeLetter } from "./envelope-parts";
+import { EnvelopeFeature, EnvelopeGallery, EnvelopeHero, EnvelopeLetter } from "./envelope-parts";
 
 /**
  * Cream envelope sealed with wax; inside, a soft page with script lettering.
@@ -33,7 +33,10 @@ export function EnvelopePage({ invitation, locale, monogram, token, onOpenAction
   const story = hasStory(invitation);
   const together = togetherPhotos(v.gallery);
   const split = splitPhotos(together);
-  const wall = story ? split.rest : together;
+  // The photo that gets a section to itself: the last true wide photo (3:2 or wider, not an
+  // album spread), so you choose it by putting it last among your wide photos in the admin.
+  const feature = [...together].reverse().find((p) => p.kind !== "spread" && p.width >= p.height * 1.45) ?? null;
+  const wall = (story ? split.rest : together).filter((p) => p !== feature);
   const day = v.main ? zonedParts(v.main.starts_at, v.tz).day : null;
   const myanmarDate = v.main ? t(v.main.myanmar_date_text, locale) : "";
 
@@ -81,6 +84,8 @@ export function EnvelopePage({ invitation, locale, monogram, token, onOpenAction
             )}
           </EnvelopeLetter>
 
+          {feature && <EnvelopeFeature photo={feature} names={v.names} dateLong={v.dateLong} locale={locale} />}
+
           {/* When & where, with the countdown */}
           {v.main && (
             <section aria-labelledby="when-heading" lang={locale} className="tpl-section bg-[color:var(--paper)]">
@@ -99,7 +104,7 @@ export function EnvelopePage({ invitation, locale, monogram, token, onOpenAction
                   <StaggerItem from="left" className="tpl-card flex flex-col items-center justify-center bg-[color:var(--ivory)] px-6 py-9 text-center">
                     <p className="tpl-eyebrow">{s("dateLabel", locale)}</p>
                     {day !== null && (
-                      <p className="tpl-display mt-3 text-[clamp(4rem,12vw,5.5rem)] leading-none font-medium text-[color:var(--gold-deep)]" aria-hidden>
+                      <p className={`tpl-display mt-3 font-medium text-[color:var(--gold-deep)] ${locale === "my" ? "text-[clamp(2.6rem,8vw,3.6rem)] leading-[1.6]" : "text-[clamp(4rem,12vw,5.5rem)] leading-none"}`} aria-hidden>
                         {formatNumber(day, locale, 2)}
                       </p>
                     )}
@@ -154,9 +159,6 @@ export function EnvelopePage({ invitation, locale, monogram, token, onOpenAction
           </InView>
           <InView>
             <TplRsvp invitation={invitation} locale={locale} token={token} />
-          </InView>
-          <InView>
-            <TplTips invitation={invitation} locale={locale} />
           </InView>
           <InView>
             <TplSeat invitation={invitation} locale={locale} />

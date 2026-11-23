@@ -9,7 +9,7 @@ import Image from "next/image";
 import { motion, useScroll, useTransform, useReducedMotion, type Variants } from "motion/react";
 import { useRef, useState, type ReactNode } from "react";
 import { MapPin } from "lucide-react";
-import { togetherPhotos, type AlbumPhoto } from "@/lib/album";
+import { albumRows, togetherPhotos, type AlbumPhoto } from "@/lib/album";
 import type { Locale } from "@/lib/i18n/numerals";
 import { s } from "@/lib/i18n/strings";
 import { Viewer } from "@/components/invite/gallery";
@@ -67,11 +67,11 @@ export function EnvelopeHero({
             <motion.p variants={heroLine} className="tpl-eyebrow lg:text-left">
               {s("weddingInvitationLabel", locale)}
             </motion.p>
-            <motion.h1 variants={heroText} className={`tpl-script mt-4 text-[color:var(--navy)] ${my ? "text-[clamp(1.55rem,5vw,2.4rem)]" : "text-[clamp(3.1rem,9vw,5.4rem)] lg:whitespace-nowrap"}`}>
+            <motion.h1 variants={heroText} className={`tpl-script mt-4 text-[color:var(--navy)] ${my ? "text-[clamp(1.55rem,5vw,2.4rem)] leading-[1.7]" : "text-[clamp(2.7rem,7.5vw,4.4rem)] lg:whitespace-nowrap"}`}>
               <motion.span variants={heroLine} className="block">
                 {names.one}
               </motion.span>
-              <motion.span variants={heroLine} className="block text-[0.62em] leading-[1.2] text-[color:var(--gold)]">
+              <motion.span variants={heroLine} className={`block text-[0.62em] text-[color:var(--gold)] ${my ? "leading-[1.7]" : "leading-[1.2]"}`}>
                 &amp;
               </motion.span>
               <motion.span variants={heroLine} className="block">
@@ -94,8 +94,9 @@ export function EnvelopeHero({
               </motion.p>
             )}
             {venue && (
-              <motion.p variants={heroLine} className={`mt-3 inline-flex items-center gap-2 text-[color:var(--ink-soft)] ${my ? "text-[0.9rem]" : "text-[1.02rem]"}`}>
-                <MapPin className="size-4 shrink-0 text-[color:var(--gold)]" aria-hidden />
+              <motion.p variants={heroLine} className={`relative mt-3 inline-block text-[color:var(--ink-soft)] ${my ? "text-[0.9rem]" : "text-[1.02rem]"}`}>
+                {/* The pin hangs outside the text, so the venue name itself stays on the page centre. */}
+                <MapPin className="absolute top-1/2 right-full mr-2 size-4 -translate-y-1/2 text-[color:var(--gold)]" aria-hidden />
                 {venue}
               </motion.p>
             )}
@@ -197,25 +198,109 @@ export function EnvelopeLetter({ id, monogram, children }: { id?: string; monogr
   );
 }
 
-/* ───────────────────────── Photo wall ───────────────────────── */
+/* ───────────────────────── Feature photo ───────────────────────── */
 
 /**
- * Tossed polaroids with only a corner kiss of overlap, so each print stays readable.
+ * One full-bleed photograph as its own moment: it eases back as it scrolls into
+ * view, fades into the page at the bottom, and a frosted card with the couple's
+ * names rests across its lower edge.
  */
-const SCATTER = [
-  { className: "top-[1%] left-[0%] w-[48%] sm:w-[46%] -rotate-[5deg]", z: 2, tape: false },
-  { className: "top-[7%] left-[50%] w-[49%] sm:w-[47%] rotate-[6deg]", z: 4, tape: true },
-  { className: "top-[50%] left-[4%] w-[46%] sm:w-[44%] rotate-[4deg]", z: 5, tape: false },
-  { className: "top-[46%] left-[51%] w-[47%] sm:w-[45%] -rotate-[5deg]", z: 3, tape: true },
-  { className: "top-[72%] left-[18%] w-[42%] sm:w-[40%] rotate-[8deg]", z: 6, tape: false },
-  { className: "top-[70%] left-[48%] w-[40%] sm:w-[38%] -rotate-[4deg]", z: 2, tape: false },
-];
+export function EnvelopeFeature({
+  photo,
+  names,
+  dateLong,
+  locale,
+}: {
+  photo: AlbumPhoto;
+  names: { one: string; two: string };
+  dateLong: string;
+  locale: Locale;
+}) {
+  const ref = useRef<HTMLElement>(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], reduce ? [1, 1, 1] : [1.14, 1.04, 1]);
+  const drift = useTransform(scrollYProgress, [0, 1], reduce ? [0, 0] : [-18, 18]);
+  const my = locale === "my";
 
+  return (
+    <section ref={ref} aria-label={s("featureEyebrow", locale)} lang={locale} className="relative bg-[color:var(--paper)] pb-14">
+      <div className="relative mx-auto h-[clamp(26rem,112vw,44rem)] overflow-hidden lg:h-[32rem] lg:max-w-5xl">
+        <motion.div style={{ scale, y: drift }} className="absolute -inset-y-6 inset-x-0">
+          <Image src={photo.src} alt={photo.alt} fill sizes="100vw" className="object-cover [object-position:72%_40%]" />
+        </motion.div>
+        <div aria-hidden className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[color:var(--paper)] to-transparent" />
+        <div aria-hidden className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[color:var(--paper)] to-transparent" />
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 36 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.4 }}
+        transition={{ duration: 0.9, ease: EASE }}
+        className="relative z-10 mx-auto -mt-24 w-[min(88%,30rem)] border border-[color:var(--gold-soft)] bg-[color:var(--ivory)]/85 px-6 py-8 text-center shadow-[0_24px_50px_-30px_rgba(79,62,49,.6)] outline outline-1 -outline-offset-[7px] outline-[color:var(--gold-soft)] backdrop-blur-md"
+      >
+        <p className="tpl-eyebrow">{s("featureEyebrow", locale)}</p>
+        <p className={`tpl-script mt-3 text-[color:var(--navy)] ${my ? "text-[1.35rem] leading-[1.9]" : "text-[clamp(2.2rem,8vw,3rem)]"}`}>{s("featureLine", locale)}</p>
+        <span aria-hidden className="mx-auto mt-4 block h-px w-16 bg-[color:var(--gold)]" />
+        <p className="tpl-eyebrow mt-4">
+          {names.one} &amp; {names.two}
+        </p>
+        {dateLong && <p className={`mt-1 text-[color:var(--ink-soft)] ${my ? "text-[0.85rem]" : "text-[0.95rem]"}`}>{dateLong}</p>}
+      </motion.div>
+    </section>
+  );
+}
+
+/* ───────────────────────── Photo album ───────────────────────── */
+
+/**
+ * A quiet printed-album page: thin gold frames, even gaps, no tilt. Wide photos
+ * and album spreads take a full row; portraits sit two to a row.
+ */
 export function EnvelopeGallery({ photos, locale }: { photos: AlbumPhoto[]; locale: Locale }) {
   const [index, setIndex] = useState<number | null>(null);
   photos = togetherPhotos(photos);
   if (photos.length === 0) return null;
-  const tall = photos.length > 4;
+  const rows = albumRows(photos);
+  const at = (p: AlbumPhoto) => photos.indexOf(p);
+
+  const frame = (p: AlbumPhoto, i: number, sizes: string) => (
+    <motion.button
+      key={p.id}
+      type="button"
+      onClick={() => setIndex(at(p))}
+      aria-label={`${s("viewPhoto", locale)}${p.alt ? `: ${p.alt}` : ""}`}
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.8, delay: (i % 2) * 0.1, ease: EASE }}
+      className="group block w-full cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--gold-deep)]"
+    >
+      <span className="relative block overflow-hidden" style={{ aspectRatio: `${p.width} / ${p.height}` }}>
+        <Image src={p.src} alt={p.alt} fill sizes={sizes} className="object-cover mix-blend-multiply transition-transform duration-700 ease-out group-hover:scale-[1.03]" />
+      </span>
+    </motion.button>
+  );
+
+  // Three photos: one large print with two beneath it (phones) or beside it (wider screens),
+  // every cell cropped to fill so the block is always a clean rectangle.
+  const cell = (p: AlbumPhoto, i: number, className: string, sizes: string) => (
+    <motion.button
+      key={p.id}
+      type="button"
+      onClick={() => setIndex(at(p))}
+      aria-label={`${s("viewPhoto", locale)}${p.alt ? `: ${p.alt}` : ""}`}
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.8, delay: i * 0.12, ease: EASE }}
+      className={`group relative block cursor-pointer overflow-hidden rounded-[3px] shadow-[0_22px_40px_-30px_rgba(79,62,49,.7)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--gold-deep)] ${className}`}
+    >
+      <Image src={p.src} alt={p.alt} fill sizes={sizes} className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]" />
+    </motion.button>
+  );
+  const bento = photos.length === 3;
 
   return (
     <section id="gallery" aria-labelledby="gallery-heading" lang={locale} className="tpl-section">
@@ -223,7 +308,7 @@ export function EnvelopeGallery({ photos, locale }: { photos: AlbumPhoto[]; loca
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.6 }}
+          viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.8, ease: EASE }}
           className="text-center"
         >
@@ -234,39 +319,26 @@ export function EnvelopeGallery({ photos, locale }: { photos: AlbumPhoto[]; loca
           <p className={`mx-auto mt-3 max-w-md text-[color:var(--ink-soft)] italic ${locale === "my" ? "text-[0.9rem] not-italic" : "text-[1.05rem]"}`}>{s("momentsSubtitle", locale)}</p>
         </motion.div>
 
-        <div
-          className={`relative mx-auto mt-10 w-[min(96vw,46rem)] sm:mt-12 sm:w-[min(94vw,56rem)] ${tall ? "aspect-[4/5]" : "aspect-[1/1] sm:aspect-[5/4]"}`}
-        >
-          {photos.map((p, i) => {
-            const spot = SCATTER[i % SCATTER.length];
-            return (
-              <motion.button
-                key={p.id}
-                type="button"
-                onClick={() => setIndex(i)}
-                aria-label={`${s("viewPhoto", locale)}${p.alt ? `: ${p.alt}` : ""}`}
-                initial={{ opacity: 0, scale: 0.86, y: 24 }}
-                whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.2 }}
-                transition={{ duration: 0.7, delay: i * 0.06, ease: EASE }}
-                style={{ zIndex: spot.z }}
-                className={`group absolute cursor-pointer bg-[#fbf6ee] p-2 pb-9 shadow-[0_16px_32px_-18px_rgba(79,62,49,.7)] hover:z-20 hover:shadow-[0_22px_40px_-14px_rgba(79,62,49,.8)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--gold-deep)] sm:p-2.5 sm:pb-11 ${spot.className}`}
-              >
-                {spot.tape && (
-                  <span aria-hidden className="absolute -top-2.5 left-[28%] h-5 w-14 -rotate-8 bg-[#e8d9a8]/85 shadow-sm sm:h-6 sm:w-16" />
-                )}
-                <span className="relative block overflow-hidden" style={{ aspectRatio: `${p.width} / ${p.height}` }}>
-                  <Image
-                    src={p.src}
-                    alt={p.alt}
-                    fill
-                    sizes="(max-width: 640px) 60vw, 420px"
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-                  />
-                </span>
-              </motion.button>
-            );
-          })}
+        {bento && (
+          <div className="mx-auto mt-10 grid w-full max-w-[56rem] grid-cols-1 gap-4 sm:mt-12 sm:grid-cols-12 sm:grid-rows-2 sm:gap-4 sm:aspect-[16/9]">
+            {cell(photos[0], 0, "aspect-[3/2] sm:col-span-7 sm:row-span-2 sm:aspect-auto", "(max-width: 640px) 92vw, 600px")}
+            {cell(photos[1], 1, "aspect-[3/2] sm:col-span-5 sm:aspect-auto", "(max-width: 640px) 46vw, 420px")}
+            {cell(photos[2], 2, "aspect-[3/2] sm:col-span-5 sm:aspect-auto", "(max-width: 640px) 46vw, 420px")}
+          </div>
+        )}
+
+        <div className={`mx-auto mt-10 flex w-full max-w-[46rem] flex-col gap-4 sm:mt-12 sm:gap-6 ${bento ? "hidden" : ""}`}>
+          {rows.map((row, r) =>
+            row.type === "single" ? (
+              <div key={row.photos[0].id} className={row.photos[0].height > row.photos[0].width * 1.1 ? "mx-auto w-[68%]" : ""}>
+                {frame(row.photos[0], r, "(max-width: 640px) 92vw, 760px")}
+              </div>
+            ) : (
+              <div key={row.photos[0].id} className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
+                {row.photos.map((p, i) => frame(p, i, "(max-width: 640px) 46vw, 380px"))}
+              </div>
+            ),
+          )}
         </div>
       </div>
       {index !== null && <Viewer photos={photos} index={index} locale={locale} onChange={setIndex} onClose={() => setIndex(null)} />}

@@ -30,6 +30,7 @@ export function PlainCountdown({
   const now = useSyncExternalStore(subscribe, nowSecond, serverNow);
   const state = now === null ? null : countdown(Date.parse(targetIso), now * 1000);
   const before = state?.phase === "before" ? state : null;
+  const my = locale === "my";
 
   if (state && state.phase !== "before") {
     return (
@@ -49,7 +50,7 @@ export function PlainCountdown({
               <span className="relative grid min-w-[3.6rem] place-items-center rounded-lg border-2 border-[color:var(--gold)] bg-gradient-to-b from-white/90 to-[#e4ddd0] px-3 py-3 shadow-[0_6px_14px_-8px_rgba(94,26,39,.5)] sm:min-w-[5.4rem] sm:py-5">
                 <span className="absolute top-1/2 -left-[5px] size-2 -translate-y-1/2 rounded-full bg-[color:var(--gold)]" />
                 <span className="absolute top-1/2 -right-[5px] size-2 -translate-y-1/2 rounded-full bg-[color:var(--gold)]" />
-                <span className="tpl-display text-[clamp(1.6rem,7vw,3rem)] leading-none font-bold text-[color:var(--navy)] tabular-nums">
+                <span className={`${my ? "tpl-display text-[clamp(1.3rem,5vw,2.1rem)] leading-[1.7] font-bold text-[color:var(--navy)] tabular-nums" : "tpl-display text-[clamp(1.6rem,7vw,3rem)] leading-none font-bold text-[color:var(--navy)] tabular-nums"}`}>
                   {before ? formatNumber(before[unit], locale, unit === "days" ? 0 : 2) : "––"}
                 </span>
               </span>
@@ -68,7 +69,7 @@ export function PlainCountdown({
         <div aria-hidden className="mx-auto grid max-w-lg grid-cols-4 overflow-hidden rounded-lg border border-[color:var(--navy)]/20 bg-[color:var(--paper)]/60">
           {UNITS.map((unit, i) => (
             <div key={unit} className={`flex flex-col items-center py-5 ${i > 0 ? "border-l border-[color:var(--navy)]/20" : ""}`}>
-              <span className="tpl-display text-[clamp(1.8rem,7vw,2.8rem)] leading-none tabular-nums">
+              <span className={`${my ? "tpl-display text-[clamp(1.4rem,5.5vw,2.1rem)] leading-[1.7] tabular-nums" : "tpl-display text-[clamp(1.8rem,7vw,2.8rem)] leading-none tabular-nums"}`}>
                 {before ? formatNumber(before[unit], locale, unit === "days" ? 0 : 2) : "––"}
               </span>
               <span className="tpl-eyebrow mt-2 !text-[0.58rem]">{s(unit, locale)}</span>
@@ -86,7 +87,7 @@ export function PlainCountdown({
         <div aria-hidden className="mx-auto flex justify-center">
           {UNITS.map((unit, i) => (
             <div key={unit} className={`flex flex-col items-center px-[0.6rem] ${i > 0 ? "border-l border-[color:var(--navy)]/30" : ""}`}>
-              <span className="tpl-display text-[clamp(1.35rem,6vw,1.9rem)] leading-none font-bold tabular-nums">
+              <span className={`${my ? "tpl-display text-[clamp(1.1rem,4.6vw,1.5rem)] leading-[1.7] font-bold tabular-nums" : "tpl-display text-[clamp(1.35rem,6vw,1.9rem)] leading-none font-bold tabular-nums"}`}>
                 {before ? formatNumber(before[unit], locale, unit === "days" ? 0 : 2) : "––"}
               </span>
               <span className="tpl-mono mt-1.5 !text-[0.55rem] !tracking-[0.14em]">{s(unit, locale)}</span>
@@ -104,12 +105,12 @@ export function PlainCountdown({
         {UNITS.map((unit, i) => (
           <div key={unit} className="flex items-start gap-[clamp(0.6rem,3.5vw,2.5rem)]">
             <div className="flex min-w-[2.4em] flex-col items-center">
-              <span className="tpl-display text-[clamp(2.2rem,9vw,5rem)] leading-none tabular-nums">
+              <span className={`${my ? "tpl-display text-[clamp(1.6rem,6vw,3rem)] leading-[1.6] tabular-nums" : "tpl-display text-[clamp(2.2rem,9vw,5rem)] leading-none tabular-nums"}`}>
                 {before ? formatNumber(before[unit], locale, unit === "days" ? 0 : 2) : "––"}
               </span>
               <span className="tpl-eyebrow mt-2 !text-current opacity-70">{s(unit, locale)}</span>
             </div>
-            {i < UNITS.length - 1 && <span className="tpl-display text-[clamp(1.6rem,6vw,3.4rem)] leading-none opacity-40">:</span>}
+            {i < UNITS.length - 1 && <span className={`${my ? "tpl-display text-[clamp(1.2rem,4.5vw,2.2rem)] leading-[1.6] opacity-40" : "tpl-display text-[clamp(1.6rem,6vw,3.4rem)] leading-none opacity-40"}`}>:</span>}
           </div>
         ))}
       </div>

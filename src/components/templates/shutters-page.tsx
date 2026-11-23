@@ -13,7 +13,7 @@ import { PhotoCollage } from "./collage";
 import { Schedule } from "./schedule";
 import { Venue } from "./venue";
 import { Reveal } from "./reveal";
-import { TplDressCode, TplFaq, TplSeat, TplTips, TplRsvp, TplStory } from "./extras";
+import { TplDressCode, TplFaq, TplSeat, TplRsvp, TplStory } from "./extras";
 import { TrackOpen } from "./track-open";
 import { WildflowerBorder } from "./wildflowers";
 import { TplFooter, navItemsFor } from "./sections";
@@ -132,7 +132,6 @@ export function ShuttersPage({ invitation, locale, monogram, token, onOpenAction
         <Reveal>
           <TplRsvp invitation={invitation} locale={locale} token={token} />
         </Reveal>
-        <Reveal><TplTips invitation={invitation} locale={locale} /></Reveal>
 <Reveal><TplSeat invitation={invitation} locale={locale} /></Reveal>
 <Reveal><TplFaq invitation={invitation} locale={locale} /></Reveal>
         <Reveal>

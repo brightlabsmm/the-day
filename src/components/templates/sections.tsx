@@ -8,7 +8,7 @@ import type { NavItem } from "./nav";
 import type { TemplateView } from "./view";
 import type { Invitation } from "@/lib/invitation";
 import { isHidden } from "@/lib/theme";
-import { hasDress, hasFaq, hasSeat, hasStory, hasTips } from "./extras";
+import { hasDress, hasFaq, hasSeat, hasStory } from "./extras";
 
 export function TplGallery({
   photos,
@@ -56,7 +56,6 @@ export function navItemsFor(v: TemplateView, invitation: Invitation, locale: Loc
   if (v.venues.length) items.push({ id: "venue", label: s("navVenue", locale) });
   if (hasDress(invitation)) items.push({ id: "dress", label: s("navDress", locale) });
   if (invitation.wedding.rsvp_enabled) items.push({ id: "rsvp", label: s("navRsvp", locale) });
-  if (hasTips(invitation)) items.push({ id: "tips", label: s("navTips", locale) });
   if (hasSeat(invitation)) items.push({ id: "seat", label: s("navSeat", locale) });
   if (hasFaq(invitation)) items.push({ id: "faq", label: s("navFaq", locale) });
   if (v.hasGift) items.push({ id: "gift", label: s("navGift", locale) });
