@@ -174,7 +174,7 @@ export function EnvelopePage({ invitation, locale, monogram, token, onOpenAction
           </InView>
           <InView amount={0.4}>
             <ClosingQuote invitation={invitation} locale={locale} />
-            <TplFooter v={v} locale={locale} />
+            <TplFooter v={v} locale={locale} thanks={false} />
           </InView>
         </div>
       </ScrollMotionRoot>

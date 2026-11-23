@@ -94,9 +94,10 @@ export function EnvelopeHero({
               </motion.p>
             )}
             {venue && (
-              <motion.p variants={heroLine} className={`relative mt-3 inline-block text-[color:var(--ink-soft)] ${my ? "text-[0.9rem]" : "text-[1.02rem]"}`}>
-                {/* The pin hangs outside the text, so the venue name itself stays on the page centre. */}
-                <MapPin className="absolute top-1/2 right-full mr-2 size-4 -translate-y-1/2 text-[color:var(--gold)]" aria-hidden />
+              <motion.p variants={heroLine} className={`relative mt-3 inline-block text-[color:var(--ink-soft)] lg:inline-flex lg:items-center lg:gap-2 ${my ? "text-[0.9rem]" : "text-[1.02rem]"}`}>
+                {/* Centred on phones: the pin hangs outside so the venue name stays on the page centre.
+                    Left-aligned on large screens: the pin sits inline, on the same left edge as the date. */}
+                <MapPin className="absolute top-1/2 right-full mr-2 size-4 -translate-y-1/2 text-[color:var(--gold)] lg:static lg:mr-0 lg:translate-y-0 lg:shrink-0" aria-hidden />
                 {venue}
               </motion.p>
             )}
@@ -124,7 +125,7 @@ export function EnvelopeHero({
                 initial={{ scale: 0, rotate: -40 }}
                 animate={open ? { scale: 1, rotate: -8 } : { scale: 0, rotate: -40 }}
                 transition={{ type: "spring", stiffness: 180, damping: 14, delay: 0.9 }}
-                className="seal seal-mark tpl-display absolute -bottom-7 left-1/2 -ml-9 grid size-[4.5rem] place-items-center rounded-full text-[1.1rem] font-semibold tracking-wide"
+                className="seal seal-mark tpl-display absolute -bottom-7 left-1/2 -ml-9 grid size-[4.5rem] place-items-center rounded-full pt-[0.45em] pl-[0.1em] text-[1.1rem] leading-none font-semibold tracking-wide"
                 aria-hidden
               >
                 {monogram}
@@ -224,7 +225,7 @@ export function EnvelopeFeature({
   const my = locale === "my";
 
   return (
-    <section ref={ref} aria-label={s("featureEyebrow", locale)} lang={locale} className="relative bg-[color:var(--paper)] pb-14">
+    <section ref={ref} aria-label={s("featureEyebrow", locale) || s("featureLine", locale)} lang={locale} className="relative bg-[color:var(--paper)] pb-14">
       <div className="relative mx-auto h-[clamp(26rem,112vw,44rem)] overflow-hidden lg:h-[32rem] lg:max-w-5xl">
         <motion.div style={{ scale, y: drift }} className="absolute -inset-y-6 inset-x-0">
           <Image src={photo.src} alt={photo.alt} fill sizes="100vw" className="object-cover [object-position:72%_40%]" />
@@ -240,8 +241,8 @@ export function EnvelopeFeature({
         transition={{ duration: 0.9, ease: EASE }}
         className="relative z-10 mx-auto -mt-24 w-[min(88%,30rem)] border border-[color:var(--gold-soft)] bg-[color:var(--ivory)]/85 px-6 py-8 text-center shadow-[0_24px_50px_-30px_rgba(79,62,49,.6)] outline outline-1 -outline-offset-[7px] outline-[color:var(--gold-soft)] backdrop-blur-md"
       >
-        <p className="tpl-eyebrow">{s("featureEyebrow", locale)}</p>
-        <p className={`tpl-script mt-3 text-[color:var(--navy)] ${my ? "text-[1.35rem] leading-[1.9]" : "text-[clamp(2.2rem,8vw,3rem)]"}`}>{s("featureLine", locale)}</p>
+        {s("featureEyebrow", locale) && <p className="tpl-eyebrow">{s("featureEyebrow", locale)}</p>}
+        <p className={`tpl-script ${s("featureEyebrow", locale) ? "mt-3" : ""} text-[color:var(--navy)] ${my ? "text-[1.2rem] leading-[2]" : "text-[clamp(2.2rem,8vw,3rem)]"}`}>{s("featureLine", locale)}</p>
         <span aria-hidden className="mx-auto mt-4 block h-px w-16 bg-[color:var(--gold)]" />
         <p className="tpl-eyebrow mt-4">
           {names.one} &amp; {names.two}

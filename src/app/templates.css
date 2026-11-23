@@ -294,6 +294,8 @@
 .tpl-script:lang(my) {
   font-family: var(--font-myanmar);
   font-style: normal;
+  /* A little air between letters keeps the marks above and below each letter (like the asat on င်) from touching their neighbours. */
+  letter-spacing: 0.03em;
   line-height: 1.45;
 }
 
@@ -337,6 +339,16 @@
 }
 .tpl-envelope .foil {
   background-image: linear-gradient(100deg, var(--gold-deep), var(--gold) 50%, var(--gold-deep));
+}
+/* Burmese letters carry marks above and below the line; a gradient clipped to the text can cut them,
+   so Burmese gold names use plain gold instead (unlayered, so it also beats the shared .foil rule). */
+.foil:lang(my),
+.tpl-envelope .foil:lang(my) {
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-text-fill-color: currentColor;
+  color: var(--gold-deep);
 }
 html:has(.tpl) {
   scroll-behavior: smooth;
