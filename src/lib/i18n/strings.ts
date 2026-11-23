@@ -54,6 +54,7 @@ const STRINGS = {
     my: "လာရောက်ကြွချီးမြှင့်ခြင်းသာ အဖိုးတန်ဆုံး လက်ဆောင်ဖြစ်ပါသည်။ ချစ်ခင်စွာ ပေးပို့လိုပါက အောက်ပါ QR ကို အသုံးပြုနိုင်ပါသည်။",
     en: "Your presence is the greatest gift. If you wish to send a gift, you may use the QR codes below.",
   },
+  giftOpenHint: { my: "လက်ဆောင်လေး ဖွင့်ရန် နှိပ်ပါ", en: "Tap to open your gift" },
   giftAccountName: { my: "အကောင့်အမည်", en: "Account name" },
   giftQrAlt: { my: "QR ကုဒ်", en: "QR code" },
   musicPlay: { my: "သီချင်း ဖွင့်ရန်", en: "Play music" },

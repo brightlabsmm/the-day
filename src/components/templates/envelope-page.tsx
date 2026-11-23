@@ -171,7 +171,7 @@ export function EnvelopePage({ invitation, locale, monogram, token, onOpenAction
             <TplFaq invitation={invitation} locale={locale} />
           </InView>
           <InView>
-            <GiftSection invitation={invitation} locale={locale} plain />
+            <GiftSection invitation={invitation} locale={locale} plain reveal />
           </InView>
           <InView>
             <WishesSection invitation={invitation} locale={locale} token={token} plain />
