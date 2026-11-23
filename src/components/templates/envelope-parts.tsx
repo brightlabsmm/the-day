@@ -8,7 +8,6 @@
 import Image from "next/image";
 import { motion, useScroll, useTransform, useReducedMotion, type Variants } from "motion/react";
 import { useRef, useState, type ReactNode } from "react";
-import { MapPin } from "lucide-react";
 import { albumRows, togetherPhotos, type AlbumPhoto } from "@/lib/album";
 import type { Locale } from "@/lib/i18n/numerals";
 import { s } from "@/lib/i18n/strings";
@@ -104,10 +103,7 @@ export function EnvelopeHero({
               </motion.p>
             )}
             {venue && (
-              <motion.p variants={heroLine} className={`relative mt-3 inline-block text-[color:var(--ink-soft)] lg:inline-flex lg:items-center lg:gap-2 ${my ? "text-[0.9rem]" : "text-[1.02rem]"}`}>
-                {/* Centred on phones: the pin hangs outside so the venue name stays on the page centre.
-                    Left-aligned on large screens: the pin sits inline, on the same left edge as the date. */}
-                <MapPin className="absolute top-1/2 right-full mr-2 size-4 -translate-y-1/2 text-[color:var(--gold)] lg:static lg:mr-0 lg:translate-y-0 lg:shrink-0" aria-hidden />
+              <motion.p variants={heroLine} className={`mt-3 text-[color:var(--ink-soft)] ${my ? "text-[0.9rem]" : "text-[1.02rem]"}`}>
                 {venue}
               </motion.p>
             )}
@@ -269,9 +265,9 @@ export function EnvelopeFeature({
  * A quiet printed-album page: thin gold frames, even gaps, no tilt. Wide photos
  * and album spreads take a full row; portraits sit two to a row.
  */
-export function EnvelopeGallery({ photos, locale }: { photos: AlbumPhoto[]; locale: Locale }) {
+export function EnvelopeGallery({ photos: allPhotos, locale }: { photos: AlbumPhoto[]; locale: Locale }) {
   const [index, setIndex] = useState<number | null>(null);
-  photos = togetherPhotos(photos);
+  const photos = togetherPhotos(allPhotos);
   if (photos.length === 0) return null;
   const rows = albumRows(photos);
   const at = (p: AlbumPhoto) => photos.indexOf(p);
