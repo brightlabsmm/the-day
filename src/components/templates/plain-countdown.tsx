@@ -19,6 +19,7 @@ export function PlainCountdown({
   locale,
   label,
   variant = "plain",
+  readable = false,
 }: {
   targetIso: string;
   locale: Locale;
@@ -26,6 +27,8 @@ export function PlainCountdown({
   variant?: "plain" | "cards" | "compact" | "boxed";
   /** Accessible description of the date being counted down to. */
   label: string;
+  /** Plain variant only: lining figures, a firmer weight and darker labels, for busy or textured backgrounds. */
+  readable?: boolean;
 }) {
   const now = useSyncExternalStore(subscribe, nowSecond, serverNow);
   const state = now === null ? null : countdown(Date.parse(targetIso), now * 1000);
@@ -105,10 +108,10 @@ export function PlainCountdown({
         {UNITS.map((unit, i) => (
           <div key={unit} className="flex items-start gap-[clamp(0.6rem,3.5vw,2.5rem)]">
             <div className="flex min-w-[2.4em] flex-col items-center">
-              <span className={`${my ? "tpl-display text-[clamp(1.6rem,6vw,3rem)] leading-[1.6] tabular-nums" : "tpl-display text-[clamp(2.2rem,9vw,5rem)] leading-none tabular-nums"}`}>
+              <span className={`${my ? "tpl-display text-[clamp(1.6rem,6vw,3rem)] leading-[1.6] tabular-nums" : "tpl-display text-[clamp(2.2rem,9vw,5rem)] leading-none tabular-nums"} ${readable ? "font-semibold" : ""}`}>
                 {before ? formatNumber(before[unit], locale, unit === "days" ? 0 : 2) : "––"}
               </span>
-              <span className="tpl-eyebrow mt-2 !text-current opacity-70">{s(unit, locale)}</span>
+              <span className={`tpl-eyebrow mt-2 !text-current ${readable ? "!text-[0.72rem] font-medium opacity-90" : "opacity-70"}`}>{s(unit, locale)}</span>
             </div>
             {i < UNITS.length - 1 && <span className={`${my ? "tpl-display text-[clamp(1.2rem,4.5vw,2.2rem)] leading-[1.6] opacity-40" : "tpl-display text-[clamp(1.6rem,6vw,3.4rem)] leading-none opacity-40"}`}>:</span>}
           </div>

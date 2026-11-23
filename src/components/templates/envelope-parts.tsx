@@ -98,12 +98,12 @@ export function EnvelopeHero({
               </motion.p>
             )}
             {timeRange && (
-              <motion.p variants={heroLine} className={`mt-1 text-[color:var(--ink-soft)] ${my ? "text-[0.9rem]" : "text-[1.02rem]"}`}>
+              <motion.p variants={heroLine} className={`mt-2 font-semibold text-[color:var(--ink)] ${my ? "text-[1.05rem]" : "text-[1.3rem] tracking-[0.01em]"}`}>
                 {timeRange}
               </motion.p>
             )}
             {venue && (
-              <motion.p variants={heroLine} className={`mt-3 text-[color:var(--ink-soft)] ${my ? "text-[0.9rem]" : "text-[1.02rem]"}`}>
+              <motion.p variants={heroLine} className={`mt-3 font-medium text-[color:var(--ink)] ${my ? "text-[0.9rem]" : "text-[1.05rem]"}`}>
                 {venue}
               </motion.p>
             )}

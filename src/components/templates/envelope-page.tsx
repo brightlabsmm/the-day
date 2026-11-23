@@ -100,7 +100,7 @@ export function EnvelopePage({ invitation, locale, monogram, token, onOpenAction
                     {s("dateLabel", locale)} · {s("venueLabel", locale)}
                   </h2>
                   <div className="mt-6 text-[color:var(--navy)]">
-                    <PlainCountdown targetIso={v.main.starts_at} locale={locale} label={`${v.dateLong} · ${v.timeRange}`} />
+                    <PlainCountdown readable targetIso={v.main.starts_at} locale={locale} label={`${v.dateLong} · ${v.timeRange}`} />
                   </div>
                 </InView>
 
@@ -113,8 +113,8 @@ export function EnvelopePage({ invitation, locale, monogram, token, onOpenAction
                       </p>
                     )}
                     <p className={`tpl-display mt-3 text-[color:var(--navy)] ${locale === "my" ? "text-[1.05rem]" : "text-[1.35rem]"}`}>{v.dateLong}</p>
-                    <p className={`mt-1 text-[color:var(--ink-soft)] ${locale === "my" ? "text-[0.9rem]" : ""}`}>{v.timeRange}</p>
-                    {myanmarDate && <p className={`mt-3 text-[color:var(--ink-soft)] ${locale === "my" ? "text-[0.82rem]" : "text-[0.95rem]"}`}>{myanmarDate}</p>}
+                    <p className={`mt-2 font-semibold text-[color:var(--ink)] ${locale === "my" ? "text-[1.05rem]" : "text-[1.3rem]"}`}>{v.timeRange}</p>
+                    {myanmarDate && <p className={`mt-3 text-[color:var(--ink)] ${locale === "my" ? "text-[0.88rem]" : "text-[1rem]"}`}>{myanmarDate}</p>}
                   </StaggerItem>
 
                   <StaggerItem from="right" className="tpl-card bg-[color:var(--ivory)] px-6 py-9 text-center">
