@@ -16,14 +16,14 @@ type ViewProps = {
   items: GiftItem[];
   unlocked: ReadonlySet<number>;
   locale: Locale;
-  onOpen: (position: number) => void;
+  onOpen: (position: number, origin?: { x: number; y: number }) => void;
 };
 
 const label = (item: GiftItem, open: boolean, locale: Locale) =>
   `${gs("blessing", locale)} ${formatNumber(item.position, locale)}${open ? ` · ${t(item.title, locale)}` : ""}`;
 
 /** Twelve petals in a ring around the sacred core, with ripples spreading on the pond. */
-export function LotusView({ items, unlocked, locale, onOpen, onCore }: ViewProps & { onCore: () => void }) {
+export function LotusView({ items, unlocked, locale, onOpen, onCore }: ViewProps & { onCore: (origin?: { x: number; y: number }) => void }) {
   const left = items.length - unlocked.size;
   const done = items.length > 0 && left === 0;
   const [hot, setHot] = useState<number | null>(null);
@@ -56,7 +56,13 @@ export function LotusView({ items, unlocked, locale, onOpen, onCore }: ViewProps
 
       <button
         type="button"
-        onClick={onCore}
+        onClick={(e) => {
+          const rect = e.currentTarget.getBoundingClientRect();
+          onCore({
+            x: rect.left + rect.width / 2,
+            y: rect.top + rect.height / 2,
+          });
+        }}
         className="gift-core absolute top-1/2 left-1/2 z-10 grid size-[23%] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full text-center"
       >
         <span aria-hidden className="gift-core-aura absolute inset-1 rounded-full" />
@@ -83,27 +89,36 @@ function PetalLayer({
   half,
 }: ViewProps & { hot: number | null; setHot: (position: number | null) => void; half: "right" | "left" | "face" }) {
   return (
-    <ul aria-hidden={half !== "right" || undefined} className={`absolute inset-0 ${half === "face" ? "pointer-events-none" : ""}`}>
+    <ul aria-hidden={half !== "face" || undefined} className="absolute inset-0">
       {items.map((item, i) => {
         const open = unlocked.has(item.position);
         const state = { "data-open": open, "data-hot": hot === item.position };
         return (
           <li key={item.position} className="gift-petal" style={{ "--a": `${(360 / items.length) * i}deg` } as CSSProperties}>
             {half === "face" ? (
-              <div className="gift-petal-shape gift-petal-face" {...state}>
-                <span className="gift-num">{formatNumber(item.position, locale)}</span>
-                {open ? <GiftIconView icon={item.icon} className="mt-1 size-[1.15rem]" /> : <LockedStar className="mt-1 size-3.5" />}
-              </div>
-            ) : (
               <button
                 type="button"
-                tabIndex={half === "right" ? undefined : -1}
-                onClick={() => onOpen(item.position)}
+                onClick={(e) => {
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  onOpen(item.position, {
+                    x: e.clientX || rect.left + rect.width / 2,
+                    y: e.clientY || rect.top + rect.height / 3,
+                  });
+                }}
                 onMouseEnter={() => setHot(item.position)}
                 onMouseLeave={() => setHot(null)}
-                onFocus={half === "right" ? () => setHot(item.position) : undefined}
-                onBlur={half === "right" ? () => setHot(null) : undefined}
-                aria-label={half === "right" ? label(item, open, locale) : undefined}
+                onFocus={() => setHot(item.position)}
+                onBlur={() => setHot(null)}
+                aria-label={label(item, open, locale)}
+                className="gift-petal-shape gift-petal-face"
+                {...state}
+              >
+                <span className="gift-num">{formatNumber(item.position, locale)}</span>
+                {open ? <GiftIconView icon={item.icon} className="mt-1 size-[1.15rem]" /> : <LockedStar className="mt-1 size-3.5" />}
+              </button>
+            ) : (
+              <div
+                aria-hidden="true"
                 className="gift-petal-shape"
                 data-half={half}
                 {...state}
@@ -117,7 +132,7 @@ function PetalLayer({
 }
 
 /** Twelve stars on a slowly turning golden astrolabe, with a sun at its centre. */
-export function AstrolabeView({ items, unlocked, locale, onOpen, onCore }: ViewProps & { onCore: () => void }) {
+export function AstrolabeView({ items, unlocked, locale, onOpen, onCore }: ViewProps & { onCore: (origin?: { x: number; y: number }) => void }) {
   return (
     <div className="gift-stage relative aspect-square w-[min(92vw,30rem)]">
       <svg aria-hidden viewBox="0 0 400 400" className="gift-spin-slow pointer-events-none absolute inset-0 size-full">
@@ -144,7 +159,19 @@ export function AstrolabeView({ items, unlocked, locale, onOpen, onCore }: ViewP
           const a = ((360 / items.length) * i - 90) * (Math.PI / 180);
           return (
             <li key={item.position} className="absolute" style={{ left: `${50 + Math.cos(a) * 41}%`, top: `${50 + Math.sin(a) * 41}%` }}>
-              <button type="button" onClick={() => onOpen(item.position)} data-open={open} aria-label={label(item, open, locale)} className="gift-star">
+              <button
+                type="button"
+                onClick={(e) => {
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  onOpen(item.position, {
+                    x: e.clientX || rect.left + rect.width / 2,
+                    y: e.clientY || rect.top + rect.height / 2,
+                  });
+                }}
+                data-open={open}
+                aria-label={label(item, open, locale)}
+                className="gift-star"
+              >
                 <span className="gift-num">{formatNumber(item.position, locale)}</span>
                 {open ? <GiftIconView icon={item.icon} className="size-3.5" /> : <LockedStar hollow className="size-3.5" />}
               </button>
@@ -155,7 +182,13 @@ export function AstrolabeView({ items, unlocked, locale, onOpen, onCore }: ViewP
 
       <button
         type="button"
-        onClick={onCore}
+        onClick={(e) => {
+          const rect = e.currentTarget.getBoundingClientRect();
+          onCore({
+            x: rect.left + rect.width / 2,
+            y: rect.top + rect.height / 2,
+          });
+        }}
         className="gift-sun absolute top-1/2 left-1/2 z-10 grid size-[26%] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full text-center"
       >
         <span className="flex flex-col items-center">
@@ -176,7 +209,19 @@ export function TarotView({ items, unlocked, locale, onOpen }: ViewProps) {
         const open = unlocked.has(item.position);
         return (
           <li key={item.position} className="gift-card-wrap">
-            <button type="button" onClick={() => onOpen(item.position)} aria-label={label(item, open, locale)} className="gift-card" data-open={open}>
+            <button
+              type="button"
+              onClick={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                onOpen(item.position, {
+                  x: e.clientX || rect.left + rect.width / 2,
+                  y: e.clientY || rect.top + rect.height / 2,
+                });
+              }}
+              aria-label={label(item, open, locale)}
+              className="gift-card"
+              data-open={open}
+            >
               <span className="gift-card-inner">
                 <span className="gift-card-face gift-card-back" aria-hidden>
                   <span className="gift-num">{formatNumber(item.position, locale)}</span>

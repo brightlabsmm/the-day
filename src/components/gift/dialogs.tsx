@@ -10,30 +10,46 @@ import type { SignupState } from "@/app/g/[slug]/actions";
 import { GiftIconView } from "./icons";
 
 /**
- * A native <dialog>: focus moves into it, Escape closes it and the rest of
- * the page is inert while it is open. Clicking the dimmed backdrop closes it too.
+ * An accessible modal overlay: focus moves into it, Escape closes it, and clicking
+ * the backdrop closes it. The backdrop is at z-40 so floating pollen at z-[45]
+ * remains visibly active and floating in the background around the card at z-50.
  */
 function Modal({ open, onClose, labelledBy, wide, children }: { open: boolean; onClose: () => void; labelledBy: string; wide?: boolean; children: ReactNode }) {
-  const ref = useRef<HTMLDialogElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    if (open && !el.open) el.showModal();
-    if (!open && el.open) el.close();
-  }, [open]);
+    if (!open) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    dialogRef.current?.focus();
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open, onClose]);
+
+  if (!open) return null;
 
   return (
-    <dialog
-      ref={ref}
+    <div
+      ref={dialogRef}
+      tabIndex={-1}
+      role="dialog"
+      aria-modal="true"
       aria-labelledby={labelledBy}
-      onClose={onClose}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
-      className={`gift-dialog ${wide ? "max-w-lg" : "max-w-md"}`}
+      className="fixed inset-0 z-40 flex items-center justify-center p-4 outline-none overflow-y-auto"
     >
-      <div className="gift-dialog-panel relative">{children}</div>
-    </dialog>
+      {/* Semi-transparent dark backdrop overlay: pollen at z-[45] floats in front of it */}
+      <div
+        aria-hidden="true"
+        onClick={onClose}
+        className="fixed inset-0 bg-[#03070c]/70 backdrop-blur-[2px] transition-opacity duration-300"
+      />
+
+      {/* The card modal panel: at z-50 above the floating pollen */}
+      <div className={`gift-dialog-panel relative z-50 w-full animate-gift-pop ${wide ? "max-w-lg" : "max-w-md"}`}>
+        {children}
+      </div>
+    </div>
   );
 }
 

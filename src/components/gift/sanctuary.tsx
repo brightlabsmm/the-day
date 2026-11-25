@@ -5,7 +5,7 @@
  * vault of unlocked codes, and an optional sign-up ("E-Invitation").
  * What this browser has unlocked is remembered in localStorage only.
  */
-import { useCallback, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { Gift, Mail, Volume2, VolumeX } from "lucide-react";
 import { GIFT_VIEWS, parseUnlocked, unlockedKey, type GiftCampaign, type GiftView } from "@/lib/gift";
 import type { Locale } from "@/lib/i18n/numerals";
@@ -17,6 +17,7 @@ import { cinzel } from "./fonts";
 import { GiftDialog, InviteDialog, VaultDialog } from "./dialogs";
 import { AstrolabeView, LotusView, TarotView } from "./views";
 import { useSanctuarySound } from "./use-sound";
+import { PollenCanvas, type PollenEmitter } from "./pollen";
 import "./gift.css";
 
 const VIEW_LABEL: Record<GiftView, GiftStringKey> = { lotus: "viewLotus", astrolabe: "viewAstrolabe", tarot: "viewTarot" };
@@ -87,7 +88,16 @@ export function GiftSanctuary({
   const [inviteOpen, setInviteOpen] = useState(false);
   const [toast, setToast] = useState("");
   const toastTimer = useRef<number | undefined>(undefined);
+  const openTimer = useRef<number | undefined>(undefined);
+  const pollenRef = useRef<PollenEmitter>(null);
   const { chime, ambient, toggleAmbient } = useSanctuarySound();
+
+  useEffect(() => {
+    return () => {
+      window.clearTimeout(toastTimer.current);
+      window.clearTimeout(openTimer.current);
+    };
+  }, []);
 
   const save = useCallback((next: ReadonlySet<number>) => writeStored(storageKey, JSON.stringify([...next])), [storageKey]);
 
@@ -98,18 +108,45 @@ export function GiftSanctuary({
   }, []);
 
   const open = useCallback(
-    (position: number) => {
+    (position: number, origin?: { x: number; y: number }) => {
       chime();
       if (!unlocked.has(position)) save(new Set([...unlocked, position]));
-      setOpenPos(position);
+
+      // Lotus pollen burst: slow, wide, and glowing
+      if (origin) {
+        pollenRef.current?.burst(origin.x, origin.y, {
+          colorTheme: position % 3 === 0 ? "lotus" : "all",
+          count: 85,
+          speed: 1.8,
+        });
+      } else if (typeof window !== "undefined") {
+        pollenRef.current?.burst(window.innerWidth / 2, window.innerHeight * 0.45, { count: 85, speed: 1.8 });
+      }
+
+      // Allow 650ms for the wide glowing pollen to drift leisurely upward before opening the card
+      window.clearTimeout(openTimer.current);
+      openTimer.current = window.setTimeout(() => {
+        setOpenPos(position);
+      }, 650);
     },
     [chime, save, unlocked],
   );
 
-  const openFinale = useCallback(() => {
-    const last = items[items.length - 1];
-    if (last) open(last.position);
-  }, [items, open]);
+  const openFinale = useCallback(
+    (origin?: { x: number; y: number }) => {
+      chime(660, 2.0);
+      pollenRef.current?.celebrate(origin?.x, origin?.y);
+      const last = items[items.length - 1];
+      if (last) {
+        if (!unlocked.has(last.position)) save(new Set([...unlocked, last.position]));
+        window.clearTimeout(openTimer.current);
+        openTimer.current = window.setTimeout(() => {
+          setOpenPos(last.position);
+        }, 700);
+      }
+    },
+    [chime, items, save, unlocked],
+  );
 
   const copy = useCallback(
     async (code: string) => {
@@ -144,6 +181,7 @@ export function GiftSanctuary({
 
   return (
     <div className={`gift-root ${cinzel.variable} relative flex min-h-svh flex-col`} lang={locale}>
+      <PollenCanvas ref={pollenRef} />
       <div aria-hidden className="gift-motes pointer-events-none fixed inset-0">
         {MOTES.map((m, i) => (
           <span key={i} style={{ left: `${m.x}%`, top: `${m.y}%`, width: m.size, height: m.size, animationDuration: `${m.dur}s`, animationDelay: `${m.delay}s` } as CSSProperties} />
@@ -209,7 +247,19 @@ export function GiftSanctuary({
         )}
       </footer>
 
-      <GiftDialog item={current} campaign={campaign} locale={locale} onClose={() => setOpenPos(null)} onCopy={copy} onChime={() => chime(528, 1.6)} />
+      <GiftDialog
+        item={current}
+        campaign={campaign}
+        locale={locale}
+        onClose={() => setOpenPos(null)}
+        onCopy={copy}
+        onChime={() => {
+          chime(528, 1.6);
+          if (typeof window !== "undefined") {
+            pollenRef.current?.burst(window.innerWidth / 2, window.innerHeight * 0.45, { count: 32, spread: 2.2, colorTheme: "gold" });
+          }
+        }}
+      />
       <VaultDialog
         open={vaultOpen}
         items={items}
