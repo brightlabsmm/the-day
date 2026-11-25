@@ -185,7 +185,7 @@ function WaxSeal({ monogram }: { monogram: string }) {
       <circle cx="60" cy="60" r="35.5" fill="none" stroke="#f7ebcb" strokeOpacity="0.55" />
       <text
         x="60"
-        y="63"
+        y="69"
         textAnchor="middle"
         fontSize="25"
         fill="#8a6736"
@@ -266,9 +266,12 @@ function EnvelopeFace({
         >
           {s("clickToOpen", locale)}
         </p>
-        <p className={`mt-2 opacity-70 ${locale === "my" ? "text-[0.75rem]" : "text-[0.85rem]"}`}>
-          {s("dear", locale)} {guestLabel}
-        </p>
+        {/* A personal greeting only for a guest with their own link; the generic "Dear Honoured Guest" is left out. */}
+        {guestLabel !== s("guestFallback", locale) && (
+          <p className={`mt-2 opacity-70 ${locale === "my" ? "text-[0.75rem]" : "text-[0.85rem]"}`}>
+            {s("dear", locale)} {guestLabel}
+          </p>
+        )}
       </div>
     </div>
   );

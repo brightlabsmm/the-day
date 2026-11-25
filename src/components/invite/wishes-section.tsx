@@ -67,7 +67,6 @@ function Card({
     <InnerCard id="wishes-heading" anchor="wishes" plain={plain} heading={s("wishesHeading", locale)} lang={locale}>
       {children}
       <ul className="mt-8 space-y-4 text-left">
-        {wishes.length === 0 && <li className="card-body text-center">{s("wishEmpty", locale)}</li>}
         {wishes.map((w, i) => (
           <li key={`${w.created_at}-${i}`} className="border-t border-navy/25 pt-3">
             <p className="card-body whitespace-pre-line break-words text-ink">{w.message}</p>

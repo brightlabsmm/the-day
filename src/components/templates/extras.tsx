@@ -9,7 +9,6 @@ import { RsvpForm } from "./rsvp-form";
 
 const text = z.object({ my: z.string().optional(), en: z.string().optional() }).partial();
 const Story = z.array(z.object({ label: text.optional(), title: text.optional(), text: text.optional() }));
-const Tips = z.array(z.object({ title: text.optional(), text: text.optional() }));
 const Faq = z.array(z.object({ q: text.optional(), a: text.optional() }));
 const Dress = z.object({
   text: text.optional(),
@@ -33,7 +32,6 @@ export function dressOf(i: Invitation) {
 }
 
 export const hasStory = (i: Invitation) => (Story.safeParse(i.wedding.story).data?.length ?? 0) > 0;
-export const hasTips = (i: Invitation) => (Tips.safeParse(i.wedding.good_to_know).data?.length ?? 0) > 0;
 export const hasSeat = (i: Invitation) => i.wedding.seating_enabled;
 export const hasFaq = (i: Invitation) => (Faq.safeParse(i.wedding.faq).data?.length ?? 0) > 0;
 export const hasDress = (i: Invitation) => {
@@ -149,31 +147,6 @@ export function TplFaq({ invitation, locale }: { invitation: Invitation; locale:
         <div className="mt-10">
           <FaqList items={items} />
         </div>
-      </div>
-    </section>
-  );
-}
-
-/** "Good to know" tips as a grid of small cards. */
-export function TplTips({ invitation, locale }: { invitation: Invitation; locale: Locale }) {
-  const items = (Tips.safeParse(invitation.wedding.good_to_know).data ?? [])
-    .map((x) => ({ title: t(x.title, locale), text: t(x.text, locale) }))
-    .filter((x) => x.title);
-  if (items.length === 0) return null;
-  return (
-    <section id="tips" aria-labelledby="tips-heading" lang={locale} className="tpl-section">
-      <div className="tpl-wide">
-        <div className="text-center">
-          <Head id="tips-heading" eyebrow={s("tipsEyebrow", locale)} heading={s("tipsHeading", locale)} />
-        </div>
-        <ul className="mx-auto mt-10 grid max-w-3xl gap-4 sm:grid-cols-2">
-          {items.map((x, i) => (
-            <li key={i} className="tpl-card text-left">
-              <h3 className={`tpl-display text-[color:var(--navy)] ${locale === "my" ? "text-[1.02rem]" : "text-[1.2rem]"}`}>{x.title}</h3>
-              {x.text && <p className="mt-2 leading-[1.9] whitespace-pre-line text-[color:var(--ink-soft)]">{x.text}</p>}
-            </li>
-          ))}
-        </ul>
       </div>
     </section>
   );

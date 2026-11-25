@@ -294,6 +294,8 @@
 .tpl-script:lang(my) {
   font-family: var(--font-myanmar);
   font-style: normal;
+  /* A little air between letters keeps the marks above and below each letter (like the asat on င်) from touching their neighbours. */
+  letter-spacing: 0.03em;
   line-height: 1.45;
 }
 
@@ -337,6 +339,16 @@
 }
 .tpl-envelope .foil {
   background-image: linear-gradient(100deg, var(--gold-deep), var(--gold) 50%, var(--gold-deep));
+}
+/* Burmese letters carry marks above and below the line; a gradient clipped to the text can cut them,
+   so Burmese gold names use plain gold instead (unlayered, so it also beats the shared .foil rule). */
+.foil:lang(my),
+.tpl-envelope .foil:lang(my) {
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-text-fill-color: currentColor;
+  color: var(--gold-deep);
 }
 html:has(.tpl) {
   scroll-behavior: smooth;
@@ -813,7 +825,6 @@ html:has(.tpl) {
 .tpl-silk .tpl-order > :has(#seat) { order: 8; }
 .tpl-silk .tpl-order > :has(#venue) { order: 9; }
 .tpl-silk .tpl-order > :has(#schedule) { order: 10; }
-.tpl-silk .tpl-order > :has(#tips) { order: 11; }
 .tpl-silk .tpl-order > :has(#faq) { order: 12; }
 .tpl-silk .tpl-order > :has(#gift) { order: 13; }
 .tpl-silk .tpl-order > :has(#wishes) { order: 14; }
@@ -827,7 +838,6 @@ html:has(.tpl) {
 .tpl-midnight .tpl-order > :has(#venue) { order: 8; }
 .tpl-midnight .tpl-order > :has(#rsvp) { order: 9; }
 .tpl-midnight .tpl-order > :has(#seat) { order: 10; }
-.tpl-midnight .tpl-order > :has(#tips) { order: 11; }
 .tpl-midnight .tpl-order > :has(#faq) { order: 12; }
 .tpl-midnight .tpl-order > :has(#gift) { order: 13; }
 .tpl-midnight .tpl-order > :has(#wishes) { order: 14; }
@@ -841,7 +851,6 @@ html:has(.tpl) {
 .tpl-lantern .tpl-order > :has(#gallery) { order: 8; }
 .tpl-lantern .tpl-order > :has(#rsvp) { order: 9; }
 .tpl-lantern .tpl-order > :has(#seat) { order: 10; }
-.tpl-lantern .tpl-order > :has(#tips) { order: 11; }
 .tpl-lantern .tpl-order > :has(#faq) { order: 12; }
 .tpl-lantern .tpl-order > :has(#gift) { order: 13; }
 .tpl-lantern .tpl-order > :has(#wishes) { order: 14; }
@@ -852,7 +861,6 @@ html:has(.tpl) {
 .tpl-polaroid .tpl-order > :has(#gallery) { order: 5; }
 .tpl-polaroid .tpl-order > :has(#story) { order: 6; }
 .tpl-polaroid .tpl-order > :has(#venue) { order: 7; }
-.tpl-polaroid .tpl-order > :has(#tips) { order: 8; }
 .tpl-polaroid .tpl-order > :has(#rsvp) { order: 9; }
 .tpl-polaroid .tpl-order > :has(#seat) { order: 10; }
 .tpl-polaroid .tpl-order > :has(#faq) { order: 11; }
@@ -868,7 +876,6 @@ html:has(.tpl) {
 .tpl-botanical .tpl-order > :has(#countdown) { order: 7; }
 .tpl-botanical .tpl-order > :has(#calendar) { order: 8; }
 .tpl-botanical .tpl-order > :has(#schedule) { order: 9; }
-.tpl-botanical .tpl-order > :has(#tips) { order: 10; }
 .tpl-botanical .tpl-order > :has(#seat) { order: 11; }
 .tpl-botanical .tpl-order > :has(#faq) { order: 12; }
 .tpl-botanical .tpl-order > :has(#gift) { order: 13; }
@@ -883,7 +890,6 @@ html:has(.tpl) {
 .tpl-artdeco .tpl-order > :has(#countdown) { order: 8; }
 .tpl-artdeco .tpl-order > :has(#calendar) { order: 9; }
 .tpl-artdeco .tpl-order > :has(#story) { order: 10; }
-.tpl-artdeco .tpl-order > :has(#tips) { order: 11; }
 .tpl-artdeco .tpl-order > :has(#faq) { order: 12; }
 .tpl-artdeco .tpl-order > :has(#gift) { order: 13; }
 .tpl-artdeco .tpl-order > :has(#wishes) { order: 14; }
@@ -897,7 +903,6 @@ html:has(.tpl) {
 .tpl-sunrise .tpl-order > :has(#countdown) { order: 8; }
 .tpl-sunrise .tpl-order > :has(#calendar) { order: 9; }
 .tpl-sunrise .tpl-order > :has(#story) { order: 10; }
-.tpl-sunrise .tpl-order > :has(#tips) { order: 11; }
 .tpl-sunrise .tpl-order > :has(#faq) { order: 12; }
 .tpl-sunrise .tpl-order > :has(#gift) { order: 13; }
 .tpl-sunrise .tpl-order > :has(#wishes) { order: 14; }
@@ -925,7 +930,6 @@ html:has(.tpl) {
 .tpl-spotlight .tpl-order > :has(#countdown) { order: 8; }
 .tpl-spotlight .tpl-order > :has(#calendar) { order: 9; }
 .tpl-spotlight .tpl-order > :has(#story) { order: 10; }
-.tpl-spotlight .tpl-order > :has(#tips) { order: 11; }
 .tpl-spotlight .tpl-order > :has(#faq) { order: 12; }
 .tpl-spotlight .tpl-order > :has(#gift) { order: 13; }
 .tpl-spotlight .tpl-order > :has(#wishes) { order: 14; }

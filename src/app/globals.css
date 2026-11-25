@@ -240,7 +240,10 @@ body {
   .card-gold-name:lang(my) {
     font-family: var(--font-noto-myanmar), "Noto Serif Myanmar", serif;
     font-size: 1.35rem;
-    line-height: 1.9;
+    /* Burmese stacks marks above and below the letters; a lighter weight and a little air keep them apart. */
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 2;
   }
   .card-label {
     font-family: var(--font-cormorant), "Cormorant Garamond", serif;

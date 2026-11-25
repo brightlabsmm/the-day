@@ -12,7 +12,7 @@ import { PhotoCollage } from "./collage";
 import { OgeeFrame } from "./ogee-frame";
 import { Peach, WildflowerBorder, WreathCaps } from "./wildflowers";
 import { Reveal } from "./reveal";
-import { TplFaq, TplSeat, TplTips, TplRsvp, TplStory, dressOf } from "./extras";
+import { TplFaq, TplSeat, TplRsvp, TplStory, dressOf } from "./extras";
 import { TrackOpen } from "./track-open";
 import { navItemsFor } from "./sections";
 import { viewOf, type TemplateProps } from "./view";
@@ -165,7 +165,6 @@ export function WildflowerPage({ invitation, locale, monogram, token, onOpenActi
       <Reveal>
         <TplRsvp invitation={invitation} locale={locale} token={token} />
       </Reveal>
-      <Reveal><TplTips invitation={invitation} locale={locale} /></Reveal>
 <Reveal><TplSeat invitation={invitation} locale={locale} /></Reveal>
 <Reveal><TplFaq invitation={invitation} locale={locale} /></Reveal>
       <Reveal>
