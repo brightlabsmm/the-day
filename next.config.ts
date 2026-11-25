@@ -29,6 +29,11 @@ const nextConfig: NextConfig = {
         port: supabaseUrl.port,
         pathname: "/storage/v1/object/public/**",
       },
+      {
+        protocol: "https",
+        hostname: "*.supabase.co",
+        pathname: "/storage/v1/object/public/**",
+      },
     ],
     // Local Supabase runs on 127.0.0.1, which Next 16 blocks by default.
     dangerouslyAllowLocalIP: process.env.NODE_ENV === "development",

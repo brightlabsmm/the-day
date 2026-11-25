@@ -3,7 +3,16 @@
 import { Monitor, RotateCcw, Smartphone, Tablet } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-type Design = { key: string; name: string; mood: string; blurb: string };
+export type ShowcaseDesign = {
+  key: string;
+  name: string;
+  mood: string;
+  blurb: string;
+  category?: "wedding" | "gift";
+  badge?: string;
+  previewUrl?: string;
+  viewUrl?: string;
+};
 
 /** The real screen each preview pretends to be. Previews are scaled down to fit their card. */
 const DEVICES = {
@@ -13,7 +22,7 @@ const DEVICES = {
 } as const;
 type DeviceKey = keyof typeof DEVICES;
 
-function Preview({ design, device, lang }: { design: Design; device: DeviceKey; lang: "en" | "my" }) {
+function Preview({ design, device, lang }: { design: ShowcaseDesign; device: DeviceKey; lang: "en" | "my" }) {
   const [nonce, setNonce] = useState(0);
   const d = DEVICES[device];
   const box = useRef<HTMLDivElement>(null);
@@ -30,6 +39,10 @@ function Preview({ design, device, lang }: { design: Design; device: DeviceKey; 
     return () => ro.disconnect();
   }, [d.w]);
 
+  const previewSrc = design.previewUrl
+    ? `${design.previewUrl}?lang=${lang}&preview=1`
+    : `/w/showcase-${design.key}?lang=${lang}&preview=1`;
+
   return (
     <div className="relative">
     <div className={`bg-[#2a2420] shadow-[0_28px_50px_-24px_rgba(42,36,32,.6)] ${d.radius} ${d.border} border-[#2a2420]`}>
@@ -38,7 +51,7 @@ function Preview({ design, device, lang }: { design: Design; device: DeviceKey; 
           <iframe
             key={`${design.key}-${device}-${lang}-${nonce}`}
             title={`${design.name} design preview, ${DEVICES[device].label.toLowerCase()}`}
-            src={`/w/showcase-${design.key}?lang=${lang}&preview=1`}
+            src={previewSrc}
             loading="lazy"
             className="absolute top-0 left-0 origin-top-left border-0"
             style={{ width: d.w, height: d.h, transform: `scale(${scale})` }}
@@ -58,17 +71,40 @@ function Preview({ design, device, lang }: { design: Design; device: DeviceKey; 
   );
 }
 
-export function ShowcaseGallery({ designs }: { designs: Design[] }) {
+export function ShowcaseGallery({ designs }: { designs: ShowcaseDesign[] }) {
   const [device, setDevice] = useState<DeviceKey>("phone");
   const [lang, setLang] = useState<"en" | "my">("en");
+  const [filter, setFilter] = useState<"all" | "wedding" | "gift">("all");
   const d = DEVICES[device];
 
   const pill = (on: boolean) =>
     `inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition ${on ? "border-[#4a3a2e] bg-[#4a3a2e] text-[#f6efe2]" : "border-[#4a3a2e]/30 hover:border-[#4a3a2e]"}`;
 
+  const weddingCount = designs.filter((d) => d.category !== "gift").length;
+  const giftCount = designs.filter((d) => d.category === "gift").length;
+
+  const filtered = designs.filter((d) => {
+    if (filter === "wedding") return d.category !== "gift";
+    if (filter === "gift") return d.category === "gift";
+    return true;
+  });
+
   return (
     <>
       <div className="mx-auto mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
+        {giftCount > 0 && (
+          <div role="group" aria-label="Design category" className="flex flex-wrap justify-center gap-2">
+            <button type="button" aria-pressed={filter === "all"} onClick={() => setFilter("all")} className={pill(filter === "all")}>
+              All ({designs.length})
+            </button>
+            <button type="button" aria-pressed={filter === "wedding"} onClick={() => setFilter("wedding")} className={pill(filter === "wedding")}>
+              Weddings ({weddingCount})
+            </button>
+            <button type="button" aria-pressed={filter === "gift"} onClick={() => setFilter("gift")} className={pill(filter === "gift")}>
+              Gift Sanctuaries ({giftCount})
+            </button>
+          </div>
+        )}
         <div role="group" aria-label="Preview screen size" className="flex flex-wrap justify-center gap-2">
           {(Object.keys(DEVICES) as DeviceKey[]).map((k) => {
             const Icon = DEVICES[k].icon;
@@ -91,24 +127,29 @@ export function ShowcaseGallery({ designs }: { designs: Design[] }) {
       </div>
 
       <ul className="mx-auto mt-12 flex max-w-[110rem] flex-wrap justify-center gap-x-10 gap-y-16">
-        {designs.map((t) => (
-          <li key={t.key} className="flex flex-col items-center text-center" style={{ width: `min(100%, ${d.card}px)` }}>
-            <div className="w-full">
-              <Preview design={t} device={device} lang={lang} />
-            </div>
-            <h2 className="font-display mt-6 text-2xl font-semibold">{t.name}</h2>
-            <p className="label-caps mt-1 text-[0.65rem] text-[#8a7766]">{t.mood}</p>
-            <p className="mt-3 max-w-[22rem] text-[0.95rem] leading-relaxed text-[#6e5f53]">{t.blurb}</p>
-            <div className="mt-4 flex gap-5 text-sm underline underline-offset-4">
-              <a href={`/w/showcase-${t.key}?lang=en`} target="_blank" rel="noopener noreferrer">
-                Open in English
-              </a>
-              <a href={`/w/showcase-${t.key}?lang=my`} target="_blank" rel="noopener noreferrer" lang="my">
-                မြန်မာဖြင့်ကြည့်ရန်
-              </a>
-            </div>
-          </li>
-        ))}
+        {filtered.map((t) => {
+          const openEn = t.viewUrl ? `${t.viewUrl}?lang=en` : `/w/showcase-${t.key}?lang=en`;
+          const openMy = t.viewUrl ? `${t.viewUrl}?lang=my` : `/w/showcase-${t.key}?lang=my`;
+
+          return (
+            <li key={t.key} className="flex flex-col items-center text-center" style={{ width: `min(100%, ${d.card}px)` }}>
+              <div className="w-full">
+                <Preview design={t} device={device} lang={lang} />
+              </div>
+              <h2 className="font-display mt-6 text-2xl font-semibold">{t.name}</h2>
+              <p className="label-caps mt-1 text-[0.65rem] text-[#8a7766]">{t.mood}</p>
+              <p className="mt-3 max-w-[22rem] text-[0.95rem] leading-relaxed text-[#6e5f53]">{t.blurb}</p>
+              <div className="mt-4 flex gap-5 text-sm underline underline-offset-4">
+                <a href={openEn} target="_blank" rel="noopener noreferrer">
+                  Open in English
+                </a>
+                <a href={openMy} target="_blank" rel="noopener noreferrer" lang="my">
+                  မြန်မာဖြင့်ကြည့်ရန်
+                </a>
+              </div>
+            </li>
+          );
+        })}
       </ul>
     </>
   );

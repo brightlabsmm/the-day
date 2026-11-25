@@ -5,13 +5,21 @@ import { notFound } from "next/navigation";
 import { LOCALE_COOKIE, resolveLocale } from "@/lib/i18n/locale";
 import { t } from "@/lib/i18n/numerals";
 import { getGiftCampaign } from "@/lib/gift-server";
+import { DEMO_GIFT_CAMPAIGN } from "@/lib/gift-demo";
+import type { GiftCampaign } from "@/lib/gift";
 import { GiftSanctuary } from "@/components/gift/sanctuary";
 import { submitGiftSignup } from "./actions";
 
 /** Link previews show the campaign title only. Pages are not indexed. */
 export async function generateMetadata({ params }: PageProps<"/g/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const data = await getGiftCampaign(slug);
+  let data: GiftCampaign | null = null;
+  try {
+    data = await getGiftCampaign(slug);
+  } catch {}
+  if (!data && slug === "lotus-sanctuary") {
+    data = DEMO_GIFT_CAMPAIGN;
+  }
   if (!data) return { title: "Gift invitation", robots: { index: false, follow: false } };
   const title = t(data.campaign.title, "en") || "Gift invitation";
   const description = t(data.campaign.subtitle, "en") || "Twelve gifts are waiting for you.";
@@ -30,7 +38,13 @@ async function GiftRoute({ params, searchParams }: PageProps<"/g/[slug]">) {
   const { slug } = await params;
   const query = await searchParams;
   const locale = resolveLocale(query.lang, (await cookies()).get(LOCALE_COOKIE)?.value);
-  const data = await getGiftCampaign(slug);
+  let data: GiftCampaign | null = null;
+  try {
+    data = await getGiftCampaign(slug);
+  } catch {}
+  if (!data && slug === "lotus-sanctuary") {
+    data = DEMO_GIFT_CAMPAIGN;
+  }
   if (!data || data.items.length === 0) notFound();
   return <GiftSanctuary data={data} locale={locale} signupAction={submitGiftSignup.bind(null, data.campaign.slug)} />;
 }
