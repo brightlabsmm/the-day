@@ -24,20 +24,63 @@ export type SanctuaryCoverProps = {
   onAnimationComplete?: () => void;
 };
 
-const STARS = [
-  { x: 14, y: 11, s: 2.2, dur: 3.2, delay: 0.1 },
-  { x: 28, y: 8, s: 1.6, dur: 2.8, delay: 0.7 },
-  { x: 44, y: 15, s: 2.5, dur: 4.1, delay: 0.3 },
-  { x: 68, y: 10, s: 1.8, dur: 3.5, delay: 1.2 },
-  { x: 84, y: 17, s: 2.4, dur: 3.0, delay: 0.5 },
-  { x: 22, y: 25, s: 1.7, dur: 3.8, delay: 1.5 },
-  { x: 78, y: 23, s: 2.0, dur: 2.6, delay: 0.9 },
-  { x: 52, y: 6, s: 3.0, dur: 4.5, delay: 1.8 }, // Bright Polaris
-  { x: 88, y: 31, s: 1.6, dur: 3.1, delay: 0.4 },
-  { x: 36, y: 21, s: 2.0, dur: 3.6, delay: 1.0 },
-  { x: 12, y: 34, s: 1.5, dur: 2.9, delay: 1.6 },
-  { x: 62, y: 19, s: 1.8, dur: 3.4, delay: 0.8 },
-  { x: 92, y: 12, s: 1.7, dur: 3.7, delay: 1.3 },
+type Star = {
+  x: number;
+  y: number;
+  s: number;
+  dur: number;
+  delay: number;
+  bright?: "major" | "bright" | "soft";
+};
+
+const STARS: Star[] = [
+  // ── Major Radiant Stars (with luminous diamond sparkle) ──
+  { x: 18, y: 14, s: 3.5, dur: 3.4, delay: 0.2, bright: "major" },
+  { x: 52, y: 5, s: 3.8, dur: 4.2, delay: 1.1, bright: "major" }, // Polaris
+  { x: 82, y: 12, s: 3.6, dur: 3.6, delay: 0.6, bright: "major" },
+  { x: 9, y: 36, s: 3.2, dur: 4.0, delay: 1.8, bright: "major" },
+  { x: 91, y: 26, s: 3.4, dur: 3.2, delay: 0.9, bright: "major" },
+  { x: 34, y: 16, s: 3.0, dur: 3.8, delay: 1.4, bright: "major" },
+
+  // ── Bright Glowing Stars ──
+  { x: 6, y: 18, s: 2.6, dur: 2.9, delay: 0.4, bright: "bright" },
+  { x: 27, y: 9, s: 2.4, dur: 3.1, delay: 1.3, bright: "bright" },
+  { x: 41, y: 12, s: 2.5, dur: 3.5, delay: 0.7, bright: "bright" },
+  { x: 63, y: 8, s: 2.6, dur: 3.3, delay: 1.0, bright: "bright" },
+  { x: 74, y: 19, s: 2.4, dur: 2.8, delay: 0.3, bright: "bright" },
+  { x: 95, y: 15, s: 2.5, dur: 3.7, delay: 1.6, bright: "bright" },
+  { x: 15, y: 48, s: 2.6, dur: 3.0, delay: 0.8, bright: "bright" },
+  { x: 24, y: 28, s: 2.5, dur: 3.9, delay: 1.5, bright: "bright" },
+  { x: 79, y: 34, s: 2.4, dur: 3.2, delay: 0.5, bright: "bright" },
+  { x: 87, y: 44, s: 2.6, dur: 3.6, delay: 1.2, bright: "bright" },
+  { x: 69, y: 27, s: 2.4, dur: 2.7, delay: 1.7, bright: "bright" },
+  { x: 47, y: 19, s: 2.5, dur: 4.1, delay: 0.1, bright: "bright" },
+
+  // ── Delicate & Deep Cosmic Stars ──
+  { x: 4, y: 8, s: 1.5, dur: 2.6, delay: 0.3, bright: "soft" },
+  { x: 12, y: 22, s: 1.7, dur: 3.4, delay: 1.2, bright: "soft" },
+  { x: 21, y: 38, s: 1.6, dur: 2.8, delay: 0.7, bright: "soft" },
+  { x: 30, y: 24, s: 1.8, dur: 3.6, delay: 1.9, bright: "soft" },
+  { x: 38, y: 7, s: 1.5, dur: 3.0, delay: 0.5, bright: "soft" },
+  { x: 46, y: 23, s: 1.7, dur: 2.5, delay: 1.4, bright: "soft" },
+  { x: 58, y: 14, s: 1.8, dur: 3.8, delay: 0.8, bright: "soft" },
+  { x: 66, y: 21, s: 1.5, dur: 3.1, delay: 1.5, bright: "soft" },
+  { x: 72, y: 11, s: 1.6, dur: 2.9, delay: 0.2, bright: "soft" },
+  { x: 85, y: 7, s: 1.5, dur: 3.5, delay: 1.1, bright: "soft" },
+  { x: 93, y: 38, s: 1.7, dur: 2.7, delay: 0.6, bright: "soft" },
+  { x: 3, y: 29, s: 1.4, dur: 3.3, delay: 1.7, bright: "soft" },
+  { x: 8, y: 52, s: 1.8, dur: 2.9, delay: 0.4, bright: "soft" },
+  { x: 17, y: 56, s: 1.5, dur: 3.7, delay: 1.0, bright: "soft" },
+  { x: 26, y: 44, s: 1.6, dur: 3.2, delay: 0.9, bright: "soft" },
+  { x: 76, y: 42, s: 1.7, dur: 2.8, delay: 1.3, bright: "soft" },
+  { x: 83, y: 51, s: 1.8, dur: 3.4, delay: 0.2, bright: "soft" },
+  { x: 92, y: 54, s: 1.5, dur: 3.6, delay: 1.6, bright: "soft" },
+  { x: 97, y: 22, s: 1.4, dur: 2.7, delay: 0.8, bright: "soft" },
+  { x: 56, y: 22, s: 1.6, dur: 3.9, delay: 1.2, bright: "soft" },
+  { x: 61, y: 30, s: 1.7, dur: 3.3, delay: 0.5, bright: "soft" },
+  { x: 39, y: 29, s: 1.5, dur: 2.6, delay: 1.8, bright: "soft" },
+  { x: 89, y: 18, s: 1.6, dur: 3.5, delay: 0.7, bright: "soft" },
+  { x: 14, y: 7, s: 1.5, dur: 3.1, delay: 1.4, bright: "soft" },
 ];
 
 export function SanctuaryCover({
@@ -86,35 +129,62 @@ export function SanctuaryCover({
       }}
     >
       <style>{`
+        @keyframes starTwinkleMajor {
+          0%, 100% { opacity: 0.65; transform: scale(0.9) rotate(0deg); }
+          50% { opacity: 1; transform: scale(1.3) rotate(45deg); }
+        }
         @keyframes starTwinkle {
           0%, 100% { opacity: 0.28; transform: scale(0.9); }
-          50% { opacity: 1; transform: scale(1.15); }
+          50% { opacity: 1; transform: scale(1.18); }
         }
         @keyframes lotusFloat {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-3px); }
         }
         @media (prefers-reduced-motion: reduce) {
-          .star-twinkle, .lotus-float { animation: none !important; }
+          .star-twinkle, .star-major, .lotus-float { animation: none !important; }
         }
       `}</style>
 
       {/* Twinkling stars across the night sky */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        {STARS.map((st, i) => (
-          <span
-            key={i}
-            className="star-twinkle absolute rounded-full bg-[#fffbee]"
-            style={{
-              left: `${st.x}%`,
-              top: `${st.y}%`,
-              width: `${st.s}px`,
-              height: `${st.s}px`,
-              animation: `starTwinkle ${st.dur}s ${st.delay}s ease-in-out infinite`,
-              boxShadow: st.s > 2.5 ? "0 0 6px 1px rgba(255, 251, 238, 0.7)" : undefined,
-            }}
-          />
-        ))}
+        {STARS.map((st, i) => {
+          const isMajor = st.bright === "major";
+          const isBright = st.bright === "bright";
+          return (
+            <span
+              key={i}
+              className={`absolute rounded-full ${isMajor ? "star-major bg-[#ffffff]" : "star-twinkle bg-[#fffbee]"}`}
+              style={{
+                left: `${st.x}%`,
+                top: `${st.y}%`,
+                width: `${st.s}px`,
+                height: `${st.s}px`,
+                animation: `${isMajor ? "starTwinkleMajor" : "starTwinkle"} ${st.dur}s ${st.delay}s ease-in-out infinite`,
+                boxShadow: isMajor
+                  ? "0 0 10px 3px rgba(255, 255, 255, 0.95), 0 0 22px 6px rgba(248, 226, 162, 0.65)"
+                  : isBright
+                    ? "0 0 7px 2px rgba(255, 252, 235, 0.85), 0 0 14px 4px rgba(248, 226, 162, 0.45)"
+                    : "0 0 3px 0.5px rgba(255, 251, 238, 0.5)",
+              }}
+            >
+              {isMajor && (
+                <svg
+                  viewBox="-10 -10 20 20"
+                  className="pointer-events-none absolute -inset-2 size-5 -translate-x-[35%] -translate-y-[35%] text-[#fffef5]"
+                  aria-hidden
+                >
+                  <path
+                    d="M 0 -9 Q 0 0 -9 0 Q 0 0 0 9 Q 0 0 9 0 Q 0 0 0 -9 Z"
+                    fill="currentColor"
+                    opacity="0.85"
+                  />
+                  <circle cx="0" cy="0" r="1.8" fill="#ffffff" />
+                </svg>
+              )}
+            </span>
+          );
+        })}
       </div>
 
       {/* Skip button in top right (matching Sunrise gate pill) */}
