@@ -6,6 +6,7 @@
  * What this browser has unlocked is remembered in localStorage only.
  */
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
+import { useReducedMotion } from "motion/react";
 import { Gift, Mail, Volume2, VolumeX } from "lucide-react";
 import { GIFT_VIEWS, parseUnlocked, unlockedKey, type GiftCampaign, type GiftView } from "@/lib/gift";
 import type { Locale } from "@/lib/i18n/numerals";
@@ -18,6 +19,7 @@ import { GiftDialog, InviteDialog, VaultDialog } from "./dialogs";
 import { AstrolabeView, LotusView, TarotView } from "./views";
 import { useSanctuarySound } from "./use-sound";
 import { PollenCanvas, type PollenEmitter } from "./pollen";
+import { SanctuaryCover } from "./cover";
 import "./gift.css";
 
 const VIEW_LABEL: Record<GiftView, GiftStringKey> = { lotus: "viewLotus", astrolabe: "viewAstrolabe", tarot: "viewTarot" };
@@ -91,6 +93,36 @@ export function GiftSanctuary({
   const openTimer = useRef<number | undefined>(undefined);
   const pollenRef = useRef<PollenEmitter>(null);
   const { chime, ambient, toggleAmbient } = useSanctuarySound();
+  const reduceMotion = useReducedMotion();
+  const [phase, setPhase] = useState<"sealed" | "opening" | "open">("sealed");
+  const isSealed = phase !== "open";
+
+  const beginOpenCover = useCallback(
+    (origin?: { x: number; y: number }) => {
+      if (phase !== "sealed") return;
+      chime(528, 2.4);
+      const x = origin?.x ?? (typeof window !== "undefined" ? window.innerWidth / 2 : 200);
+      const y = origin?.y ?? (typeof window !== "undefined" ? window.innerHeight * 0.48 : 300);
+      pollenRef.current?.celebrate(x, y);
+      pollenRef.current?.burst(x, y, { count: 80, speed: 2.2, colorTheme: "lotus" });
+      if (reduceMotion) {
+        setPhase("open");
+      } else {
+        setPhase("opening");
+      }
+    },
+    [chime, phase, reduceMotion],
+  );
+
+  const skipCover = useCallback(() => {
+    if (phase === "open") return;
+    chime(528, 1.2);
+    setPhase("open");
+  }, [chime, phase]);
+
+  const finishCover = useCallback(() => {
+    setPhase("open");
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -188,64 +220,78 @@ export function GiftSanctuary({
         ))}
       </div>
 
-      <header className="relative z-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-4 px-5 pt-5 pb-3 md:justify-between md:px-10 md:pt-6">
-        <div className="text-center md:text-left">
-          <h1 className="gift-display flex items-center justify-center gap-2 text-[1.15rem] text-[#f8e2a2] md:justify-start md:text-[1.5rem] [&:lang(my)]:text-[1.05rem] md:[&:lang(my)]:text-[1.25rem]">
-            <span aria-hidden className="text-[#e5c16c]">✦</span>
-            {t(campaign.title, locale)}
-          </h1>
-          {t(campaign.subtitle, locale) && <p className="gift-serif text-[0.95rem] text-[#f3dca0]/75 italic md:text-[1.05rem] [&:lang(my)]:text-[0.8rem] md:[&:lang(my)]:text-[0.85rem]">{t(campaign.subtitle, locale)}</p>}
-        </div>
+      <div inert={isSealed} aria-hidden={isSealed} className="relative flex flex-1 flex-col">
+        <header className="relative z-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-4 px-5 pt-5 pb-3 md:justify-between md:px-10 md:pt-6">
+          <div className="text-center md:text-left">
+            <h1 className="gift-display flex items-center justify-center gap-2 text-[1.15rem] text-[#f8e2a2] md:justify-start md:text-[1.5rem] [&:lang(my)]:text-[1.05rem] md:[&:lang(my)]:text-[1.25rem]">
+              <span aria-hidden className="text-[#e5c16c]">✦</span>
+              {t(campaign.title, locale)}
+            </h1>
+            {t(campaign.subtitle, locale) && <p className="gift-serif text-[0.95rem] text-[#f3dca0]/75 italic md:text-[1.05rem] [&:lang(my)]:text-[0.8rem] md:[&:lang(my)]:text-[0.85rem]">{t(campaign.subtitle, locale)}</p>}
+          </div>
 
-        <div role="group" aria-label={gs("viewsLabel", locale)} className="gift-pillbar flex items-center gap-1 rounded-full p-1">
-          {GIFT_VIEWS.map((v) => (
-            <button key={v} type="button" aria-pressed={view === v} onClick={() => setView(v)} className="gift-mode rounded-full px-3 py-1.5 text-[0.7rem] font-medium">
-              {gs(VIEW_LABEL[v], locale)}
+          <div role="group" aria-label={gs("viewsLabel", locale)} className="gift-pillbar flex items-center gap-1 rounded-full p-1">
+            {GIFT_VIEWS.map((v) => (
+              <button key={v} type="button" aria-pressed={view === v} onClick={() => setView(v)} className="gift-mode rounded-full px-3 py-1.5 text-[0.7rem] font-medium">
+                {gs(VIEW_LABEL[v], locale)}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-2.5">
+            <p className="gift-pillbar flex items-center gap-2.5 rounded-full px-4 py-1.5 text-[0.75rem] text-[#f7f2e8]">
+              <svg aria-hidden viewBox="0 0 24 24" className="size-5 -rotate-90">
+                <circle cx="12" cy="12" r="9" stroke="rgba(229,193,108,.2)" strokeWidth="2.5" fill="none" />
+                <circle cx="12" cy="12" r="9" stroke="#f8e2a2" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeDasharray={ring} strokeDashoffset={total ? ring - (count / total) * ring : ring} style={{ transition: "stroke-dashoffset .6s ease" }} />
+              </svg>
+              <span aria-live="polite">{gs("progress", locale, { n: formatNumber(count, locale), total: formatNumber(total, locale) })}</span>
+            </p>
+            <button
+              type="button"
+              onClick={() => say(gs(toggleAmbient() ? "soundOn" : "soundOff", locale))}
+              aria-pressed={ambient}
+              aria-label={gs("sound", locale)}
+              className="gift-pillbar grid size-9 place-items-center rounded-full text-[#e5c16c] transition hover:text-[#f8e2a2]"
+            >
+              {ambient ? <Volume2 aria-hidden className="size-4" /> : <VolumeX aria-hidden className="size-4" />}
             </button>
-          ))}
-        </div>
+            <LanguageSwitch locale={locale} />
+          </div>
+        </header>
 
-        <div className="flex items-center gap-2.5">
-          <p className="gift-pillbar flex items-center gap-2.5 rounded-full px-4 py-1.5 text-[0.75rem] text-[#f7f2e8]">
-            <svg aria-hidden viewBox="0 0 24 24" className="size-5 -rotate-90">
-              <circle cx="12" cy="12" r="9" stroke="rgba(229,193,108,.2)" strokeWidth="2.5" fill="none" />
-              <circle cx="12" cy="12" r="9" stroke="#f8e2a2" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeDasharray={ring} strokeDashoffset={total ? ring - (count / total) * ring : ring} style={{ transition: "stroke-dashoffset .6s ease" }} />
-            </svg>
-            <span aria-live="polite">{gs("progress", locale, { n: formatNumber(count, locale), total: formatNumber(total, locale) })}</span>
-          </p>
-          <button
-            type="button"
-            onClick={() => say(gs(toggleAmbient() ? "soundOn" : "soundOff", locale))}
-            aria-pressed={ambient}
-            aria-label={gs("sound", locale)}
-            className="gift-pillbar grid size-9 place-items-center rounded-full text-[#e5c16c] transition hover:text-[#f8e2a2]"
-          >
-            {ambient ? <Volume2 aria-hidden className="size-4" /> : <VolumeX aria-hidden className="size-4" />}
+        <main className="relative z-10 flex flex-1 flex-col items-center justify-center px-4 py-2">
+          <p className="gift-serif mb-4 max-w-lg text-center text-[1.05rem] text-[#f3dca0]/80 italic md:text-[1.15rem] [&:lang(my)]:text-[0.85rem] md:[&:lang(my)]:text-[0.92rem]">{gs(VIEW_HINT[view], locale)}</p>
+          {view === "lotus" && <LotusView {...viewProps} onCore={openFinale} />}
+          {view === "astrolabe" && <AstrolabeView {...viewProps} onCore={openFinale} />}
+          {view === "tarot" && <TarotView {...viewProps} />}
+        </main>
+
+        <footer className="relative z-10 flex flex-wrap items-center justify-center gap-3 px-4 pt-4 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
+          <button type="button" onClick={() => setVaultOpen(true)} className="gift-gold-btn inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-[0.82rem]">
+            <Gift aria-hidden className="size-4" />
+            {gs("vault", locale)}
+            <span className="ml-1 rounded-full bg-[#07121c] px-2 py-0.5 text-[0.7rem] text-[#f8e2a2]">{formatNumber(count, locale)}</span>
           </button>
-          <LanguageSwitch locale={locale} />
-        </div>
-      </header>
+          {campaign.invite_enabled && (
+            <button type="button" onClick={() => setInviteOpen(true)} className="gift-pillbar inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-[0.82rem] text-[#f8e2a2] transition hover:border-[#f8e2a2]">
+              <Mail aria-hidden className="size-4" />
+              {gs("invite", locale)}
+            </button>
+          )}
+        </footer>
+      </div>
 
-      <main className="relative z-10 flex flex-1 flex-col items-center justify-center px-4 py-2">
-        <p className="gift-serif mb-4 max-w-lg text-center text-[1.05rem] text-[#f3dca0]/80 italic md:text-[1.15rem] [&:lang(my)]:text-[0.85rem] md:[&:lang(my)]:text-[0.92rem]">{gs(VIEW_HINT[view], locale)}</p>
-        {view === "lotus" && <LotusView {...viewProps} onCore={openFinale} />}
-        {view === "astrolabe" && <AstrolabeView {...viewProps} onCore={openFinale} />}
-        {view === "tarot" && <TarotView {...viewProps} />}
-      </main>
-
-      <footer className="relative z-10 flex flex-wrap items-center justify-center gap-3 px-4 pt-4 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
-        <button type="button" onClick={() => setVaultOpen(true)} className="gift-gold-btn inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-[0.82rem]">
-          <Gift aria-hidden className="size-4" />
-          {gs("vault", locale)}
-          <span className="ml-1 rounded-full bg-[#07121c] px-2 py-0.5 text-[0.7rem] text-[#f8e2a2]">{formatNumber(count, locale)}</span>
-        </button>
-        {campaign.invite_enabled && (
-          <button type="button" onClick={() => setInviteOpen(true)} className="gift-pillbar inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-[0.82rem] text-[#f8e2a2] transition hover:border-[#f8e2a2]">
-            <Mail aria-hidden className="size-4" />
-            {gs("invite", locale)}
-          </button>
-        )}
-      </footer>
+      {isSealed && (
+        <SanctuaryCover
+          locale={locale}
+          title={t(campaign.title, locale)}
+          subtitle={t(campaign.subtitle, locale)}
+          opening={phase === "opening"}
+          onOpen={beginOpenCover}
+          onSkip={skipCover}
+          onAnimationComplete={finishCover}
+        />
+      )}
 
       <GiftDialog
         item={current}

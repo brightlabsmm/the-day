@@ -53,6 +53,10 @@ const GIFT_STRINGS = {
   sound: { my: "နောက်ခံအသံ", en: "Ambient sound" },
   soundOn: { my: "နောက်ခံအသံ ဖွင့်ထားသည်", en: "Ambient sound on" },
   soundOff: { my: "နောက်ခံအသံ ပိတ်ထားသည်", en: "Ambient sound off" },
+  coverEyebrow: { my: "✦ မင်္ဂလာဖိတ်ကြားလွှာ ✦", en: "✦ THE SACRED INVITATION ✦" },
+  coverEnter: { my: "ပွဲသို့ ဝင်ရောက်ရန် နှိပ်ပါ", en: "Tap to Enter the Sanctuary" },
+  coverSealHint: { my: "ကြာပန်းတံဆိပ်ကို နှိပ်၍ ဆုမင်္ဂလာများ ဖွင့်ပါ", en: "Tap the royal lotus seal to bloom" },
+  skip: { my: "ကျော်ရန်", en: "Skip" },
 } as const satisfies Record<string, Record<Locale, string>>;
 
 export type GiftStringKey = keyof typeof GIFT_STRINGS;
