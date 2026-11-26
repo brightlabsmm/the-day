@@ -97,6 +97,12 @@ export const TEMPLATES = [
     mood: "Quiet · sepia film · typewriter",
   },
   {
+    key: "ribbon",
+    name: "Blue Ribbon",
+    blurb: "A hand-drawn, light-pink and cobalt-blue invitation: brush-script names over a toast of champagne glasses, arched photos, line drawings for each detail and a ribbon to close.",
+    mood: "Illustrated · pink & blue · outdoor",
+  },
+  {
     key: "scratch",
     name: "Scratch to Reveal",
     blurb: "A playful rose-pink invitation: scratch the heart to reveal it, then a calendar and hearts.",

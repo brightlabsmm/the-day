@@ -64,7 +64,7 @@ export function GiftSection({ invitation, locale, plain, reveal, bare, intro }: 
   if (bare) {
     return (
       <div lang={locale}>
-        <p className="card-body max-w-md whitespace-pre-line text-ink">{intro ?? s("giftIntro", locale)}</p>
+        {intro !== "" && <p className="card-body max-w-md whitespace-pre-line text-ink">{intro ?? s("giftIntro", locale)}</p>}
         {reveal ? <GiftReveal hint={s("giftOpenHint", locale)}>{tiles("mt-2")}</GiftReveal> : tiles("mt-8")}
       </div>
     );

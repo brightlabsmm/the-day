@@ -30,6 +30,7 @@ import { ArtDecoPage } from "@/components/templates/artdeco-page";
 import { SunrisePage } from "@/components/templates/sunrise-page";
 import { SpotlightPage } from "@/components/templates/spotlight-page";
 import { GardenPage } from "@/components/templates/garden-page";
+import { RibbonPage } from "@/components/templates/ribbon-page";
 import { SilkPage } from "@/components/templates/silk-page";
 import { TheatrePage } from "@/components/templates/theatre-page";
 import { markOpened } from "./actions";
@@ -137,6 +138,8 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
           <SpotlightPage {...props} />
         ) : key === "garden" ? (
           <GardenPage {...props} />
+        ) : key === "ribbon" ? (
+          <RibbonPage {...props} />
         ) : (
           <ScratchPage {...props} />
         )}

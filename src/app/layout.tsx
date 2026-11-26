@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, DM_Mono, Great_Vibes, Jost, Noto_Serif_Myanmar, Pacifico, Playfair_Display } from "next/font/google";
+import { Cormorant_Garamond, DM_Mono, Great_Vibes, Jost, Libre_Caslon_Text, Mr_Dafoe, Noto_Serif_Myanmar, Pacifico, Playfair_Display, Yellowtail } from "next/font/google";
 import "./globals.css";
 import "./templates.css";
 
@@ -33,6 +33,11 @@ const pacifico = Pacifico({ variable: "--font-brush", subsets: ["latin"], weight
 
 const dmMono = DM_Mono({ variable: "--font-mono-label", subsets: ["latin"], weight: ["400", "500"], display: "swap" });
 
+// Used only by the Blue Ribbon template: a brush script for names, a lighter script for headings, a sturdy serif for text.
+const mrDafoe = Mr_Dafoe({ variable: "--font-ribbon-names", subsets: ["latin"], weight: "400", display: "swap" });
+const yellowtail = Yellowtail({ variable: "--font-ribbon-script", subsets: ["latin"], weight: "400", display: "swap" });
+const caslon = Libre_Caslon_Text({ variable: "--font-ribbon-serif", subsets: ["latin"], weight: ["400", "700"], display: "swap" });
+
 const jost = Jost({
   variable: "--font-jost",
   subsets: ["latin"],
@@ -60,7 +65,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="my"
       // Browser extensions add attributes to <html> and <body> before React loads; ignore those differences.
       suppressHydrationWarning
-      className={`${cormorant.variable} ${notoMyanmar.variable} ${jost.variable} ${playfair.variable} ${greatVibes.variable} ${pacifico.variable} ${dmMono.variable} h-full`}
+      className={`${cormorant.variable} ${notoMyanmar.variable} ${jost.variable} ${playfair.variable} ${greatVibes.variable} ${pacifico.variable} ${dmMono.variable} ${mrDafoe.variable} ${yellowtail.variable} ${caslon.variable} h-full`}
     >
       <body className="min-h-full" suppressHydrationWarning>
         {children}

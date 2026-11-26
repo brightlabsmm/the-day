@@ -33,6 +33,7 @@ const PALETTES: Record<string, Palette> = {
   artdeco: { sky: ["#151515", "#2b2618"], sun: "#f2d479", hills: ["#2a2a2a", "#3b3417", "#5a4d22"], bloom: ["#f2d479", "#d4af37", "#ece6d6"], suit: "#0b0b0d", gown: "#f5efe0" },
   sunrise: { sky: ["#ffe9d6", "#f7bfa2"], sun: "#fff2dc", hills: ["#f6cba9", "#e9a481", "#cf7a5a"], bloom: ["#fff2dc", "#f7bfa2", "#e8825a"], suit: "#5a3a36", gown: "#fffaf2" },
   garden: { sky: ["#c9bfaa", "#a39880"], sun: "#e9dfca", hills: ["#8f836c", "#6c6250", "#463f33"], bloom: ["#e9dfca", "#c7bba2", "#f4ecdc"], suit: "#2a241d", gown: "#efe6d4" },
+  ribbon: { sky: ["#f7e1e6","#efd0d8"], sun: "#ffffff", hills: ["#9fb3d6","#6f8ec4","#4468a6"], bloom: ["#f7e1e6","#ffffff","#9fb3d6"], suit: "#4468a6", gown: "#ffffff" },
   spotlight: { sky: ["#1b1d12", "#3b3f26"], sun: "#e8d9a8", hills: ["#2c3020", "#4a5030", "#6b7144"], bloom: ["#e8d9a8", "#c9b36a", "#f3ecd2"], suit: "#14150e", gown: "#f4efdd" },
   scratch: { sky: ["#fde3e7", "#f6b8c6"], sun: "#fff6f2", hills: ["#e7a3b4", "#c97d94", "#9e5a75"], bloom: ["#ffd9df", "#f7a3b7", "#fff2f4"], suit: "#4a2b3a", gown: "#fff7f6" },
 };
@@ -119,6 +120,7 @@ const DEMOS = [
   { key: "sunrise", one: ["Su Mon", "စုမွန်"], two: ["Lin Htet", "လင်းထက်"], mono: "S&L", tag: ["Every sunrise, together", "နေထွက်တိုင်း အတူတကွ"] },
   { key: "spotlight", one: ["Aria", "အာရီယာ"], two: ["Theo", "သီယို"], mono: "A&T", tag: ["The lights come up on us", "ကျွန်ုပ်တို့အပေါ် အလင်းကျလာသည်"] },
   { key: "garden", one: ["Rafe", "ရာဖေ"], two: ["Kira", "ကီရာ"], mono: "R&K", tag: ["Our love for gardens, and each other", "ဥယျာဉ်ကို ချစ်သလို တစ်ယောက်ကိုတစ်ယောက်လည်း ချစ်သည်"] },
+  { key: "ribbon", one: ["Marco", "မာကို"], two: ["Katrina", "ကက်ထရီနာ"], mono: "M&K", tag: ["Invite you to their wedding on March 23, 2030", "၂၀၃၀ ခုနှစ် မတ်လ ၂၃ ရက်တွင် မင်္ဂလာဆောင်ပါမည်"] },
   { key: "scratch", one: ["Kaung Myat", "ကောင်းမြတ်"], two: ["Phoo Pwint", "ဖူးပွင့်"], mono: "K&P", tag: ["Love, one scratch at a time", "ချစ်ခြင်းမေတ္တာ"] },
 ] as const;
 
@@ -293,6 +295,85 @@ function gardenFixed() {
   };
 }
 
+/** Blue Ribbon is a copy of one published design too: every line of its wording is kept as published. English only. */
+function ribbonFixed() {
+  const place = { en: "Solana Gardens" };
+  const ev = (time: string, kind: "ceremony" | "reception" | "other", en: string) => ({
+    kind,
+    title: { en },
+    starts_at_local: `2030-03-23T${time}`,
+    venue_name: place,
+    venue_address: { en: "Our ceremony will be held in the garden of Solana Gardens, surrounded by greenery, soft blooms, and the people we love most." },
+  });
+  const intro = "Share details about your ceremony, reception, or any other program related thing here.";
+  return {
+    partner_one_name: { en: "Marco" },
+    partner_two_name: { en: "Katrina" },
+    monogram: "M&K",
+    tagline: { en: "Invite you to their wedding on March 23, 2030" },
+    invitation_text: { en: "" },
+    closing_quote: {},
+    cover_text: {
+      english_only: true,
+      ribbon: {
+        intro: { title: "Our wedding, close to nature", text: `${intro} ${intro} ${intro}` },
+        about: {
+          title: "About the Wedding",
+          sub: "Important details about our outdoor wedding",
+          items: [
+            { icon: "church", title: "Ceremony", text: "Our ceremony will be held in the garden of Solana Gardens, surrounded by greenery, soft blooms, and the people we love most." },
+            { icon: "dancers", title: "Reception", text: "We’ll move straight into cocktails and an alfresco dinner under the trees. Expect an easygoing atmosphere, lots of laughter, and a few surprises." },
+            { icon: "shoes", title: "Dress Code", text: "Garden formal. Think flowy, breathable fabrics and shoes that work on grass. We recommend bringing a light layer for the evening breeze." },
+          ],
+        },
+        schedule: {
+          title: "Schedule of Events",
+          items: [
+            { time: "3:00 PM", title: "Garden Ceremony", text: "We begin our celebration with a short, heartfelt ceremony under the trees." },
+            { time: "5:30 PM", title: "Dinner Reception", text: "A laid-back al fresco dinner under the lights." },
+            { time: "4:30 PM", title: "Cocktail Hour & Photos", text: "Enjoy light bites, refreshing drinks, and golden hour mingling while we take photos with family and friends." },
+            { time: "7:00 PM", title: "Dancing & Open Bar", text: "Let’s end the night with music, drinks (we serve non-alcoholic, too!), and a little dancing under the stars." },
+          ],
+          note: "We recommend arriving at",
+          noteBold: "2:00 PM",
+          noteAfter: "for pictures, welcome drinks, and getting settled.",
+        },
+        gift: {
+          title: "Gift Registry",
+          line: "Your presence is truly the best gift we could ask for.",
+          paragraphs: [
+            "But if you feel called to give a little something, we’ve put together a small registry with some of our most wished-for items at Sining Spaces. Email hello@reallygreatsite.com with the Registry No. 12345 as the subject line for our updated gift list.",
+            "Alternatively, if you prefer to support us as we begin our married life, a contribution to our future would mean so much. Scan the QR on this page or email us at hello@reallygreatsite.com for our details.",
+            "Thank you for being part of this milestone with us.",
+          ],
+        },
+        faqTitle: "Frequently-asked-Qs",
+        rsvpBy: "RSVP by February 15, 2030.",
+        contact: [{ text: "Telephone: (123) 456-7890" }, { text: "Mobile: (123) 456-7890" }, { text: "hello@reallygreatsite.com" }],
+      },
+    },
+    wishes_enabled: false,
+    public_wishes: false,
+    seating_enabled: false,
+    guests: [],
+    story: [],
+    good_to_know: [],
+    dress_code: { text: { en: "Garden formal. Think flowy, breathable fabrics and shoes that work on grass. We recommend bringing a light layer for the evening breeze." }, colors: [] },
+    faq: [
+      { q: { en: "Is the entire wedding outdoors?" }, a: { en: "Yes — the ceremony and reception will both take place in the garden. We recommend wearing something comfortable and dressy, and opting for shoes that work well on grass (flats, wedges, or block heels). Covered areas will be available in case of rain." } },
+      { q: { en: "Can I bring a guest or my kids?" }, a: { en: "We’d love to keep this gathering intimate, so we’re only able to accommodate those listed on the invitation. Thanks for understanding!" } },
+      { q: { en: "Is there parking available?" }, a: { en: "Yes, the venue has designated parking, including spaces for seniors and PWD guests. We’ll also include a map and directions with your RSVP confirmation." } },
+    ],
+    note: {},
+    events: [
+      ev("15:00", "ceremony", "Garden Ceremony"),
+      ev("16:30", "other", "Cocktail Hour & Photos"),
+      ev("17:30", "reception", "Dinner Reception"),
+      ev("19:00", "other", "Dancing & Open Bar"),
+    ],
+  };
+}
+
 async function main() {
   const only = process.argv.slice(2);
   for (const [n, d] of DEMOS.entries()) {
@@ -314,7 +395,7 @@ async function main() {
       const qr = `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="480"><rect width="480" height="480" fill="#fff"/><rect x="24" y="24" width="432" height="432" fill="none" stroke="#555" stroke-width="6" stroke-dasharray="14 10"/><text x="240" y="230" font-family="sans-serif" font-size="40" text-anchor="middle" fill="#555">DEMO</text><text x="240" y="280" font-family="sans-serif" font-size="40" text-anchor="middle" fill="#555">QR CODE</text></svg>`;
       await sharp(Buffer.from(qr)).png().toFile(path.join(dir, "qr.png"));
       const song = d.key === "record" ? await demoTrack(dir) : null;
-      const cfg = { ...config(d), ...(d.key === "garden" ? gardenFixed() : {}) };
+      const cfg = { ...config(d), ...(d.key === "garden" ? gardenFixed() : d.key === "ribbon" ? ribbonFixed() : {}) };
       if (useReal) {
         cfg.photos = real
           .filter((f) => f.endsWith(".jpg"))
