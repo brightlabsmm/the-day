@@ -13,6 +13,7 @@ export function Reveal({
   variant = "up",
   as: Tag = "div",
   className,
+  style: boxStyle,
 }: {
   children: ReactNode;
   /** Milliseconds to wait once it is on screen, to stagger neighbours. */
@@ -21,6 +22,7 @@ export function Reveal({
   variant?: "up" | "left" | "right" | "photo" | "arch";
   as?: ElementType;
   className?: string;
+  style?: React.CSSProperties;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [state, setState] = useState<"visible" | "hidden" | "shown">("visible");
@@ -49,7 +51,7 @@ export function Reveal({
       className={`tpl-reveal${className ? ` ${className}` : ""}`}
       data-state={state}
       data-variant={variant}
-      style={delay ? { transitionDelay: `${delay}ms` } : undefined}
+      style={delay ? { ...boxStyle, transitionDelay: `${delay}ms` } : boxStyle}
     >
       {children}
     </Tag>

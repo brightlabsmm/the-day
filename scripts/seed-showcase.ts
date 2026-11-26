@@ -35,6 +35,7 @@ const PALETTES: Record<string, Palette> = {
   garden: { sky: ["#c9bfaa", "#a39880"], sun: "#e9dfca", hills: ["#8f836c", "#6c6250", "#463f33"], bloom: ["#e9dfca", "#c7bba2", "#f4ecdc"], suit: "#2a241d", gown: "#efe6d4" },
   ribbon: { sky: ["#f7e1e6","#efd0d8"], sun: "#ffffff", hills: ["#9fb3d6","#6f8ec4","#4468a6"], bloom: ["#f7e1e6","#ffffff","#9fb3d6"], suit: "#4468a6", gown: "#ffffff" },
   renewal: { sky: ["#faf3e1","#f1e8cf"], sun: "#ffffff", hills: ["#a9b39a","#7d8c6c","#5c6c4e"], bloom: ["#faf3e1","#d9a3b8","#f4c7b0"], suit: "#5c6c4e", gown: "#ffffff" },
+  scrapbook: { sky: ["#fbf8f3","#efe7da"], sun: "#ffffff", hills: ["#d8b9aa","#c98a73","#a53a22"], bloom: ["#fbf8f3","#e9c7c0","#d7a58c"], suit: "#2c2a27", gown: "#ffffff" },
   spotlight: { sky: ["#1b1d12", "#3b3f26"], sun: "#e8d9a8", hills: ["#2c3020", "#4a5030", "#6b7144"], bloom: ["#e8d9a8", "#c9b36a", "#f3ecd2"], suit: "#14150e", gown: "#f4efdd" },
   scratch: { sky: ["#fde3e7", "#f6b8c6"], sun: "#fff6f2", hills: ["#e7a3b4", "#c97d94", "#9e5a75"], bloom: ["#ffd9df", "#f7a3b7", "#fff2f4"], suit: "#4a2b3a", gown: "#fff7f6" },
 };
@@ -123,6 +124,7 @@ const DEMOS = [
   { key: "garden", one: ["Rafe", "ရာဖေ"], two: ["Kira", "ကီရာ"], mono: "R&K", tag: ["Our love for gardens, and each other", "ဥယျာဉ်ကို ချစ်သလို တစ်ယောက်ကိုတစ်ယောက်လည်း ချစ်သည်"] },
   { key: "ribbon", one: ["Marco", "မာကို"], two: ["Katrina", "ကက်ထရီနာ"], mono: "M&K", tag: ["Invite you to their wedding on March 23, 2030", "၂၀၃၀ ခုနှစ် မတ်လ ၂၃ ရက်တွင် မင်္ဂလာဆောင်ပါမည်"] },
   { key: "renewal", one: ["Alaia", "အလိုင်ယာ"], two: ["Jeremy", "ဂျယ်ရမီ"], mono: "A&J", tag: ["Celebrate 50 years together on February 20, 2030", "၂၀၃၀ ပြည့်နှစ် ဖေဖော်ဝါရီ ၂၀ ရက်တွင် ၅၀ နှစ်ပြည့်ကို အတူကျင်းပကြပါစို့"] },
+  { key: "scrapbook", one: ["Arman Buhay", "အာမန်"], two: ["Lovely Tan", "လာဗ်လီ"], mono: "A&L", tag: ["Our love for gardens (and each other!) grows", "ကျွန်ုပ်တို့၏ ချစ်ခြင်း ကြီးထွားနေသည်"] },
   { key: "scratch", one: ["Kaung Myat", "ကောင်းမြတ်"], two: ["Phoo Pwint", "ဖူးပွင့်"], mono: "K&P", tag: ["Love, one scratch at a time", "ချစ်ခြင်းမေတ္တာ"] },
 ] as const;
 
@@ -453,6 +455,117 @@ function renewalFixed() {
   };
 }
 
+/** Pressed Scrapbook is a copy of one published design too, word for word. English only; its artwork rides along as `art`. */
+function scrapbookFixed() {
+  const place = { en: "The Sunroom at Rizal Gardens" };
+  const ev = (time: string, kind: "ceremony" | "reception" | "other", en: string) => ({
+    kind,
+    title: { en },
+    starts_at_local: `2035-04-27T${time}`,
+    venue_name: place,
+  });
+  return {
+    partner_one_name: { en: "Arman Buhay" },
+    partner_two_name: { en: "Lovely Tan" },
+    monogram: "A&L",
+    tagline: { en: "Our love for gardens (and each other!) grows" },
+    invitation_text: { en: "" },
+    closing_quote: {},
+    cover_text: {
+      english_only: true,
+      scrapbook: {
+        intro: "YOU ARE CORDIALLY INVITED TO THE WEDDING RECEPTION OF",
+        dateLine: "ON APRIL 27, 2035 | 6PM",
+        place: "THE SUNROOM AT RIZAL GARDENS",
+        rsvpBy: "Please RSVP by March 15, 2035.",
+        buttons: { rsvp: "RSVP", gift: "Gift Registry" },
+        story: {
+          title: "Our love for gardens (and each other!) grows",
+          text: "Write a paragraph that tells your story as a couple. You can include details like how you met, your journey together, and what makes your relationship unique. This is your chance to share your personality and connect with your guests, giving them a glimpse into your love story and what this special day means to you.",
+        },
+        about: {
+          title: "About the Reception",
+          items: [
+            { art: "harbour", title: "VENUE", text: "Our reception will take place in The Sunroom at Rizal Gardens — an open-air garden space. The celebration will be outdoors, so expect fresh air, soft grass, and lots of golden hour glow." },
+            { art: "shoes", title: "ATTIRE", text: "Garden party chic! Flowy, breathable fabrics and comfortable shoes (heels are optional, sinking in the grass is not required). Pastel colors are preferred but not mandatory!" },
+            { art: "rabbit", title: "KIDS", text: "Yes, this is a kid-friendly event. We’ll have a few child-friendly meals and cozy corners for them to relax or play while the grown-ups enjoy the night." },
+            { art: "car", title: "PARKING", text: "Free parking is available on-site, with designated areas for PWDs and senior guests. If you need special assistance or a drop-off closer to the garden entrance, let us know — we’ll be happy to help." },
+          ],
+        },
+        program: {
+          title: "Program of Events",
+          items: [
+            { time: "5:00 PM", title: "Welcome Photos & Cocktails" },
+            { time: "6:00 PM", title: "Dinner Program" },
+            { time: "7:00PM", title: "Toasts & Speeches" },
+            { time: "8:00 PM", title: "Open Bar & Dancing" },
+          ],
+        },
+        meta: { left: "#LOVELYEVERARMAN", right: "April 27, 2035 | 6:00PM at The Sunroom" },
+        gift: {
+          title: "Gift Registry",
+          line: "YOUR PRESENCE IS TRULY THE BEST GIFT WE COULD ASK FOR.",
+          paragraphs: [
+            "But if you feel called to give a little something, we’ve put together a small registry with some of our most wished-for items at Sining Spaces. Email hello@reallygreatsite.com with the Registry No. 12345 as the subject line for our updated gift list.",
+            "Alternatively, if you prefer to support us as we begin our married life, a contribution to our future would mean so much. Scan the QR on this page or email us at hello@reallygreatsite.com for our details.",
+          ],
+          thanks: "Thank you for being part of this milestone with us.",
+        },
+        contact: {
+          lead: "FOR RELATED QUESTIONS OR CONCERNS, PLEASE CONTACT US AT:",
+          people: [
+            { name: "Arman Buhay", phone: "(123) 456-7890", email: "hello@reallygreatsite.com", tone: "blue" },
+            { name: "Lovely Tan", phone: "(123) 456-7890", email: "hello@reallygreatsite.com", tone: "pink" },
+          ],
+        },
+      },
+    },
+    art: {
+      "paper-bg": "paper-bg.png",
+      "paper-card": "paper-card.png",
+      "shadow": "shadow.png",
+      "envelope": "envelope.png",
+      "tape": "tape.png",
+      "butterfly": "butterfly.png",
+      "strip": "strip.png",
+      "red-flower": "red-flower.png",
+      "petals-cream": "petals-cream.png",
+      "harbour": "harbour.png",
+      "shoes": "shoes.png",
+      "rabbit": "rabbit.png",
+      "car": "car.png",
+      "petal": "petal.png",
+      "mustard": "mustard.png",
+      "orange": "orange.png",
+      "pink-plant": "pink-plant.png",
+      "pink-flower": "pink-flower.png",
+      "lace": "lace.png",
+      "torn": "torn.png",
+      "chair": "chair.png",
+      "delphinium": "delphinium.png",
+      "yellow-plant": "yellow-plant.png",
+      "card-blue": "card-blue.png",
+      "card-pink": "card-pink.png",
+    },
+    rsvp_enabled: false,
+    wishes_enabled: false,
+    public_wishes: false,
+    seating_enabled: false,
+    guests: [],
+    story: [],
+    good_to_know: [],
+    dress_code: {},
+    note: {},
+    faq: [],
+    events: [
+      ev("17:00", "other", "Welcome Photos & Cocktails"),
+      ev("18:00", "ceremony", "Dinner Program"),
+      ev("19:00", "reception", "Toasts & Speeches"),
+      ev("20:00", "other", "Open Bar & Dancing"),
+    ],
+  };
+}
+
 async function main() {
   const only = process.argv.slice(2);
   for (const [n, d] of DEMOS.entries()) {
@@ -474,7 +587,7 @@ async function main() {
       const qr = `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="480"><rect width="480" height="480" fill="#fff"/><rect x="24" y="24" width="432" height="432" fill="none" stroke="#555" stroke-width="6" stroke-dasharray="14 10"/><text x="240" y="230" font-family="sans-serif" font-size="40" text-anchor="middle" fill="#555">DEMO</text><text x="240" y="280" font-family="sans-serif" font-size="40" text-anchor="middle" fill="#555">QR CODE</text></svg>`;
       await sharp(Buffer.from(qr)).png().toFile(path.join(dir, "qr.png"));
       const song = d.key === "record" ? await demoTrack(dir) : null;
-      const cfg = { ...config(d), ...(d.key === "garden" ? gardenFixed() : d.key === "ribbon" ? ribbonFixed() : d.key === "renewal" ? renewalFixed() : {}) };
+      const cfg = { ...config(d), ...(d.key === "garden" ? gardenFixed() : d.key === "ribbon" ? ribbonFixed() : d.key === "renewal" ? renewalFixed() : d.key === "scrapbook" ? scrapbookFixed() : {}) };
       if (useReal) {
         cfg.photos = real
           .filter((f) => f.endsWith(".jpg"))

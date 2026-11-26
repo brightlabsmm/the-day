@@ -27,7 +27,7 @@ const Config = z.object({
   slug: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/).max(60).optional(),
   status: z.enum(["draft", "published"]).default("published"),
   timezone: z.string().default("Asia/Yangon"),
-  template_key: z.enum(["classic", "editorial", "envelope", "scratch", "theatre", "record", "wildflower", "shutters", "silk", "midnight", "lantern", "polaroid", "botanical", "artdeco", "sunrise", "spotlight", "garden", "ribbon", "renewal"]).default("classic"),
+  template_key: z.enum(["classic", "editorial", "envelope", "scratch", "theatre", "record", "wildflower", "shutters", "silk", "midnight", "lantern", "polaroid", "botanical", "artdeco", "sunrise", "spotlight", "garden", "ribbon", "renewal", "scrapbook"]).default("classic"),
   partner_one_name: i18n,
   partner_two_name: i18n,
   monogram: z.string().nullable().default(null),
@@ -208,7 +208,7 @@ export async function importWedding(dir: string) {
   const artMap: Record<string, { p: string; w: number; h: number }> = {};
   for (const [key, file] of Object.entries(cfg.art)) {
     const out = await sharp(await readFile(path.join(dir, file)))
-      .resize({ width: 1000, height: 1000, fit: "inside", withoutEnlargement: true })
+      .resize({ width: 1800, height: 1800, fit: "inside", withoutEnlargement: true })
       .webp({ quality: 88, alphaQuality: 95 })
       .toBuffer({ resolveWithObject: true });
     const artPath = `${id}/art/${key}.webp`;

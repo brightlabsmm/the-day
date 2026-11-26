@@ -109,6 +109,12 @@ export const TEMPLATES = [
     mood: "Botanical · olive & cream · painted flowers",
   },
   {
+    key: "scrapbook",
+    name: "Pressed Scrapbook",
+    blurb: "A paper scrapbook invitation: loopy rust-red handwriting, a polaroid and pressed flowers on the cover, masking-tape buttons, collage drawings for each detail, and a kraft envelope of contact cards.",
+    mood: "Scrapbook · paper & pressed flowers · rust red",
+  },
+  {
     key: "scratch",
     name: "Scratch to Reveal",
     blurb: "A playful rose-pink invitation: scratch the heart to reveal it, then a calendar and hearts.",

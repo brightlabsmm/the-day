@@ -360,6 +360,58 @@
   .rn-sway { animation: none; }
 }
 
+.tpl-scrapbook {
+  --ivory: #fbf8f3;
+  --paper: #fbf8f3;
+  --paper-deep: #efe7da;
+  --navy: #a53a22;
+  --ink: #2c2a27;
+  --ink-soft: #4a4640;
+  --gold: #a53a22;
+  --gold-soft: #d8b9aa;
+  --gold-deep: #7e2a17;
+  --color-ivory: var(--ivory);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-navy: var(--navy);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-deep: var(--gold-deep);
+  --tpl-display: var(--font-scrap-type), "Special Elite", monospace;
+  background: var(--paper);
+  font-family: var(--font-scrap-type), "Special Elite", monospace;
+}
+.tpl-scrapbook .foil {
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-text-fill-color: currentColor;
+  color: var(--navy);
+}
+.tpl .sb-s {
+  font-family: var(--font-scrap-script), "Sacramento", cursive;
+  font-weight: 400;
+  /* A touch heavier than the face itself, to match the published lettering. */
+  -webkit-text-stroke: 0.012em currentColor;
+}
+.tpl .sb-t {
+  font-family: var(--font-scrap-type), "Special Elite", monospace;
+}
+/* Loose paper shadows for the collage pieces. */
+.sb-lift {
+  box-shadow: 0 1px 2px rgba(60, 40, 20, 0.25), 0 10px 24px -10px rgba(60, 40, 20, 0.45);
+}
+@keyframes sb-flutter {
+  0%, 100% { transform: rotate(var(--r, -10deg)) translateY(0); }
+  50% { transform: rotate(calc(var(--r, -10deg) + 4deg)) translateY(-5px); }
+}
+.sb-sway { transform-origin: 50% 100%; animation: sb-flutter var(--t, 8s) ease-in-out var(--d, 0s) infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .sb-sway { animation: none; }
+}
+
 .tpl-envelope {
   --ivory: #f8f3ea;
   --paper: #efe6d6;
