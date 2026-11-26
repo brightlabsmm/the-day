@@ -40,6 +40,17 @@ const Copy = z
 const ICONS = { church: Church, dancers: Dancers, shoes: Shoes } as const;
 const PINK = "text-[#f7e1e6]";
 
+/** Where the little sparkles float behind the cover (fixed values, so the page renders the same everywhere). */
+const SPARKS = [
+  { x: "8%", y: "26%", s: 14, d: "0s", t: "9s" },
+  { x: "20%", y: "62%", s: 10, d: "2.5s", t: "8s" },
+  { x: "33%", y: "14%", s: 12, d: "4s", t: "10s" },
+  { x: "66%", y: "18%", s: 10, d: "1.2s", t: "9.5s" },
+  { x: "79%", y: "58%", s: 16, d: "3.4s", t: "8.5s" },
+  { x: "91%", y: "30%", s: 11, d: "5.2s", t: "10s" },
+  { x: "52%", y: "78%", s: 9, d: "6s", t: "9s" },
+];
+
 /**
  * Blue Ribbon: light pink and cobalt blue with hand-drawn line art. A brush-script cover over a toast
  * of champagne glasses, a row of arched photos, a blue band with a wedding car, three illustrated
@@ -67,9 +78,14 @@ export function RibbonPage({ invitation, locale, monogram, token, onOpenAction }
 
       {/* 1 · Cover */}
       <header id="top" className="relative flex min-h-svh flex-col items-center justify-center overflow-hidden px-6 pt-24 pb-16 text-center text-[color:var(--navy)]">
-        <h1 style={{ "--d": "100ms" } as React.CSSProperties} className="tpl-garden-rise rb-names text-[clamp(4.2rem,13vw,9.5rem)] leading-[0.95]">
-          <span className="block -translate-x-[0.35em]">{v.names.one} &amp;</span>
-          <span className="block translate-x-[0.4em]">{v.names.two}</span>
+        {SPARKS.map((k, i) => (
+          <svg key={i} aria-hidden viewBox="0 0 20 20" className="rb-drift pointer-events-none absolute text-[color:var(--navy)] opacity-0" style={{ left: k.x, top: k.y, width: k.s, height: k.s, "--d": k.d, "--t": k.t } as React.CSSProperties}>
+            <path d="M10 0 C11 7 13 9 20 10 C13 11 11 13 10 20 C9 13 7 11 0 10 C7 9 9 7 10 0 Z" fill="currentColor" />
+          </svg>
+        ))}
+        <h1 className="rb-names relative text-[clamp(4.2rem,13vw,9.5rem)] leading-[0.95]">
+          <span style={{ "--d": "250ms" } as React.CSSProperties} className="rb-write block -translate-x-[0.35em]">{v.names.one} &amp;</span>
+          <span style={{ "--d": "1000ms" } as React.CSSProperties} className="rb-write block translate-x-[0.4em]">{v.names.two}</span>
         </h1>
         {tagline && (
           <p style={{ "--d": "500ms" } as React.CSSProperties} className="tpl-garden-rise mt-10 font-[family-name:var(--font-jost)] text-[0.72rem] tracking-[0.12em] uppercase sm:text-[0.85rem]">
@@ -83,7 +99,7 @@ export function RibbonPage({ invitation, locale, monogram, token, onOpenAction }
               <span className="relative">RSVP</span>
             </a>
           )}
-          <Glasses className="h-[7.5rem] w-auto sm:order-2 sm:h-[8.5rem]" />
+          <Glasses className="rb-float h-[7.5rem] w-auto sm:order-2 sm:h-[8.5rem]" />
           {v.hasGift && (
             <a href="#gift" className="rb-pill sm:order-3">
               <PillOutline />
@@ -98,7 +114,7 @@ export function RibbonPage({ invitation, locale, monogram, token, onOpenAction }
         <section id="gallery" aria-label={s("galleryHeading", locale)} className="px-6 pb-[clamp(3rem,7vw,5rem)]">
           <ul className="mx-auto flex max-w-4xl flex-wrap items-end justify-center gap-6 sm:flex-nowrap sm:gap-[7%]">
             {arches.map((p, i) => (
-              <Reveal as="li" variant="photo" delay={i * 160} key={p.id} className="relative aspect-[0.55] w-[min(78%,16rem)] sm:w-[27%]">
+              <Reveal as="li" variant="arch" delay={i * 220} key={p.id} className="relative aspect-[0.55] w-[min(78%,16rem)] sm:w-[27%]">
                 <div className="rb-arch absolute inset-0 overflow-hidden border border-[color:var(--navy)]">
                   <Image src={p.src} alt={p.alt} fill sizes="(max-width: 640px) 80vw, 280px" className="object-cover" />
                 </div>
@@ -113,11 +129,11 @@ export function RibbonPage({ invitation, locale, monogram, token, onOpenAction }
         <section id="invitation" aria-label={s("weddingInvitationLabel", locale)} className={`bg-[color:var(--navy)] px-6 py-[clamp(3.5rem,8vw,6rem)] ${PINK}`}>
           <div className="mx-auto grid max-w-5xl items-center gap-10 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] md:gap-6">
             <Reveal variant="left">
-              <h2 className="rb-script text-[clamp(2rem,4.2vw,2.9rem)] leading-[1.15]">{copy.intro.title}</h2>
+              <h2 className="rb-script rb-wipe text-[clamp(2rem,4.2vw,2.9rem)] leading-[1.15]">{copy.intro.title}</h2>
               <p className="rb-caps mt-8 max-w-[22rem] text-[0.86rem]">{copy.intro.text}</p>
             </Reveal>
             <Reveal variant="right" delay={150}>
-              <Car className="mx-auto w-[min(100%,26rem)] md:ml-auto" />
+              <Car className="rb-draw rb-drive mx-auto w-[min(100%,26rem)] md:ml-auto" />
             </Reveal>
           </div>
         </section>
@@ -127,7 +143,7 @@ export function RibbonPage({ invitation, locale, monogram, token, onOpenAction }
       {copy.about && (
         <section id="venue" aria-label={copy.about.title} className="px-6 py-[clamp(4rem,9vw,7rem)] text-center text-[color:var(--navy)]">
           <Reveal>
-            <h2 className="rb-script text-[clamp(2.3rem,5vw,3.4rem)]">{copy.about.title}</h2>
+            <h2 className="rb-script rb-wipe text-[clamp(2.3rem,5vw,3.4rem)]">{copy.about.title}</h2>
             <p className="rb-caps mt-3 text-[0.9rem]">{copy.about.sub}</p>
           </Reveal>
           <div className="mx-auto mt-14 grid max-w-4xl gap-12 md:grid-cols-3 md:gap-8">
@@ -136,7 +152,7 @@ export function RibbonPage({ invitation, locale, monogram, token, onOpenAction }
               return (
                 <Reveal key={it.title} delay={i * 150} className={i === 1 ? "md:mt-20" : ""}>
                   <div id={it.icon === "shoes" ? "dress" : undefined}>
-                    <Icon className={`mx-auto h-28 w-auto ${it.icon === "dancers" ? "h-36" : ""}`} />
+                    <Icon className={`rb-draw mx-auto h-28 w-auto ${it.icon === "dancers" ? "h-36" : ""}`} />
                     <h3 className="rb-caps mt-5 text-[1.05rem] font-bold">{it.title}</h3>
                     <p className="rb-caps mx-auto mt-3 max-w-[15rem] text-[0.8rem]">{it.text}</p>
                   </div>
@@ -150,9 +166,9 @@ export function RibbonPage({ invitation, locale, monogram, token, onOpenAction }
       {/* 5 · Schedule of events */}
       {copy.schedule && (
         <section id="schedule" aria-label={copy.schedule.title} className="relative px-6 pb-[clamp(4rem,9vw,7rem)] text-center text-[color:var(--navy)]">
-          <Plate aria-hidden className="absolute top-0 right-[6%] hidden h-24 w-auto md:block" />
+          <Reveal variant="photo" delay={300} className="absolute top-0 right-[6%] hidden md:block"><Plate className="rb-draw h-24 w-auto" /></Reveal>
           <Reveal>
-            <h2 className="rb-script text-[clamp(2.3rem,5vw,3.4rem)]">{copy.schedule.title}</h2>
+            <h2 className="rb-script rb-wipe text-[clamp(2.3rem,5vw,3.4rem)]">{copy.schedule.title}</h2>
           </Reveal>
           <div className="relative mx-auto mt-12 grid max-w-3xl gap-x-10 gap-y-12 sm:grid-cols-2">
             {copy.schedule.items?.map((e, i) => (
@@ -166,7 +182,7 @@ export function RibbonPage({ invitation, locale, monogram, token, onOpenAction }
             ))}
           </div>
           <div className="relative mx-auto mt-14 max-w-3xl">
-            <Champagne aria-hidden className="absolute -bottom-6 left-0 hidden h-28 w-auto -translate-x-[110%] md:block" />
+            <Reveal variant="photo" delay={300} className="absolute -bottom-6 left-0 hidden -translate-x-[110%] md:block"><Champagne className="rb-draw h-28 w-auto" /></Reveal>
             {copy.schedule.note && (
               <p className="rb-caps text-[0.8rem]">
                 {copy.schedule.note}
@@ -183,7 +199,7 @@ export function RibbonPage({ invitation, locale, monogram, token, onOpenAction }
         <section id="gift" aria-label={s("giftHeading", locale)} className="px-6 py-[clamp(3rem,8vw,6rem)] text-[color:var(--navy)]">
           <Reveal>
             <div className="text-center">
-              <h2 className="rb-script text-[clamp(2.4rem,5vw,3.6rem)] leading-tight">{copy.gift.title}</h2>
+              <h2 className="rb-script rb-wipe text-[clamp(2.4rem,5vw,3.6rem)] leading-tight">{copy.gift.title}</h2>
               <p className="rb-caps -mt-1 text-[0.9rem]">{copy.gift.line}</p>
             </div>
           </Reveal>
@@ -195,7 +211,7 @@ export function RibbonPage({ invitation, locale, monogram, token, onOpenAction }
                 ))}
               </div>
             </Reveal>
-            <Reveal variant="right" delay={150}>
+            <Reveal variant="arch" delay={150}>
               <div className="rb-arch mx-auto grid h-[17rem] w-[15.5rem] place-items-center bg-[color:var(--navy)] pt-16 [&_ul]:justify-center">
                 <GiftSection invitation={invitation} locale={locale} plain bare intro="" />
               </div>
@@ -212,14 +228,14 @@ export function RibbonPage({ invitation, locale, monogram, token, onOpenAction }
         <section id="faq" aria-label={copy.faqTitle ?? s("faqHeading", locale)} className={`bg-[color:var(--navy)] px-6 py-[clamp(4rem,9vw,6.5rem)] ${PINK}`}>
           <div className="mx-auto grid max-w-4xl items-center gap-12 md:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)] md:gap-16">
             {faqPhoto && (
-              <Reveal variant="photo">
+              <Reveal variant="arch">
                 <div className="rb-arch relative mx-auto aspect-[0.55] w-[min(78%,15rem)] overflow-hidden border border-[#f7e1e6]/70 md:w-full">
                   <Image src={faqPhoto.src} alt={faqPhoto.alt} fill sizes="(max-width: 768px) 70vw, 260px" className="object-cover" />
                 </div>
               </Reveal>
             )}
             <Reveal variant="right" delay={150}>
-              <h2 className="rb-script text-[clamp(2.2rem,4.6vw,3.1rem)]">{copy.faqTitle ?? s("faqHeading", locale)}</h2>
+              <h2 className="rb-script rb-wipe text-[clamp(2.2rem,4.6vw,3.1rem)]">{copy.faqTitle ?? s("faqHeading", locale)}</h2>
               <dl className="mt-8 space-y-8">
                 {faq.map((f) => (
                   <div key={f.q}>
@@ -244,11 +260,11 @@ export function RibbonPage({ invitation, locale, monogram, token, onOpenAction }
       <footer id="contact" lang={locale} className={`border-t border-[#f7e1e6]/30 bg-[color:var(--navy)] px-6 pt-[clamp(4rem,9vw,6rem)] pb-14 text-center ${PINK}`}>
         {copy.rsvpBy && (
           <Reveal>
-            <h2 className="rb-script text-[clamp(2.2rem,6vw,4rem)]">{copy.rsvpBy}</h2>
+            <h2 className="rb-script rb-wipe text-[clamp(2.2rem,6vw,4rem)]">{copy.rsvpBy}</h2>
           </Reveal>
         )}
         <Reveal variant="photo" delay={150}>
-          <Bow className="mx-auto mt-10 h-[11rem] w-auto" />
+          <Bow className="rb-draw rb-sway mx-auto mt-10 h-[11rem] w-auto" />
         </Reveal>
         {copy.contact && copy.contact.length > 0 && (
           <Reveal delay={250}>

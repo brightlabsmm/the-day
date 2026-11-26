@@ -18,7 +18,7 @@ export function Reveal({
   /** Milliseconds to wait once it is on screen, to stagger neighbours. */
   delay?: number;
   /** `up` lifts, `left`/`right` slide in from that side, `photo` rises and settles from slightly larger. */
-  variant?: "up" | "left" | "right" | "photo";
+  variant?: "up" | "left" | "right" | "photo" | "arch";
   as?: ElementType;
   className?: string;
 }) {
