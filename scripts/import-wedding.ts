@@ -27,7 +27,7 @@ const Config = z.object({
   slug: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/).max(60).optional(),
   status: z.enum(["draft", "published"]).default("published"),
   timezone: z.string().default("Asia/Yangon"),
-  template_key: z.enum(["classic", "editorial", "envelope", "scratch", "theatre", "record", "wildflower", "shutters", "silk", "midnight", "lantern", "polaroid", "botanical", "artdeco", "sunrise", "spotlight", "garden", "ribbon"]).default("classic"),
+  template_key: z.enum(["classic", "editorial", "envelope", "scratch", "theatre", "record", "wildflower", "shutters", "silk", "midnight", "lantern", "polaroid", "botanical", "artdeco", "sunrise", "spotlight", "garden", "ribbon", "renewal"]).default("classic"),
   partner_one_name: i18n,
   partner_two_name: i18n,
   monogram: z.string().nullable().default(null),
@@ -71,6 +71,8 @@ const Config = z.object({
     }),
   ),
   gifts: z.array(z.object({ label: z.string(), account_name: z.string().optional(), file: z.string() })).default([]),
+  /** Decorative artwork with a transparent background (key -> file), e.g. flowers; shown by designs that use it. */
+  art: z.record(z.string(), z.string()).default({}),
   /** Background music: an mp3, m4a, aac or ogg file in the folder. */
   music: z.object({ file: z.string(), title: z.string().optional() }).optional(),
 });
@@ -162,7 +164,7 @@ export async function importWedding(dir: string) {
 
   // Replace stored media for this wedding
   await db.from("wedding_photos").delete().eq("wedding_id", id);
-  for (const folder of ["photos", "gifts", "music"]) {
+  for (const folder of ["photos", "gifts", "music", "art"]) {
     const { data: old } = await db.storage.from("wedding-media").list(`${id}/${folder}`);
     if (old?.length) await db.storage.from("wedding-media").remove(old.map((o) => `${id}/${folder}/${o.name}`));
   }
@@ -203,6 +205,18 @@ export async function importWedding(dir: string) {
     gifts.push({ label: g.label, ...(g.account_name ? { account_name: g.account_name } : {}), qr_path });
     console.log(`✓ gift QR ${g.label}`);
   }
+  const artMap: Record<string, { p: string; w: number; h: number }> = {};
+  for (const [key, file] of Object.entries(cfg.art)) {
+    const out = await sharp(await readFile(path.join(dir, file)))
+      .resize({ width: 1000, height: 1000, fit: "inside", withoutEnlargement: true })
+      .webp({ quality: 88, alphaQuality: 95 })
+      .toBuffer({ resolveWithObject: true });
+    const artPath = `${id}/art/${key}.webp`;
+    const { error: aErr } = await db.storage.from("wedding-media").upload(artPath, out.data, { contentType: "image/webp", cacheControl: "31536000", upsert: true });
+    if (aErr) throw aErr;
+    artMap[key] = { p: artPath, w: out.info.width, h: out.info.height };
+    console.log(`✓ art ${key}`);
+  }
   let musicUpdate: { music_path: string | null; music_title: string | null } = { music_path: null, music_title: null };
   if (cfg.music) {
     const types: Record<string, [string, string]> = { ".mp3": ["audio/mpeg", "mp3"], ".m4a": ["audio/mp4", "m4a"], ".aac": ["audio/aac", "aac"], ".ogg": ["audio/ogg", "ogg"] };
@@ -216,7 +230,7 @@ export async function importWedding(dir: string) {
     musicUpdate = { music_path, music_title: cfg.music.title ?? null };
     console.log(`✓ music ${cfg.music.file}`);
   }
-  const { error: gErr } = await db.from("weddings").update({ gift_methods: gifts, ...musicUpdate }).eq("id", id);
+  const { error: gErr } = await db.from("weddings").update({ gift_methods: gifts, ...musicUpdate, ...(Object.keys(artMap).length ? { cover_text: { ...cfg.cover_text, art: artMap } as never } : {}) }).eq("id", id);
   if (gErr) throw gErr;
   console.log(`Done. Open /w/${cfg.slug}`);
 }

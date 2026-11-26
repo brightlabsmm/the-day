@@ -31,6 +31,7 @@ import { SunrisePage } from "@/components/templates/sunrise-page";
 import { SpotlightPage } from "@/components/templates/spotlight-page";
 import { GardenPage } from "@/components/templates/garden-page";
 import { RibbonPage } from "@/components/templates/ribbon-page";
+import { RenewalPage } from "@/components/templates/renewal-page";
 import { SilkPage } from "@/components/templates/silk-page";
 import { TheatrePage } from "@/components/templates/theatre-page";
 import { markOpened } from "./actions";
@@ -140,6 +141,8 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
           <GardenPage {...props} />
         ) : key === "ribbon" ? (
           <RibbonPage {...props} />
+        ) : key === "renewal" ? (
+          <RenewalPage {...props} />
         ) : (
           <ScratchPage {...props} />
         )}

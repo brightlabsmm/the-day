@@ -34,6 +34,7 @@ const PALETTES: Record<string, Palette> = {
   sunrise: { sky: ["#ffe9d6", "#f7bfa2"], sun: "#fff2dc", hills: ["#f6cba9", "#e9a481", "#cf7a5a"], bloom: ["#fff2dc", "#f7bfa2", "#e8825a"], suit: "#5a3a36", gown: "#fffaf2" },
   garden: { sky: ["#c9bfaa", "#a39880"], sun: "#e9dfca", hills: ["#8f836c", "#6c6250", "#463f33"], bloom: ["#e9dfca", "#c7bba2", "#f4ecdc"], suit: "#2a241d", gown: "#efe6d4" },
   ribbon: { sky: ["#f7e1e6","#efd0d8"], sun: "#ffffff", hills: ["#9fb3d6","#6f8ec4","#4468a6"], bloom: ["#f7e1e6","#ffffff","#9fb3d6"], suit: "#4468a6", gown: "#ffffff" },
+  renewal: { sky: ["#faf3e1","#f1e8cf"], sun: "#ffffff", hills: ["#a9b39a","#7d8c6c","#5c6c4e"], bloom: ["#faf3e1","#d9a3b8","#f4c7b0"], suit: "#5c6c4e", gown: "#ffffff" },
   spotlight: { sky: ["#1b1d12", "#3b3f26"], sun: "#e8d9a8", hills: ["#2c3020", "#4a5030", "#6b7144"], bloom: ["#e8d9a8", "#c9b36a", "#f3ecd2"], suit: "#14150e", gown: "#f4efdd" },
   scratch: { sky: ["#fde3e7", "#f6b8c6"], sun: "#fff6f2", hills: ["#e7a3b4", "#c97d94", "#9e5a75"], bloom: ["#ffd9df", "#f7a3b7", "#fff2f4"], suit: "#4a2b3a", gown: "#fff7f6" },
 };
@@ -121,6 +122,7 @@ const DEMOS = [
   { key: "spotlight", one: ["Aria", "အာရီယာ"], two: ["Theo", "သီယို"], mono: "A&T", tag: ["The lights come up on us", "ကျွန်ုပ်တို့အပေါ် အလင်းကျလာသည်"] },
   { key: "garden", one: ["Rafe", "ရာဖေ"], two: ["Kira", "ကီရာ"], mono: "R&K", tag: ["Our love for gardens, and each other", "ဥယျာဉ်ကို ချစ်သလို တစ်ယောက်ကိုတစ်ယောက်လည်း ချစ်သည်"] },
   { key: "ribbon", one: ["Marco", "မာကို"], two: ["Katrina", "ကက်ထရီနာ"], mono: "M&K", tag: ["Invite you to their wedding on March 23, 2030", "၂၀၃၀ ခုနှစ် မတ်လ ၂၃ ရက်တွင် မင်္ဂလာဆောင်ပါမည်"] },
+  { key: "renewal", one: ["Alaia", "အလိုင်ယာ"], two: ["Jeremy", "ဂျယ်ရမီ"], mono: "A&J", tag: ["Celebrate 50 years together on February 20, 2030", "၂၀၃၀ ပြည့်နှစ် ဖေဖော်ဝါရီ ၂၀ ရက်တွင် ၅၀ နှစ်ပြည့်ကို အတူကျင်းပကြပါစို့"] },
   { key: "scratch", one: ["Kaung Myat", "ကောင်းမြတ်"], two: ["Phoo Pwint", "ဖူးပွင့်"], mono: "K&P", tag: ["Love, one scratch at a time", "ချစ်ခြင်းမေတ္တာ"] },
 ] as const;
 
@@ -374,6 +376,83 @@ function ribbonFixed() {
   };
 }
 
+/** Golden Renewal is a copy of one published design too, word for word. English only. Its flower files ride along as `art`. */
+function renewalFixed() {
+  const place = { en: "Sunfolk Gardens and Events Place" };
+  const ev = (time: string, kind: "ceremony" | "reception" | "other", en: string) => ({
+    kind,
+    title: { en },
+    starts_at_local: `2030-02-20T${time}`,
+    venue_name: place,
+  });
+  return {
+    partner_one_name: { en: "Alaia" },
+    partner_two_name: { en: "Jeremy" },
+    monogram: "A&J",
+    tagline: { en: "Celebrate 50 years together on February 20, 2030" },
+    invitation_text: { en: "" },
+    closing_quote: {},
+    cover_text: {
+      english_only: true,
+      renewal: {
+        kicker: "A Golden Renewal",
+        love: { script: "Love", text: "that transcends time" },
+        about: {
+          lead: "About the",
+          script: "Ceremony",
+          cards: [
+            { title: "DATE & TIME", text: "The ceremony will take place on February 20, 2030 at 5:00 pm – just in time for the sunset!" },
+            { title: "VENUE", text: "We’ve chosen the Sunfolk Gardens and Events Place, which is a convenient 30-minute drive from our home in Beechtown." },
+            { title: "DRESS CODE", text: "Please come dressed in formal attire. Long gowns or cocktail dresses for the ladies, and dark suits for the gentlemen." },
+          ],
+        },
+        program: { script: "Program", lead: "of Events", date: "FEBRUARY 20, 2030" },
+        faqTitle: "FAQs",
+        rsvp: {
+          title: "Please RSVP",
+          sub: "WITH OUR COORDINATORS BY JANUARY 5",
+          people: [
+            { name: "Edith Schulz", role: "COORDINATOR", address: "123 Anywhere St., Any City ST 12345", mobile: "Mobile: (123) 456-7890", email: "hello@reallygreatsite.com", flower: "hydrangea" },
+            { name: "Elaine Defaux", role: "ASSISTANT COORDINATOR", address: "123 Anywhere St., Any City ST 12345", mobile: "Mobile: (123) 456-7890", email: "hello@reallygreatsite.com", flower: "magnolia" },
+          ],
+        },
+      },
+    },
+    art: {
+      tulip: "tulip.png",
+      rose: "rose.png",
+      pansy: "pansy.png",
+      lily: "lily.png",
+      dahlia: "dahlia.png",
+      orchid: "orchid.webp",
+      hydrangea: "hydrangea.webp",
+      magnolia: "magnolia.png",
+      "anthurium-pink": "anthurium-pink.png",
+      "anthurium-red": "anthurium-red.png",
+    },
+    rsvp_enabled: false,
+    wishes_enabled: false,
+    public_wishes: false,
+    seating_enabled: false,
+    guests: [],
+    story: [],
+    good_to_know: [],
+    dress_code: {},
+    note: {},
+    faq: [
+      { q: { en: "WHAT IS YOUR PHONE POLICY DURING THE CEREMONY?" }, a: { en: "We have hired a professional photographer and videographer to document our big day. As such, we highly encourage everyone to refrain from pulling out smartphones to take photos and videos during the ceremony. Please switch all of your devices to silent mode and keep unnecessary phone use to a minimum as well." } },
+      { q: { en: "WILL WHEELCHAIR ACCESS BE AVAILABLE?" }, a: { en: "Yes, our venue has multiple entries equipped with wheelchair access ramps. For anyone who’d like to request a wheelchair on the day of the ceremony, you may ask for one from any of the event personnel present." } },
+      { q: { en: "WHAT IF I HAVE DIETARY RESTRICTIONS?" }, a: { en: "We request that guests with any food allergies or other dietary restrictions let Edith, our coordinator, know in advance. This is to give us ample time to coordinate with our caterer for any necessary menu adjustments." } },
+    ],
+    events: [
+      ev("16:30", "other", "Arrival of guests"),
+      ev("17:00", "ceremony", "Ceremony"),
+      ev("18:00", "reception", "Dinner Program"),
+      ev("20:00", "other", "Celebration"),
+    ],
+  };
+}
+
 async function main() {
   const only = process.argv.slice(2);
   for (const [n, d] of DEMOS.entries()) {
@@ -385,7 +464,7 @@ async function main() {
       const real = await readdir(mediaDir).catch(() => [] as string[]);
       const useReal = real.includes("cover.jpg");
       if (useReal) {
-        for (const f of real) if (f.endsWith(".jpg")) await copyFile(path.join(mediaDir, f), path.join(dir, f));
+        for (const f of real) await copyFile(path.join(mediaDir, f), path.join(dir, f));
       } else {
         for (const [i, s] of SIZES.entries()) {
           const svg = scene(n * 100 + i + 1, pal, s.w, s.h, s.figures);
@@ -395,7 +474,7 @@ async function main() {
       const qr = `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="480"><rect width="480" height="480" fill="#fff"/><rect x="24" y="24" width="432" height="432" fill="none" stroke="#555" stroke-width="6" stroke-dasharray="14 10"/><text x="240" y="230" font-family="sans-serif" font-size="40" text-anchor="middle" fill="#555">DEMO</text><text x="240" y="280" font-family="sans-serif" font-size="40" text-anchor="middle" fill="#555">QR CODE</text></svg>`;
       await sharp(Buffer.from(qr)).png().toFile(path.join(dir, "qr.png"));
       const song = d.key === "record" ? await demoTrack(dir) : null;
-      const cfg = { ...config(d), ...(d.key === "garden" ? gardenFixed() : d.key === "ribbon" ? ribbonFixed() : {}) };
+      const cfg = { ...config(d), ...(d.key === "garden" ? gardenFixed() : d.key === "ribbon" ? ribbonFixed() : d.key === "renewal" ? renewalFixed() : {}) };
       if (useReal) {
         cfg.photos = real
           .filter((f) => f.endsWith(".jpg"))

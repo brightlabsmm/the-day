@@ -103,6 +103,12 @@ export const TEMPLATES = [
     mood: "Illustrated · pink & blue · outdoor",
   },
   {
+    key: "renewal",
+    name: "Golden Renewal",
+    blurb: "A botanical invitation in olive green and cream: a monogram entwined with a painted tulip, oval photographs with flowers laid over them, bordered detail cards and a program inside an arch.",
+    mood: "Botanical · olive & cream · painted flowers",
+  },
+  {
     key: "scratch",
     name: "Scratch to Reveal",
     blurb: "A playful rose-pink invitation: scratch the heart to reveal it, then a calendar and hearts.",

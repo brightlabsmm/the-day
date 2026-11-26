@@ -262,7 +262,8 @@
   transition: clip-path 1.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.9s ease;
 }
 .tpl-reveal[data-variant="arch"][data-state="hidden"] {
-  clip-path: inset(100% 0 0 0);
+  /* Leave a sliver showing: a fully clipped box counts as off screen, so it would never be revealed. */
+  clip-path: inset(88% 0 0 0);
   opacity: 0;
 }
 .tpl-reveal[data-variant="arch"] img {
@@ -301,6 +302,62 @@
   .tpl-reveal[data-variant="arch"][data-state="hidden"] { clip-path: none; opacity: 1; }
   .tpl-reveal[data-state="hidden"] .rb-wipe { clip-path: inset(-25% -12% -25% -5%); }
   .rb-glass-l, .rb-glass-r { opacity: 1; }
+}
+
+.tpl-renewal {
+  --ivory: #faf3e1;
+  --paper: #faf3e1;
+  --paper-deep: #f1e8cf;
+  --navy: #5c6c4e;
+  --ink: #5c6c4e;
+  --ink-soft: #6f7d62;
+  --gold: #5c6c4e;
+  --gold-soft: #a9b39a;
+  --gold-deep: #46543a;
+  --color-ivory: var(--ivory);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-navy: var(--navy);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-deep: var(--gold-deep);
+  --tpl-display: var(--font-jost), "Jost", system-ui, sans-serif;
+  background: var(--paper);
+  font-family: var(--font-jost), "Jost", system-ui, sans-serif;
+}
+.tpl-renewal .foil {
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-text-fill-color: currentColor;
+  color: var(--navy);
+}
+/* Thin display lettering (names, headings) and the calligraphy used for accents. */
+.tpl .rn-thin {
+  font-family: var(--font-jost), "Jost", system-ui, sans-serif;
+  font-weight: 200;
+  letter-spacing: 0;
+  line-height: 1.02;
+}
+.tpl .rn-script {
+  font-family: var(--font-script), "Great Vibes", cursive;
+  font-weight: 400;
+  line-height: 1.15;
+}
+.tpl .rn-caps {
+  font-family: var(--font-jost), "Jost", system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+@keyframes rn-sway {
+  50% { transform: rotate(var(--r, 2.5deg)) translateY(-3px); }
+}
+.rn-sway { transform-origin: 50% 100%; animation: rn-sway var(--t, 7s) ease-in-out var(--d, 0s) infinite alternate; }
+@media (prefers-reduced-motion: reduce) {
+  .rn-sway { animation: none; }
 }
 
 .tpl-envelope {
