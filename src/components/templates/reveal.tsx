@@ -1,13 +1,27 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ElementType, type ReactNode } from "react";
 
 /**
  * Fades and lifts its content in the first time it scrolls into view. Content
  * is fully visible until the script runs, and for people who prefer reduced
  * motion, so nothing is ever hidden without JavaScript.
  */
-export function Reveal({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
+export function Reveal({
+  children,
+  delay = 0,
+  variant = "up",
+  as: Tag = "div",
+  className,
+}: {
+  children: ReactNode;
+  /** Milliseconds to wait once it is on screen, to stagger neighbours. */
+  delay?: number;
+  /** `up` lifts, `left`/`right` slide in from that side, `photo` rises and settles from slightly larger. */
+  variant?: "up" | "left" | "right" | "photo";
+  as?: ElementType;
+  className?: string;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const [state, setState] = useState<"visible" | "hidden" | "shown">("visible");
 
@@ -30,8 +44,14 @@ export function Reveal({ children, delay = 0 }: { children: ReactNode; delay?: n
   }, []);
 
   return (
-    <div ref={ref} className="tpl-reveal" data-state={state} style={delay ? { transitionDelay: `${delay}ms` } : undefined}>
+    <Tag
+      ref={ref}
+      className={`tpl-reveal${className ? ` ${className}` : ""}`}
+      data-state={state}
+      data-variant={variant}
+      style={delay ? { transitionDelay: `${delay}ms` } : undefined}
+    >
       {children}
-    </div>
+    </Tag>
   );
 }

@@ -31,7 +31,9 @@ export function TemplateNav({
   monogram,
   items,
   over,
+  hideLang,
 }: {
+  hideLang?: boolean;
   locale: Locale;
   monogram: string;
   items: NavItem[];
@@ -75,7 +77,7 @@ export function TemplateNav({
       <div className="hidden items-center gap-5 whitespace-nowrap xl:gap-7 lg:flex">{links}</div>
 
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-2" role="group" aria-label="ဘာသာစကား / Language">
+        {!hideLang && <div className="flex items-center gap-2" role="group" aria-label="ဘာသာစကား / Language">
           {LANGS.map((l, i) => (
             <span key={l.locale} className="flex items-center gap-2">
               {i > 0 && <span aria-hidden className="opacity-40">/</span>}
@@ -94,7 +96,7 @@ export function TemplateNav({
               </Link>
             </span>
           ))}
-        </div>
+        </div>}
         <button
           type="button"
           className="grid size-9 place-items-center lg:hidden"

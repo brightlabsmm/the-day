@@ -117,7 +117,7 @@ function CalendarLinks({ invitation, locale }: { invitation: Invitation; locale:
 }
 
 /** RSVP form plus calendar buttons. */
-export function TplRsvp({ invitation, locale, token }: { invitation: Invitation; locale: Locale; token: string | null }) {
+export function TplRsvp({ invitation, locale, token, calendar = true }: { invitation: Invitation; locale: Locale; token: string | null; calendar?: boolean }) {
   const { wedding, guest } = invitation;
   if (!wedding.rsvp_enabled) return null;
   return (
@@ -126,7 +126,7 @@ export function TplRsvp({ invitation, locale, token }: { invitation: Invitation;
         <Head id="rsvp-heading" eyebrow={s("rsvpEyebrow", locale)} heading={s("rsvpHeading", locale)} />
         <p className="tpl-lead mx-auto mt-5 max-w-md">{s("rsvpIntro", locale)}</p>
         <RsvpForm slug={wedding.slug} token={guest ? token : null} locale={locale} defaultName={guest ? guestName(guest, locale) : ""} />
-        <CalendarLinks invitation={invitation} locale={locale} />
+        {calendar && <CalendarLinks invitation={invitation} locale={locale} />}
       </div>
     </section>
   );

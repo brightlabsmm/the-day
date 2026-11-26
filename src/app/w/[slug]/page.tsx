@@ -29,6 +29,7 @@ import { BotanicalPage } from "@/components/templates/botanical-page";
 import { ArtDecoPage } from "@/components/templates/artdeco-page";
 import { SunrisePage } from "@/components/templates/sunrise-page";
 import { SpotlightPage } from "@/components/templates/spotlight-page";
+import { GardenPage } from "@/components/templates/garden-page";
 import { SilkPage } from "@/components/templates/silk-page";
 import { TheatrePage } from "@/components/templates/theatre-page";
 import { markOpened } from "./actions";
@@ -75,18 +76,22 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
   const token = typeof query.g === "string" ? query.g : undefined;
   // The showcase embeds pages with ?preview=1 so every preview starts at its opening screen.
   const preview = query.preview === "1";
-  const locale: Locale = resolveLocale(query.lang, (await cookies()).get(LOCALE_COOKIE)?.value);
+  const chosen: Locale = resolveLocale(query.lang, (await cookies()).get(LOCALE_COOKIE)?.value);
 
   const invitation = await getInvitation(slug, token);
   if (!invitation) notFound();
 
   const { wedding, guest } = invitation;
+  // A demo can be English only (cover_text.english_only), whatever language the visitor last chose.
+  const englishOnly = (wedding.cover_text as Record<string, unknown> | null)?.english_only === true;
+  const locale: Locale = englishOnly ? "en" : chosen;
   const theme = themeOf(invitation);
   const monogram =
     wedding.monogram ??
     `${t(wedding.partner_one_name, "en").charAt(0)}&${t(wedding.partner_two_name, "en").charAt(0)}`;
 
-  const key = templateKey(wedding.template_key);
+  // On a developer machine only, `?design=<key>` previews any design with this wedding's content.
+  const key = templateKey(process.env.NODE_ENV !== "production" && typeof query.design === "string" ? query.design : wedding.template_key);
   if (key !== "classic") {
     const props = {
       invitation,
@@ -130,6 +135,8 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
           <SunrisePage {...props} />
         ) : key === "spotlight" ? (
           <SpotlightPage {...props} />
+        ) : key === "garden" ? (
+          <GardenPage {...props} />
         ) : (
           <ScratchPage {...props} />
         )}

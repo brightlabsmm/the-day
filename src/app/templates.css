@@ -36,6 +36,81 @@
   --tpl-display: var(--font-playfair), "Playfair Display", Georgia, serif;
 }
 
+.tpl-garden {
+  --ivory: #d9d0bc;
+  --paper: #c9bfaa;
+  --paper-deep: #bcb19a;
+  --navy: #2a241d;
+  --ink: #2f2923;
+  --ink-soft: #5b5143;
+  --gold: #2f2923;
+  --gold-soft: #a89d86;
+  --gold-deep: #1f1b16;
+  --color-ivory: var(--ivory);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-navy: var(--navy);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-deep: var(--gold-deep);
+  --tpl-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  background: var(--paper);
+  font-family: var(--font-mono-label), "DM Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+.tpl-garden :lang(my) {
+  font-family: var(--font-myanmar);
+}
+.tpl-garden .tpl-h2 {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+/* Typewriter text for small labels and paragraphs (Burmese keeps its own face). */
+.tpl-garden :is(.tpl-eyebrow, .tpl-section p, .tpl-btn, .label-caps):not(:lang(my)) {
+  font-family: var(--font-mono-label), "DM Mono", ui-monospace, Menlo, monospace;
+}
+.tpl-garden .foil {
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-text-fill-color: currentColor;
+  color: var(--navy);
+}
+/* The gift intro line is typewriter too. */
+.tpl-garden #gift .card-body:not(:lang(my)) {
+  font-family: var(--font-mono-label), "DM Mono", ui-monospace, Menlo, monospace;
+}
+.tpl-garden-mono {
+  font-family: var(--font-mono-label), "DM Mono", ui-monospace, Menlo, monospace;
+}
+.tpl-garden-mono:lang(my) {
+  font-family: var(--font-myanmar);
+}
+.tpl-garden-button {
+  display: inline-block;
+  border: 1px solid currentColor;
+  padding: 0.85rem 2.6rem;
+  font-family: var(--font-mono-label), "DM Mono", ui-monospace, Menlo, monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.tpl-garden-button:lang(my) {
+  font-family: var(--font-myanmar);
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+.tpl-garden-button:hover {
+  background: #f3ecdd;
+  color: #26211b;
+}
+/* Every photo goes warm sepia; QR codes and our own logo stay as they are. */
+.tpl-garden img:not(#gift img):not(aside img) {
+  filter: sepia(0.55) saturate(0.8) contrast(1.04) brightness(0.96);
+}
+
 .tpl-envelope {
   --ivory: #f8f3ea;
   --paper: #efe6d6;
@@ -393,7 +468,33 @@ html:has(.tpl) {
   opacity: 0;
   transform: translateY(28px);
 }
+.tpl-reveal[data-variant="left"][data-state="hidden"] {
+  transform: translateX(-40px);
+}
+.tpl-reveal[data-variant="right"][data-state="hidden"] {
+  transform: translateX(40px);
+}
+.tpl-reveal[data-variant="photo"] {
+  transition: opacity 1.2s ease, transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.tpl-reveal[data-variant="photo"][data-state="hidden"] {
+  transform: translateY(36px) scale(1.06);
+}
+/* Garden: the cover's words rise in one after another when the page opens. */
+@keyframes tpl-garden-rise {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+}
+.tpl-garden-rise {
+  animation: tpl-garden-rise 1.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--d, 0ms);
+}
 @media (prefers-reduced-motion: reduce) {
+  .tpl-garden-rise {
+    animation: none;
+  }
   .tpl-reveal {
     transition: none;
   }

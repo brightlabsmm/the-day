@@ -91,6 +91,12 @@ export const TEMPLATES = [
     mood: "Cinematic · photo-first · olive & gold",
   },
   {
+    key: "garden",
+    name: "Sepia Garden",
+    blurb: "A quiet film-photo invitation: a sepia cover with script names and a thin-outlined RSVP button, a taupe page in a typewriter face, and a stack of photos to close.",
+    mood: "Quiet · sepia film · typewriter",
+  },
+  {
     key: "scratch",
     name: "Scratch to Reveal",
     blurb: "A playful rose-pink invitation: scratch the heart to reveal it, then a calendar and hearts.",

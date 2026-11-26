@@ -46,3 +46,6 @@ next-env.d.ts
 
 # real couple data (names, QR codes, photos) — never committed
 /private/
+
+# third-party stock photos used only for the garden showcase demo
+/supabase/seed-media/

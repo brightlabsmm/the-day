@@ -9,7 +9,11 @@ import os from "node:os";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
 import sharp from "sharp";
+import { copyFile, readdir } from "node:fs/promises";
 import { importWedding } from "./import-wedding";
+
+/** Optional real photos for a demo, kept out of git: supabase/seed-media/<key>/ (cover.jpg, p1.jpg ...). */
+const MEDIA_ROOT = path.join(process.cwd(), "supabase", "seed-media");
 
 type Palette = { sky: [string, string]; sun: string; hills: [string, string, string]; bloom: string[]; suit: string; gown: string };
 
@@ -28,6 +32,7 @@ const PALETTES: Record<string, Palette> = {
   botanical: { sky: ["#eef3e4", "#cfdcc0"], sun: "#fbfdf5", hills: ["#c9d8b4", "#9db688", "#6f8f62"], bloom: ["#ffffff", "#dfe9cf", "#f3d9d0"], suit: "#2f4a34", gown: "#fbfdf6" },
   artdeco: { sky: ["#151515", "#2b2618"], sun: "#f2d479", hills: ["#2a2a2a", "#3b3417", "#5a4d22"], bloom: ["#f2d479", "#d4af37", "#ece6d6"], suit: "#0b0b0d", gown: "#f5efe0" },
   sunrise: { sky: ["#ffe9d6", "#f7bfa2"], sun: "#fff2dc", hills: ["#f6cba9", "#e9a481", "#cf7a5a"], bloom: ["#fff2dc", "#f7bfa2", "#e8825a"], suit: "#5a3a36", gown: "#fffaf2" },
+  garden: { sky: ["#c9bfaa", "#a39880"], sun: "#e9dfca", hills: ["#8f836c", "#6c6250", "#463f33"], bloom: ["#e9dfca", "#c7bba2", "#f4ecdc"], suit: "#2a241d", gown: "#efe6d4" },
   spotlight: { sky: ["#1b1d12", "#3b3f26"], sun: "#e8d9a8", hills: ["#2c3020", "#4a5030", "#6b7144"], bloom: ["#e8d9a8", "#c9b36a", "#f3ecd2"], suit: "#14150e", gown: "#f4efdd" },
   scratch: { sky: ["#fde3e7", "#f6b8c6"], sun: "#fff6f2", hills: ["#e7a3b4", "#c97d94", "#9e5a75"], bloom: ["#ffd9df", "#f7a3b7", "#fff2f4"], suit: "#4a2b3a", gown: "#fff7f6" },
 };
@@ -113,6 +118,7 @@ const DEMOS = [
   { key: "artdeco", one: ["Aung Aung", "အောင်အောင်"], two: ["Moe Moe", "မိုးမိုး"], mono: "A&M", tag: ["A night to remember, gilded forever", "မှတ်မိနေမည့်ညတစ်ညကို ရွှေစင်ဖြင့်"] },
   { key: "sunrise", one: ["Su Mon", "စုမွန်"], two: ["Lin Htet", "လင်းထက်"], mono: "S&L", tag: ["Every sunrise, together", "နေထွက်တိုင်း အတူတကွ"] },
   { key: "spotlight", one: ["Aria", "အာရီယာ"], two: ["Theo", "သီယို"], mono: "A&T", tag: ["The lights come up on us", "ကျွန်ုပ်တို့အပေါ် အလင်းကျလာသည်"] },
+  { key: "garden", one: ["Rafe", "ရာဖေ"], two: ["Kira", "ကီရာ"], mono: "R&K", tag: ["Our love for gardens, and each other", "ဥယျာဉ်ကို ချစ်သလို တစ်ယောက်ကိုတစ်ယောက်လည်း ချစ်သည်"] },
   { key: "scratch", one: ["Kaung Myat", "ကောင်းမြတ်"], two: ["Phoo Pwint", "ဖူးပွင့်"], mono: "K&P", tag: ["Love, one scratch at a time", "ချစ်ခြင်းမေတ္တာ"] },
 ] as const;
 
@@ -229,21 +235,95 @@ function config(d: (typeof DEMOS)[number]) {
   };
 }
 
+/**
+ * Garden is a copy of one published design, so its demo uses that design's own wording, word for
+ * word, instead of the generic sample text. The Burmese lines are translations and need a native check.
+ */
+const VENUE = { en: "The Sunroom at Rizal Gardens" };
+const GARDEN_ADDRESS = {
+  en: "Our reception will take place in The Sunroom at Rizal Gardens — an open-air garden space. The celebration will be outdoors, so expect fresh air, soft grass, and lots of golden hour glow.",
+};
+function gardenFixed() {
+  const ev = (time: string, kind: "ceremony" | "reception" | "other", en: string) => ({
+    kind,
+    title: { en },
+    starts_at_local: `2035-04-27T${time}`,
+    venue_name: VENUE,
+    venue_address: GARDEN_ADDRESS,
+  });
+  return {
+    partner_one_name: { en: "Rafael" },
+    partner_two_name: { en: "Kirsten" },
+    monogram: "R&K",
+    tagline: { en: "Our love for gardens (and each other)" },
+    invitation_text: {
+      en: "Write a paragraph that tells your story as a couple. You can include details like how you met, your journey together, and what makes your relationship unique. This is your chance to share your personality and connect with your guests,",
+    },
+    closing_quote: {},
+    cover_text: { english_only: true, contact: [{ text: "the-day.brightlabsmm.com", href: "https://the-day.brightlabsmm.com/" }, { text: "@theday", href: "https://www.facebook.com/people/The-Day-E-Invitation-Service/61597006130300/" }] },
+    wishes_enabled: false,
+    public_wishes: false,
+    seating_enabled: false,
+    guests: [],
+    faq: [],
+    story: [],
+    dress_code: {
+      text: {
+        en: "Garden party chic! Flowy, breathable fabrics and comfortable shoes (heels are optional, sinking in the grass is not required). Pastel colors are preferred but not mandatory!",
+      },
+      colors: [],
+    },
+    good_to_know: [
+      {
+        text: {
+          en: "Free parking is available on-site, with designated areas for PWDs and senior guests. If you need special assistance or a drop-off closer to the garden entrance, let us know.",
+        },
+      },
+    ],
+    note: {
+      en: "But if you feel called to give a little something, we’ve put together a small registry with some of our most wished-for items at Sining Spaces.\n\nScan the QR on this page or send an email to hello@reallygreatsite.com with the Registry No. 12345 as the subject line for our updated gift list.",
+    },
+    events: [
+      ev("17:00", "other", "Welcome Photos & Cocktails"),
+      ev("18:00", "ceremony", "Dinner Program"),
+      ev("19:00", "reception", "Toasts & Speeches"),
+      ev("20:00", "other", "Official Picture Taking"),
+      ev("21:00", "other", "Open Bar & Dancing"),
+    ],
+  };
+}
+
 async function main() {
+  const only = process.argv.slice(2);
   for (const [n, d] of DEMOS.entries()) {
+    if (only.length && !only.includes(d.key)) continue;
     const dir = await mkdtemp(path.join(os.tmpdir(), `showcase-${d.key}-`));
     try {
       const pal = PALETTES[d.key];
-      for (const [i, s] of SIZES.entries()) {
-        const svg = scene(n * 100 + i + 1, pal, s.w, s.h, s.figures);
-        await sharp(Buffer.from(svg)).jpeg({ quality: 88 }).toFile(path.join(dir, s.name));
+      const mediaDir = path.join(MEDIA_ROOT, d.key);
+      const real = await readdir(mediaDir).catch(() => [] as string[]);
+      const useReal = real.includes("cover.jpg");
+      if (useReal) {
+        for (const f of real) if (f.endsWith(".jpg")) await copyFile(path.join(mediaDir, f), path.join(dir, f));
+      } else {
+        for (const [i, s] of SIZES.entries()) {
+          const svg = scene(n * 100 + i + 1, pal, s.w, s.h, s.figures);
+          await sharp(Buffer.from(svg)).jpeg({ quality: 88 }).toFile(path.join(dir, s.name));
+        }
       }
       const qr = `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="480"><rect width="480" height="480" fill="#fff"/><rect x="24" y="24" width="432" height="432" fill="none" stroke="#555" stroke-width="6" stroke-dasharray="14 10"/><text x="240" y="230" font-family="sans-serif" font-size="40" text-anchor="middle" fill="#555">DEMO</text><text x="240" y="280" font-family="sans-serif" font-size="40" text-anchor="middle" fill="#555">QR CODE</text></svg>`;
       await sharp(Buffer.from(qr)).png().toFile(path.join(dir, "qr.png"));
       const song = d.key === "record" ? await demoTrack(dir) : null;
+      const cfg = { ...config(d), ...(d.key === "garden" ? gardenFixed() : {}) };
+      if (useReal) {
+        cfg.photos = real
+          .filter((f) => f.endsWith(".jpg"))
+          .sort((a, b) => (a === "cover.jpg" ? -1 : b === "cover.jpg" ? 1 : a.localeCompare(b, undefined, { numeric: true })))
+          .map((f) => ({ file: f, kind: "portrait" as const, cover: f === "cover.jpg", alt: { en: "Wedding photo", my: "မင်္ဂလာဓာတ်ပုံ" }, _i: 0 }));
+      }
       await writeFile(
         path.join(dir, "wedding.json"),
-        JSON.stringify({ ...config(d), ...(song ? { music: { file: song, title: "Demo ambient loop" } } : {}) }),
+        JSON.stringify({ ...cfg, ...(song ? { music: { file: song, title: "Demo ambient loop" } } : {}) }),
       );
       await importWedding(dir);
     } finally {

@@ -14,12 +14,23 @@ const Method = z.object({
 });
 
 /** Display-only gift QR codes (KBZPay, Wave, …). Nothing here moves money. */
-export function GiftSection({ invitation, locale, plain, reveal }: { invitation: Invitation; locale: Locale; plain?: boolean; reveal?: boolean }) {
+export function GiftSection({ invitation, locale, plain, reveal, bare, intro }: { invitation: Invitation; locale: Locale; plain?: boolean; reveal?: boolean; bare?: boolean; intro?: string }) {
   const methods = invitation.wedding.gift_methods.flatMap((m) => {
     const parsed = Method.safeParse(m);
     return parsed.success ? [parsed.data] : [];
   });
   if (methods.length === 0) return null;
+
+  // `bare`: only the white QR tiles, left-aligned under the text, with no card around them.
+  const tiles = (top: string) => (
+    <ul className={`${top} flex flex-wrap gap-4`}>
+      {methods.map((m) => (
+        <li key={m.qr_path} className="relative aspect-square w-36 overflow-hidden bg-white p-2">
+          <Image src={mediaUrl(m.qr_path)} alt={`${s("giftQrAlt", locale)}${m.label ? ` — ${m.label}` : ""}`} fill sizes="144px" className="object-contain p-1" />
+        </li>
+      ))}
+    </ul>
+  );
 
   const list = (top: string) => (
     <ul className={`mx-auto ${top} grid max-w-xl gap-3 sm:gap-6 ${methods.length > 1 ? "grid-cols-2" : "max-w-xs grid-cols-1"}`}>
@@ -48,6 +59,16 @@ export function GiftSection({ invitation, locale, plain, reveal }: { invitation:
       ))}
     </ul>
   );
+
+  // `bare`: just the intro line and the codes, for a design that provides its own heading and layout.
+  if (bare) {
+    return (
+      <div lang={locale}>
+        <p className="card-body max-w-md whitespace-pre-line text-ink">{intro ?? s("giftIntro", locale)}</p>
+        {reveal ? <GiftReveal hint={s("giftOpenHint", locale)}>{tiles("mt-2")}</GiftReveal> : tiles("mt-8")}
+      </div>
+    );
+  }
 
   return (
     <InnerCard id="gift-heading" anchor="gift" plain={plain} heading={s("giftHeading", locale)} lang={locale}>
