@@ -282,7 +282,7 @@ export default function Home() {
           </B>
           <B x={896} y={640} w={380} fs={20.5} as="p" cls="font-display text-[#3b3632]">Worldwide service</B>
           <B x={894} y={676} w={400} fs={20.5} as="p" cls="font-display text-[#8a6d33]">Taiwan · Thailand · Myanmar</B>
-          <B x={1158} y={575} w={150} cls="hide-m"><img src="/landing/bouq-line.webp" alt="" className="lp-img" /></B>
+          <B x={1160} y={578} w={140} cls="hide-m"><img src="/landing/envelope-line.webp" alt="" className="lp-img" /></B>
         </div>
       </section>
 
@@ -293,7 +293,11 @@ export default function Home() {
         <B x={930} y={95} w={150} v="right" cls="hide-m"><img src="/landing/dried.webp" alt="" className="lp-img" style={{ transform: "scaleX(-1) rotate(-6deg)", opacity: .85 }} /></B>
         <B x={828} y={185} w={285} h={430} v="zoom" cls="hide-m">
           <div className="flex h-full w-full items-center justify-center" style={{ background: "linear-gradient(#f9f3ea,#f3e9dc)", boxShadow: "0 30px 50px -28px rgba(120,90,50,.45)", transform: "rotate(1.5deg)" }}>
-            <img src="/landing/bouq-gold.webp" alt="" style={{ width: "76%" }} />
+            {/* A gold laurel wreath with the name set inside it, like a monogram. */}
+            <div className="relative" style={{ width: "78%" }}>
+              <img src="/landing/wreath-line.webp" alt="" className="lp-img" />
+              <span className="script absolute inset-x-0 text-center text-[#8a7f78]" style={{ top: "34%", fontSize: "calc(34 * var(--u))" }}>The Day</span>
+            </div>
           </div>
         </B>
         <div className="in pt-20">
