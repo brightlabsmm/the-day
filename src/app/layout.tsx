@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, DM_Mono, Great_Vibes, Jost, Libre_Caslon_Text, Mr_Dafoe, Noto_Serif_Myanmar, Pacifico, Playfair_Display, Sacramento, Special_Elite, Yellowtail } from "next/font/google";
+import { Anton, Cormorant_Garamond, DM_Mono, Great_Vibes, Jost, Libre_Caslon_Text, Mr_Dafoe, Noto_Serif_Myanmar, Pacifico, Playfair_Display, Sacramento, Special_Elite, Yellowtail } from "next/font/google";
 import "./globals.css";
 import "./templates.css";
 
@@ -42,6 +42,9 @@ const caslon = Libre_Caslon_Text({ variable: "--font-ribbon-serif", subsets: ["l
 const rainbow = Sacramento({ variable: "--font-scrap-script", subsets: ["latin"], weight: "400", display: "swap" });
 const elite = Special_Elite({ variable: "--font-scrap-type", subsets: ["latin"], weight: "400", display: "swap" });
 
+// Used only by the Love Letters template: tall condensed capitals for the names and headings.
+const anton = Anton({ variable: "--font-letters-display", subsets: ["latin"], weight: "400", display: "swap" });
+
 const jost = Jost({
   variable: "--font-jost",
   subsets: ["latin"],
@@ -69,7 +72,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="my"
       // Browser extensions add attributes to <html> and <body> before React loads; ignore those differences.
       suppressHydrationWarning
-      className={`${cormorant.variable} ${notoMyanmar.variable} ${jost.variable} ${playfair.variable} ${greatVibes.variable} ${pacifico.variable} ${dmMono.variable} ${mrDafoe.variable} ${yellowtail.variable} ${caslon.variable} ${rainbow.variable} ${elite.variable} h-full`}
+      className={`${cormorant.variable} ${notoMyanmar.variable} ${jost.variable} ${playfair.variable} ${greatVibes.variable} ${pacifico.variable} ${dmMono.variable} ${mrDafoe.variable} ${yellowtail.variable} ${caslon.variable} ${rainbow.variable} ${elite.variable} ${anton.variable} h-full`}
     >
       <body className="min-h-full" suppressHydrationWarning>
         {children}

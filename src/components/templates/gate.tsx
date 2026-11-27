@@ -16,7 +16,7 @@ import { GATE_OPENED_EVENT } from "@/components/invite/music-player";
 type Props = {
   kind:
     | "envelope" | "scratch" | "theatre" | "shutters" | "silk" | "midnight" | "lantern" | "polaroid" | "botanical" | "artdeco" | "sunrise" | "spotlight"
-    | "garden" | "ribbon" | "renewal" | "scrapbook";
+    | "garden" | "ribbon" | "renewal" | "scrapbook" | "letters";
   slug: string;
   token: string | null;
   locale: Locale;
@@ -99,7 +99,7 @@ export function Gate({ kind, slug, token, locale, monogram, coverSrc, guestLabel
           lang={locale}
           className="fixed inset-0 z-50 overflow-hidden"
           animate={{ opacity: phase === "opening" ? 0 : 1 }}
-          transition={{ duration: 0.7, delay: phase === "opening" ? (kind === "envelope" ? 1.1 : kind === "theatre" ? 1.5 : kind === "shutters" ? 1.9 : kind === "silk" ? 1.2 : kind === "midnight" ? 1.4 : kind === "lantern" ? 1.5 : kind === "polaroid" ? 1.1 : kind === "botanical" ? 1.3 : kind === "artdeco" ? 1.2 : kind === "sunrise" ? 1.6 : kind === "spotlight" ? 1.5 : kind === "garden" ? 1.4 : kind === "ribbon" ? 1.2 : kind === "renewal" ? 1.4 : kind === "scrapbook" ? 1.6 : 0.9) : 0, ease: "easeOut" }}
+          transition={{ duration: 0.7, delay: phase === "opening" ? (kind === "envelope" ? 1.1 : kind === "theatre" ? 1.5 : kind === "shutters" ? 1.9 : kind === "silk" ? 1.2 : kind === "midnight" ? 1.4 : kind === "lantern" ? 1.5 : kind === "polaroid" ? 1.1 : kind === "botanical" ? 1.3 : kind === "artdeco" ? 1.2 : kind === "sunrise" ? 1.6 : kind === "spotlight" ? 1.5 : kind === "garden" ? 1.4 : kind === "ribbon" ? 1.2 : kind === "renewal" ? 1.4 : kind === "scrapbook" ? 1.6 : kind === "letters" ? 1.4 : 0.9) : 0, ease: "easeOut" }}
           onAnimationComplete={() => {
             if (phase === "opening") finish();
           }}
@@ -110,6 +110,8 @@ export function Gate({ kind, slug, token, locale, monogram, coverSrc, guestLabel
             <RibbonFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} place={place} />
           ) : kind === "renewal" ? (
             <RenewalFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} place={place} monogram={monogram} />
+          ) : kind === "letters" ? (
+            <LettersFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} />
           ) : kind === "scrapbook" ? (
             <ScrapbookFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} place={place} guestLabel={guestLabel} />
           ) : kind === "spotlight" ? (
@@ -1342,6 +1344,85 @@ function ScrapbookFace({ opening, onOpen, locale, names, dateLabel, place, guest
 
         <span className="mt-7 block text-[0.72rem] tracking-[0.22em] uppercase [&:lang(my)]:tracking-normal" style={{ ...type, opacity: opening ? 0 : 1, transition: "opacity .4s" }}>
           {s("tapScrapbook", locale)}
+        </span>
+      </button>
+    </div>
+  );
+}
+
+/* ── Love Letters ───────────────────────────────────────────── */
+
+/** A folded love letter held shut by a strip of red striped washi tape; a tap pulls the tape off and the letter opens. */
+function LettersFace({ opening, onOpen, locale, names, dateLabel }: Omit<FaceProps, "place">) {
+  const display = { fontFamily: "var(--font-letters-display), Impact, sans-serif" } as const;
+  const script = { fontFamily: "var(--font-ribbon-names), cursive" } as const;
+  const type = { fontFamily: "var(--font-scrap-type), monospace" } as const;
+  const fade = { opacity: opening ? 0 : 1, transition: "opacity .45s" };
+  return (
+    <div className="relative grid h-full w-full place-items-center overflow-hidden bg-[#e7dbc6] px-5 text-[#2e2a26]">
+      <div aria-hidden className="absolute inset-0 opacity-[.14] mix-blend-multiply" style={{ backgroundImage: GRAIN }} />
+      <button
+        type="button"
+        onClick={onOpen}
+        disabled={opening}
+        aria-label={s("enter", locale)}
+        className="relative flex w-full max-w-md flex-col items-center text-center focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-[#b23a1e]"
+      >
+        <span className="block bg-[#c9ad89] px-3 py-1 text-[0.85rem] tracking-[0.1em] uppercase [&:lang(my)]:tracking-normal [&:lang(my)]:normal-case" style={{ ...type, ...fade }}>
+          {s("lettersSaveDate", locale)}
+        </span>
+
+        {/* The folded letter */}
+        <span className="relative mt-7 block aspect-[1.4] w-[min(84vw,360px)]" style={{ perspective: "1100px" }}>
+          {/* Inside of the letter, revealed as the top half folds back */}
+          <span aria-hidden className="absolute inset-0 grid place-items-center bg-[#f4ede0] shadow-[0_18px_30px_-18px_rgba(60,40,20,.6)]">
+            <span className="text-[2.6rem] leading-none text-[#b23a1e]" style={display}>
+              {names?.one?.[0]}&amp;{names?.two?.[0]}
+            </span>
+          </span>
+          {/* Top half of the fold, with faint handwriting lines */}
+          <span
+            aria-hidden
+            className="absolute inset-x-0 top-0 block h-1/2"
+            style={{
+              background: "repeating-linear-gradient(180deg,#efe6d6 0 17px,rgba(120,100,80,.25) 17px 18px),#efe6d6",
+              transformOrigin: "bottom center",
+              transform: opening ? "rotateX(-178deg)" : "none",
+              transition: "transform .8s cubic-bezier(.5,0,.3,1) .45s",
+              boxShadow: "0 1px 0 rgba(60,40,20,.15)",
+              zIndex: 2,
+            }}
+          />
+          <span aria-hidden className="absolute inset-x-0 bottom-0 block h-1/2" style={{ background: "repeating-linear-gradient(180deg,#f1e9da 0 17px,rgba(120,100,80,.22) 17px 18px),#f1e9da", zIndex: 1 }} />
+          {/* The guest-facing names on the closed letter */}
+          <span className="absolute inset-x-0 top-[5%] z-[3] block px-4" style={fade}>
+            <span className="block text-[clamp(2.1rem,10vw,3rem)] leading-[0.95] text-[#b23a1e] uppercase [&:lang(my)]:normal-case" style={display}>
+              {names?.one} &amp; {names?.two}
+            </span>
+            <span className="-mt-1 block text-[2.4rem] leading-none" style={script}>
+              {s("lettersForever", locale)}
+            </span>
+          </span>
+          {/* Red striped washi tape across the fold */}
+          <span
+            aria-hidden
+            className="absolute top-1/2 left-[-8%] z-[4] block h-7 w-[116%]"
+            style={{
+              background: "repeating-linear-gradient(-45deg,#b23a1e 0 7px,#c9573a 7px 9px)",
+              clipPath: "polygon(1% 10%,3% 0,97% 4%,100% 0,99% 90%,100% 100%,2% 96%,0 100%)",
+              boxShadow: "0 2px 5px rgba(60,30,20,.25)",
+              transform: opening ? "translate(115%,-50%) rotate(8deg)" : "translateY(-50%) rotate(-3deg)",
+              opacity: opening ? 0 : 1,
+              transition: "transform .6s cubic-bezier(.6,0,.4,1), opacity .4s ease .3s",
+            }}
+          />
+        </span>
+
+        <span className="mt-7 block text-[0.85rem] tracking-[0.08em] uppercase [&:lang(my)]:normal-case [&:lang(my)]:tracking-normal" style={{ ...type, ...fade }}>
+          {dateLabel}
+        </span>
+        <span className="mt-4 block text-[0.72rem] tracking-[0.22em] text-[#b23a1e] uppercase [&:lang(my)]:tracking-normal" style={{ ...type, ...fade }}>
+          {s("tapLetters", locale)}
         </span>
       </button>
     </div>

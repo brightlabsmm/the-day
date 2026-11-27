@@ -1405,3 +1405,132 @@ html:has(.tpl) {
   .tpl-record .rec-veil { animation: none; opacity: 0; }
   .tpl-record .rec-photo { animation: none; }
 }
+
+/* ── Love Letters: sand paper, rust condensed capitals, a handwritten "forever." and typewriter labels ── */
+.tpl-letters {
+  --ivory: #efe5d4;
+  --paper: #e7dbc6;
+  --paper-deep: #d9c9ad;
+  --navy: #b23a1e;
+  --ink: #2e2a26;
+  --ink-soft: #5a5048;
+  --gold: #b23a1e;
+  --gold-soft: #c9ad89;
+  --gold-deep: #8a2a14;
+  --color-ivory: var(--ivory);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-navy: var(--navy);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-deep: var(--gold-deep);
+  --tpl-display: var(--font-letters-display), "Anton", Impact, sans-serif;
+  background: var(--paper);
+  font-family: var(--font-scrap-type), "Special Elite", "Courier New", monospace;
+}
+.tpl-letters :lang(my) {
+  font-family: var(--font-myanmar);
+}
+.tpl-letters .foil {
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-text-fill-color: currentColor;
+  color: var(--navy);
+}
+/* Shared sections (RSVP, questions, wishes) keep the typewriter for their small text. */
+.tpl-letters :is(.tpl-eyebrow, .tpl-section p, .tpl-btn, .label-caps):not(:lang(my)) {
+  font-family: var(--font-scrap-type), "Special Elite", monospace;
+}
+/* Big condensed capitals, as on the names and "QUESTIONS?". */
+.lt-big {
+  font-family: var(--font-letters-display), "Anton", Impact, sans-serif;
+  color: var(--navy);
+  text-transform: uppercase;
+  line-height: 0.92;
+  letter-spacing: -0.005em;
+}
+.lt-big:lang(my) {
+  font-family: var(--font-myanmar);
+  font-weight: 700;
+  text-transform: none;
+  line-height: 1.6;
+}
+/* The handwritten word that overlaps the names. */
+.lt-script {
+  font-family: var(--font-ribbon-names), "Mr Dafoe", cursive;
+  color: var(--ink);
+  line-height: 1;
+}
+.lt-script:lang(my) {
+  font-family: var(--font-myanmar);
+}
+/* Typewriter labels on strips of tan paper. */
+.lt-chip {
+  display: inline-block;
+  background: #c9ad89;
+  color: var(--ink);
+  padding: 0.3em 0.65em 0.25em;
+  font-size: clamp(0.82rem, 3.6vw, 1rem);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.lt-chip:lang(my) {
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.9;
+}
+.lt-button {
+  display: inline-block;
+  background: #c9ad89;
+  color: var(--navy);
+  padding: 1rem 2.4rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.lt-button:lang(my) {
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+.lt-button:hover {
+  background: var(--navy);
+  color: #f4ecdd;
+}
+.lt-button:focus-visible {
+  outline: 2px solid var(--navy);
+  outline-offset: 4px;
+}
+/* A dry-brush stroke under a heading. */
+.lt-brush {
+  display: block;
+  height: 0.6rem;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 14' preserveAspectRatio='none'><path d='M2 9 C60 4 120 11 200 7 S340 3 398 8 L397 12 C330 9 260 13 190 11 S60 13 3 13Z' fill='%23a5913f'/><path d='M8 7 C90 5 170 8 260 6 S360 5 392 6' stroke='%23c2ad5a' stroke-width='1.4' fill='none' opacity='.7'/></svg>") center / 100% 100% no-repeat;
+}
+/* A rust rule under each contact row and programme line. */
+.lt-rule {
+  border-bottom: 2px solid var(--navy);
+}
+/* Yellow paper with fine vertical stripes, behind the last photo. */
+.lt-stripes {
+  background: repeating-linear-gradient(90deg, #c8b25c 0 3px, #d9c677 3px 8px);
+}
+/* Pressed flowers rock gently once they are on the page. */
+.lt-sway {
+  transform-origin: 50% 60%;
+  animation: lt-sway 9s ease-in-out 1.5s infinite alternate;
+}
+@keyframes lt-sway {
+  from { transform: rotate(-3deg); }
+  to { transform: rotate(3deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lt-sway { animation: none; }
+}
+/* The gift intro line is typewriter too. */
+.tpl-letters #gift .card-body:not(:lang(my)) {
+  font-family: var(--font-scrap-type), "Special Elite", monospace;
+}

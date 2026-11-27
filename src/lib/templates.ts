@@ -115,6 +115,12 @@ export const TEMPLATES = [
     mood: "Scrapbook · paper & pressed flowers · rust red",
   },
   {
+    key: "letters",
+    name: "Love Letters",
+    blurb: "A sand-paper save-the-date: tall rust-red names with a handwritten “forever.”, typewriter labels on tan paper, and collages of photos with tape, torn paper, pressed flowers and old love letters.",
+    mood: "Collage · sand & rust · love letters",
+  },
+  {
     key: "scratch",
     name: "Scratch to Reveal",
     blurb: "A playful rose-pink invitation: scratch the heart to reveal it, then a calendar and hearts.",

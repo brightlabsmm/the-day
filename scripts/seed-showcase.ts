@@ -36,6 +36,7 @@ const PALETTES: Record<string, Palette> = {
   ribbon: { sky: ["#f7e1e6","#efd0d8"], sun: "#ffffff", hills: ["#9fb3d6","#6f8ec4","#4468a6"], bloom: ["#f7e1e6","#ffffff","#9fb3d6"], suit: "#4468a6", gown: "#ffffff" },
   renewal: { sky: ["#faf3e1","#f1e8cf"], sun: "#ffffff", hills: ["#a9b39a","#7d8c6c","#5c6c4e"], bloom: ["#faf3e1","#d9a3b8","#f4c7b0"], suit: "#5c6c4e", gown: "#ffffff" },
   scrapbook: { sky: ["#fbf8f3","#efe7da"], sun: "#ffffff", hills: ["#d8b9aa","#c98a73","#a53a22"], bloom: ["#fbf8f3","#e9c7c0","#d7a58c"], suit: "#2c2a27", gown: "#ffffff" },
+  letters: { sky: ["#9fb3cf","#d9cfbd"], sun: "#fff6e4", hills: ["#d8c79f","#b9a26f","#8a7a4f"], bloom: ["#b23a1e","#e7dbc6","#f2d37b"], suit: "#ece4d6", gown: "#e9dcc6" },
   spotlight: { sky: ["#1b1d12", "#3b3f26"], sun: "#e8d9a8", hills: ["#2c3020", "#4a5030", "#6b7144"], bloom: ["#e8d9a8", "#c9b36a", "#f3ecd2"], suit: "#14150e", gown: "#f4efdd" },
   scratch: { sky: ["#fde3e7", "#f6b8c6"], sun: "#fff6f2", hills: ["#e7a3b4", "#c97d94", "#9e5a75"], bloom: ["#ffd9df", "#f7a3b7", "#fff2f4"], suit: "#4a2b3a", gown: "#fff7f6" },
 };
@@ -125,6 +126,7 @@ const DEMOS = [
   { key: "ribbon", one: ["Marco", "မာကို"], two: ["Katrina", "ကက်ထရီနာ"], mono: "M&K", tag: ["Invite you to their wedding on March 23, 2030", "၂၀၃၀ ခုနှစ် မတ်လ ၂၃ ရက်တွင် မင်္ဂလာဆောင်ပါမည်"] },
   { key: "renewal", one: ["Alaia", "အလိုင်ယာ"], two: ["Jeremy", "ဂျယ်ရမီ"], mono: "A&J", tag: ["Celebrate 50 years together on February 20, 2030", "၂၀၃၀ ပြည့်နှစ် ဖေဖော်ဝါရီ ၂၀ ရက်တွင် ၅၀ နှစ်ပြည့်ကို အတူကျင်းပကြပါစို့"] },
   { key: "scrapbook", one: ["Arman Buhay", "အာမန်"], two: ["Lovely Tan", "လာဗ်လီ"], mono: "A&L", tag: ["Our love for gardens (and each other!) grows", "ကျွန်ုပ်တို့၏ ချစ်ခြင်း ကြီးထွားနေသည်"] },
+  { key: "letters", one: ["Riley", "Riley"], two: ["Lin", "Lin"], mono: "R&L", tag: ["Forever starts here", "Forever starts here"] },
   { key: "scratch", one: ["Kaung Myat", "ကောင်းမြတ်"], two: ["Phoo Pwint", "ဖူးပွင့်"], mono: "K&P", tag: ["Love, one scratch at a time", "ချစ်ခြင်းမေတ္တာ"] },
 ] as const;
 
@@ -566,6 +568,81 @@ function scrapbookFixed() {
   };
 }
 
+/**
+ * Love Letters follows one published save-the-date: Riley & Lin, Venston Bay, July 15. English only,
+ * like the other copied designs; its contact rows and paper artwork are part of the demo.
+ */
+function lettersFixed() {
+  const place = { en: "Venston Bay" };
+  const ev = (time: string, kind: "ceremony" | "reception" | "other", en: string) => ({
+    kind,
+    title: { en },
+    starts_at_local: `2030-07-15T${time}`,
+    venue_name: place,
+    venue_address: { en: "The Boathouse, 12 Shore Road, Venston Bay" },
+    map_url: "https://www.google.com/maps/search/?api=1&query=Venston+Bay",
+  });
+  return {
+    partner_one_name: { en: "Riley" },
+    partner_two_name: { en: "Lin" },
+    monogram: "R&L",
+    tagline: { en: "Forever starts here" },
+    invitation_text: {
+      en: "We met with a letter and we are marrying with one. Please keep the date, bring your warmest smile, and celebrate with us by the bay. [Sample wording]",
+    },
+    closing_quote: { en: "Yours, always." },
+    cover_text: {
+      english_only: true,
+      contact: [
+        { label: "Phone", text: "(123) 456-7890" },
+        { label: "Email", text: "hello@reallygreatsite.com" },
+        { label: "Social", text: "@reallygreatsite" },
+      ],
+    },
+    dress_code: {
+      text: { en: "Garden party chic. Soft, natural tones photograph beautifully." },
+      colors: [
+        { hex: "#b23a1e", name: { en: "Rust" } },
+        { hex: "#c9ad89", name: { en: "Sand" } },
+        { hex: "#efe5d4", name: { en: "Ivory" } },
+        { hex: "#2e2a26", name: { en: "Charcoal" } },
+      ],
+    },
+    good_to_know: [
+      { title: { en: "Parking" }, text: { en: "Free parking at the boathouse. Our ushers will guide you." } },
+      { title: { en: "Weather" }, text: { en: "The ceremony is by the water. A light layer for the evening breeze is a good idea." } },
+      { title: { en: "Children" }, text: { en: "Children are welcome." } },
+    ],
+    faq: [
+      { q: { en: "What time should I arrive?" }, a: { en: "Please arrive by 3:30 PM so you can find your seat before the ceremony." } },
+      { q: { en: "Is parking available?" }, a: { en: "Yes, free parking is available at the venue." } },
+    ],
+    guests: [
+      { name: "Ko Aung", table: "1" },
+      { name: "Ma Hnin", table: "2" },
+    ],
+    story: [],
+    events: [
+      ev("15:30", "other", "Guests arrive"),
+      ev("16:00", "ceremony", "The ceremony"),
+      ev("17:30", "reception", "Dinner by the water"),
+      ev("19:30", "other", "Dancing"),
+    ],
+    art: {
+      "love-letter": "love-letter.webp",
+      letters: "letters.webp",
+      manuscript: "manuscript.webp",
+      torn: "torn.png",
+      "tape-clear": "tape-clear.png",
+      washi: "washi.png",
+      polaroid: "polaroid.png",
+      "flower-white": "flower-white.png",
+      "flower-yellow": "flower-yellow.webp",
+      "flower-red": "flower-red.png",
+    },
+  };
+}
+
 async function main() {
   const only = process.argv.slice(2);
   for (const [n, d] of DEMOS.entries()) {
@@ -587,7 +664,7 @@ async function main() {
       const qr = `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="480"><rect width="480" height="480" fill="#fff"/><rect x="24" y="24" width="432" height="432" fill="none" stroke="#555" stroke-width="6" stroke-dasharray="14 10"/><text x="240" y="230" font-family="sans-serif" font-size="40" text-anchor="middle" fill="#555">DEMO</text><text x="240" y="280" font-family="sans-serif" font-size="40" text-anchor="middle" fill="#555">QR CODE</text></svg>`;
       await sharp(Buffer.from(qr)).png().toFile(path.join(dir, "qr.png"));
       const song = d.key === "record" ? await demoTrack(dir) : null;
-      const cfg = { ...config(d), ...(d.key === "garden" ? gardenFixed() : d.key === "ribbon" ? ribbonFixed() : d.key === "renewal" ? renewalFixed() : d.key === "scrapbook" ? scrapbookFixed() : {}) };
+      const cfg = { ...config(d), ...(d.key === "garden" ? gardenFixed() : d.key === "ribbon" ? ribbonFixed() : d.key === "renewal" ? renewalFixed() : d.key === "scrapbook" ? scrapbookFixed() : d.key === "letters" ? lettersFixed() : {}) };
       if (useReal) {
         cfg.photos = real
           .filter((f) => f.endsWith(".jpg"))

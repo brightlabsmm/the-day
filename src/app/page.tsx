@@ -106,6 +106,7 @@ const TEMPLATES: TemplateCard[] = [
     { name: "Lantern Festival", img: "inv-cultural", event: "Cultural Celebration" },
   ].filter((t) => hasPicture(t.img)),
   { name: "Pressed Scrapbook", img: "shot-scrapbook", event: "Wedding", demo: "/w/showcase-scrapbook?lang=en" },
+  { name: "Love Letters", img: "shot-letters", event: "Save the Date", demo: "/w/showcase-letters?lang=en" },
 ];
 
 const EVENTS: { name: string; img: string; icon: ReactNode }[] = [
