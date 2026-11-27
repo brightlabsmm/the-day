@@ -368,11 +368,7 @@ export default function Home() {
             <span className="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3.5c-4.900 0-8.700 3.500-8.700 8 0 2.400 1.100 4.500 2.900 6v3l2.800-1.600c1 .3 2 .4 3 .4 4.900 0 8.700-3.500 8.700-8s-3.800-8-8.700-8z" /><path d="M7.800 13.400l2.800-3 2.100 2 2.700-3" /></svg></span>
             <a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer">Messenger: Message us</a>
           </B>
-          <B x={197} y={534} w={420} h={40} cls="ct" v="left">
-            <span className="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3.500 12.200V4.500a1 1 0 011-1h7.700l8.300 8.300a1 1 0 010 1.400l-7 7a1 1 0 01-1.400 0z" /><circle cx="8" cy="8" r="1.400" /></svg></span>
-            <Link href="/pricing">Pricing: from {fmt(startingPrice())} MMK</Link>
-          </B>
-          <B x={263} y={594} w={183} h={44} fs={22} v="zoom"><a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer" className="gbtn">Get in touch</a></B>
+          <B x={263} y={550} w={183} h={44} fs={22} v="zoom"><a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer" className="gbtn">Get in touch</a></B>
         </div>
       </section>
 
