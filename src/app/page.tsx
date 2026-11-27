@@ -43,15 +43,62 @@ function firstPicture<T extends { img: string }>(...options: T[]): T {
   return options.find((o) => hasPicture(o.img)) ?? options[options.length - 1];
 }
 
+// Wording printed on the blank cards in the template pictures, each placed over its card (inset in %).
+// Sizes are in cqw, so the text scales with the picture. Every card ends with a small "The Day" mark.
+const Mark = () => <span className="script mark">The Day</span>;
+const BIRTHDAY_CARD = {
+  inset: "25% 24% 25% 24%",
+  content: (
+    <>
+      <span className="caps2">You&rsquo;re invited to</span>
+      <span className="script" style={{ fontSize: "11cqw", marginTop: "3cqw" }}>Ava&rsquo;s</span>
+      <span className="font-display" style={{ fontSize: "7cqw" }}>30th Birthday</span>
+      <span className="rule-s" />
+      <span className="caps2">Saturday &middot; 14 June</span>
+      <span className="caps2" style={{ marginTop: "1.4cqw" }}>7 pm &middot; The Terrace</span>
+      <Mark />
+    </>
+  ),
+};
+const BABY_CARD = {
+  inset: "21% 23% 30% 17%",
+  content: (
+    <>
+      <span className="caps2">Please join us for a</span>
+      <span className="font-display" style={{ fontSize: "8cqw", letterSpacing: ".12em", marginTop: "3cqw" }}>BABY</span>
+      <span className="script" style={{ fontSize: "10cqw", marginTop: "-1cqw" }}>Shower</span>
+      <span className="caps2" style={{ marginTop: "3cqw" }}>honouring</span>
+      <span className="font-display" style={{ fontSize: "6.4cqw" }}>Emily Smith</span>
+      <span className="rule-s" />
+      <span className="caps2">Sunday &middot; 20 June &middot; 2 pm</span>
+      <Mark />
+    </>
+  ),
+};
+const GALA_CARD = {
+  inset: "26% 25% 26% 25%",
+  content: (
+    <>
+      <span className="caps2">You are cordially invited to the</span>
+      <span className="font-display" style={{ fontSize: "6.4cqw", letterSpacing: ".14em", marginTop: "3cqw" }}>ANNUAL</span>
+      <span className="script" style={{ fontSize: "10.5cqw" }}>Evening Gala</span>
+      <span className="rule-s" />
+      <span className="caps2">Friday &middot; 3 October</span>
+      <span className="caps2" style={{ marginTop: "1.4cqw" }}>7 pm &middot; Black tie</span>
+      <Mark />
+    </>
+  ),
+};
+
 // Our templates carousel: real designs mixed with other celebrations. Pictures only, no links to demo pages.
 const TEMPLATES: TemplateCard[] = [
   { name: "Sepia Garden", img: "shot-garden", event: "Wedding" },
-  firstPicture({ name: "Golden Birthday", img: "inv-birthday", event: "Birthday" }, { name: "Classic Floral", img: "inv-floral", event: "Wedding" }),
+  firstPicture({ name: "Golden Birthday", img: "inv-birthday", event: "Birthday", card: BIRTHDAY_CARD }, { name: "Classic Floral", img: "inv-floral", event: "Wedding" }),
   { name: "Blue Ribbon", img: "shot-ribbon", event: "Wedding" },
-  firstPicture({ name: "Sage Baby Shower", img: "inv-baby", event: "Baby Celebration" }, { name: "Modern Portrait", img: "inv-veil", event: "Wedding" }),
+  firstPicture({ name: "Sage Baby Shower", img: "inv-baby", event: "Baby Celebration", card: BABY_CARD }, { name: "Modern Portrait", img: "inv-veil", event: "Wedding" }),
   { name: "Golden Renewal", img: "shot-renewal", event: "Anniversary" },
   ...[
-    { name: "Evening Gala", img: "inv-corporate", event: "Corporate Event" },
+    { name: "Evening Gala", img: "inv-corporate", event: "Corporate Event", card: GALA_CARD },
     { name: "Lantern Festival", img: "inv-cultural", event: "Cultural Celebration" },
   ].filter((t) => hasPicture(t.img)),
   { name: "Pressed Scrapbook", img: "shot-scrapbook", event: "Wedding" },

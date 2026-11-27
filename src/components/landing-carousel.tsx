@@ -1,14 +1,24 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element -- small pre-cropped static pictures */
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 
-export type TemplateCard = { name: string; img: string; event: string };
+export type TemplateCard = {
+  name: string;
+  img: string;
+  event: string;
+  /**
+   * Wording printed on a blank card in the picture (2:3 pictures only): `inset` places the text box
+   * over the card as CSS inset percentages, `content` is the text. Sizes inside use cqw (1% of the picture's width).
+   */
+  card?: { inset: string; content: ReactNode };
+};
 
 /**
  * One row of template cards that slides sideways: three at a time on desktop, two on tablets and
  * one and a bit on phones. Arrows move a page, dots show where you are, and it also scrolls by
- * swipe or trackpad (scroll snap keeps cards aligned). Cards are pictures only, with no links.
+ * swipe or trackpad (scroll snap keeps cards aligned). Cards are pictures only, with no links;
+ * blank invitation cards in the pictures can carry their own wording.
  */
 export function TemplateCarousel({ cards }: { cards: TemplateCard[] }) {
   const track = useRef<HTMLUListElement>(null);
@@ -63,7 +73,14 @@ export function TemplateCarousel({ cards }: { cards: TemplateCard[] }) {
         <ul ref={track} onScroll={measure} className="tcar-track" aria-label="Invitation templates">
           {cards.map((c) => (
             <li key={c.name} className="tcar-item">
-              <img src={`/landing/${c.img}.webp`} alt={`${c.name} invitation design`} loading="lazy" />
+              {c.card ? (
+                <div className="tcar-pic">
+                  <img src={`/landing/${c.img}.webp`} alt={`${c.name} invitation design`} loading="lazy" />
+                  <div className="tcar-text" style={{ inset: c.card.inset }}>{c.card.content}</div>
+                </div>
+              ) : (
+                <img src={`/landing/${c.img}.webp`} alt={`${c.name} invitation design`} loading="lazy" />
+              )}
               <h3 className="font-display">{c.name}</h3>
               <p>{c.event}</p>
             </li>
