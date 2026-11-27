@@ -6,9 +6,10 @@ import { useEffect, useRef, useState, type ElementType, type ReactNode } from "r
 const SLOW = new Set(["drift", "slide-left", "slide-right", "drop", "circle", "spin", "zoom", "wipe", "flip"]);
 
 /**
- * Fades and lifts its content in each time it scrolls into view, going down or up. Content
- * is fully visible until the script runs, and for people who prefer reduced
- * motion, so nothing is ever hidden without JavaScript.
+ * Fades and lifts its content in when it scrolls into view going down. Going back up, it is
+ * already in place (no animation, which is hard to follow in reverse); once it drops below the
+ * screen again it resets, so the next scroll down plays it again. Content is fully visible until
+ * the script runs, and for people who prefer reduced motion, so nothing is ever hidden without JavaScript.
  */
 export function Reveal({
   children,
@@ -33,18 +34,21 @@ export function Reveal({
   useEffect(() => {
     const el = ref.current;
     if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const onScreen = el.getBoundingClientRect().top < window.innerHeight;
+    const rect = el.getBoundingClientRect();
+    const onScreen = rect.top < window.innerHeight;
     // Slow pieces also play when the page opens; the others simply stay put until they are first scrolled away.
+    // Pieces already above the screen (the page opened part-way down) stay visible, so scrolling up shows them as they are.
     const timers: number[] = [];
-    if (SLOW.has(variant)) {
+    if (SLOW.has(variant) && rect.bottom > 0) {
       timers.push(window.setTimeout(() => setState("hidden"), 0));
       if (onScreen) timers.push(window.setTimeout(() => setState("shown"), 120));
     }
-    // It plays every time it scrolls into view, going down or up, and resets once it is fully out of view.
+    // Plays when it comes in from below (scrolling down). It resets only when it leaves through the bottom
+    // (scrolling up past it), so coming back into view from the top shows it already in place, without animating.
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) setState("shown");
-        else setState("hidden");
+        else if (entry.boundingClientRect.top > 0) setState("hidden");
       },
       { rootMargin: "0px 0px -8% 0px", threshold: 0.05 },
     );
