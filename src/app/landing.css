@@ -36,7 +36,8 @@
 .tcar-track { display: flex; gap: 1.5rem; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 0.5rem 0 1.5rem; list-style: none; margin: 0 2.75rem; }
 .tcar-track::-webkit-scrollbar { display: none; }
 .tcar-item { flex: 0 0 calc((100% - 1.5rem) / 1.2); scroll-snap-align: start; display: flex; flex-direction: column; align-items: center; text-align: center; }
-.tcar-item img { height: 20rem; width: auto; max-width: 100%; object-fit: cover; border-radius: 3px; box-shadow: 0 18px 34px -20px rgba(70, 50, 25, .6); transition: transform .4s ease; }
+/* Every card shares one 2:3 shape; taller phone screenshots are cropped from the centre to fit. */
+.tcar-item img { height: 20rem; width: auto; max-width: 100%; aspect-ratio: 2 / 3; object-fit: cover; object-position: center; border-radius: 3px; box-shadow: 0 18px 34px -20px rgba(70, 50, 25, .6); transition: transform .4s ease; }
 .tcar-item:hover img, .tcar-item:hover .tcar-pic { transform: translateY(-4px); }
 /* A picture with wording on its blank card: sized by height and a 2:3 shape, so text can scale with it (cqw). */
 .tcar-pic { position: relative; height: 20rem; aspect-ratio: 2 / 3; container-type: inline-size; border-radius: 3px; box-shadow: 0 18px 34px -20px rgba(70, 50, 25, .6); transition: transform .4s ease; }

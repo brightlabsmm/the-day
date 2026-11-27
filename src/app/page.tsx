@@ -6,6 +6,7 @@ import type { CSSProperties, ElementType, ReactNode } from "react";
 import "./landing.css";
 import { Reveal } from "@/components/templates/reveal";
 import { LandingNav } from "@/components/landing-nav";
+import { CurrentYear } from "@/components/current-year";
 import { TemplateCarousel, type TemplateCard } from "@/components/landing-carousel";
 import { BRAND_URL, FACEBOOK_URL } from "@/components/site-chrome";
 
@@ -370,13 +371,19 @@ export default function Home() {
           <B x={40} y={705} w={1286} h={2} cls="hide-m"><span className="block h-px w-full" style={{ background: "linear-gradient(90deg, transparent, rgba(201,169,106,.75) 18%, rgba(201,169,106,.75) 82%, transparent)" }} /></B>
           <B x={672} y={697} w={16} h={16} cls="hide-m text-[#b8913f]"><Heart /></B>
           <div className="grp mt-10 flex flex-col items-center gap-3 text-[#8d837c]">
-            <B x={425} y={712} w={150} fs={34} m="2.2rem" as="p" cls="script whitespace-nowrap">The Day</B>
-            <B x={595} y={727} w={110} fs={15} as="p" cls="font-display font-bold">Digital Invitations</B>
-            <B x={760} y={727} w={140} fs={15} as="p" cls="font-display font-bold"><Link href="/showcase">Designs</Link> · <Link href="/pricing">Pricing</Link></B>
-            <B x={930} y={727} w={160} fs={15} as="p" cls="font-display font-bold">© Bright Labs</B>
+            <B x={445} y={712} w={150} fs={34} m="2.2rem" as="p" cls="script whitespace-nowrap">The Day</B>
+            <B x={615} y={727} w={110} fs={15} as="p" cls="font-display font-bold">Digital Invitations</B>
+            <B x={780} y={727} w={140} fs={15} as="p" cls="font-display font-bold"><Link href="/showcase">Designs</Link> · <Link href="/pricing">Pricing</Link></B>
           </div>
         </div>
       </section>
+
+      {/* Copyright bar */}
+      <footer className="border-t border-[#c9a96a]/30 px-4 py-5 text-center text-sm text-[#8d837c]" style={{ background: "#f3e8dc" }}>
+        <p>
+          &copy; <CurrentYear /> The Day by Bright Labs. All rights reserved.
+        </p>
+      </footer>
     </div>
   );
 }
