@@ -154,10 +154,11 @@ export function TemplateCarousel({ cards, contactUrl }: { cards: TemplateCard[];
   );
 }
 
-/** A card's picture: with its printed wording when it has some; `full` shows a whole screenshot, uncropped. */
+/** A card's picture: with its printed wording when it has some; screenshots are never cropped. */
 function Picture({ card, full = false }: { card: TemplateCard; full?: boolean }) {
   const img = <img src={`/landing/${card.img}.webp`} alt={`${card.name} invitation design`} loading="lazy" />;
-  if (!card.card) return full ? <div className="tprev-shot">{img}</div> : img;
+  // Design screenshots are tall phone pages: shown whole on a 2:3 panel in the row, or on their own in the preview.
+  if (!card.card) return <div className={full ? "tprev-shot" : "tcar-shot"}>{img}</div>;
   return (
     <div className="tcar-pic">
       {img}
