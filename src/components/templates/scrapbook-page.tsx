@@ -3,6 +3,7 @@ import { z } from "zod";
 import type { AlbumPhoto } from "@/lib/album";
 import { mediaUrl } from "@/lib/media";
 import { Reveal } from "./reveal";
+import { TplRsvp } from "./extras";
 import { TrackOpen } from "./track-open";
 import { viewOf, type TemplateProps } from "./view";
 
@@ -36,22 +37,54 @@ type Copy = z.infer<typeof Copy>;
 const RUST = "#ae2700";
 const INK = "#222";
 const CREAM = "#fefbf8";
+/** One canvas unit, as a length. */
 const u = (n: number) => `calc(var(--u) * ${n})`;
 type CSS = React.CSSProperties;
+/*
+ * Across: `--ox` is where the canvas starts (it is centred when the screen is wider than the canvas).
+ * Down: on the tablet canvas the wide photograph's height depends on the screen width, so everything
+ * after it moves by `--oy`. Pieces lower than SPLIT are shifted by it; on the other canvases it is 0.
+ */
+const SPLIT = 1500;
+const X = (n: number) => `calc(var(--ox) + var(--u) * ${n})`;
+const Y = (n: number) => (n > SPLIT ? `calc(var(--oy) + var(--u) * ${n})` : u(n));
 
 /** A box given by its centre (as the design records it). */
-const centred = (cx: number, cy: number, w: number, h: number): CSS => ({ position: "absolute", left: u(cx - w / 2), top: u(cy - h / 2), width: u(w), height: u(h) });
+const centred = (cx: number, cy: number, w: number, h: number): CSS => ({ position: "absolute", left: X(cx - w / 2), top: Y(cy - h / 2), width: u(w), height: u(h) });
 /** A text box given by its top-left corner. */
 const corner = (x: number, y: number, w: number, fs: number, lh: number, align: CSS["textAlign"] = "left", extra: CSS = {}): CSS => ({
   position: "absolute",
-  left: u(x),
-  top: u(y),
+  left: X(x),
+  top: Y(y),
   width: u(w),
   fontSize: u(fs),
   lineHeight: u(lh),
   textAlign: align,
   ...extra,
 });
+
+type Anim = "drift" | "slide-left" | "slide-right" | "drop" | "circle" | "spin" | "zoom" | "wipe" | "flip";
+/** Each picture gets its own entrance; the choice is fixed by its name and place, so it never changes between visits. */
+const FLOWERS: Anim[] = ["spin", "slide-left", "drift", "drop", "slide-right", "zoom", "circle", "flip"];
+function pick(key: string, x: number, y: number): Anim {
+  let h = 0;
+  for (const c of `${key}${Math.round(x)}${Math.round(y)}`) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  return FLOWERS[h % FLOWERS.length];
+}
+
+/** Pieces that keep moving gently once they have arrived: [seconds per sway, delay before it starts]. */
+const MOVES: Record<string, [string, string]> = {
+  butterfly: ["3.2s", "3.5s"],
+  "red-flower": ["8s", "4s"],
+  "pink-plant": ["9s", "4.5s"],
+  mustard: ["10s", "5s"],
+  orange: ["7s", "4s"],
+  delphinium: ["9s", "5s"],
+  "pink-flower": ["11s", "4s"],
+  "petals-cream": ["12s", "5s"],
+  petal: ["12s", "5s"],
+  "yellow-plant": ["10s", "5s"],
+};
 
 type Ctx = { art: ArtMap; photos: Record<string, AlbumPhoto | null>; qr: string | null };
 
@@ -60,9 +93,9 @@ function Piece({ ctx, k, cx, cy, w, h, r = 0, delay = 0, crop, flip }: { ctx: Ct
   const a = ctx.art[k];
   if (!a) return null;
   return (
-    <Reveal variant="photo" delay={delay} style={centred(cx, cy, w, h)}>
+    <Reveal variant={pick(k, cx, cy)} delay={delay} style={centred(cx, cy, w, h)}>
       <div className="h-full w-full" style={{ transform: `${r ? `rotate(${r}deg)` : ""}${flip ? " scaleX(-1)" : ""}`.trim() || undefined }}>
-        <Image src={mediaUrl(a.p)} width={a.w} height={a.h} alt="" sizes="(max-width: 767px) 100vw, 800px" className="pointer-events-none block select-none" style={{ width: "100%", height: crop ? u(crop) : "100%", objectFit: crop ? "cover" : "fill", objectPosition: "top" }} />
+        <Image src={mediaUrl(a.p)} width={a.w} height={a.h} alt="" sizes="(max-width: 767px) 100vw, 800px" className={`pointer-events-none block select-none ${MOVES[k] ? "sb-sway" : ""}`} style={{ width: "100%", height: crop ? u(crop) : "100%", objectFit: crop ? "cover" : "fill", objectPosition: "top", ...(MOVES[k] ? ({ "--r": "0deg", "--t": MOVES[k][0], "--d": MOVES[k][1] } as CSS) : {}) }} />
       </div>
     </Reveal>
   );
@@ -73,7 +106,7 @@ function Tape({ ctx, left, cy, w, h, vx, vw, flip }: { ctx: Ctx; left: number; c
   const a = ctx.art.tape;
   if (!a) return null;
   return (
-    <Reveal variant="photo" style={{ position: "absolute", left: u(left + vx), top: u(cy - h / 2), width: u(vw), height: u(h), overflow: "hidden" }}>
+    <Reveal variant="wipe" style={{ position: "absolute", left: X(left + vx), top: Y(cy - h / 2), width: u(vw), height: u(h), overflow: "hidden" }}>
       <Image src={mediaUrl(a.p)} width={a.w} height={a.h} alt="" sizes="300px" className="pointer-events-none absolute max-w-none select-none" style={{ left: u(-vx), top: 0, width: u(w), height: u(h), transform: flip ? "scaleX(-1)" : undefined }} />
     </Reveal>
   );
@@ -84,7 +117,7 @@ function Snap({ ctx, n, cx, cy, w, h, r = 0, delay = 0, pos = "50% 50%" }: { ctx
   const p = ctx.photos[n];
   if (!p) return null;
   return (
-    <Reveal variant="photo" delay={delay} style={centred(cx, cy, w, h)}>
+    <Reveal variant={pick(n, cx, cy)} delay={delay} style={centred(cx, cy, w, h)}>
       <div className="relative h-full w-full overflow-hidden" style={{ transform: r ? `rotate(${r}deg)` : undefined }}>
         <Image src={p.src} alt={p.alt} fill sizes="(max-width: 767px) 100vw, 900px" className="object-cover" style={{ objectPosition: pos }} />
       </div>
@@ -96,7 +129,7 @@ function Snap({ ctx, n, cx, cy, w, h, r = 0, delay = 0, pos = "50% 50%" }: { ctx
 function Txt({ box, font = "t", color = INK, upper, ls, delay = 0, underline, fscale = 1, children }: { box: CSS; font?: "t" | "s"; color?: string; upper?: boolean; ls?: string; delay?: number; underline?: boolean; fscale?: number; children: React.ReactNode }) {
   return (
     <Reveal delay={delay} style={{ ...box, color, textTransform: upper ? "uppercase" : undefined, letterSpacing: ls, textDecoration: underline ? "underline" : undefined, textUnderlineOffset: underline ? "0.12em" : undefined }}>
-      <div className={font === "s" ? "sb-s" : "sb-t"} style={font === "s" ? { fontSize: `${fscale}em` } : undefined}>{children}</div>
+      <div className={font === "s" ? "sb-s rb-wipe" : "sb-t"} style={font === "s" ? { fontSize: `${fscale}em` } : undefined}>{children}</div>
     </Reveal>
   );
 }
@@ -117,11 +150,11 @@ function Polaroid({ ctx, n, cx, cy, w, h, r, pos, sheets = true }: { ctx: Ctx; n
           [-9, 19],
           [-21, 35],
         ].map(([dx, dy]) => (
-          <Reveal key={dx} variant="photo" style={centred(cx + dx, cy + dy + (bottom - top) / 2, cw, ch)}>
+          <Reveal key={dx} variant="slide-left" style={centred(cx + dx, cy + dy + (bottom - top) / 2, cw, ch)}>
             <div className="h-full w-full border border-[#e4e1db] bg-[#fdfdfb]" style={{ transform: `rotate(${r}deg)`, boxShadow: "0 1px 2px rgba(60,40,20,.2)" }} />
           </Reveal>
         ))}
-      <Reveal variant="photo" style={centred(cx, cy + (bottom - top) / 2, cw, ch)}>
+      <Reveal variant="drop" style={centred(cx, cy + (bottom - top) / 2, cw, ch)}>
         <div className="relative h-full w-full bg-[#fdfdfb] sb-lift" style={{ transform: `rotate(${r}deg)` }}>
           <div className="absolute overflow-hidden" style={{ left: u(side), top: u(top), width: u(w), height: u(h) }}>
             <Image src={p.src} alt={p.alt} fill sizes="(max-width: 767px) 100vw, 400px" className="object-cover" style={{ objectPosition: pos ?? "50% 50%" }} />
@@ -135,7 +168,7 @@ function Polaroid({ ctx, n, cx, cy, w, h, r, pos, sheets = true }: { ctx: Ctx; n
 /** The paperclip on the front polaroid. */
 function Clip({ cx, cy, s, r }: { cx: number; cy: number; s: number; r: number }) {
   return (
-    <Reveal style={centred(cx, cy, 20 * s, 56 * s)}>
+    <Reveal variant="spin" delay={300} style={centred(cx, cy, 20 * s, 56 * s)}>
       <svg aria-hidden viewBox="0 0 24 56" className="h-full w-full" style={{ transform: `rotate(${r}deg)` }} fill="none" stroke="#7d8286" strokeWidth="2.4" strokeLinecap="round">
         <path d="M7 46 V12 C7 3 19 3 19 12 V48 C19 56 8 56 8 48 V18" />
       </svg>
@@ -180,7 +213,7 @@ function Header({ ctx, copy, names, d }: { ctx: Ctx; copy: Copy; names: [string,
       )}
       {copy.buttons && (
         <>
-          <a href={d ? "#contact" : "#contact-m"} aria-label={copy.buttons.rsvp}>
+          <a href="#rsvp" aria-label={copy.buttons.rsvp}>
             {d ? <Tape ctx={ctx} left={536} cy={569} w={272} h={67} vx={59} vw={183} /> : <Piece ctx={ctx} k="tape" cx={tape1[0]} cy={tape1[1]} w={tape1[2]} h={tape1[3]} />}
             <Txt upper underline color={CREAM} box={d ? corner(643, 553, 70, 26.2, 36.5, "center", { whiteSpace: "nowrap" }) : corner(151, 892, 59, 22.1, 30.8, "center", { whiteSpace: "nowrap" })}>
               {copy.buttons.rsvp}
@@ -223,14 +256,14 @@ function WideCanvas({ ctx, copy, names }: { ctx: Ctx; copy: Copy; names: [string
   return (
     <>
       {/* paper behind the invitation */}
-      <div className="absolute overflow-hidden" style={{ left: 0, top: 0, width: u(1280), height: u(652) }}>
-        {paper && <Image src={mediaUrl(paper.p)} alt="" width={paper.w} height={paper.h} sizes="100vw" priority className="absolute max-w-none" style={{ left: 0, top: u(-545), width: u(1280), height: u(1809) }} />}
+      <div className="absolute overflow-hidden" style={{ left: 0, top: 0, width: "100cqw", height: u(652) }}>
+        {paper && <Image src={mediaUrl(paper.p)} alt="" width={paper.w} height={paper.h} sizes="100vw" priority className="absolute max-w-none object-cover" style={{ left: 0, top: u(-545), width: "100cqw", height: u(1809) }} />}
       </div>
       <Header ctx={ctx} copy={copy} names={names} d />
 
       {/* the wide photograph */}
       {veil && (
-        <Reveal variant="photo" style={{ position: "absolute", left: 0, top: u(652), width: u(1280), height: u(853) }}>
+        <Reveal variant="circle" style={{ position: "absolute", left: 0, top: u(652), width: "100cqw", height: u(853) }}>
           <div className="relative h-full w-full overflow-hidden">
             <Image src={veil.src} alt={veil.alt} fill sizes="100vw" className="object-cover" />
           </div>
@@ -238,10 +271,10 @@ function WideCanvas({ ctx, copy, names }: { ctx: Ctx; copy: Copy; names: [string
       )}
 
       {/* a paper card on a photograph */}
-      <div className="absolute overflow-hidden" style={{ left: 0, top: u(1505), width: u(1280), height: u(645) }}>
-        {bg && <Image src={bg.src} alt="" width={bg.width} height={bg.height} sizes="100vw" className="absolute max-w-none" style={{ left: 0, top: u(-68), width: u(1280), height: u(1921) }} />}
+      <div className="absolute overflow-hidden" style={{ left: 0, top: u(1505), width: "100cqw", height: u(645) }}>
+        {bg && <Image src={bg.src} alt="" width={bg.width} height={bg.height} sizes="100vw" className="absolute max-w-none object-cover" style={{ left: 0, top: u(-68), width: "100cqw", height: u(1921) }} />}
       </div>
-      {card && <div className="absolute sb-lift" style={{ left: u(208), top: u(1554), width: u(865), height: u(466), backgroundImage: `url(${mediaUrl(card.p)})`, backgroundSize: "cover" }} />}
+      {card && <div className="absolute sb-lift" style={{ left: X(208), top: u(1554), width: u(865), height: u(466), backgroundImage: `url(${mediaUrl(card.p)})`, backgroundSize: "cover" }} />}
       {copy.story && (
         <>
           <Txt font="s" color={RUST} box={corner(326, 1617, 627, 75, 74, "center", { whiteSpace: "pre-line" })}>
@@ -292,7 +325,7 @@ function WideCanvas({ ctx, copy, names }: { ctx: Ctx; copy: Copy; names: [string
             {copy.program.title}
           </Txt>
           {[3235.5, 3326, 3416.5].map((y) => (
-            <div key={y} className="absolute border-t border-dashed" style={{ left: u(404), width: u(485), top: u(y), borderColor: "#444" }} />
+            <div key={y} className="absolute border-t border-dashed" style={{ left: X(404), width: u(485), top: u(y), borderColor: "#444" }} />
           ))}
           {copy.program.items.map((e, i) => {
             const r = rows[i];
@@ -354,7 +387,7 @@ function WideCanvas({ ctx, copy, names }: { ctx: Ctx; copy: Copy; names: [string
 function QrTile({ ctx, cx, cy, size }: { ctx: Ctx; cx: number; cy: number; size: number }) {
   if (!ctx.qr) return null;
   return (
-    <Reveal variant="photo" delay={100} style={centred(cx, cy, size, size)}>
+    <Reveal variant="flip" delay={100} style={centred(cx, cy, size, size)}>
       <div className="relative h-full w-full bg-white">
         <Image src={ctx.qr} alt="QR code" fill sizes="200px" className="object-contain p-[4%]" />
       </div>
@@ -363,8 +396,8 @@ function QrTile({ ctx, cx, cy, size }: { ctx: Ctx; cx: number; cy: number; size:
 }
 
 /** The kraft envelope and the two contact cards. `k` scales the whole group (the phone canvas shows it small). */
-function Contact({ ctx, copy, k, x0, y0 }: { ctx: Ctx; copy: Copy; k: number; x0: number; y0: number }) {
-  const T = (x: number, y: number): [number, number] => [(x - 764) * k + x0, (y - 4655) * k + y0];
+function Contact({ ctx, copy, k, x0, y0, dx = 0, dy = 0 }: { ctx: Ctx; copy: Copy; k: number; x0: number; y0: number; dx?: number; dy?: number }) {
+  const T = (x: number, y: number): [number, number] => [(x - 764) * k + x0 - dx, (y - 4655) * k + y0 - dy];
   const at = (x: number, y: number, w: number, h: number) => {
     const [cx, cy] = T(x, y);
     return { cx, cy, w: w * k, h: h * k };
@@ -403,7 +436,7 @@ function Contact({ ctx, copy, k, x0, y0 }: { ctx: Ctx; copy: Copy; k: number; x0
         return (
           <div key={c.person.name}>
             <Piece ctx={ctx} k="shadow" delay={250 + i * 100} cx={sx} cy={sy} w={336 * k} h={35 * k} r={c.shadow[2]} />
-            <Reveal variant="photo" delay={250 + i * 100} style={centred(cx, cy, w, 479 * k)}>
+            <Reveal variant={i === 0 ? "slide-left" : "slide-right"} delay={250 + i * 100} style={centred(cx, cy, w, 479 * k)}>
               <div className="relative h-full w-full" style={{ transform: c.r ? `rotate(${c.r}deg)` : undefined }}>
                 {ctx.art[c.art] && (
                   <Image src={mediaUrl(ctx.art[c.art].p)} width={ctx.art[c.art].w} height={ctx.art[c.art].h} alt="" sizes="400px" className="absolute top-0 left-0 block max-w-none select-none" style={{ width: "100%", height: u(268 * k), objectFit: "cover", objectPosition: "top" }} />
@@ -453,22 +486,22 @@ function PhoneCanvas({ ctx, copy, names }: { ctx: Ctx; copy: Copy; names: [strin
   ];
   return (
     <>
-      <div className="absolute overflow-hidden" style={{ left: 0, top: 0, width: u(375), height: u(1034) }}>
-        {paper && <Image src={mediaUrl(paper.p)} alt="" width={paper.w} height={paper.h} sizes="100vw" priority className="absolute max-w-none" style={{ left: u(-186), top: 0, width: u(746), height: u(1055) }} />}
+      <div className="absolute overflow-hidden" style={{ left: 0, top: 0, width: "100cqw", height: u(1034) }}>
+        {paper && <Image src={mediaUrl(paper.p)} alt="" width={paper.w} height={paper.h} sizes="100vw" priority className="absolute max-w-none" style={{ left: "50%", top: 0, transform: "translateX(-50%)", width: `max(100cqw, ${u(746)})`, height: u(1055), objectFit: "cover" }} />}
       </div>
       <Header ctx={ctx} copy={copy} names={names} d={false} />
       {veil && (
-        <Reveal variant="photo" style={{ position: "absolute", left: 0, top: u(1034), width: u(375), height: u(250) }}>
+        <Reveal variant="circle" style={{ position: "absolute", left: 0, top: u(1034), width: "100cqw", height: u(250) }}>
           <div className="relative h-full w-full overflow-hidden">
             <Image src={veil.src} alt={veil.alt} fill sizes="100vw" className="object-cover" />
           </div>
         </Reveal>
       )}
 
-      <div className="absolute overflow-hidden" style={{ left: 0, top: u(1284), width: u(375), height: u(816) }}>
-        {bg && <Image src={bg.src} alt="" width={bg.width} height={bg.height} sizes="100vw" className="absolute max-w-none" style={{ left: u(-545), top: u(-20), width: u(1466), height: u(2200) }} />}
+      <div className="absolute overflow-hidden" style={{ left: 0, top: u(1284), width: "100cqw", height: u(816) }}>
+        {bg && <Image src={bg.src} alt="" width={bg.width} height={bg.height} sizes="100vw" className="absolute max-w-none" style={{ left: "50%", top: u(-20), transform: "translateX(-50%)", width: `max(100cqw, ${u(1466)})`, height: u(2200), objectFit: "cover" }} />}
       </div>
-      {card && <div className="absolute" style={{ left: u(-178), top: u(1362), width: u(730), height: u(730), backgroundImage: `url(${mediaUrl(card.p)})`, backgroundSize: "cover" }} />}
+      {card && <div className="absolute" style={{ left: X(-178), top: u(1362), width: u(730), height: u(730), backgroundImage: `url(${mediaUrl(card.p)})`, backgroundSize: "cover" }} />}
       {copy.story && (
         <>
           <Txt font="s" color={RUST} box={corner(39, 1415, 298, 63.3, 62.5, "center", { whiteSpace: "normal" })}>
@@ -567,6 +600,197 @@ function PhoneCanvas({ ctx, copy, names }: { ctx: Ctx; copy: Copy; names: [strin
   );
 }
 
+
+/** The tablet canvas (768 across at its smallest). The pieces keep their size while the wide photographs follow the screen. */
+function TabletCanvas({ ctx, copy, names }: { ctx: Ctx; copy: Copy; names: [string, string] }) {
+  const P = ctx.photos;
+  const veil = P.cover;
+  const bg = P.p2;
+  const paper = ctx.art["paper-bg"];
+  const card = ctx.art["paper-card"];
+  const about = copy.about?.items ?? [];
+  const aboutAt: Record<string, { piece: number[]; title: number[]; text: number[] }> = {
+    VENUE: { piece: [244, 2789, 119, 189, 4.8], title: [197.5, 2902, 91], text: [116, 2956, 256] },
+    ATTIRE: { piece: [525, 2779, 120, 159, 0], title: [479, 2888, 96], text: [402, 2942, 250] },
+    KIDS: { piece: [184, 3190, 101, 169, 0], title: [203, 3296, 64], text: [118.5, 3350, 233] },
+    PARKING: { piece: [510, 3190, 190, 128, 0], title: [454.5, 3283, 121], text: [381, 3337, 268] },
+  };
+  const rows = [
+    { t: [150, 4380.5, 90], n: [300.5, 4380.5, 329] },
+    { t: [161, 4468.5, 90], n: [311.5, 4468.5, 193] },
+    { t: [168.5, 4555.5, 83], n: [311.5, 4555.5, 217] },
+    { t: [161, 4643.5, 90], n: [310.5, 4643.5, 237] },
+  ];
+  return (
+    <>
+      <span id="gift-t" className="absolute" style={{ top: Y(5120) }} />
+      <span id="contact-t" className="absolute" style={{ top: Y(6390) }} />
+      {/* paper behind the invitation, then the wide photograph */}
+      <div className="absolute overflow-hidden" style={{ left: 0, top: 0, width: "100cqw", height: "var(--vt)" }}>
+        {paper && <Image src={mediaUrl(paper.p)} alt="" width={paper.w} height={paper.h} sizes="100vw" priority className="absolute max-w-none" style={{ left: "50%", top: 0, transform: "translateX(-50%)", width: `max(100cqw, ${u(944)})`, aspectRatio: `${paper.w} / ${paper.h}` }} />}
+      </div>
+      <Piece ctx={ctx} k="pink-plant" cx={298} cy={81} w={375} h={332} />
+      <Polaroid ctx={ctx} n="p1" cx={406} cy={278} w={263} h={395} r={14.1} />
+      <Clip cx={521} cy={259} s={1.2} r={12} />
+      <Piece ctx={ctx} k="butterfly" cx={28} cy={635} w={92} h={44} />
+      <Piece ctx={ctx} k="petals-cream" delay={100} cx={286} cy={596} w={219} h={179} />
+      <Piece ctx={ctx} k="red-flower" delay={150} cx={467} cy={596} w={219} h={374} r={-9} />
+      {copy.intro && (
+        <Txt upper box={corner(137, 742, 494, 26, 36.2, "center")}>
+          {copy.intro}
+        </Txt>
+      )}
+      <Txt font="s" fscale={0.9} color={RUST} delay={100} box={corner(83.5, 823, 601, 119.7, 101.3, "center", { whiteSpace: "nowrap" })}>
+        {names[0]}
+        <br />
+        &amp; {names[1]}
+      </Txt>
+      {copy.dateLine && (
+        <Txt upper box={corner(227.5, 1087, 313, 24.7, 34.3, "center", { whiteSpace: "nowrap" })}>
+          {copy.dateLine}
+        </Txt>
+      )}
+      {copy.place && (
+        <Txt upper box={corner(169, 1121, 430, 24.7, 34.3, "center", { whiteSpace: "nowrap" })}>
+          {copy.place}
+        </Txt>
+      )}
+      {copy.buttons && (
+        <>
+          <a href="#rsvp" aria-label={copy.buttons.rsvp}>
+            <Tape ctx={ctx} left={98} cy={1219} w={270} h={66} vx={58} vw={181} />
+            <Txt upper underline color={CREAM} box={corner(205.5, 1203, 69, 26, 36.2, "center", { whiteSpace: "nowrap" })}>
+              {copy.buttons.rsvp}
+            </Txt>
+          </a>
+          <a href="#gift-t" aria-label={copy.buttons.gift}>
+            <Tape ctx={ctx} left={344} cy={1213} w={270} h={66} vx={31} vw={235} />
+            <Txt underline color={CREAM} box={corner(406, 1197, 174, 26, 36.2, "center", { whiteSpace: "nowrap" })}>
+              {copy.buttons.gift}
+            </Txt>
+          </a>
+        </>
+      )}
+      {copy.rsvpBy && <Txt box={corner(222.5, 1281, 323, 19.8, 27, "center")}>{copy.rsvpBy}</Txt>}
+      {veil && (
+        <Reveal variant="circle" style={{ position: "absolute", left: 0, top: "var(--vt)", width: "100cqw", height: "calc(100cqw * 0.668)" }}>
+          <div className="relative h-full w-full overflow-hidden">
+            <Image src={veil.src} alt={veil.alt} fill sizes="100vw" className="object-cover" />
+          </div>
+        </Reveal>
+      )}
+
+      {/* a paper card on a photograph */}
+      <div className="absolute overflow-hidden" style={{ left: 0, top: "var(--vb)", width: "100cqw", height: u(665.5) }}>
+        {bg && <Image src={bg.src} alt="" width={bg.width} height={bg.height} sizes="100vw" className="absolute max-w-none object-cover" style={{ left: "50%", top: u(-41.5), transform: "translateX(-50%)", width: u(1267), height: u(1902) }} />}
+      </div>
+      {card && <div className="absolute sb-lift" style={{ left: X(-44), top: Y(1880), width: u(856), height: u(461), backgroundImage: `url(${mediaUrl(card.p)})`, backgroundSize: "cover" }} />}
+      {copy.story && (
+        <>
+          <Txt font="s" color={RUST} box={corner(73.5, 1942, 621, 74.2, 73.4, "center", { whiteSpace: "pre-line" })}>
+            {copy.story.title.replace(" (", "\n(")}
+          </Txt>
+          <Txt delay={100} box={corner(65.5, 2119.5, 637, 19.8, 27, "center")}>
+            {copy.story.text}
+          </Txt>
+        </>
+      )}
+
+      {copy.about && (
+        <>
+          <Txt font="s" color={RUST} box={corner(103.5, 2552.5, 561, 76.7, 76, "center", { whiteSpace: "nowrap" })}>
+            {copy.about.title}
+          </Txt>
+          {about.map((it, i) => {
+            const a = aboutAt[it.title];
+            if (!a) return null;
+            return (
+              <div key={it.title}>
+                <Piece ctx={ctx} k={it.art} delay={i * 100} cx={a.piece[0]} cy={a.piece[1]} w={a.piece[2]} h={a.piece[3]} r={a.piece[4]} />
+                {it.art === "rabbit" && <Piece ctx={ctx} k="rabbit" delay={200} cx={253} cy={3216} w={69} h={116} flip />}
+                <Txt upper color={RUST} box={corner(a.title[0], a.title[1], a.title[2], 26, 36.2, "center", { whiteSpace: "nowrap" })}>
+                  {it.title}
+                </Txt>
+                <Txt box={corner(a.text[0], a.text[1], a.text[2], 14.8, 20.3, "center")}>{it.text}</Txt>
+              </div>
+            );
+          })}
+        </>
+      )}
+
+      {copy.program && (
+        <>
+          <Piece ctx={ctx} k="butterfly" cx={456} cy={3725} w={96} h={46} r={-30.5} />
+          <Piece ctx={ctx} k="orange" cx={323} cy={3810} w={98} h={107} r={46.6} />
+          <Piece ctx={ctx} k="petal" cx={440} cy={3943} w={140} h={135} r={7.2} />
+          <Piece ctx={ctx} k="mustard" cx={362} cy={4113} w={182} h={234} flip />
+          <Txt font="s" color={RUST} box={corner(132, 4251.5, 504, 76.7, 76, "center", { whiteSpace: "nowrap" })}>
+            {copy.program.title}
+          </Txt>
+          {[4437, 4525, 4612.5].map((y) => (
+            <div key={y} className="absolute border-t border-dashed" style={{ left: X(150), width: u(480), top: Y(y), borderColor: "#444" }} />
+          ))}
+          {copy.program.items.map((e, i) => {
+            const r = rows[i];
+            if (!r) return null;
+            return (
+              <div key={e.title}>
+                <Txt color={RUST} ls="0.36px" box={corner(r.t[0], r.t[1], r.t[2], 22.3, 33.4, "right", { whiteSpace: "nowrap" })}>
+                  {e.time}
+                </Txt>
+                <Txt ls="0.36px" box={corner(r.n[0], r.n[1], r.n[2], 22.3, 33.4, "left", { whiteSpace: "nowrap" })}>
+                  {e.title}
+                </Txt>
+              </div>
+            );
+          })}
+          <Piece ctx={ctx} k="pink-plant" cx={390} cy={4810} w={204} h={180} r={-12.8} />
+          <Piece ctx={ctx} k="red-flower" cx={717} cy={4972} w={72} h={123} r={35.5} />
+          <Piece ctx={ctx} k="pink-flower" cx={338} cy={4998} w={126} h={124} r={-108.7} />
+        </>
+      )}
+
+      {copy.gift && (
+        <>
+          {copy.meta && (
+            <>
+              <Txt upper ls="0.3px" box={corner(87, 5162, 208, 18.6, 28, "left")}>
+                {copy.meta.left}
+              </Txt>
+              <Txt ls="0.3px" box={corner(209, 5714, 392, 18.6, 28, "right")}>
+                {copy.meta.right}
+              </Txt>
+            </>
+          )}
+          <Txt font="s" color={RUST} box={corner(86.5, 5208.5, 355, 76.7, 76, "left", { whiteSpace: "nowrap" })}>
+            {copy.gift.title}
+          </Txt>
+          <Txt upper box={corner(87, 5335.5, 550, 23.5, 32.5, "left")}>
+            {copy.gift.line}
+          </Txt>
+          <Txt box={corner(87, 5422.5, 591, 17.3, 24.2, "left")}>{copy.gift.paragraphs[0]}</Txt>
+          <Txt box={corner(86, 5543.5, 596, 17.3, 24.2, "left")}>{copy.gift.paragraphs[1]}</Txt>
+          <Txt color={RUST} box={corner(86.5, 5664, 473, 17.3, 24.2, "left")}>
+            {copy.gift.thanks}
+          </Txt>
+          <Piece ctx={ctx} k="lace" cx={341} cy={5976} w={361} h={393} />
+          <Piece ctx={ctx} k="chair" cx={418} cy={5864} w={78} h={140} />
+          <Piece ctx={ctx} k="chair" cx={510} cy={5881} w={74} h={133} flip />
+          <Piece ctx={ctx} k="torn" cx={400} cy={6048} w={295} h={295} />
+          <QrTile ctx={ctx} cx={400} cy={6030} size={178} />
+          <Piece ctx={ctx} k="delphinium" cx={515} cy={6166} w={143} h={198} r={13.2} />
+        </>
+      )}
+      {copy.contact && (
+        // The contact collage grows with the screen faster than the rest, so it has a scale of its own around its top centre.
+        <div style={{ position: "absolute", left: "50cqw", top: Y(6416), width: 0, height: 0, ["--u" as string]: "calc(var(--u0) * var(--kc))", ["--ox" as string]: "0px", ["--oy" as string]: "0px" } as CSS}>
+          <Contact ctx={ctx} copy={copy} k={0.594} x0={456} y0={6579} dx={384} dy={6416} />
+        </div>
+      )}
+    </>
+  );
+}
+
 /**
  * Pressed Scrapbook: a copy of one published design. The page is the design's own canvas, scaled to
  * the width of the screen (a wide canvas and a phone canvas), using its pieces and wording as given.
@@ -587,12 +811,18 @@ export function ScrapbookPage({ invitation, locale, token, onOpenAction }: Templ
   const ctx: Ctx = { art, photos, qr: gifts[0] ? mediaUrl(gifts[0].qr_path) : null };
   const names: [string, string] = [v.names.one, v.names.two];
 
-  const stage = (ref: number, height: number, children: React.ReactNode, cls: string, id: string) => (
+  const stage = (vars: Record<string, string>, height: string, children: React.ReactNode, cls: string, id: string) => (
     <div className={cls} style={{ containerType: "inline-size" }}>
-      <div id={id} className="relative overflow-hidden" style={{ ["--u" as string]: `calc(100cqw / ${ref})`, height: `calc(100cqw * ${height} / ${ref})` } as CSS}>
+      <div id={id} className="relative overflow-hidden" style={{ ...vars, height } as CSS}>
         {children}
       </div>
     </div>
+  );
+  const anchors = (g: string, c: string, gy: number, cy: number) => (
+    <>
+      <span id={g} className="absolute" style={{ top: Y(gy) }} />
+      <span id={c} className="absolute" style={{ top: Y(cy) }} />
+    </>
   );
 
   return (
@@ -601,8 +831,57 @@ export function ScrapbookPage({ invitation, locale, token, onOpenAction }: Templ
       <h1 className="sr-only">
         {v.names.one} &amp; {v.names.two}
       </h1>
-      {stage(1280, 5067, <><span id="gift" className="absolute" style={{ top: `calc(var(--u) * 3680)` }} /><span id="contact" className="absolute" style={{ top: `calc(var(--u) * 4370)` }} /><WideCanvas ctx={ctx} copy={copy} names={names} /></>, "hidden md:block", "top")}
-      {stage(375, 6355, <><span id="gift-m" className="absolute" style={{ top: `calc(var(--u) * 5010)` }} /><span id="contact-m" className="absolute" style={{ top: `calc(var(--u) * 6070)` }} /><PhoneCanvas ctx={ctx} copy={copy} names={names} /></>, "md:hidden", "top-phone")}
+      {stage(
+        {
+          "--u": "calc(min(100cqw, 1365.33px) / 1280)",
+          "--ox": "max(0px, calc((100cqw - 1365.33px) / 2))",
+          "--oy": "0px",
+        },
+        "calc(min(100cqw, 1365.33px) * 5067 / 1280)",
+        <>
+          {anchors("gift", "contact", 3680, 4370)}
+          <WideCanvas ctx={ctx} copy={copy} names={names} />
+        </>,
+        "hidden min-[1100px]:block",
+        "top",
+      )}
+      {stage(
+        {
+          "--k": "calc(1 + tan(atan2(100cqw - 768px, 1px)) * 0.0001696)",
+          "--u0": "calc(var(--k) * 1px)",
+          "--u": "var(--u0)",
+          "--kc": "calc(1 + tan(atan2(100cqw - 768px, 1px)) * 0.0014)",
+          "--ox": "calc(50cqw - 384 * var(--u))",
+          "--vt": "calc(1292.5 * var(--u))",
+          "--vb": "calc(var(--vt) + 100cqw * 0.668)",
+          "--oy": "calc(var(--vb) - 1805.5 * var(--u))",
+        },
+        "calc(var(--vb) + 4610.5 * var(--u) + 427 * var(--u) * var(--kc))",
+        <TabletCanvas ctx={ctx} copy={copy} names={names} />,
+        "hidden min-[600px]:block min-[1100px]:hidden",
+        "top-tablet",
+      )}
+      {stage(
+        {
+          // Smaller screens shrink it; a little wider and it grows slightly, then stops and stays centred.
+          "--us": "min(tan(atan2(100cqw, 375px)), calc(1 + max(0, tan(atan2(100cqw - 375px, 1px))) * 0.000637), 1.0667)",
+          "--u": "calc(var(--us) * 1px)",
+          "--ox": "calc((100cqw - 375 * var(--u)) / 2)",
+          "--oy": "0px",
+        },
+        "calc(6355 * var(--u))",
+        <>
+          {anchors("gift-m", "contact-m", 5010, 6070)}
+          <PhoneCanvas ctx={ctx} copy={copy} names={names} />
+        </>,
+        "min-[600px]:hidden",
+        "top-phone",
+      )}
+      {wedding.rsvp_enabled && (
+        <div className="sb-t bg-[#fbf8f3] py-10" style={{ color: INK }}>
+          <TplRsvp invitation={invitation} locale={locale} token={token} calendar={false} />
+        </div>
+      )}
     </div>
   );
 }

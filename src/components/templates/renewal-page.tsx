@@ -4,6 +4,7 @@ import type { AlbumPhoto } from "@/lib/album";
 import { mediaUrl } from "@/lib/media";
 import { oneTime } from "@/lib/i18n/datetime";
 import { Reveal } from "./reveal";
+import { TplRsvp } from "./extras";
 import { TrackOpen } from "./track-open";
 import { viewOf, type TemplateProps } from "./view";
 
@@ -228,7 +229,7 @@ export function RenewalPage({ invitation, locale, monogram, token, onOpenAction 
 
       {/* 8 · Please RSVP, with the coordinators */}
       {copy.rsvp && (
-        <section id="rsvp" aria-label={copy.rsvp.title} className="px-4 pt-14 pb-20 text-center text-[color:var(--navy)]">
+        <section id="coordinators" aria-label={copy.rsvp.title} className="px-4 pt-14 pb-20 text-center text-[color:var(--navy)]">
           <Reveal variant="photo">
             <div className="relative mx-auto h-16 w-40">
               {art.rose && (
@@ -255,6 +256,12 @@ export function RenewalPage({ invitation, locale, monogram, token, onOpenAction 
             ))}
           </div>
         </section>
+      )}
+      {/* Guests can also reply here */}
+      {wedding.rsvp_enabled && (
+        <Reveal>
+          <TplRsvp invitation={invitation} locale={locale} token={token} calendar={false} />
+        </Reveal>
       )}
     </div>
   );
