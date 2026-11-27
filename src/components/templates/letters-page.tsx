@@ -10,7 +10,10 @@ import { GiftSection } from "@/components/invite/gift-section";
 import { WishesSection } from "@/components/invite/wishes-section";
 import { TemplateNav } from "./nav";
 import { Reveal } from "./reveal";
-import { TplFaq, TplRsvp, TplSeat, TplStory, dressOf } from "./extras";
+import { TplStory, dressOf, faqItems, hasSeat } from "./extras";
+import { FaqList } from "./faq";
+import { FindSeat } from "./find-seat";
+import { RsvpForm } from "./rsvp-form";
 import { Gate } from "./gate";
 import { navItemsFor } from "./sections";
 import { viewOf, type TemplateProps } from "./view";
@@ -95,6 +98,7 @@ export function LettersPage({ invitation, locale, monogram, token, onOpenAction,
   const place = venue ? t(venue.venue_name, locale) : "";
   const showSchedule = events.length > 0 && !isHidden(invitation, "schedule");
   const hasDetails = !!venue || !!dress || tips.length > 0;
+  const faq = faqItems(invitation, locale);
 
   // Photos: the cover leads the first collage; the rest are spread so that, as far as the album
   // allows, no picture is used twice.
@@ -288,28 +292,65 @@ export function LettersPage({ invitation, locale, monogram, token, onOpenAction,
         )}
 
         {/* 5 · Gift beside the reply form, and the seat finder beside the questions (side by side on wide screens) */}
-        <div className="lt-pair">
-        {v.hasGift && (
-          <section id="gift" aria-label={s("giftHeading", locale)} lang={locale} className="px-6 py-[clamp(3rem,8vw,5rem)]">
-            <div className="mx-auto max-w-xl">
-              <Reveal>
-                <h2 className="lt-big text-[clamp(3rem,12vw,5rem)]">{s("lettersGift", locale)}</h2>
-              </Reveal>
-              <Reveal delay={150}>
-                <div className="mt-6 [&_.card-body]:text-[0.92rem] [&_.card-body]:leading-[1.85]">
-                  <GiftSection invitation={invitation} locale={locale} plain bare intro={t(wedding.note, locale) || undefined} />
-                </div>
-              </Reveal>
-            </div>
-          </section>
+        {/* 6 · Gifts beside the reply, then the seat finder beside the questions: set like "The plan." */}
+        {(v.hasGift || wedding.rsvp_enabled) && (
+          <div className={`lt-duo ${v.hasGift && wedding.rsvp_enabled ? "" : "lt-duo-one"}`}>
+            {v.hasGift && (
+              <section id="gift" aria-labelledby="gift-heading" lang={locale}>
+                <Reveal>
+                  <h2 id="gift-heading" className="lt-big text-[clamp(3rem,12vw,5rem)]">{s("lettersGift", locale)}</h2>
+                </Reveal>
+                <Reveal delay={150}>
+                  <div className="lt-gift mt-8">
+                    <GiftSection invitation={invitation} locale={locale} plain bare intro={t(wedding.note, locale) || undefined} />
+                  </div>
+                </Reveal>
+              </section>
+            )}
+            {wedding.rsvp_enabled && (
+              <section id="rsvp" aria-labelledby="rsvp-heading" lang={locale}>
+                <Reveal>
+                  <h2 id="rsvp-heading" className="lt-big text-[clamp(3rem,12vw,5rem)]">{s("lettersRsvp", locale)}</h2>
+                </Reveal>
+                <Reveal delay={150}>
+                  <p className="lt-note mt-8">{s("rsvpIntro", locale)}</p>
+                  <div className="lt-form">
+                    <RsvpForm slug={wedding.slug} token={invitation.guest ? token : null} locale={locale} defaultName={invitation.guest ? guestName(invitation.guest, locale) : ""} />
+                  </div>
+                </Reveal>
+              </section>
+            )}
+          </div>
         )}
 
-        <Reveal><TplRsvp invitation={invitation} locale={locale} token={token} calendar={false} /></Reveal>
-        </div>
-        <div className="lt-pair">
-          <Reveal><TplSeat invitation={invitation} locale={locale} /></Reveal>
-          <Reveal><TplFaq invitation={invitation} locale={locale} /></Reveal>
-        </div>
+        {(hasSeat(invitation) || faq.length > 0) && (
+          <div className={`lt-duo ${hasSeat(invitation) && faq.length > 0 ? "" : "lt-duo-one"}`}>
+            {hasSeat(invitation) && (
+              <section id="seat" aria-labelledby="seat-heading" lang={locale}>
+                <Reveal>
+                  <h2 id="seat-heading" className="lt-big text-[clamp(3rem,12vw,5rem)]">{s("lettersSeat", locale)}</h2>
+                </Reveal>
+                <Reveal delay={150}>
+                  <div className="lt-form lt-seat mt-10">
+                    <FindSeat slug={wedding.slug} locale={locale} />
+                  </div>
+                </Reveal>
+              </section>
+            )}
+            {faq.length > 0 && (
+              <section id="faq" aria-labelledby="faq-heading" lang={locale}>
+                <Reveal>
+                  <h2 id="faq-heading" className="lt-big text-[clamp(3rem,12vw,5rem)]">{s("lettersFaq", locale)}</h2>
+                </Reveal>
+                <Reveal delay={150}>
+                  <div className="lt-faq mt-6">
+                    <FaqList items={faq} />
+                  </div>
+                </Reveal>
+              </section>
+            )}
+          </div>
+        )}
 
         {/* 7 · Wishes, set like the published "QUESTIONS?" block, beside the last collage on wide screens */}
         <div className="lt-end">

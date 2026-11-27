@@ -404,7 +404,7 @@ export default function Home() {
               <a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer" className="inline-block py-2.5 hover:text-[#2f2925]">Messenger</a>
             </nav>
           </div>
-          <p className="text-sm text-[#6b625c]">&copy; <CurrentYear /> The Day by Bright Labs. All rights reserved.</p>
+          <p className="text-sm text-[#6b625c]">&copy; <CurrentYear /> The Day. All rights reserved.</p>
         </div>
       </footer>
     </div>

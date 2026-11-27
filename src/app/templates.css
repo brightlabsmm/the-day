@@ -1723,31 +1723,111 @@ html:has(.tpl) {
   }
 }
 
-/* Love Letters on wide screens: the gift beside the reply form, the seat finder beside the questions. */
-@media (min-width: 768px) {
-  .tpl-letters .lt-pair {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: start;
-    gap: 4rem;
-    width: min(88vw, 1180px);
-    margin: 0 auto;
-    padding: clamp(2.5rem, 4vw, 4rem) 0;
-  }
-  /* A section that is switched off leaves an empty wrapper; the other one then takes the full width. */
-  .tpl-letters .lt-pair > :empty {
-    display: none;
-  }
-  .tpl-letters .lt-pair:has(> :empty) {
-    grid-template-columns: minmax(0, 40rem);
-    justify-content: center;
-  }
-  .tpl-letters .lt-pair > * > section,
-  .tpl-letters .lt-pair > section {
-    padding-block: 0;
-  }
-  .tpl-letters .lt-pair #gift > div {
-    margin: 0;
-    max-width: none;
-  }
+/*
+ * Gifts, RSVP, the seat finder and the questions, set like "The plan.": a big rust heading, a typewriter
+ * line, then rows with a rust rule under each. On wide screens two sit side by side in the same columns
+ * as the plan.
+ */
+.tpl-letters .lt-duo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4rem;
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: clamp(3rem, 8vw, 5rem) 1.5rem;
 }
+.tpl-letters .lt-duo-one {
+  max-width: 36rem;
+}
+@media (min-width: 768px) {
+  .tpl-letters .lt-duo { column-gap: 5rem; padding-block: clamp(2.5rem, 4vw, 3.5rem); }
+  .tpl-letters .lt-duo:not(.lt-duo-one) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.tpl-letters .lt-note {
+  max-width: 32rem;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--ink);
+}
+.tpl-letters .lt-note:not(:lang(my)), .tpl-letters :is(.lt-form, .lt-faq, .lt-gift) :not(:lang(my)) {
+  font-family: var(--font-letters-type), "Cutive", "Courier New", serif;
+}
+/* Gifts: the intro as typewriter, the QR codes as cards of paper taped on. */
+.tpl-letters .lt-gift .card-body { font-size: 1rem; line-height: 1.8; color: var(--ink); text-align: left; }
+.tpl-letters .lt-gift img, .tpl-letters .lt-gift [class*="border-dashed"] { box-shadow: 0 10px 22px -14px rgba(46, 42, 38, 0.55); }
+
+/* Forms: a rust label over a value on a rust rule, like the wishes. */
+.tpl-letters .lt-form form { margin: 1.6rem 0 0; max-width: 32rem; text-align: left; }
+.tpl-letters .lt-form label.tpl-eyebrow {
+  display: block;
+  margin: 0;
+  color: var(--navy);
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-align: left;
+  text-transform: uppercase;
+}
+.tpl-letters .lt-form :is(input:not([type="radio"]), select, textarea) {
+  width: 100%;
+  border: 0;
+  border-bottom: 2px solid var(--navy);
+  border-radius: 0;
+  background: transparent;
+  padding: 0.3rem 0 0.45rem;
+  color: var(--ink);
+  font-size: 1rem;
+  box-shadow: none;
+}
+.tpl-letters .lt-form textarea { height: 4.2rem; resize: none; }
+.tpl-letters .lt-form :is(input, select, textarea):focus { outline: none; border-bottom-width: 3px; }
+.tpl-letters .lt-form :is(input, select, textarea):focus-visible { outline: 2px solid var(--navy); outline-offset: 3px; }
+.tpl-letters .lt-form ::placeholder { color: var(--ink-soft); opacity: 0.7; }
+/* Accept or decline: two strips of tan paper; the chosen one turns rust. */
+.tpl-letters .lt-form fieldset label {
+  border: 0;
+  background: #d9c9ad;
+  color: var(--ink);
+  min-width: 0;
+  padding: 0.7rem 0.6rem;
+  font-size: clamp(0.82rem, 3.6vw, 0.95rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.tpl-letters .lt-form fieldset label:lang(my) { text-transform: none; letter-spacing: 0; }
+.tpl-letters .lt-form fieldset label:has(input:checked) { background: var(--navy); color: #f4ecdd; }
+.tpl-letters .lt-form fieldset label:has(input:focus-visible) { outline: 2px solid var(--navy); outline-offset: 3px; }
+.tpl-letters .lt-form button[type="submit"] {
+  display: inline-block;
+  margin: 0.5rem 0 0;
+  border: 0;
+  background: #c9ad89;
+  color: var(--navy);
+  padding: 0.85rem 2rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.tpl-letters .lt-form button[type="submit"]:hover { background: var(--navy); color: #f4ecdd; }
+.tpl-letters .lt-form p[role="status"] { text-align: left; }
+/* The seat finder: one ruled line and a small tan search button. */
+.tpl-letters .lt-seat > div { margin: 0; max-width: 32rem; }
+.tpl-letters .lt-seat form { margin: 0; align-items: end; gap: 1rem; }
+.tpl-letters .lt-seat button[type="submit"] { margin: 0; padding: 0.7rem 1rem; border-radius: 0; box-shadow: none; }
+.tpl-letters .lt-seat input::placeholder { font-size: clamp(0.78rem, 3.4vw, 0.9rem); }
+.tpl-letters .lt-seat [aria-live] { text-align: left; }
+.tpl-letters .lt-seat .tpl-card { background: #efe5d4; border: 0; border-bottom: 2px solid var(--navy); border-radius: 0; box-shadow: none; }
+/* Questions: typewriter capitals with a rust rule under each, the answer below. */
+.tpl-letters .lt-faq ul { border: 0; }
+.tpl-letters .lt-faq li { border-top: 0 !important; border-bottom: 2px solid var(--navy); }
+.tpl-letters .lt-faq h3 button { padding: 1rem 0; }
+.tpl-letters .lt-faq h3 span {
+  font-family: var(--font-letters-type), "Cutive", "Courier New", serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  text-transform: uppercase;
+}
+.tpl-letters .lt-faq h3 span:lang(my) { font-family: var(--font-myanmar); text-transform: none; }
+.tpl-letters .lt-faq h3 svg { color: var(--navy); }
+.tpl-letters .lt-faq [role="region"] p { color: var(--ink-soft); font-size: 0.98rem; line-height: 1.85; }

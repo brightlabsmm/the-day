@@ -132,11 +132,13 @@ export function TplRsvp({ invitation, locale, token, calendar = true }: { invita
   );
 }
 
+/** The questions and answers in the reader's language, skipping any without a question. */
+export const faqItems = (invitation: Invitation, locale: Locale) =>
+  (Faq.safeParse(invitation.wedding.faq).data ?? []).map((f) => ({ q: t(f.q, locale), a: t(f.a, locale) })).filter((f) => f.q);
+
 /** Frequently asked questions. */
 export function TplFaq({ invitation, locale }: { invitation: Invitation; locale: Locale }) {
-  const items = (Faq.safeParse(invitation.wedding.faq).data ?? [])
-    .map((f) => ({ q: t(f.q, locale), a: t(f.a, locale) }))
-    .filter((f) => f.q);
+  const items = faqItems(invitation, locale);
   if (items.length === 0) return null;
   return (
     <section id="faq" aria-labelledby="faq-heading" lang={locale} className="tpl-section">
