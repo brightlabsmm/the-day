@@ -27,6 +27,8 @@ export function TemplateCarousel({ cards, contactUrl }: { cards: TemplateCard[];
   const track = useRef<HTMLUListElement>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const [open, setOpen] = useState<number | null>(null);
+  // Which live demo has finished loading; until then the phone shows the design's picture, not a loading skeleton.
+  const [loadedDemo, setLoadedDemo] = useState<string | null>(null);
 
   // Open or close the native dialog to match the chosen card (it handles focus, Esc and the backdrop layer).
   useEffect(() => {
@@ -122,8 +124,10 @@ export function TemplateCarousel({ cards, contactUrl }: { cards: TemplateCard[];
               {shown.demo ? (
                 // The real invitation, live, inside a phone: it scrolls inside the screen like on a guest's phone.
                 <div className="tprev-phone">
-                  <div className="tprev-screen">
-                    <iframe key={shown.demo} src={shown.demo} title={`${shown.name} live demo`} />
+                  <div className="tprev-screen" data-loaded={loadedDemo === shown.demo}>
+                    <img src={`/landing/${shown.img}.webp`} alt="" className="tprev-placeholder" />
+                    <span className="tprev-loading">Loading live preview</span>
+                    <iframe key={shown.demo} src={shown.demo} title={`${shown.name} live demo`} onLoad={() => setLoadedDemo(shown.demo ?? null)} />
                   </div>
                 </div>
               ) : (
