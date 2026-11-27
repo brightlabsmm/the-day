@@ -287,7 +287,8 @@ export function LettersPage({ invitation, locale, monogram, token, onOpenAction,
           </section>
         )}
 
-        {/* 5 · Gift */}
+        {/* 5 · Gift beside the reply form, and the seat finder beside the questions (side by side on wide screens) */}
+        <div className="lt-pair">
         {v.hasGift && (
           <section id="gift" aria-label={s("giftHeading", locale)} lang={locale} className="px-6 py-[clamp(3rem,8vw,5rem)]">
             <div className="mx-auto max-w-xl">
@@ -303,10 +304,12 @@ export function LettersPage({ invitation, locale, monogram, token, onOpenAction,
           </section>
         )}
 
-        {/* Replies, seating and questions, on the same sand paper */}
         <Reveal><TplRsvp invitation={invitation} locale={locale} token={token} calendar={false} /></Reveal>
-        <Reveal><TplSeat invitation={invitation} locale={locale} /></Reveal>
-        <Reveal><TplFaq invitation={invitation} locale={locale} /></Reveal>
+        </div>
+        <div className="lt-pair">
+          <Reveal><TplSeat invitation={invitation} locale={locale} /></Reveal>
+          <Reveal><TplFaq invitation={invitation} locale={locale} /></Reveal>
+        </div>
 
         {/* 7 · Wishes, set like the published "QUESTIONS?" block, beside the last collage on wide screens */}
         <div className="lt-end">
