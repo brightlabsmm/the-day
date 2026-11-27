@@ -1,219 +1,353 @@
-import { Suspense } from "react";
+/* eslint-disable @next/next/no-img-element -- small pre-cropped static pictures */
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import Link from "next/link";
-import {
-  ArrowRight,
-  CalendarClock,
-  Gift,
-  Images,
-  Languages,
-  Link2,
-  MessageCircle,
-  MessageCircleHeart,
-  Sparkles,
-  Ticket,
-} from "lucide-react";
-import { FACEBOOK_URL, SiteFooter, SiteHeader } from "@/components/site-chrome";
-import { FeaturedCouples } from "@/components/featured-couples";
+import type { CSSProperties, ElementType, ReactNode } from "react";
+import "./landing.css";
+import { Reveal } from "@/components/templates/reveal";
+import { LandingNav } from "@/components/landing-nav";
+import { BRAND_URL, FACEBOOK_URL } from "@/components/site-chrome";
 
+type V = "up" | "left" | "right" | "photo" | "drift" | "zoom";
+
+/** A piece placed on the 1366×768 canvas (desktop) that simply stacks on phones and tablets. */
+function B({
+  x, y, w, h, fs, m, lh, cls = "", v = "up", delay, as, children,
+}: {
+  x: number; y: number; w?: number; h?: number; fs?: number; m?: string; lh?: number;
+  cls?: string; v?: V; delay?: number; as?: ElementType; children?: ReactNode;
+}) {
+  const style = { "--x": x, "--y": y, "--w": w, "--h": h, "--fs": fs, "--m": m, "--lh": lh } as CSSProperties;
+  return (
+    <Reveal as={as} variant={v} delay={delay} className={`p ${fs ? "t" : ""} ${cls}`} style={style}>
+      {children}
+    </Reveal>
+  );
+}
+
+/** A piece of the devices group, placed on its own 660×415 canvas. */
+function D({ x, y, w, h, r, b, r2, cls = "", children }: { x: number; y: number; w: number; h: number; r?: number; b?: number; r2?: number; cls?: string; children?: ReactNode }) {
+  return (
+    <div className={`dv ${cls}`} style={{ "--x": x, "--y": y, "--w": w, "--h": h, "--r": r, "--b": b, "--r2": r2 } as CSSProperties}>
+      {children}
+    </div>
+  );
+}
+
+/** True once public/landing/<name>.webp exists, so new pictures appear as soon as they are added. Runs at build time. */
+const hasPicture = (name: string) => existsSync(join(process.cwd(), "public", "landing", `${name}.webp`));
+
+/** Use the first picture of the list that exists; the last one is the fallback that is already there. */
+function firstPicture<T extends { img: string }>(...options: T[]): T {
+  return options.find((o) => hasPicture(o.img)) ?? options[options.length - 1];
+}
+
+const TEMPLATES: { name: string; img: string; href?: string }[] = [
+  { name: "Sepia Garden", img: "shot-garden", href: "/w/showcase-garden?lang=en" },
+  { name: "Blue Ribbon", img: "shot-ribbon", href: "/w/showcase-ribbon?lang=en" },
+  { name: "Golden Renewal", img: "shot-renewal", href: "/w/showcase-renewal?lang=en" },
+  { name: "Pressed Scrapbook", img: "shot-scrapbook", href: "/w/showcase-scrapbook?lang=en" },
+  // Non-wedding mock-ups, so the row shows other celebrations; the wedding cards stay until they are added.
+  firstPicture({ name: "Golden Birthday", img: "inv-birthday" }, { name: "Classic Floral", img: "inv-floral" }),
+  firstPicture({ name: "Sage Baby Shower", img: "inv-baby" }, { name: "Modern Portrait", img: "inv-veil" }),
+  ...[
+    { name: "Evening Gala", img: "inv-corporate" },
+    { name: "Lantern Festival", img: "inv-cultural" },
+  ].filter((t) => hasPicture(t.img)),
+];
+
+const EVENTS: { name: string; img: string; icon: ReactNode }[] = [
+  { name: "Wedding", img: "wedding", icon: <><circle cx="16" cy="26" r="9" /><circle cx="28" cy="26" r="9" /><path d="M22 7l-2.800 4h5.600z" /></> },
+  { name: "Birthday", img: "birthday", icon: <><rect x="9" y="24" width="26" height="12" rx="1" /><path d="M9 30q3.250 3 6.500 0t6.500 0 6.500 0 6.500 0M22 24v-7M22 8c-2.500 3-1.500 5.500 0 6.500 1.500-1 2.500-3.500 0-6.500z" /></> },
+  { name: "Engagement", img: "engagement", icon: <><circle cx="22" cy="28" r="9" /><path d="M16 15l3-6h6l3 6-6 6z" /><path d="M16 15h12" /></> },
+  { name: "Anniversary", img: "anniversary", icon: <><path d="M16 33C4 25 6 13 13 13c2.500 0 4 1.500 5 3.500M28 33C16 25 18 13 25 13c7 0 9 12-3 20z" /></> },
+  { name: "Baby Celebration", img: "baby", icon: <><ellipse cx="15" cy="28" rx="5" ry="8" /><ellipse cx="29" cy="23" rx="5" ry="8" /><circle cx="10.500" cy="16" r="1.400" /><circle cx="14.500" cy="14" r="1.400" /><circle cx="18.500" cy="16" r="1.400" /><circle cx="24.500" cy="10" r="1.400" /><circle cx="28.500" cy="8" r="1.400" /><circle cx="32.500" cy="10" r="1.400" /></> },
+  { name: "Party", img: "party", icon: <><ellipse cx="16" cy="17" rx="7" ry="9" /><ellipse cx="29" cy="15" rx="7" ry="9" /><path d="M16 26q5 7 13 9M29 24q-3 7-7 11" /></> },
+  { name: "Corporate Event", img: "corporate", icon: <><rect x="7" y="15" width="30" height="20" rx="2" /><path d="M16 15v-4h12v4M7 25h30" /><rect x="19.500" y="23" width="5" height="4" /></> },
+  { name: "Cultural Celebration", img: "cultural", icon: <><path d="M16 12h12M18 8h8v4M14 12l-2 7v11l5 5h10l5-5V19l-2-7M12 21h20M12 29h20M22 21v8" /></> },
+  { name: "Custom Event", img: "custom", icon: <><path d="M28 10H11a2 2 0 00-2 2v21a2 2 0 002 2h21a2 2 0 002-2V22M26 26l-7 1.500L20.500 20 32 9l5 5z" /></> },
+];
 
 const FEATURES = [
-  { icon: Link2, title: "A link for every guest", text: "Each guest opens an invitation with their own name on it." },
-  { icon: Languages, title: "Burmese and English", text: "Guests switch language with one tap." },
-  { icon: CalendarClock, title: "Countdown and schedule", text: "Every event of the day, with times and venues." },
-  { icon: Images, title: "Your photos", text: "A gallery of your favourite pictures together." },
-  { icon: Gift, title: "Gift QR codes", text: "Guests can send a gift from their banking app." },
-  { icon: MessageCircleHeart, title: "Wishes wall", text: "Guests leave messages for you to keep." },
-  { icon: Ticket, title: "RSVP and seating", text: "Replies and table finder, on our newest designs." },
-  { icon: Sparkles, title: "An opening moment", text: "Envelopes, curtains and lanterns that open like a real card." },
+  { t: "Elegant digital invitations", s: "Timeless designs with refined details.", y: 228 },
+  { t: "Custom designs that reflect your style", s: "Bespoke creations made just for you.", y: 295 },
+  { t: "Easy sharing for you and your guests", s: "Send with ease and keep everyone connected.", y: 362 },
+  { t: "Worldwide service", s: "Designed to reach your loved ones, anywhere.", y: 429 },
 ];
 
-const STEPS = [
-  { title: "Pick a design", text: "Browse all sixteen and open any of them on your phone." },
-  { title: "Send us your details", text: "Names, dates, venues, photos and your guest list." },
-  { title: "Share the links", text: "Send each guest their link on Viber, Messenger or Telegram." },
+const FEATURE_ICONS: ReactNode[] = [
+  <><rect x="6" y="11" width="32" height="23" rx="2" /><path d="M7 13l15 12 15-12" /><path d="M22 21c-3-2-3.500-4-2-4.500 1-.3 1.700.3 2 1 .3-.7 1-1.300 2-1 1.500.5 1 2.500-2 4.500z" /></>,
+  <><circle cx="22" cy="15" r="4" /><path d="M22 11c-1-6 5-6 4 0M26 15c6-1 6 5 0 4M22 19c1 6-5 6-4 0M18 15c-6 1-6-5 0-4M22 19v19M22 30c-6-1-8-4-8-8M22 32c5-1 7-4 7-8" /></>,
+  <><path d="M6 21L39 6 31 37l-9-9z" /><path d="M22 28l17-22M22 28v9l5-5" /></>,
+  <><circle cx="22" cy="22" r="16" /><ellipse cx="22" cy="22" rx="7" ry="16" /><path d="M6 22h32M9 13h26M9 31h26" /></>,
 ];
+
+const PSTEPS = [
+  { n: "01", l: "Choose a design", x: 131, icon: <><rect x="6" y="8" width="32" height="28" /><circle cx="15" cy="17" r="3" /><path d="M6 32l10-9 7 6 6-5 9 8" /></> },
+  { n: "02", l: "Add your event details", x: 315, icon: <><path d="M32 22v12H8V10h14M16 28l1-6 15-15 5 5-15 15z" /></> },
+  { n: "03", l: "Share with guests", x: 503, icon: <><path d="M6 20L38 6 30 36l-9-9z" /><path d="M21 27l17-21M21 27v9l5-5" /></> },
+];
+
+const Heart = () => (
+  <svg viewBox="0 0 24 22" fill="currentColor" aria-hidden>
+    <path d="M12 21C-4 9.5 3 .5 8.2 2.4 10.2 3.2 11.4 4.600 12 6c.6-1.400 1.800-2.800 3.800-3.600C21 .5 28 9.500 12 21Z" />
+  </svg>
+);
+
+/** Thin gold rule with a small heart. */
+function Rule({ x, y, w, fs = 16 }: { x: number; y: number; w: number; fs?: number }) {
+  return (
+    <B x={x} y={y} w={w} h={fs} fs={fs} cls="rule" v="zoom">
+      <Heart />
+    </B>
+  );
+}
+
+const Svg = ({ children, sw = 1.4, className = "" }: { children: ReactNode; sw?: number; className?: string }) => (
+  <svg viewBox="0 0 44 44" fill="none" stroke="currentColor" strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden>
+    {children}
+  </svg>
+);
 
 export default function Home() {
   return (
-    <div className="landing min-h-svh overflow-x-clip bg-[#f6f1e7] text-[#2f2925]">
-      <SiteHeader current="home" />
+    <div id="top" className="landing lp min-h-svh overflow-x-clip">
+      <LandingNav />
 
-      {/* Hero */}
-      <section className="relative">
-        <Thread className="pointer-events-none absolute bottom-0 left-0 hidden h-[140px] w-full text-[#a8823f] lg:block" />
-        <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-4 pt-6 pb-16 sm:px-8 lg:grid-cols-[1.1fr_1fr] lg:pt-10 lg:pb-24">
-          <div className="text-center lg:text-left">
-            <p className="caps text-[#5c5048]">Digital invitations</p>
-            <h1 className="script mt-4 text-[clamp(4.5rem,14vw,8.5rem)] leading-[0.9] text-[#1f1b18]">The Day</h1>
-            <span className="mx-auto mt-6 block h-px w-24 bg-[#a8823f] lg:mx-0" aria-hidden />
-            <p className="font-display mt-6 text-[clamp(1.5rem,3.4vw,2.1rem)] leading-snug text-[#2f2925]">
-              Make your day unforgettable.
-            </p>
-            <p className="mx-auto mt-4 max-w-md text-lg leading-relaxed text-[#5c5048] lg:mx-0">
-              Wedding invitations that open like a real card, with your names, date, venue and photos. Every guest gets
-              their own link.
-            </p>
-            <p lang="my" className="mt-3 text-[0.95rem] text-[#6e5f53]">
-              မင်္ဂလာဖိတ်စာ ဒစ်ဂျစ်တယ် · မြန်မာ / English
-            </p>
-            <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start">
-              <Link
-                href="/showcase"
-                className="inline-flex items-center gap-2 rounded-full bg-[#2f2925] px-6 py-3.5 font-medium text-[#f6f1e7] shadow-[0_10px_24px_-12px_rgba(47,41,37,.7)] transition hover:bg-[#1f1b18]"
-              >
-                Browse all 16 designs
-                <ArrowRight className="size-4" aria-hidden />
-              </Link>
-              <a
-                href={FACEBOOK_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full px-5 py-3.5 font-medium text-[#2f2925] underline decoration-[#a8823f] decoration-1 underline-offset-[6px] hover:decoration-2"
-              >
-                <MessageCircle className="size-4" aria-hidden />
-                Message us on Facebook
-              </a>
-            </div>
+      {/* 1 · Hero */}
+      <section className="lp-scr lp-hero" style={{ background: "#fbf3ea" }} aria-labelledby="hero-h">
+        <div className="in pt-24">
+          <B x={65} y={118} fs={38} m="2.2rem" as="p" cls="script text-[#c9a25a]">Template Demo</B>
+          <B x={65} y={165} w={520} fs={56} lh={0.96} m="2.8rem" as="h1" cls="font-display text-[#3b3632]">
+            <span id="hero-h">Find the Invitation <br className="hidden min-[900px]:inline" />That Feels Like You</span>
+          </B>
+          <Rule x={70} y={292} w={115} />
+          <B x={65} y={321} w={440} fs={21.5} lh={1.07} m="1.25rem" as="p" cls="text-[#66584d] max-w-sm">
+            Join a personalised demo session and explore our beautiful collection of digital invitation templates for every celebration.
+          </B>
+          <div className="grp flex flex-col items-center gap-3 sm:flex-row">
+            <B x={70} y={422} w={216} h={46} fs={21} v="left"><a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer" className="gbtn">Book a demo session</a></B>
           </div>
 
-          <HeroPhone />
+          {/* monitor, tablet and phone, built in code */}
+          <B x={590} y={95} w={660} h={415} v="drift" cls="w-full min-[900px]:!absolute">
+            <div className="devices">
+              <D x={94} y={-2} w={480} h={413}>
+                <img src="/landing/monitor.webp" alt="" className="lp-img" />
+              </D>
+              <D x={-5} y={178} w={152} h={214} r={12} b={7} r2={5} cls="bezel">
+                <img src="/landing/tablet-peony.webp" alt="" />
+              </D>
+              <D x={549} y={212} w={101} h={193} r={17} b={6} r2={12} cls="bezel">
+                <img src="/landing/phone.webp" alt="" />
+              </D>
+            </div>
+          </B>
+          <B x={1238} y={252} w={152} v="right" cls="hide-m"><img src="/landing/vase.webp" alt="" className="lp-img" /></B>
+
         </div>
       </section>
 
-      {/* Real couples */}
-      <Suspense fallback={null}>
-        <FeaturedCouples />
-      </Suspense>
+      {/* Templates: screenshots of the real designs */}
+      <section id="templates" className="relative overflow-hidden px-6 py-20 text-center min-[900px]:py-28" style={{ background: "#f9f1e7" }}>
+        <img src="/landing/leaf-c.webp" alt="" className="pointer-events-none absolute top-10 left-2 w-16 opacity-90 sm:left-8 sm:w-24 min-[1200px]:left-[8%] min-[1200px]:w-28" />
+        <img src="/landing/bouq-gold.webp" alt="" className="pointer-events-none absolute top-8 right-2 w-24 sm:right-8 sm:w-36 min-[1200px]:right-[8%] min-[1200px]:w-44" />
+        <Reveal>
+          <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.4rem)] leading-tight text-[#2b2623]">Our templates</h2>
+          <div className="rule mx-auto mt-6" style={{ fontSize: 16 }} aria-hidden><Heart /></div>
+        </Reveal>
+        {/* Flex rather than grid, so a last row that is not full (7 or 8 cards) sits in the middle. */}
+        <ul className="panel mx-auto mt-12 flex max-w-6xl list-none flex-wrap items-end justify-center gap-x-5 gap-y-12 px-5 py-10 min-[900px]:gap-x-8 min-[900px]:px-10">
+          {TEMPLATES.map((t, i) => {
+            const pic = (
+              <>
+                <img src={`/landing/${t.img}.webp`} alt={`${t.name} invitation design`} className="mx-auto h-[15rem] w-auto rounded-sm shadow-[0_18px_34px_-20px_rgba(70,50,25,.6)] transition group-hover:-translate-y-1 sm:h-[24rem]" />
+                <h3 className="font-display mt-5 text-2xl text-[#3b3632]">{t.name}</h3>
+              </>
+            );
+            return (
+              <Reveal as="li" key={t.name} variant="photo" delay={(i % 3) * 120} className="w-[calc(50%-0.625rem)] min-[900px]:w-[calc((100%-4rem)/3)]">
+                {t.href ? (
+                  <a href={t.href} target="_blank" rel="noopener noreferrer" className="group block">{pic}</a>
+                ) : (
+                  <div className="group">{pic}</div>
+                )}
+              </Reveal>
+            );
+          })}
+          <li className="w-full pt-2 text-lg text-[#3b3632] sm:text-xl">
+            <span className="text-[#b8913f]">❦</span> Every template can be customised for any celebration.
+          </li>
+        </ul>
+        <Reveal delay={150}>
+          <Link href="/showcase" className="gbtn mt-12" style={{ display: "inline-flex" }}>Explore templates</Link>
+        </Reveal>
+      </section>
 
-      {/* Features */}
-      <section className="py-16 sm:py-20">
-        <div className="mx-auto max-w-6xl px-4 sm:px-8">
-          <SectionHeading eyebrow="In every invitation" title="Everything your guests need, in one link" />
-          <ul className="mt-10 grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
-            {FEATURES.map(({ icon: Icon, title, text }) => (
-              <li key={title}>
-                <Icon className="size-6 text-[#a8823f]" strokeWidth={1.5} aria-hidden />
-                <h3 className="font-display mt-3 text-xl font-semibold text-[#1f1b18]">{title}</h3>
-                <p className="mt-1 text-[0.95rem] leading-relaxed text-[#5c5048]">{text}</p>
+      {/* 2 · Services */}
+      <section id="services" className="lp-scr" style={{ background: "#f7f0e6" }}>
+        <B x={0} y={380} w={470} h={300} cls="hide-m"><span className="block h-full w-full" style={{ background: "radial-gradient(ellipse at 40% 60%, rgba(226,208,184,.95), rgba(236,222,202,.55) 55%, transparent 72%)", WebkitMaskImage: "radial-gradient(closest-side, #000 40%, transparent)", maskImage: "radial-gradient(closest-side, #000 40%, transparent)" }} /></B>
+        <B x={0} y={118} w={165} v="left" cls="hide-m"><img src="/landing/leaf-dried.webp" alt="" className="lp-img" /></B>
+        <B x={83} y={104} w={258} h={388} v="left" cls="hide-m">
+          <div className="relative h-full w-full"><img src="/landing/tablet-frame.webp" alt="" className="lp-img absolute inset-0 h-full" />
+            {/* Text sits in the gold arch, nudged right of the leaves and turned with the tablet (-2.4deg). */}
+            <div className="absolute top-[18%] right-[12%] left-[20%] flex flex-col items-center text-center text-[#3b3632]" style={{ fontSize: "calc(8 * var(--u))", transform: "rotate(-2.4deg)" }}>
+              <span className="caps2" style={{ fontSize: "calc(6 * var(--u))" }}>Together with their families</span>
+              <span className="mt-[6%] text-[3.1em]" style={{ letterSpacing: ".06em" }}>SOPHIA</span>
+              <span className="mt-[10%] text-[3.1em]" style={{ letterSpacing: ".06em" }}>JAMES</span>
+              <span className="mt-[8%] caps2" style={{ fontSize: "calc(5.5 * var(--u))" }}>Invite you to celebrate</span>
+              <span className="script text-[2.6em]">their wedding</span>
+              <span className="mt-[6%] caps2 leading-snug" style={{ fontSize: "calc(5.5 * var(--u))" }}>Saturday, 12 June 2027<br />at four in the afternoon<br /><br />Villa del Sol<br />Ravello, Italy</span>
+            </div>
+          </div>
+        </B>
+        <B x={334} y={215} w={148} h={296} v="right" cls="hide-m z-10">
+          <div className="relative h-full w-full"><img src="/landing/phone-frame.webp" alt="" className="lp-img absolute inset-0 h-full" />
+            <div className="absolute inset-x-[18%] top-[22%] flex flex-col items-center text-center text-[#3b3632]" style={{ fontSize: "calc(8 * var(--u))", transform: "rotate(-3deg)" }}>
+              <span className="caps2" style={{ fontSize: "calc(5.5 * var(--u))" }}>Please join us for a</span>
+              <span className="mt-[4%] text-[2.2em]">BABY</span>
+              <span className="script text-[2.6em]">Shower</span>
+              <span className="mt-[10%] text-[2.1em] font-medium">Emily Smith</span>
+              <span className="mt-[10%] caps2" style={{ fontSize: "calc(5 * var(--u))" }}>Sunday, 20 June · 2 pm</span>
+              <span className="mt-[8%] caps2" style={{ fontSize: "calc(4.5 * var(--u))" }}>The Grand Hotel<br />Garden Room</span>
+            </div>
+          </div>
+        </B>
+        <img src="/landing/bouq-gold.webp" alt="" className="hide-d mx-auto w-36" />
+        <B x={1050} y={140} w={238} v="right" cls="hide-m"><img src="/landing/bouq-gold.webp" alt="" className="lp-img" /></B>
+        <B x={1205} y={375} w={120} v="right" cls="hide-m"><img src="/landing/leaf-c.webp" alt="" className="lp-img" /></B>
+        <div className="in pt-20">
+          <B x={560} y={62} w={314} fs={18} m="1.1rem" as="p" cls="text-center text-[#3b3632]">Services</B>
+          <Rule x={682} y={97} w={80} fs={14} />
+          <B x={520} y={105} w={384} fs={55} lh={1.04} m="2.8rem" as="h2" cls="font-display text-center text-[#2b2623]">For Every Kind <br className="hidden min-[900px]:inline" />of Celebration</B>
+          <B x={520} y={245} w={384} fs={16.5} m="1.1rem" as="p" cls="text-center text-[#3b3632]">Beautiful digital invitations for every moment.</B>
+          <B x={657} y={305} w={146} h={42} fs={19} v="zoom"><Link href="/showcase" className="gbtn">Explore events</Link></B>
+          <B x={426} y={415} w={607} h={340} cls="grid w-full max-w-md grid-cols-3 gap-[2px] min-[900px]:max-w-none min-[900px]:gap-[calc(2*var(--u))]" v="up">
+            {EVENTS.map((e) => (
+              <div key={e.name} className="ev">
+                {hasPicture(e.img) && <img src={`/landing/${e.img}.webp`} alt="" className="ev-pic" loading="lazy" />}
+                <Svg sw={1.4}>{e.icon}</Svg>
+                <span>{e.name}</span>
+                <i />
+              </div>
+            ))}
+          </B>
+        </div>
+      </section>
+
+      {/* 3 · Process */}
+      <section id="process" className="lp-scr" style={{ background: "#fbf2e8" }}>
+        <B x={801} y={68} w={440} v="right" cls="hide-m"><img src="/landing/plate.webp" alt="" className="lp-img" /></B>
+        <B x={700} y={96} w={170} cls="hide-m"><img src="/landing/dried.webp" alt="" className="lp-img" /></B>
+        {/* Lettering laid on the card, which sits in the middle of the plate turned about -8.6deg. */}
+        <B x={915} y={130} w={230} h={290} v="zoom" cls="hide-m">
+          <div className="flex h-full w-full flex-col items-center justify-center text-center" style={{ transform: "rotate(-8.6deg)", paddingLeft: "12%" }}>
+            <img src="/landing/bouq-line.webp" alt="" style={{ width: "calc(110 * var(--u))" }} />
+            <span className="script mt-[12%] text-[#8a7f78]" style={{ fontSize: "calc(30 * var(--u))" }}>The Day</span>
+            <span className="rule" style={{ fontSize: "calc(8 * var(--u))", width: "calc(80 * var(--u))" }}><Heart /></span>
+            <span className="caps2 mt-[4%] text-[#8a7f78]" style={{ fontSize: "calc(9.5 * var(--u))" }}>Digital Invitations</span>
+          </div>
+        </B>
+        <div className="in pt-20">
+          <div className="hide-d relative mx-auto w-full max-w-sm">
+            <img src="/landing/plate.webp" alt="" className="lp-img" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center" style={{ transform: "rotate(-8.6deg)", paddingLeft: "12%" }}>
+              <img src="/landing/bouq-line.webp" alt="" className="w-[28%]" />
+              <span className="script text-2xl text-[#8a7f78]">The Day</span>
+              <span className="caps2 text-[0.55rem] text-[#8a7f78]">Digital Invitations</span>
+            </div>
+          </div>
+          <B x={95} y={88} w={460} fs={47} lh={1.04} m="2.6rem" as="h2" cls="font-display text-center">Thoughtfully <br className="hidden min-[900px]:inline" />Designed for Your Day</B>
+          <Rule x={261} y={202} w={122} />
+          <ul className="grp flex w-full max-w-sm list-none flex-col gap-6">
+            {FEATURES.map((f, i) => (
+              <li key={f.t} className="grp">
+                <B x={120} y={f.y} w={500} h={52} cls="feat" v="left" delay={i * 90}>
+                  <Svg className="ic" sw={1.2}>{FEATURE_ICONS[i]}</Svg>
+                  <span className="bar" />
+                  <span>
+                    <h3 className="font-display">{f.t}</h3>
+                    <p>{f.s}</p>
+                  </span>
+                </B>
               </li>
             ))}
           </ul>
-        </div>
-      </section>
 
-      {/* How it works */}
-      <section id="how" className="scroll-mt-6 bg-[#fbf8f2] py-16 sm:py-20">
-        <div className="mx-auto max-w-5xl px-4 sm:px-8">
-          <SectionHeading eyebrow="How it works" title="Ready in three steps" />
-          <ol className="mt-10 grid gap-8 sm:grid-cols-3">
-            {STEPS.map((s, i) => (
-              <li key={s.title} className="text-center">
-                <span className="script block text-5xl leading-none text-[#a8823f]">{i + 1}</span>
-                <h3 className="font-display mt-3 text-xl font-semibold text-[#1f1b18]">{s.title}</h3>
-                <p className="mx-auto mt-1 max-w-[16rem] text-[0.95rem] leading-relaxed text-[#5c5048]">{s.text}</p>
-              </li>
+          <B x={30} y={520} w={1305} h={240} cls="panel hide-m" v="zoom"><span /></B>
+          <B x={35} y={572} w={105} cls="hide-m"><img src="/landing/leaf-a.webp" alt="" className="lp-img" /></B>
+          <B x={185} y={540} w={400} fs={25} as="h3" cls="font-display text-center">Our Simple Process</B>
+          <Rule x={333} y={587} w={108} fs={14} />
+          <div className="steps grp mt-4">
+            {PSTEPS.map((s, i) => (
+              <div key={s.n} className="grp contents-d">
+                <B x={s.x - 20} y={606} w={180} h={112} cls="step" delay={i * 120}>
+                  <b className="font-display text-[#3b3632] min-[900px]:text-[calc(23*var(--u))]">{s.n}</b>
+                  <Svg className="min-[900px]:!h-[calc(46*var(--u))] min-[900px]:!w-[calc(46*var(--u))]" sw={1.5}>{s.icon}</Svg>
+                  <span className="min-[900px]:text-[calc(15*var(--u))]">{s.l}</span>
+                </B>
+                {i < 2 && (
+                  <B x={i === 0 ? 274 : 459} y={651} w={32} h={16} cls="arrow max-[899px]:hidden">
+                    <svg viewBox="0 0 32 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M2 8h26M21 2l7 6-7 6" /></svg>
+                  </B>
+                )}
+              </div>
             ))}
-          </ol>
+          </div>
+          <B x={702} y={548} w={1} h={190} cls="hide-m"><span className="block h-full w-px bg-[#b8913f]/35" /></B>
+          <B x={773} y={543} w={400} fs={25} as="h3" cls="font-display mt-10 text-center min-[900px]:mt-0">Regional Reach</B>
+          <Rule x={918} y={590} w={104} fs={14} />
+          <B x={766} y={613} w={108} h={108} cls="mt-3 w-24 text-[#b8913f] min-[900px]:mt-0">
+            <Svg sw={1}><circle cx="22" cy="22" r="19" /><ellipse cx="22" cy="22" rx="8" ry="19" /><path d="M3 22h38M6 13h32M6 31h32M22 3v38" /></Svg>
+          </B>
+          <B x={896} y={640} w={380} fs={20.5} as="p" cls="font-display text-[#3b3632]">Worldwide service</B>
+          <B x={894} y={676} w={400} fs={20.5} as="p" cls="font-display text-[#8a6d33]">Taiwan · Thailand · Myanmar</B>
+          <B x={1158} y={575} w={150} cls="hide-m"><img src="/landing/bouq-line.webp" alt="" className="lp-img" /></B>
         </div>
       </section>
 
-      {/* Closing call to action */}
-      <section className="px-4 py-20 text-center sm:px-8 sm:py-24">
-        <EnvelopeMark className="mx-auto h-20 w-28 text-[#2f2925]" />
-        <h2 className="font-display mx-auto mt-6 max-w-xl text-[clamp(1.9rem,4.5vw,2.8rem)] leading-tight text-[#1f1b18]">
-          Planning a wedding?
-        </h2>
-        <p className="mx-auto mt-3 max-w-md text-lg text-[#5c5048]">
-          Message us on Facebook and we’ll help you choose a design and set up your invitation.
-        </p>
-        <p lang="my" className="mt-2 text-[0.95rem] text-[#6e5f53]">
-          မင်္ဂလာဆောင်စီစဉ်နေပါက Message ပို့ပါ။
-        </p>
-        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <a
-            href={FACEBOOK_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full bg-[#2f2925] px-6 py-3.5 font-medium text-[#f6f1e7] hover:bg-[#1f1b18]"
-          >
-            <MessageCircle className="size-4" aria-hidden />
-            Message us on Facebook
-          </a>
-          <Link href="/showcase" className="rounded-full px-5 py-3.5 font-medium underline decoration-[#a8823f] underline-offset-[6px]">
-            Browse designs
-          </Link>
+      {/* 4 · Contact */}
+      <section id="contact" className="lp-scr" style={{ background: "#f8eee4" }}>
+        <B x={700} y={430} w={660} h={300} cls="hide-m"><span className="block h-full w-full" style={{ background: "radial-gradient(ellipse at 60% 40%, rgba(240,226,206,.95), rgba(244,232,214,.5) 55%, transparent 72%)", WebkitMaskImage: "radial-gradient(closest-side, #000 40%, transparent)", maskImage: "radial-gradient(closest-side, #000 40%, transparent)" }} /></B>
+        <B x={1040} y={70} w={250} v="right" cls="hide-m"><img src="/landing/dried.webp" alt="" className="lp-img" /></B>
+        <B x={930} y={95} w={150} v="right" cls="hide-m"><img src="/landing/dried.webp" alt="" className="lp-img" style={{ transform: "scaleX(-1) rotate(-6deg)", opacity: .85 }} /></B>
+        <B x={828} y={185} w={285} h={430} v="zoom" cls="hide-m">
+          <div className="flex h-full w-full items-center justify-center" style={{ background: "linear-gradient(#f9f3ea,#f3e9dc)", boxShadow: "0 30px 50px -28px rgba(120,90,50,.45)", transform: "rotate(1.5deg)" }}>
+            <img src="/landing/bouq-gold.webp" alt="" style={{ width: "76%" }} />
+          </div>
+        </B>
+        <div className="in pt-20">
+          <img src="/landing/bouq-gold.webp" alt="" className="hide-d mx-auto w-32" />
+          <B x={80} y={118} w={600} fs={58} lh={0.98} m="2.8rem" as="h2" cls="font-display text-center text-[#2f2925]">Let’s Make Your Day <br className="hidden min-[900px]:inline" />Unforgettable</B>
+          <Rule x={296} y={262} w={157} />
+          <B x={265} y={284} w={200} fs={40} m="2.8rem" as="p" cls="script text-center text-[#8c837d]">The Day</B>
+          <B x={190} y={341} w={365} fs={24} m="1.4rem" as="p" cls="font-display text-center font-bold text-[#8d837c]">Digital Invitations</B>
+          <B x={150} y={382} w={450} fs={15.8} lh={1.22} m="1.1rem" as="p" cls="text-center text-[#6b625c] max-w-sm">
+            We’d love to hear about your celebration. Get in touch to create a beautiful digital invitation that reflects your style and makes your day unforgettable.
+          </B>
+          <B x={197} y={486} w={420} h={40} cls="ct" v="left">
+            <span className="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16.500v3a2 2 0 01-2.200 2A19.800 19.800 0 013 5.200 2 2 0 015 3h3a2 2 0 012 1.700c.1 1 .4 1.900.7 2.800a2 2 0 01-.5 2.100L9 10.900a16 16 0 006 6l1.300-1.300a2 2 0 012.100-.4c.9.300 1.800.6 2.800.7A2 2 0 0121 16.500z" /></svg></span>
+            <a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer">Messenger: Message us</a>
+          </B>
+          <B x={197} y={534} w={420} h={40} cls="ct" v="left">
+            <span className="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="9" /><ellipse cx="12" cy="12" rx="4" ry="9" /><path d="M3 12h18" /></svg></span>
+            <a href={BRAND_URL}>Website: the-day.brightlabsmm.com</a>
+          </B>
+          <B x={263} y={594} w={183} h={44} fs={22} v="zoom"><a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer" className="gbtn">Get in touch</a></B>
+
+          <B x={0} y={638} w={160} h={74} cls="hide-m">
+            <svg viewBox="0 0 160 74" className="h-full w-full text-[#c9a96a]" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"><path d="M0 70C30 66 60 56 80 40c12-10 10-34-4-34-14 0-12 22 6 38 18 12 40 22 78 24" /><path d="M72 6c-4-4-9 0-5 5l7 8 7-8c4-5-1-9-5-5z" /></svg>
+          </B>
+          <B x={0} y={705} w={1338} h={2} cls="hide-m"><span className="block h-px w-full bg-[#c9a96a]/70" /></B>
+          <B x={672} y={697} w={16} h={16} cls="hide-m text-[#b8913f]"><Heart /></B>
+          <div className="grp mt-10 flex flex-col items-center gap-3 text-[#8d837c]">
+            <B x={425} y={712} w={150} fs={34} m="2.2rem" as="p" cls="script whitespace-nowrap">The Day</B>
+            <B x={595} y={727} w={110} fs={15} as="p" cls="font-display font-bold">Digital Invitations</B>
+            <B x={760} y={727} w={140} fs={15} as="p" cls="font-display font-bold"><Link href="/showcase">Designs</Link> · <Link href="/pricing">Pricing</Link></B>
+            <B x={930} y={727} w={160} fs={15} as="p" cls="font-display font-bold">© Bright Labs</B>
+          </div>
         </div>
       </section>
-
-      <SiteFooter />
     </div>
-  );
-}
-
-function SectionHeading({ eyebrow, title, children }: { eyebrow: string; title: string; children?: React.ReactNode }) {
-  return (
-    <div className="text-center">
-      <p className="caps text-[#8a7766]">{eyebrow}</p>
-      <h2 className="font-display mt-3 text-[clamp(1.9rem,4.5vw,2.8rem)] leading-tight text-[#1f1b18]">{title}</h2>
-      <span className="mx-auto mt-4 block h-px w-16 bg-[#a8823f]" aria-hidden />
-      {children && <p className="mx-auto mt-4 max-w-lg text-[1.05rem] text-[#5c5048]">{children}</p>}
-    </div>
-  );
-}
-
-/** A real demo invitation in a phone frame (390×844 shown at 60%). */
-function HeroPhone() {
-  return (
-    <div className="relative mx-auto w-fit">
-      <EnvelopeMark className="absolute -bottom-6 -left-24 hidden h-28 w-40 -rotate-6 text-[#2f2925] sm:block" />
-      <div className="relative rounded-[2.6rem] border-[9px] border-[#1f1b18] bg-[#1f1b18] shadow-[0_40px_70px_-30px_rgba(47,41,37,.75)]">
-        <div className="relative h-[506px] w-[234px] overflow-hidden rounded-[2rem] bg-white">
-          <iframe
-            title="Wildflower design, demo invitation"
-            src="/w/showcase-wildflower?lang=en&preview=1"
-            loading="lazy"
-            tabIndex={-1}
-            className="pointer-events-none absolute top-0 left-0 h-[844px] w-[390px] origin-top-left scale-[0.6] border-0"
-          />
-        </div>
-      </div>
-      <Link
-        href="/w/showcase-wildflower?lang=en"
-        target="_blank"
-        className="mt-4 flex items-center justify-center gap-1.5 text-sm text-[#5c5048] underline underline-offset-4 hover:text-[#1f1b18]"
-      >
-        Open this demo
-        <ArrowRight className="size-3.5" aria-hidden />
-      </Link>
-    </div>
-  );
-}
-
-/** Line-drawn envelope with a gold heart seal, after the brand cover. */
-function EnvelopeMark({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 160 110" className={className} fill="none" aria-hidden>
-      <g stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" strokeLinecap="round">
-        <rect x="6" y="14" width="148" height="90" rx="4" fill="#fbf8f2" />
-        <path d="M8 17 80 66 152 17" />
-        <path d="M8 101 62 54M152 101 98 54" opacity=".55" />
-      </g>
-      <path d="M80 64c-8-5.5-10-11-6-12.6 2.6-1 4.9.4 6 2.4 1.1-2 3.4-3.4 6-2.4 4 1.6 2 7.1-6 12.6Z" fill="#a8823f" />
-    </svg>
-  );
-}
-
-/** The looping gold thread from the brand cover, running behind the hero. */
-function Thread({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 1440 260" preserveAspectRatio="none" className={className} fill="none" aria-hidden>
-      <path
-        d="M0 60C120 50 200 70 260 110c40 28 30 60 8 58-24-2-16-40 24-44 70-8 120 60 220 70M980 210c120 0 200-30 260-80 24-20 10-46-10-38-22 8-4 38 30 40 60 4 110-40 180-60"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeLinecap="round"
-        opacity=".75"
-      />
-    </svg>
   );
 }
