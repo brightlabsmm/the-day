@@ -2,83 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Check, Minus, MessageCircle, Plus, Sparkles } from "lucide-react";
 import { FACEBOOK_URL, SiteFooter, SiteHeader } from "@/components/site-chrome";
+import { LEVELS, finalPrice, fmt, type Level } from "@/lib/pricing";
 
 export const metadata: Metadata = {
   title: "Pricing",
   description: "Three levels of digital wedding invitation. Save up to 50% with our launch offer.",
 };
-
-type Level = {
-  id: 1 | 2 | 3;
-  name: string;
-  forWho: string;
-  price: number;
-  discount: number;
-  rounds: number | "unlimited";
-  badge?: string;
-  featured?: boolean;
-  intro: string;
-  features: string[];
-};
-
-const LEVELS: Level[] = [
-  {
-    id: 1,
-    name: "Essential",
-    forWho: "A beautiful invitation, with one link for all your guests.",
-    price: 300_000,
-    discount: 30,
-    rounds: 3,
-    intro: "What’s included",
-    features: [
-      "Your choice of 16 designs",
-      "In Burmese and English",
-      "A countdown and your schedule",
-      "Up to 8 of your photos",
-      "Gift QR codes",
-      "A wishes wall for your guests",
-      "One link to share with everyone",
-      "3 rounds of changes",
-    ],
-  },
-  {
-    id: 2,
-    name: "Signature",
-    forWho: "A personal invitation that greets each guest by name.",
-    price: 450_000,
-    discount: 30,
-    rounds: 5,
-    badge: "Most popular",
-    intro: "Everything in Essential, plus",
-    features: [
-      "A personal link for every guest",
-      "See who has opened their invitation",
-      "RSVP: guests reply in a tap",
-      "Your story, dress code and FAQ",
-      "Background music",
-      "5 rounds of changes",
-    ],
-  },
-  {
-    id: 3,
-    name: "Premium",
-    forWho: "Every detail taken care of, for your big day.",
-    price: 700_000,
-    discount: 50,
-    rounds: "unlimited",
-    badge: "Best value",
-    featured: true,
-    intro: "Everything in Signature, plus",
-    features: [
-      "Your photos turned into an animated video",
-      "Find your seat: guests look up their table",
-      "Good to know: parking, transport and weather",
-      "Your own words on the cover",
-      "Priority setup",
-      "Unlimited rounds of changes",
-    ],
-  },
-];
 
 /** Rows of the comparison table: true / false, or text per level. */
 const COMPARE: { label: string; values: [boolean | string, boolean | string, boolean | string] }[] = [
@@ -124,8 +53,6 @@ const FAQ = [
   },
 ];
 
-const fmt = (n: number) => new Intl.NumberFormat("en-US").format(n);
-const finalPrice = (l: Level) => Math.round((l.price * (100 - l.discount)) / 100);
 
 export default function PricingPage() {
   return (

@@ -7,8 +7,9 @@ import "./landing.css";
 import { Reveal } from "@/components/templates/reveal";
 import { LandingNav } from "@/components/landing-nav";
 import { CurrentYear } from "@/components/current-year";
+import { fmt, startingPrice } from "@/lib/pricing";
 import { TemplateCarousel, type TemplateCard } from "@/components/landing-carousel";
-import { BRAND_URL, FACEBOOK_URL } from "@/components/site-chrome";
+import { FACEBOOK_URL } from "@/components/site-chrome";
 
 type V = "up" | "left" | "right" | "photo" | "drift" | "zoom";
 
@@ -176,6 +177,12 @@ export default function Home() {
           <div className="grp flex flex-col items-center gap-3 sm:flex-row">
             <B x={70} y={397} w={216} h={46} fs={21} v="left"><a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer" className="gbtn">Book a demo session</a></B>
           </div>
+          {/* Starting price, read from the same plans as /pricing. */}
+          <B x={70} y={462} w={440} fs={16} m="1rem" as="p" cls="text-[#5c524b]">
+            Launch prices from <strong className="font-semibold text-[#2f2925]">{fmt(startingPrice())} MMK</strong>
+            <span className="text-[#b8913f]"> &middot; </span>
+            <Link href="/pricing" className="text-[#7d6230] underline decoration-[#b8913f]/60 underline-offset-4 hover:text-[#2f2925]">See pricing</Link>
+          </B>
 
           {/* monitor, tablet and phone, built in code */}
           <B x={590} y={95} w={660} h={415} v="drift" cls="w-full min-[900px]:!absolute">
@@ -205,7 +212,7 @@ export default function Home() {
           <div className="rule mx-auto mt-6" style={{ fontSize: 16 }} aria-hidden><Heart /></div>
         </Reveal>
         <Reveal variant="photo">
-          <TemplateCarousel cards={TEMPLATES} />
+          <TemplateCarousel cards={TEMPLATES} contactUrl={FACEBOOK_URL} />
         </Reveal>
         <p className="mt-8 text-lg text-[#3b3632] sm:text-xl">
           <span className="text-[#b8913f]">❦</span> Every template can be customised for any celebration.
@@ -249,7 +256,7 @@ export default function Home() {
           <Rule x={682} y={97} w={80} fs={14} />
           <B x={520} y={105} w={384} fs={55} lh={1.04} m="2.8rem" as="h2" cls="font-display text-center text-[#2b2623]">For Every Kind <br className="hidden min-[900px]:inline" />of Celebration</B>
           <B x={520} y={245} w={384} fs={16.5} m="1.1rem" as="p" cls="text-center text-[#3b3632]">Beautiful digital invitations for every moment.</B>
-          <B x={657} y={305} w={146} h={42} fs={19} v="zoom"><Link href="/showcase" className="gbtn">Explore events</Link></B>
+          <B x={657} y={305} w={146} h={42} fs={19} v="zoom"><a href="#templates" className="gbtn">See templates</a></B>
           <B x={426} y={415} w={607} h={340} cls="grid w-full max-w-md grid-cols-3 gap-[2px] min-[900px]:max-w-none min-[900px]:gap-[calc(2*var(--u))]" v="up">
             {EVENTS.map((e) => (
               <div key={e.name} className="ev">
@@ -271,9 +278,9 @@ export default function Home() {
         <B x={915} y={130} w={230} h={290} v="zoom" cls="hide-m">
           <div className="flex h-full w-full flex-col items-center justify-center text-center" style={{ transform: "rotate(-8.6deg)", paddingLeft: "12%" }}>
             <img src="/landing/bouq-line.webp" alt="" style={{ width: "calc(110 * var(--u))" }} />
-            <span className="script mt-[12%] text-[#8a7f78]" style={{ fontSize: "calc(30 * var(--u))" }}>The Day</span>
+            <span className="script mt-[12%] text-[#6f655d]" style={{ fontSize: "calc(30 * var(--u))" }}>The Day</span>
             <span className="rule" style={{ fontSize: "calc(8 * var(--u))", width: "calc(80 * var(--u))" }}><Heart /></span>
-            <span className="caps2 mt-[4%] text-[#8a7f78]" style={{ fontSize: "calc(9.5 * var(--u))" }}>Digital Invitations</span>
+            <span className="caps2 mt-[4%] text-[#6f655d]" style={{ fontSize: "calc(9.5 * var(--u))" }}>Digital Invitations</span>
           </div>
         </B>
         <div className="in pt-20">
@@ -281,8 +288,8 @@ export default function Home() {
             <img src="/landing/plate.webp" alt="" className="lp-img" />
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center" style={{ transform: "rotate(-8.6deg)", paddingLeft: "12%" }}>
               <img src="/landing/bouq-line.webp" alt="" className="w-[28%]" />
-              <span className="script text-2xl text-[#8a7f78]">The Day</span>
-              <span className="caps2 text-[0.55rem] text-[#8a7f78]">Digital Invitations</span>
+              <span className="script text-2xl text-[#6f655d]">The Day</span>
+              <span className="caps2 text-[0.55rem] text-[#6f655d]">Digital Invitations</span>
             </div>
           </div>
           <B x={95} y={88} w={460} fs={47} lh={1.04} m="2.6rem" as="h2" cls="font-display text-center">Thoughtfully <br className="hidden min-[900px]:inline" />Designed for Your Day</B>
@@ -344,7 +351,7 @@ export default function Home() {
             {/* A gold laurel wreath with the name set inside it, like a monogram. */}
             <div className="relative" style={{ width: "78%" }}>
               <img src="/landing/wreath-line.webp" alt="" className="lp-img" />
-              <span className="script absolute inset-x-0 text-center text-[#8a7f78]" style={{ top: "34%", fontSize: "calc(34 * var(--u))" }}>The Day</span>
+              <span className="script absolute inset-x-0 text-center text-[#6f655d]" style={{ top: "34%", fontSize: "calc(34 * var(--u))" }}>The Day</span>
             </div>
           </div>
         </B>
@@ -353,33 +360,33 @@ export default function Home() {
           <B x={80} y={118} w={600} fs={58} lh={0.98} m="2.8rem" as="h2" cls="font-display text-center text-[#2f2925]">Let’s Make Your Day <br className="hidden min-[900px]:inline" />Unforgettable</B>
           <Rule x={296} y={262} w={157} />
           <B x={265} y={284} w={200} fs={40} m="2.8rem" as="p" cls="script text-center text-[#8c837d]">The Day</B>
-          <B x={190} y={341} w={365} fs={24} m="1.4rem" as="p" cls="font-display text-center font-bold text-[#8d837c]">Digital Invitations</B>
+          <B x={190} y={341} w={365} fs={24} m="1.4rem" as="p" cls="font-display text-center font-bold text-[#6b625c]">Digital Invitations</B>
           <B x={150} y={382} w={450} fs={15.8} lh={1.22} m="1.1rem" as="p" cls="text-center text-[#6b625c] max-w-sm">
             We’d love to hear about your celebration. Get in touch to create a beautiful digital invitation that reflects your style and makes your day unforgettable.
           </B>
           <B x={197} y={486} w={420} h={40} cls="ct" v="left">
-            <span className="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16.500v3a2 2 0 01-2.200 2A19.800 19.800 0 013 5.200 2 2 0 015 3h3a2 2 0 012 1.700c.1 1 .4 1.900.7 2.800a2 2 0 01-.5 2.100L9 10.900a16 16 0 006 6l1.300-1.300a2 2 0 012.100-.4c.9.300 1.800.6 2.800.7A2 2 0 0121 16.500z" /></svg></span>
+            <span className="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3.5c-4.900 0-8.700 3.500-8.700 8 0 2.400 1.100 4.500 2.900 6v3l2.800-1.600c1 .3 2 .4 3 .4 4.900 0 8.700-3.500 8.700-8s-3.800-8-8.700-8z" /><path d="M7.800 13.400l2.800-3 2.100 2 2.700-3" /></svg></span>
             <a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer">Messenger: Message us</a>
           </B>
           <B x={197} y={534} w={420} h={40} cls="ct" v="left">
-            <span className="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="9" /><ellipse cx="12" cy="12" rx="4" ry="9" /><path d="M3 12h18" /></svg></span>
-            <a href={BRAND_URL}>Website: the-day.brightlabsmm.com</a>
+            <span className="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3.500 12.200V4.500a1 1 0 011-1h7.700l8.300 8.300a1 1 0 010 1.400l-7 7a1 1 0 01-1.400 0z" /><circle cx="8" cy="8" r="1.400" /></svg></span>
+            <Link href="/pricing">Pricing: from {fmt(startingPrice())} MMK</Link>
           </B>
           <B x={263} y={594} w={183} h={44} fs={22} v="zoom"><a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer" className="gbtn">Get in touch</a></B>
 
           {/* Footer divider: a thin gold line that fades in from both edges, with a small heart in the middle. */}
           <B x={40} y={705} w={1286} h={2} cls="hide-m"><span className="block h-px w-full" style={{ background: "linear-gradient(90deg, transparent, rgba(201,169,106,.75) 18%, rgba(201,169,106,.75) 82%, transparent)" }} /></B>
           <B x={672} y={697} w={16} h={16} cls="hide-m text-[#b8913f]"><Heart /></B>
-          <div className="grp mt-10 flex flex-col items-center gap-3 text-[#8d837c]">
+          <div className="grp mt-10 flex flex-col items-center gap-3 text-[#6b625c]">
             <B x={445} y={712} w={150} fs={34} m="2.2rem" as="p" cls="script whitespace-nowrap">The Day</B>
             <B x={615} y={727} w={110} fs={15} as="p" cls="font-display font-bold">Digital Invitations</B>
-            <B x={780} y={727} w={140} fs={15} as="p" cls="font-display font-bold"><Link href="/showcase">Designs</Link> · <Link href="/pricing">Pricing</Link></B>
+            <B x={780} y={727} w={140} fs={15} as="p" cls="font-display font-bold"><a href="#templates">Templates</a> · <Link href="/pricing">Pricing</Link></B>
           </div>
         </div>
       </section>
 
       {/* Copyright bar */}
-      <footer className="border-t border-[#c9a96a]/30 px-4 py-5 text-center text-sm text-[#8d837c]" style={{ background: "#f3e8dc" }}>
+      <footer className="border-t border-[#c9a96a]/30 px-4 py-5 text-center text-sm text-[#6b625c]" style={{ background: "#f3e8dc" }}>
         <p>
           &copy; <CurrentYear /> The Day by Bright Labs. All rights reserved.
         </p>

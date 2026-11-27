@@ -17,11 +17,25 @@ export type TemplateCard = {
 /**
  * One row of template cards that slides sideways: three at a time on desktop, two on tablets and
  * one and a bit on phones. Arrows move a page, dots show where you are, and it also scrolls by
- * swipe or trackpad (scroll snap keeps cards aligned). Cards are pictures only, with no links;
- * blank invitation cards in the pictures can carry their own wording.
+ * swipe or trackpad (scroll snap keeps cards aligned). Blank invitation cards in the pictures can
+ * carry their own wording. Tapping a card opens a larger preview (no demo pages) with a button to
+ * ask about that design on Messenger.
  */
-export function TemplateCarousel({ cards }: { cards: TemplateCard[] }) {
+export function TemplateCarousel({ cards, contactUrl }: { cards: TemplateCard[]; contactUrl: string }) {
   const track = useRef<HTMLUListElement>(null);
+  const dialog = useRef<HTMLDialogElement>(null);
+  const [open, setOpen] = useState<number | null>(null);
+
+  // Open or close the native dialog to match the chosen card (it handles focus, Esc and the backdrop layer).
+  useEffect(() => {
+    const d = dialog.current;
+    if (!d) return;
+    if (open !== null && !d.open) d.showModal();
+    if (open === null && d.open) d.close();
+  }, [open]);
+
+  const shown = open === null ? null : cards[open];
+  const step = (by: number) => setOpen((i) => (i === null ? i : (i + by + cards.length) % cards.length));
   const [page, setPage] = useState(0);
   const [pages, setPages] = useState(1);
 
@@ -71,16 +85,14 @@ export function TemplateCarousel({ cards }: { cards: TemplateCard[] }) {
     <div className="tcar mx-auto mt-12 max-w-6xl">
       <div className="relative">
         <ul ref={track} onScroll={measure} className="tcar-track" aria-label="Invitation templates">
-          {cards.map((c) => (
+          {cards.map((c, i) => (
             <li key={c.name} className="tcar-item">
-              {c.card ? (
-                <div className="tcar-pic">
-                  <img src={`/landing/${c.img}.webp`} alt={`${c.name} invitation design`} loading="lazy" />
-                  <div className="tcar-text" style={{ inset: c.card.inset }}>{c.card.content}</div>
-                </div>
-              ) : (
-                <img src={`/landing/${c.img}.webp`} alt={`${c.name} invitation design`} loading="lazy" />
-              )}
+              <button type="button" className="tcar-open" onClick={() => setOpen(i)} aria-label={`Preview ${c.name}`}>
+                <Picture card={c} />
+                <span className="tcar-zoom" aria-hidden>
+                  <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" /><path d="M16 16l4 4M11 8.5v5M8.5 11h5" /></svg>
+                </span>
+              </button>
               <h3 className="font-display">{c.name}</h3>
               <p>{c.event}</p>
             </li>
@@ -93,6 +105,44 @@ export function TemplateCarousel({ cards }: { cards: TemplateCard[] }) {
           <svg viewBox="0 0 24 24" aria-hidden><path d="M9 5l7 7-7 7" /></svg>
         </button>
       </div>
+      <dialog
+        ref={dialog}
+        className="tprev"
+        aria-label={shown ? `${shown.name} preview` : "Template preview"}
+        onClose={() => setOpen(null)}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) setOpen(null); // click on the dimmed backdrop
+        }}
+      >
+        {shown && (
+          <div className="tprev-body">
+            <div className="tprev-pic">
+              <Picture card={shown} full />
+            </div>
+            <div className="tprev-info">
+              <p className="tprev-event">{shown.event}</p>
+              <h3 className="font-display">{shown.name}</h3>
+              <span className="tprev-rule" aria-hidden />
+              <p className="tprev-copy">
+                Names, dates, wording, colours and language are all set for your celebration, in English, Burmese or both.
+              </p>
+              <a href={contactUrl} target="_blank" rel="noopener noreferrer" className="gbtn">Ask about this design</a>
+              <div className="tprev-nav">
+                <button type="button" onClick={() => step(-1)} aria-label="Previous template">
+                  <svg viewBox="0 0 24 24" aria-hidden><path d="M15 5l-7 7 7 7" /></svg>
+                </button>
+                <span>{(open ?? 0) + 1} / {cards.length}</span>
+                <button type="button" onClick={() => step(1)} aria-label="Next template">
+                  <svg viewBox="0 0 24 24" aria-hidden><path d="M9 5l7 7-7 7" /></svg>
+                </button>
+              </div>
+            </div>
+            <button type="button" className="tprev-close" onClick={() => setOpen(null)} aria-label="Close preview">
+              <svg viewBox="0 0 24 24" aria-hidden><path d="M6 6l12 12M18 6L6 18" /></svg>
+            </button>
+          </div>
+        )}
+      </dialog>
       {pages > 1 && (
         <div className="tcar-dots" role="tablist" aria-label="Template pages">
           {Array.from({ length: pages }, (_, i) => (
@@ -100,6 +150,18 @@ export function TemplateCarousel({ cards }: { cards: TemplateCard[] }) {
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+/** A card's picture: with its printed wording when it has some; `full` shows a whole screenshot, uncropped. */
+function Picture({ card, full = false }: { card: TemplateCard; full?: boolean }) {
+  const img = <img src={`/landing/${card.img}.webp`} alt={`${card.name} invitation design`} loading="lazy" />;
+  if (!card.card) return full ? <div className="tprev-shot">{img}</div> : img;
+  return (
+    <div className="tcar-pic">
+      {img}
+      <div className="tcar-text" style={{ inset: card.card.inset }}>{card.card.content}</div>
     </div>
   );
 }
