@@ -8,7 +8,7 @@ import type { Locale } from "@/lib/i18n/numerals";
 import { t } from "@/lib/i18n/numerals";
 import { guestName } from "@/lib/i18n/strings";
 import { Opening } from "@/components/invite/opening";
-import { SleeveShell } from "@/components/invite/sleeve-parts";
+import { InviteLoading } from "@/components/invite/invite-loading";
 import { InvitationBody } from "@/components/invite/invitation-body";
 import { LanguageSwitch } from "@/components/invite/language-switch";
 import { MusicPlayer } from "@/components/invite/music-player";
@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: PageProps<"/w/[slug]">): Prom
 
 export default function InvitationPage(props: PageProps<"/w/[slug]">) {
   return (
-    <Suspense fallback={<SleeveShell />}>
+    <Suspense fallback={<InviteLoading />}>
       <InvitationRoute {...props} />
     </Suspense>
   );
