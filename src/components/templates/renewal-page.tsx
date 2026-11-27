@@ -5,7 +5,9 @@ import { mediaUrl } from "@/lib/media";
 import { oneTime } from "@/lib/i18n/datetime";
 import { Reveal } from "./reveal";
 import { TplRsvp } from "./extras";
-import { TrackOpen } from "./track-open";
+import { Gate } from "./gate";
+import { guestName } from "@/lib/i18n/strings";
+import { t } from "@/lib/i18n/numerals";
 import { viewOf, type TemplateProps } from "./view";
 
 const Faq = z.array(z.object({ q: z.object({ en: z.string().optional() }).partial(), a: z.object({ en: z.string().optional() }).partial() }));
@@ -54,7 +56,7 @@ const BODY = "text-[1.12rem] leading-[1.3] text-[color:var(--ink-soft)]";
  * green panel with the names, oval photographs with flowers laid over them, bordered detail cards,
  * the program inside an arch, numbered FAQs and coordinator cards. There is no opening screen.
  */
-export function RenewalPage({ invitation, locale, monogram, token, onOpenAction }: TemplateProps) {
+export function RenewalPage({ invitation, locale, monogram, token, onOpenAction, preview }: TemplateProps) {
   const v = viewOf(invitation, locale);
   const { wedding, events } = invitation;
   const raw = (wedding.cover_text as Record<string, unknown> | null) ?? {};
@@ -70,8 +72,22 @@ export function RenewalPage({ invitation, locale, monogram, token, onOpenAction 
   const tall = pick(3);
 
   return (
+    // Opening screen for this design; it also records when a guest with a personal link opens it.
+    <Gate
+      kind="renewal"
+      slug={wedding.slug}
+      token={invitation.guest ? token : null}
+      locale={locale}
+      monogram={monogram}
+      coverSrc={v.cover?.src ?? null}
+      guestLabel={guestName(invitation.guest, locale)}
+      dateLabel={v.dateShort}
+      names={v.names}
+      place={v.venues[0] ? t(v.venues[0].venue_name, locale) : ""}
+      onOpenAction={onOpenAction}
+      preview={preview}
+    >
     <div className="tpl tpl-renewal" lang={locale}>
-      <TrackOpen slug={wedding.slug} token={token} action={onOpenAction} />
 
       {/* 1 · The monogram and the tulip */}
       <header id="top" className="px-4 pt-6">
@@ -264,5 +280,6 @@ export function RenewalPage({ invitation, locale, monogram, token, onOpenAction 
         </Reveal>
       )}
     </div>
+    </Gate>
   );
 }

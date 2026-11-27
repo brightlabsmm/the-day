@@ -14,7 +14,9 @@ import { s } from "@/lib/i18n/strings";
 import { GATE_OPENED_EVENT } from "@/components/invite/music-player";
 
 type Props = {
-  kind: "envelope" | "scratch" | "theatre" | "shutters" | "silk" | "midnight" | "lantern" | "polaroid" | "botanical" | "artdeco" | "sunrise" | "spotlight";
+  kind:
+    | "envelope" | "scratch" | "theatre" | "shutters" | "silk" | "midnight" | "lantern" | "polaroid" | "botanical" | "artdeco" | "sunrise" | "spotlight"
+    | "garden" | "ribbon" | "renewal" | "scrapbook";
   slug: string;
   token: string | null;
   locale: Locale;
@@ -97,12 +99,20 @@ export function Gate({ kind, slug, token, locale, monogram, coverSrc, guestLabel
           lang={locale}
           className="fixed inset-0 z-50 overflow-hidden"
           animate={{ opacity: phase === "opening" ? 0 : 1 }}
-          transition={{ duration: 0.7, delay: phase === "opening" ? (kind === "envelope" ? 1.1 : kind === "theatre" ? 1.5 : kind === "shutters" ? 1.9 : kind === "silk" ? 1.2 : kind === "midnight" ? 1.4 : kind === "lantern" ? 1.5 : kind === "polaroid" ? 1.1 : kind === "botanical" ? 1.3 : kind === "artdeco" ? 1.2 : kind === "sunrise" ? 1.6 : kind === "spotlight" ? 1.5 : 0.9) : 0, ease: "easeOut" }}
+          transition={{ duration: 0.7, delay: phase === "opening" ? (kind === "envelope" ? 1.1 : kind === "theatre" ? 1.5 : kind === "shutters" ? 1.9 : kind === "silk" ? 1.2 : kind === "midnight" ? 1.4 : kind === "lantern" ? 1.5 : kind === "polaroid" ? 1.1 : kind === "botanical" ? 1.3 : kind === "artdeco" ? 1.2 : kind === "sunrise" ? 1.6 : kind === "spotlight" ? 1.5 : kind === "garden" ? 1.4 : kind === "ribbon" ? 1.2 : kind === "renewal" ? 1.4 : kind === "scrapbook" ? 1.6 : 0.9) : 0, ease: "easeOut" }}
           onAnimationComplete={() => {
             if (phase === "opening") finish();
           }}
         >
-          {kind === "spotlight" ? (
+          {kind === "garden" ? (
+            <GardenFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} place={place} coverSrc={coverSrc} />
+          ) : kind === "ribbon" ? (
+            <RibbonFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} place={place} />
+          ) : kind === "renewal" ? (
+            <RenewalFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} place={place} monogram={monogram} />
+          ) : kind === "scrapbook" ? (
+            <ScrapbookFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} place={place} guestLabel={guestLabel} />
+          ) : kind === "spotlight" ? (
             <SpotlightFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} place={place} />
           ) : kind === "botanical" ? (
             <BotanicalFace opening={phase === "opening"} onOpen={begin} locale={locale} names={names} dateLabel={dateLabel} place={place} />
@@ -1013,6 +1023,326 @@ function SpotlightFace({ opening, onOpen, locale, names }: FaceProps) {
         <p className="text-[clamp(1.9rem,8vw,3rem)] leading-tight" style={serif}>
           {names ? `${names.one} & ${names.two}` : ""}
         </p>
+      </button>
+    </div>
+  );
+}
+
+/* ── Sepia Garden ───────────────────────────────────────────── */
+
+/** Fine film grain, drawn once as a tiny SVG noise tile. */
+const GRAIN =
+  "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")";
+
+/** An old photograph still in its sepia haze; a tap develops it clear, then the page appears. */
+function GardenFace({ opening, onOpen, locale, names, dateLabel, place, coverSrc }: FaceProps & { coverSrc: string | null }) {
+  const script = { fontFamily: "var(--font-script), cursive" } as const;
+  const serif = { fontFamily: "var(--font-cormorant), serif" } as const;
+  return (
+    <div className="relative h-full w-full overflow-hidden bg-[#2a241d] text-[#f1e8d6]">
+      {coverSrc && (
+        <Image
+          src={coverSrc}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover [object-position:50%_18%]"
+          style={{
+            filter: opening ? "sepia(.45) contrast(1.05) brightness(.95) blur(0px)" : "sepia(1) contrast(.72) brightness(1.18) blur(9px)",
+            transform: opening ? "scale(1)" : "scale(1.07)",
+            transition: "filter 1.3s ease, transform 1.8s ease",
+          }}
+        />
+      )}
+      {/* The haze lifts as the photo develops. */}
+      <div
+        aria-hidden
+        className="absolute inset-0"
+        style={{ background: "radial-gradient(ellipse at 50% 46%, rgba(241,232,214,.5), rgba(42,36,29,.82) 78%)", opacity: opening ? 0.25 : 1, transition: "opacity 1.3s ease" }}
+      />
+      <div aria-hidden className="absolute inset-0 opacity-[.16] mix-blend-overlay" style={{ backgroundImage: GRAIN }} />
+      {/* A thin print border, like the edge of a photograph. */}
+      <div aria-hidden className="absolute inset-3 border border-[#f1e8d6]/35 sm:inset-6" />
+      <button
+        type="button"
+        onClick={onOpen}
+        disabled={opening}
+        aria-label={s("enter", locale)}
+        className="absolute inset-0 grid place-items-center px-6 text-center focus-visible:outline-2 focus-visible:-outline-offset-8 focus-visible:outline-[#f1e8d6]"
+        style={{ opacity: opening ? 0 : 1, transition: "opacity .6s ease .35s" }}
+      >
+        <span className="block">
+          <span className="block text-[0.72rem] tracking-[0.38em] uppercase [&:lang(my)]:tracking-normal" style={serif}>
+            {dateLabel}
+          </span>
+          <span className="mt-4 block text-[clamp(3rem,12vw,5.4rem)] leading-[1.05] drop-shadow-[0_2px_18px_rgba(0,0,0,.45)]" style={script}>
+            {names?.one} <span className="text-[0.6em]">&amp;</span> {names?.two}
+          </span>
+          {place && (
+            <span className="mt-4 block text-[0.72rem] tracking-[0.3em] text-[#e2d6bf] uppercase [&:lang(my)]:tracking-normal" style={serif}>
+              {place}
+            </span>
+          )}
+          <span className="mt-10 inline-block border border-[#f1e8d6]/70 px-6 py-2.5 text-[0.68rem] tracking-[0.32em] uppercase [&:lang(my)]:tracking-normal" style={serif}>
+            {s("tapGarden", locale)}
+          </span>
+        </span>
+      </button>
+    </div>
+  );
+}
+
+/* ── Blue Ribbon ────────────────────────────────────────────── */
+
+/** A cobalt silk bow; on opening its loops fall away and the knot lets go. */
+function RibbonBow({ opening }: { opening: boolean }) {
+  const part = (style: React.CSSProperties) => ({ ...style, transition: "transform .9s cubic-bezier(.6,0,.3,1), opacity .7s ease", transformBox: "fill-box" as const });
+  return (
+    <svg viewBox="0 0 200 140" className="w-[min(56vw,250px)] overflow-visible drop-shadow-[0_10px_14px_rgba(47,76,133,.35)]" aria-hidden>
+      <defs>
+        <linearGradient id="rb-silk" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#6d8fcf" />
+          <stop offset=".45" stopColor="#4468a6" />
+          <stop offset="1" stopColor="#2f4c85" />
+        </linearGradient>
+      </defs>
+      {/* Tails */}
+      <g style={part({ transformOrigin: "50% 0%", transform: opening ? "translateY(40px) rotate(18deg)" : "none", opacity: opening ? 0 : 1 })}>
+        <path d="M94 70 L70 132 L84 124 L92 138 L104 74Z" fill="url(#rb-silk)" />
+      </g>
+      <g style={part({ transformOrigin: "50% 0%", transform: opening ? "translateY(40px) rotate(-18deg)" : "none", opacity: opening ? 0 : 1 })}>
+        <path d="M106 70 L130 132 L116 124 L108 138 L96 74Z" fill="url(#rb-silk)" />
+      </g>
+      {/* Loops */}
+      <g style={part({ transformOrigin: "100% 50%", transform: opening ? "translateX(-60px) rotate(-55deg) scale(.6)" : "none", opacity: opening ? 0 : 1 })}>
+        <path d="M100 62 C74 18 18 20 22 56 C26 92 76 86 100 62Z" fill="url(#rb-silk)" />
+        <path d="M96 62 C76 36 42 36 42 56 C42 74 74 74 96 62Z" fill="#2f4c85" opacity=".45" />
+      </g>
+      <g style={part({ transformOrigin: "0% 50%", transform: opening ? "translateX(60px) rotate(55deg) scale(.6)" : "none", opacity: opening ? 0 : 1 })}>
+        <path d="M100 62 C126 18 182 20 178 56 C174 92 124 86 100 62Z" fill="url(#rb-silk)" />
+        <path d="M104 62 C124 36 158 36 158 56 C158 74 126 74 104 62Z" fill="#2f4c85" opacity=".45" />
+      </g>
+      {/* Knot */}
+      <rect
+        x="88"
+        y="50"
+        width="24"
+        height="26"
+        rx="7"
+        fill="#3a5b98"
+        style={part({ transformOrigin: "50% 50%", transform: opening ? "scale(0)" : "none", opacity: opening ? 0 : 1 })}
+      />
+    </svg>
+  );
+}
+
+/** Blush pink with a cobalt silk ribbon tied across it; a tap unties the bow and the ribbon slides away. */
+function RibbonFace({ opening, onOpen, locale, names, dateLabel, place }: FaceProps) {
+  const names_ = { fontFamily: "var(--font-ribbon-names), cursive" } as const;
+  const serif = { fontFamily: "var(--font-ribbon-serif), serif" } as const;
+  const band = (dir: number) => ({
+    background: "linear-gradient(180deg,#6d8fcf,#4468a6 45%,#2f4c85)",
+    transform: opening ? `translateX(${dir * 105}%)` : "none",
+    transition: "transform 1s cubic-bezier(.7,0,.3,1) .35s",
+  });
+  return (
+    <div className="relative h-full w-full overflow-hidden bg-[#f8e3e8] text-[#4468a6]">
+      <div aria-hidden className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 50% 30%, #fdf1f4, transparent 70%)" }} />
+      {/* The ribbon across the page, in two halves that slide out either side. */}
+      <div aria-hidden className="absolute inset-x-0 top-[62%] h-11 -translate-y-1/2 shadow-[0_6px_14px_-6px_rgba(47,76,133,.5)]">
+        <div className="absolute inset-y-0 left-0 w-1/2" style={band(-1)} />
+        <div className="absolute inset-y-0 right-0 w-1/2" style={band(1)} />
+      </div>
+      <button
+        type="button"
+        onClick={onOpen}
+        disabled={opening}
+        aria-label={s("enter", locale)}
+        className="absolute inset-0 focus-visible:outline-2 focus-visible:-outline-offset-8 focus-visible:outline-[#4468a6]"
+      >
+        <span className="absolute inset-x-0 top-[16%] block px-6 text-center" style={{ opacity: opening ? 0 : 1, transition: "opacity .5s" }}>
+          <span className="block text-[0.72rem] tracking-[0.3em] uppercase [&:lang(my)]:tracking-normal" style={serif}>
+            {dateLabel}
+          </span>
+          <span className="mt-3 block text-[clamp(3rem,13vw,5.6rem)] leading-[1.05]" style={names_}>
+            {names?.one} &amp;
+            <br />
+            {names?.two}
+          </span>
+          {place && (
+            <span className="mt-3 block text-[0.72rem] tracking-[0.24em] text-[#5f7fb6] uppercase [&:lang(my)]:tracking-normal" style={serif}>
+              {place}
+            </span>
+          )}
+        </span>
+        <span className="absolute top-[62%] left-1/2 block -translate-x-1/2 -translate-y-[58%]">
+          <RibbonBow opening={opening} />
+        </span>
+        <span
+          className="absolute inset-x-0 top-[calc(62%+5.5rem)] block text-center text-[0.68rem] tracking-[0.32em] uppercase [&:lang(my)]:tracking-normal"
+          style={{ ...serif, opacity: opening ? 0 : 1, transition: "opacity .4s" }}
+        >
+          {s("tapRibbon", locale)}
+        </span>
+      </button>
+    </div>
+  );
+}
+
+/* ── Golden Renewal ─────────────────────────────────────────── */
+
+/** An olive-green cloth book cover stamped in gold; a tap swings it open on its spine. */
+function RenewalFace({ opening, onOpen, locale, names, dateLabel, place, monogram }: FaceProps & { monogram: string }) {
+  const [m1, m2] = monogram.split("&").map((x) => x.trim());
+  const jost = { fontFamily: "var(--font-jost), sans-serif" } as const;
+  const script = { fontFamily: "var(--font-script), cursive" } as const;
+  const gold = "#dcc48a";
+  return (
+    <div className="relative h-full w-full overflow-hidden bg-[#efe6cf]" style={{ perspective: "1800px" }}>
+      {/* The first page, waiting under the cover. */}
+      <div aria-hidden className="absolute inset-0 bg-[#faf3e1]" style={{ boxShadow: "inset 24px 0 40px -20px rgba(70,84,58,.35)" }} />
+      <button
+        type="button"
+        onClick={onOpen}
+        disabled={opening}
+        aria-label={s("enter", locale)}
+        className="absolute inset-0 grid place-items-center px-6 text-center focus-visible:outline-2 focus-visible:-outline-offset-8 focus-visible:outline-[#dcc48a]"
+        style={{
+          background:
+            "repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,rgba(0,0,0,.05) 0 1px,transparent 1px 4px),linear-gradient(135deg,#66775a,#55654a 55%,#46543a)",
+          transformOrigin: "left center",
+          transform: opening ? "rotateY(-108deg)" : "none",
+          transition: "transform 1.4s cubic-bezier(.6,0,.25,1)",
+          boxShadow: "inset 10px 0 18px -8px rgba(0,0,0,.45), 0 30px 60px -30px rgba(0,0,0,.6)",
+          color: gold,
+        }}
+      >
+        {/* Gold border, stamped into the cloth. */}
+        <span aria-hidden className="pointer-events-none absolute inset-5 border border-[#dcc48a]/70 sm:inset-8" />
+        <span aria-hidden className="pointer-events-none absolute inset-7 border border-[#dcc48a]/35 sm:inset-10" />
+        <span className="relative block">
+          <span className="mx-auto grid size-36 place-items-center rounded-full border border-[#dcc48a]/80 sm:size-44">
+            <span className="flex items-baseline gap-3 text-[3.6rem] font-light leading-none sm:text-[4.4rem]" style={jost}>
+              <span>{m1}</span>
+              <span className="text-[0.45em] opacity-80">&amp;</span>
+              <span>{m2}</span>
+            </span>
+          </span>
+          <span className="mt-8 block text-[clamp(2rem,7vw,2.8rem)] leading-tight" style={script}>
+            {names?.one} &amp; {names?.two}
+          </span>
+          <span className="mt-4 block text-[0.72rem] tracking-[0.32em] uppercase [&:lang(my)]:tracking-normal" style={jost}>
+            {dateLabel}
+          </span>
+          {place && (
+            <span className="mt-1 block text-[0.68rem] tracking-[0.24em] uppercase opacity-80 [&:lang(my)]:tracking-normal" style={jost}>
+              {place}
+            </span>
+          )}
+          <span className="mt-9 inline-block border-y border-[#dcc48a]/60 px-4 py-2 text-[0.66rem] tracking-[0.34em] uppercase [&:lang(my)]:tracking-normal" style={jost}>
+            {s("tapRenewal", locale)}
+          </span>
+        </span>
+      </button>
+    </div>
+  );
+}
+
+/* ── Pressed Scrapbook ──────────────────────────────────────── */
+
+/** A strip of masking tape with torn ends. */
+function Tape({ style }: { style: React.CSSProperties }) {
+  return (
+    <span
+      aria-hidden
+      className="absolute block h-9 w-32 sm:h-10 sm:w-40"
+      style={{
+        background: "linear-gradient(180deg,rgba(242,232,206,.92),rgba(230,217,186,.9))",
+        boxShadow: "0 2px 6px rgba(80,60,30,.18)",
+        clipPath: "polygon(0 8%,4% 0,9% 10%,14% 2%,86% 0,91% 9%,96% 1%,100% 10%,100% 92%,95% 100%,90% 91%,85% 99%,14% 100%,9% 90%,4% 99%,0 90%)",
+        transition: "transform .7s cubic-bezier(.5,0,.3,1), opacity .5s ease",
+        ...style,
+      }}
+    />
+  );
+}
+
+/** A kraft envelope sealed with masking tape; a tap peels the tape, the flap lifts and a card slides out. */
+function ScrapbookFace({ opening, onOpen, locale, names, dateLabel, place, guestLabel }: FaceProps & { guestLabel: string }) {
+  const script = { fontFamily: "var(--font-scrap-script), cursive" } as const;
+  const type = { fontFamily: "var(--font-scrap-type), monospace" } as const;
+  return (
+    <div
+      className="relative grid h-full w-full place-items-center overflow-hidden px-5 text-[#a53a22]"
+      style={{ background: "radial-gradient(ellipse at 50% 40%, #fbf8f3, #efe7da 75%)" }}
+    >
+      <div aria-hidden className="absolute inset-0 opacity-[.12] mix-blend-multiply" style={{ backgroundImage: GRAIN }} />
+      <button
+        type="button"
+        onClick={onOpen}
+        disabled={opening}
+        aria-label={s("enter", locale)}
+        className="relative flex flex-col items-center text-center focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-[#a53a22]"
+      >
+        <span className="block text-[clamp(2.6rem,11vw,4.4rem)] leading-[1.05]" style={{ ...script, opacity: opening ? 0 : 1, transition: "opacity .5s" }}>
+          {names?.one} &amp; {names?.two}
+        </span>
+        <span className="mt-1 block text-[0.78rem] text-[#4a4640]" style={{ ...type, opacity: opening ? 0 : 1, transition: "opacity .5s" }}>
+          {dateLabel}
+          {place ? ` · ${place}` : ""}
+        </span>
+
+        {/* The envelope */}
+        <span className="relative mt-8 block aspect-[1.45] w-[min(84vw,380px)]" style={{ perspective: "1200px" }}>
+          {/* Card inside, slides up when opened */}
+          <span
+            aria-hidden
+            className="absolute inset-x-[7%] top-[6%] bottom-[8%] grid place-items-center bg-[#fbf8f3] shadow-[0_4px_10px_rgba(80,60,30,.15)]"
+            style={{ transform: opening ? "translateY(-62%)" : "none", transition: "transform .9s cubic-bezier(.4,0,.2,1) .75s" }}
+          >
+            <span className="text-[2rem] text-[#a53a22]" style={script}>
+              {names?.one?.[0]} &amp; {names?.two?.[0]}
+            </span>
+          </span>
+          {/* Envelope body (front pocket) */}
+          <span
+            aria-hidden
+            className="absolute inset-0 block rounded-[3px]"
+            style={{
+              background: "linear-gradient(160deg,#dcc09a,#cfae85 60%,#c39f74)",
+              clipPath: "polygon(0 0,50% 52%,100% 0,100% 100%,0 100%)",
+              boxShadow: "0 18px 30px -18px rgba(80,55,25,.6)",
+            }}
+          />
+          {/* Guest's name on the front */}
+          <span className="absolute inset-x-0 bottom-[12%] block text-center" style={{ opacity: opening ? 0 : 1, transition: "opacity .4s" }}>
+            <span className="block text-[1.9rem] leading-tight text-[#7e2a17]" style={script}>
+              {guestLabel}
+            </span>
+          </span>
+          {/* Flap: folds up and back once the tape is off */}
+          <span
+            aria-hidden
+            className="absolute inset-x-0 top-0 block h-[58%]"
+            style={{
+              background: "linear-gradient(180deg,#a87d50,#bb9163 70%,#c49b6c)",
+              filter: "drop-shadow(0 3px 2px rgba(80,55,25,.35))",
+              clipPath: "polygon(0 0,100% 0,50% 100%)",
+              transformOrigin: "top center",
+              transform: opening ? "rotateX(180deg)" : "none",
+              transition: "transform .7s cubic-bezier(.5,0,.3,1) .4s",
+              zIndex: opening ? 0 : 2,
+            }}
+          />
+          {/* Masking tape over the flap's point */}
+          <Tape style={{ left: "50%", top: "42%", zIndex: 3, transform: opening ? "translate(-30%,-140%) rotate(-38deg)" : "translate(-50%,-50%) rotate(-12deg)", opacity: opening ? 0 : 1 }} />
+          <Tape style={{ left: "50%", top: "47%", zIndex: 3, transform: opening ? "translate(-70%,-150%) rotate(30deg)" : "translate(-50%,-50%) rotate(9deg)", opacity: opening ? 0 : 1, transitionDelay: ".12s" }} />
+        </span>
+
+        <span className="mt-7 block text-[0.72rem] tracking-[0.22em] uppercase [&:lang(my)]:tracking-normal" style={{ ...type, opacity: opening ? 0 : 1, transition: "opacity .4s" }}>
+          {s("tapScrapbook", locale)}
+        </span>
       </button>
     </div>
   );

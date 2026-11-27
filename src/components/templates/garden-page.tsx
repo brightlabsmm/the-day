@@ -3,14 +3,14 @@ import { z } from "zod";
 import type { AlbumPhoto } from "@/lib/album";
 import { t } from "@/lib/i18n/numerals";
 import { oneTime } from "@/lib/i18n/datetime";
-import { s } from "@/lib/i18n/strings";
+import { s, guestName } from "@/lib/i18n/strings";
 import { isHidden } from "@/lib/theme";
 import { GiftSection } from "@/components/invite/gift-section";
 import { WishesSection } from "@/components/invite/wishes-section";
 import { TemplateNav } from "./nav";
 import { Reveal } from "./reveal";
 import { TplFaq, TplRsvp, TplSeat, TplStory, dressOf } from "./extras";
-import { TrackOpen } from "./track-open";
+import { Gate } from "./gate";
 import { navItemsFor } from "./sections";
 import { viewOf, type TemplateProps } from "./view";
 
@@ -27,7 +27,7 @@ const mono = "tpl-garden-mono text-[0.8rem] leading-[1.95] tracking-[0.02em] [&:
  * beside the reception notes, a row of photos on a dark floral ground, the gift page, and a dark
  * closing. There is no opening screen.
  */
-export function GardenPage({ invitation, locale, monogram, token, onOpenAction }: TemplateProps) {
+export function GardenPage({ invitation, locale, monogram, token, onOpenAction, preview }: TemplateProps) {
   const v = viewOf(invitation, locale);
   const { wedding, events } = invitation;
   const my = locale === "my";
@@ -68,8 +68,22 @@ export function GardenPage({ invitation, locale, monogram, token, onOpenAction }
   const contactPhoto = pick(6);
 
   return (
+    // Opening screen for this design; it also records when a guest with a personal link opens it.
+    <Gate
+      kind="garden"
+      slug={wedding.slug}
+      token={invitation.guest ? token : null}
+      locale={locale}
+      monogram={monogram}
+      coverSrc={v.cover?.src ?? null}
+      guestLabel={guestName(invitation.guest, locale)}
+      dateLabel={v.dateShort}
+      names={v.names}
+      place={v.venues[0] ? t(v.venues[0].venue_name, locale) : ""}
+      onOpenAction={onOpenAction}
+      preview={preview}
+    >
     <div className="tpl tpl-garden" lang={locale}>
-      <TrackOpen slug={wedding.slug} token={token} action={onOpenAction} />
       <TemplateNav locale={locale} monogram={monogram} items={navItemsFor(v, invitation, locale)} over="dark" hideLang={englishOnly} />
 
       {/* 1 · Cover */}
@@ -303,5 +317,6 @@ export function GardenPage({ invitation, locale, monogram, token, onOpenAction }
         </footer>
       )}
     </div>
+    </Gate>
   );
 }

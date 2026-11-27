@@ -4,7 +4,9 @@ import type { AlbumPhoto } from "@/lib/album";
 import { mediaUrl } from "@/lib/media";
 import { Reveal } from "./reveal";
 import { TplRsvp } from "./extras";
-import { TrackOpen } from "./track-open";
+import { Gate } from "./gate";
+import { guestName } from "@/lib/i18n/strings";
+import { t } from "@/lib/i18n/numerals";
 import { viewOf, type TemplateProps } from "./view";
 
 const Art = z.record(z.string(), z.object({ p: z.string(), w: z.number(), h: z.number() }));
@@ -795,7 +797,7 @@ function TabletCanvas({ ctx, copy, names }: { ctx: Ctx; copy: Copy; names: [stri
  * Pressed Scrapbook: a copy of one published design. The page is the design's own canvas, scaled to
  * the width of the screen (a wide canvas and a phone canvas), using its pieces and wording as given.
  */
-export function ScrapbookPage({ invitation, locale, token, onOpenAction }: TemplateProps) {
+export function ScrapbookPage({ invitation, locale, monogram, token, onOpenAction, preview }: TemplateProps) {
   const v = viewOf(invitation, locale);
   const { wedding } = invitation;
   const raw = (wedding.cover_text as Record<string, unknown> | null) ?? {};
@@ -826,8 +828,22 @@ export function ScrapbookPage({ invitation, locale, token, onOpenAction }: Templ
   );
 
   return (
+    // Opening screen for this design; it also records when a guest with a personal link opens it.
+    <Gate
+      kind="scrapbook"
+      slug={wedding.slug}
+      token={invitation.guest ? token : null}
+      locale={locale}
+      monogram={monogram}
+      coverSrc={v.cover?.src ?? null}
+      guestLabel={guestName(invitation.guest, locale)}
+      dateLabel={v.dateShort}
+      names={v.names}
+      place={v.venues[0] ? t(v.venues[0].venue_name, locale) : ""}
+      onOpenAction={onOpenAction}
+      preview={preview}
+    >
     <div className="tpl tpl-scrapbook" lang={locale}>
-      <TrackOpen slug={wedding.slug} token={token} action={onOpenAction} />
       <h1 className="sr-only">
         {v.names.one} &amp; {v.names.two}
       </h1>
@@ -883,5 +899,6 @@ export function ScrapbookPage({ invitation, locale, token, onOpenAction }: Templ
         </div>
       )}
     </div>
+    </Gate>
   );
 }

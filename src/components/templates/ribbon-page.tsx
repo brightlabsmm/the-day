@@ -1,13 +1,14 @@
 import Image from "next/image";
 import { z } from "zod";
 import type { AlbumPhoto } from "@/lib/album";
-import { s } from "@/lib/i18n/strings";
+import { s, guestName } from "@/lib/i18n/strings";
 import { GiftSection } from "@/components/invite/gift-section";
 import { WishesSection } from "@/components/invite/wishes-section";
 import { TemplateNav } from "./nav";
 import { Reveal } from "./reveal";
 import { TplRsvp } from "./extras";
-import { TrackOpen } from "./track-open";
+import { Gate } from "./gate";
+import { t } from "@/lib/i18n/numerals";
 import { navItemsFor } from "./sections";
 import { viewOf, type TemplateProps } from "./view";
 import { Bow, Car, Champagne, Church, Dancers, Glasses, PillOutline, Plate, Shoes } from "./ribbon-art";
@@ -57,7 +58,7 @@ const SPARKS = [
  * details, the schedule, the gift page with a QR in an arch, FAQ beside an arched photo, and a ribbon.
  * There is no opening screen.
  */
-export function RibbonPage({ invitation, locale, monogram, token, onOpenAction }: TemplateProps) {
+export function RibbonPage({ invitation, locale, monogram, token, onOpenAction, preview }: TemplateProps) {
   const v = viewOf(invitation, locale);
   const { wedding } = invitation;
   const raw = (wedding.cover_text as Record<string, unknown> | null) ?? {};
@@ -72,8 +73,22 @@ export function RibbonPage({ invitation, locale, monogram, token, onOpenAction }
   const faqPhoto = pick(3);
 
   return (
+    // Opening screen for this design; it also records when a guest with a personal link opens it.
+    <Gate
+      kind="ribbon"
+      slug={wedding.slug}
+      token={invitation.guest ? token : null}
+      locale={locale}
+      monogram={monogram}
+      coverSrc={v.cover?.src ?? null}
+      guestLabel={guestName(invitation.guest, locale)}
+      dateLabel={v.dateShort}
+      names={v.names}
+      place={v.venues[0] ? t(v.venues[0].venue_name, locale) : ""}
+      onOpenAction={onOpenAction}
+      preview={preview}
+    >
     <div className="tpl tpl-ribbon" lang={locale}>
-      <TrackOpen slug={wedding.slug} token={token} action={onOpenAction} />
       <TemplateNav locale={locale} monogram={monogram} items={navItemsFor(v, invitation, locale)} over="light" hideLang={englishOnly} />
 
       {/* 1 · Cover */}
@@ -285,5 +300,6 @@ export function RibbonPage({ invitation, locale, monogram, token, onOpenAction }
         )}
       </footer>
     </div>
+    </Gate>
   );
 }
