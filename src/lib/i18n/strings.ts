@@ -161,6 +161,7 @@ const STRINGS = {
   lettersPlan: { my: "အစီအစဉ်", en: "The plan." },
   lettersDetails: { my: "သိထားရန်", en: "Good to know." },
   lettersGift: { my: "လက်ဆောင်", en: "Gifts." },
+  lettersWishes: { my: "ဆုမွန်ကောင်းများ", en: "Wishes." },
   seatEyebrow: { my: "နေရာရှာရန်", en: "Find your seat" },
   seatHeading: { my: "သင့်စားပွဲကို ရှာပါ", en: "Find Your Seat" },
   seatHint: { my: "သင့်အမည်ကို ရိုက်ထည့်ပါ", en: "Type your name to find your table" },

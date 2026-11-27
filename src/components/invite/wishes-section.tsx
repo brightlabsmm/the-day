@@ -16,11 +16,14 @@ export async function WishesSection({
   locale,
   token,
   plain,
+  heading,
 }: {
   invitation: Invitation;
   locale: Locale;
   token: string | null;
   plain?: boolean;
+  /** A design's own heading. The section then has no card around it, so the design can style it all. */
+  heading?: React.ReactNode;
 }) {
   const { wedding, guest } = invitation;
   if (!wedding.wishes_enabled) return null;
@@ -28,7 +31,7 @@ export async function WishesSection({
   if (wedding.public_wishes) {
     const wishes = await getPublicWishes(wedding.slug);
     return (
-      <Card locale={locale} wishes={wishes} plain={plain}>
+      <Card locale={locale} wishes={wishes} plain={plain} heading={heading}>
         <WishForm mode="public" slug={wedding.slug} locale={locale} defaultName="" />
       </Card>
     );
@@ -38,7 +41,7 @@ export async function WishesSection({
   const wishes = await getWishes(wedding.slug, token);
   const mine = wishes.find((w) => w.is_mine) ?? null;
   return (
-    <Card locale={locale} wishes={wishes} plain={plain}>
+    <Card locale={locale} wishes={wishes} plain={plain} heading={heading}>
       <WishForm
         mode="guest"
         slug={wedding.slug}
@@ -57,26 +60,40 @@ function Card({
   wishes,
   children,
   plain,
+  heading,
 }: {
   locale: Locale;
   wishes: Entry[];
   children: React.ReactNode;
   plain?: boolean;
+  heading?: React.ReactNode;
 }) {
+  const list = (
+    <ul className="wish-list mt-8 space-y-4 text-left">
+      {wishes.map((w, i) => (
+        <li key={`${w.created_at}-${i}`} className="border-t border-navy/25 pt-3">
+          <p className="card-body whitespace-pre-line break-words text-ink">{w.message}</p>
+          <p className="label-caps mt-1 text-ink-soft">
+            — {w.author_name}
+            {w.is_mine && ` (${s("wishYou", locale)})`}
+          </p>
+        </li>
+      ))}
+    </ul>
+  );
+  if (heading) {
+    return (
+      <section id="wishes" aria-labelledby="wishes-heading" lang={locale} className="wishes-own">
+        {heading}
+        {children}
+        {list}
+      </section>
+    );
+  }
   return (
     <InnerCard id="wishes-heading" anchor="wishes" plain={plain} heading={s("wishesHeading", locale)} lang={locale}>
       {children}
-      <ul className="mt-8 space-y-4 text-left">
-        {wishes.map((w, i) => (
-          <li key={`${w.created_at}-${i}`} className="border-t border-navy/25 pt-3">
-            <p className="card-body whitespace-pre-line break-words text-ink">{w.message}</p>
-            <p className="label-caps mt-1 text-ink-soft">
-              — {w.author_name}
-              {w.is_mine && ` (${s("wishYou", locale)})`}
-            </p>
-          </li>
-        ))}
-      </ul>
+      {list}
     </InnerCard>
   );
 }

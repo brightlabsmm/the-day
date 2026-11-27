@@ -1426,9 +1426,9 @@ html:has(.tpl) {
   --color-gold: var(--gold);
   --color-gold-soft: var(--gold-soft);
   --color-gold-deep: var(--gold-deep);
-  --tpl-display: var(--font-letters-display), "Anton", Impact, sans-serif;
+  --tpl-display: var(--font-letters-display), "League Gothic", Impact, sans-serif;
   background: var(--paper);
-  font-family: var(--font-scrap-type), "Special Elite", "Courier New", monospace;
+  font-family: var(--font-letters-type), "Cutive", "Courier New", serif;
 }
 .tpl-letters :lang(my) {
   font-family: var(--font-myanmar);
@@ -1442,15 +1442,15 @@ html:has(.tpl) {
 }
 /* Shared sections (RSVP, questions, wishes) keep the typewriter for their small text. */
 .tpl-letters :is(.tpl-eyebrow, .tpl-section p, .tpl-btn, .label-caps):not(:lang(my)) {
-  font-family: var(--font-scrap-type), "Special Elite", monospace;
+  font-family: var(--font-letters-type), "Cutive", "Courier New", serif;
 }
 /* Big condensed capitals, as on the names and "QUESTIONS?". */
 .lt-big {
-  font-family: var(--font-letters-display), "Anton", Impact, sans-serif;
+  font-family: var(--font-letters-display), "League Gothic", Impact, sans-serif;
   color: var(--navy);
   text-transform: uppercase;
-  line-height: 0.92;
-  letter-spacing: -0.005em;
+  line-height: 0.86;
+  letter-spacing: 0;
 }
 .lt-big:lang(my) {
   font-family: var(--font-myanmar);
@@ -1472,10 +1472,15 @@ html:has(.tpl) {
   display: inline-block;
   background: #c9ad89;
   color: var(--ink);
-  padding: 0.3em 0.65em 0.25em;
-  font-size: clamp(0.82rem, 3.6vw, 1rem);
-  letter-spacing: 0.1em;
+  padding: 0.3em 0.55em 0.25em;
+  font-size: clamp(0.88rem, 3.9vw, 1.1rem);
+  letter-spacing: 0.02em;
   text-transform: uppercase;
+}
+/* The place and date are spaced out wide, as in the published design. */
+.lt-chip-wide {
+  letter-spacing: 0.2em;
+  padding-right: 0.4em;
 }
 .lt-chip:lang(my) {
   letter-spacing: 0;
@@ -1486,9 +1491,9 @@ html:has(.tpl) {
   display: inline-block;
   background: #c9ad89;
   color: var(--navy);
-  padding: 1rem 2.4rem;
+  padding: 0.75rem 2rem;
   font-size: 0.95rem;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -1526,5 +1531,104 @@ html:has(.tpl) {
 }
 /* The gift intro line is typewriter too. */
 .tpl-letters #gift .card-body:not(:lang(my)) {
-  font-family: var(--font-scrap-type), "Special Elite", monospace;
+  font-family: var(--font-letters-type), "Cutive", "Courier New", serif;
+}
+
+/* A dry-brush stroke under a heading, as under "QUESTIONS?" in the published design. */
+.lt-brush {
+  display: block;
+  height: 0.7rem;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 14' preserveAspectRatio='none'><path d='M2 9 C60 4 120 11 200 7 S340 3 398 8 L397 12 C330 9 260 13 190 11 S60 13 3 13Z' fill='%23a5913f'/><path d='M8 7 C90 5 170 8 260 6 S360 5 392 6' stroke='%23c2ad5a' stroke-width='1.4' fill='none' opacity='.7'/></svg>") center / 100% 100% no-repeat;
+}
+/*
+ * Wishes, laid out like the published "QUESTIONS?" block: right-aligned typewriter rows, each a rust
+ * label over its value with a rust rule beneath, and the tan button.
+ */
+.tpl-letters .wishes-own form {
+  margin: 2.6rem 0 0 auto;
+  width: min(66%, 24rem);
+  text-align: right;
+}
+.tpl-letters .wishes-own form > p.card-body:first-of-type {
+  display: none;
+}
+.tpl-letters .wishes-own label {
+  display: block;
+  color: var(--navy);
+  font-family: var(--font-letters-type), "Cutive", "Courier New", serif;
+  font-size: 1.15rem;
+  letter-spacing: 0;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+.tpl-letters .wishes-own :is(input, textarea) {
+  width: 100%;
+  border: 0;
+  border-bottom: 2px solid var(--navy);
+  border-radius: 0;
+  background: transparent;
+  height: auto;
+  min-height: 0;
+  padding: 0.25rem 0 0.4rem;
+  color: var(--ink);
+  font-family: var(--font-letters-type), "Cutive", "Courier New", serif;
+  font-size: 1rem;
+  text-align: right;
+  box-shadow: none;
+}
+.tpl-letters .wishes-own textarea {
+  height: 4.2rem;
+  resize: none;
+}
+.tpl-letters .wishes-own form > div {
+  margin-top: 1.1rem;
+}
+.tpl-letters .wishes-own :is(input, textarea):focus {
+  outline: none;
+  border-bottom-width: 3px;
+}
+.tpl-letters .wishes-own :is(input, textarea):focus-visible {
+  outline: 2px solid var(--navy);
+  outline-offset: 3px;
+}
+.tpl-letters .wishes-own form .card-body {
+  font-family: var(--font-letters-type), "Cutive", "Courier New", serif;
+  font-size: 0.9rem;
+}
+.tpl-letters .wishes-own button[type="submit"] {
+  margin: 1.25rem 0 0 auto;
+  border: 0;
+  background: #c9ad89;
+  color: var(--navy);
+  padding: 0.85rem 1.8rem;
+  font-family: var(--font-letters-type), "Cutive", "Courier New", serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.tpl-letters .wishes-own button[type="submit"]:hover {
+  background: var(--navy);
+  color: #f4ecdd;
+}
+.tpl-letters .wishes-own .wish-list {
+  margin: 2.5rem 0 0 auto;
+  width: min(66%, 24rem);
+  text-align: right;
+}
+.tpl-letters .wishes-own .wish-list li {
+  border-top: 0;
+  border-bottom: 2px solid var(--navy);
+  padding: 0 0 0.85rem;
+}
+.tpl-letters .wishes-own .wish-list .card-body {
+  font-family: var(--font-letters-type), "Cutive", "Courier New", serif;
+  font-size: 1rem;
+  color: var(--ink);
+}
+.tpl-letters .wishes-own .wish-list .label-caps {
+  color: var(--navy);
+  font-family: var(--font-letters-type), "Cutive", "Courier New", serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
 }

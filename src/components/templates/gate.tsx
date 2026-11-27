@@ -1356,7 +1356,7 @@ function ScrapbookFace({ opening, onOpen, locale, names, dateLabel, place, guest
 function LettersFace({ opening, onOpen, locale, names, dateLabel }: Omit<FaceProps, "place">) {
   const display = { fontFamily: "var(--font-letters-display), Impact, sans-serif" } as const;
   const script = { fontFamily: "var(--font-ribbon-names), cursive" } as const;
-  const type = { fontFamily: "var(--font-scrap-type), monospace" } as const;
+  const type = { fontFamily: "var(--font-letters-type), monospace" } as const;
   const fade = { opacity: opening ? 0 : 1, transition: "opacity .45s" };
   return (
     <div className="relative grid h-full w-full place-items-center overflow-hidden bg-[#e7dbc6] px-5 text-[#2e2a26]">

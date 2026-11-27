@@ -136,22 +136,22 @@ export function LettersPage({ invitation, locale, monogram, token, onOpenAction,
           </Reveal>
           {dateline && (
             <Reveal delay={120}>
-              <p className="lt-chip mt-3">{dateline}</p>
+              <p className="lt-chip lt-chip-wide mt-3">{dateline}</p>
             </Reveal>
           )}
           <Reveal delay={240}>
-            <h1 className={`lt-big mx-auto mt-7 max-w-5xl ${my ? "text-[clamp(2.2rem,9vw,4.4rem)]" : "text-[clamp(4.1rem,19vw,10.5rem)]"}`}>
+            <h1 className={`lt-big mx-auto mt-[2.4rem] max-w-5xl whitespace-nowrap ${my ? "text-[clamp(2.2rem,9vw,4.4rem)] whitespace-normal" : "text-[clamp(4.5rem,27.8vw,12rem)]"}`}>
               {v.names.one} &amp; {v.names.two}
               {my ? "" : "."}
             </h1>
           </Reveal>
           <Reveal delay={480}>
-            <p aria-hidden={!my} className={`lt-script relative mx-auto -rotate-[4deg] ${my ? "mt-3 text-[1.6rem]" : "-mt-[0.32em] pl-[0.6em] text-[clamp(4.2rem,19vw,10rem)]"}`}>
+            <p aria-hidden={!my} className={`lt-script relative mx-auto -rotate-[3deg] ${my ? "mt-3 text-[1.6rem]" : "-mt-[0.26em] pr-[0.2em] text-[clamp(4.2rem,21.5vw,9.5rem)]"}`}>
               {s("lettersForever", locale)}
             </p>
           </Reveal>
           <Reveal delay={650}>
-            <a href={cta} className="lt-button mt-9">
+            <a href={cta} className="lt-button mt-6">
               {ctaLabel}
             </a>
           </Reveal>
@@ -159,18 +159,32 @@ export function LettersPage({ invitation, locale, monogram, token, onOpenAction,
           {/* Collage: an old love letter, torn rust paper, the cover photo, a polaroid and a pressed flower */}
           {hero && (
             <Reveal variant="photo" delay={150}>
-              <div className="relative mx-auto mt-14 aspect-[1/1.02] w-[min(90vw,30rem)]">
-                <Cut art={art} k="love-letter" style={{ left: "18%", top: "0%", width: "70%", height: "64%" }} pos="0% 50%" />
-                <Cut art={art} k="torn" style={{ left: "2%", top: "8%", width: "34%", height: "21%" }} />
-                <Photo p={hero} style={{ left: "23%", top: "11%", width: "65%", height: "79%" }} pos="58% 50%" />
-                <Polaroid art={art} p={snapA} style={{ left: "0%", top: "57%", width: "44%", aspectRatio: "800 / 636" }} />
-                <Cut art={art} k="flower-white" className="lt-sway" style={{ left: "67%", top: "74%", width: "27%", aspectRatio: "726 / 800" }} />
+              <div className="relative mx-auto mt-4 aspect-[343/367] w-[min(91.5vw,30rem)]">
+                <Cut art={art} k="love-letter" style={{ left: "19%", top: "0%", width: "64%", height: "64%" }} pos="0% 50%" />
+                <Cut art={art} k="torn" style={{ left: "11.7%", top: "5.2%", width: "34.4%", height: "16.4%" }} />
+                <Photo p={hero} style={{ left: "29.4%", top: "9.5%", width: "61.8%", height: "82.8%" }} pos="58% 50%" />
+                <Polaroid art={art} p={snapA} style={{ left: "0%", top: "51%", width: "46.4%", aspectRatio: "800 / 636" }} />
+                <Cut art={art} k="flower-white" className="lt-sway" style={{ left: "69%", top: "67.3%", width: "30.9%", aspectRatio: "726 / 800" }} />
               </div>
             </Reveal>
           )}
         </header>
 
-        {/* 2 · The invitation, typed out */}
+        {/* 2 · The second collage, straight after the first, as in the published design: a polaroid, old letters, a tall photo held by clear tape */}
+        {tall && (
+          <Reveal variant="photo">
+            <div className="relative mx-auto mb-[clamp(3rem,8vw,5rem)] aspect-[343/273] w-[min(91.5vw,30rem)]">
+              <Cut art={art} k="letters" style={{ left: "12.5%", top: "41%", width: "33.2%", height: "34.8%" }} pos="50% 30%" />
+              <Polaroid art={art} p={snapB} style={{ left: "0%", top: "17.2%", width: "41.7%", aspectRatio: "800 / 636" }} />
+              <Photo p={small} style={{ left: "32%", top: "66%", width: "27.1%", height: "34%" }} />
+              <Photo p={tall} style={{ left: "45.8%", top: "5.5%", width: "47.8%", height: "86%" }} pos="50% 35%" />
+              <Cut art={art} k="tape-clear" style={{ left: "53%", top: "0%", width: "33%", aspectRatio: "800 / 217" }} />
+              <Cut art={art} k="flower-yellow" className="lt-sway" style={{ left: "0%", top: "60.4%", width: "21.9%", aspectRatio: "756 / 800" }} />
+            </div>
+          </Reveal>
+        )}
+
+        {/* 3 · The invitation, typed out */}
         {message && (
           <section id="invitation" aria-label={s("weddingInvitationLabel", locale)} lang={locale} className="px-6 pb-[clamp(3rem,8vw,5rem)]">
             <Reveal>
@@ -189,20 +203,6 @@ export function LettersPage({ invitation, locale, monogram, token, onOpenAction,
         <Reveal>
           <TplStory invitation={invitation} locale={locale} />
         </Reveal>
-
-        {/* 3 · The second collage: a polaroid, old letters, a tall photo held by clear tape */}
-        {tall && (
-          <Reveal variant="photo">
-            <div className="relative mx-auto my-[clamp(2rem,6vw,4rem)] aspect-[1/0.86] w-[min(92vw,32rem)]">
-              <Cut art={art} k="letters" style={{ left: "16%", top: "38%", width: "34%", height: "30%" }} pos="50% 30%" />
-              <Polaroid art={art} p={snapB} style={{ left: "1%", top: "12%", width: "42%", aspectRatio: "800 / 636" }} />
-              <Photo p={small} style={{ left: "31%", top: "53%", width: "27%", height: "38%" }} />
-              <Photo p={tall} style={{ left: "47%", top: "6%", width: "47%", height: "82%" }} pos="50% 35%" />
-              <Cut art={art} k="tape-clear" style={{ left: "52%", top: "0%", width: "32%", aspectRatio: "800 / 217" }} />
-              <Cut art={art} k="flower-yellow" className="lt-sway" style={{ left: "-2%", top: "44%", width: "23%", aspectRatio: "756 / 800" }} />
-            </div>
-          </Reveal>
-        )}
 
         {/* 4 · The plan and the details, in typewriter rows */}
         {(showSchedule || hasDetails) && (
@@ -299,23 +299,39 @@ export function LettersPage({ invitation, locale, monogram, token, onOpenAction,
           </section>
         )}
 
-        {/* Replies, seating, questions and wishes, on the same sand paper */}
+        {/* Replies, seating and questions, on the same sand paper */}
         <Reveal><TplRsvp invitation={invitation} locale={locale} token={token} calendar={false} /></Reveal>
         <Reveal><TplSeat invitation={invitation} locale={locale} /></Reveal>
         <Reveal><TplFaq invitation={invitation} locale={locale} /></Reveal>
-        <Reveal>
-          <WishesSection invitation={invitation} locale={locale} token={token} plain />
-        </Reveal>
 
-        {/* 6 · The last collage: yellow striped paper, a photo, a pressed red flower and a strip of manuscript */}
+        {/* 7 · Wishes, set like the published "QUESTIONS?" block */}
+        <div className="px-5 pt-[clamp(3rem,8vw,5rem)]">
+          <div className="mx-auto max-w-xl">
+            <WishesSection
+              invitation={invitation}
+              locale={locale}
+              token={token}
+              heading={
+                <Reveal>
+                  <h2 id="wishes-heading" className={`lt-big text-right ${my ? "text-[clamp(2.2rem,9vw,3.2rem)]" : "text-[clamp(4.5rem,25.5vw,10.5rem)]"}`}>
+                    {s("lettersWishes", locale)}
+                  </h2>
+                  <span aria-hidden className="lt-brush -mt-[0.35rem] ml-[-1.5%] w-[97%]" />
+                </Reveal>
+              }
+            />
+          </div>
+        </div>
+
+        {/* 8 · The last collage: yellow striped paper, a photo, a pressed red flower and a strip of manuscript */}
         {last && (
           <Reveal variant="photo">
-            <div className="relative mx-auto mt-[clamp(3rem,8vw,5rem)] aspect-[1/1.02] w-[min(94vw,32rem)]">
-              <div aria-hidden className="lt-stripes absolute" style={{ right: "0%", top: "0%", width: "36%", height: "42%" }} />
-              <Photo p={last} style={{ left: "0%", top: "9%", width: "85%", height: "77%" }} pos="50% 70%" />
-              <Cut art={art} k="flower-red" className="lt-sway" style={{ left: "62%", top: "23%", width: "33%", aspectRatio: "800 / 726" }} />
-              <Cut art={art} k="manuscript" style={{ left: "22%", top: "85%", width: "66%", height: "11%" }} pos="50% 72%" />
-              <Cut art={art} k="washi" style={{ left: "26%", top: "83.5%", width: "70%", aspectRatio: "1500 / 134" }} />
+            <div className="relative mx-auto mt-4 aspect-[345/334] w-[min(92vw,30rem)]">
+              <div aria-hidden className="lt-stripes absolute" style={{ left: "62.9%", top: "0%", width: "37.1%", height: "37.7%" }} />
+              <Cut art={art} k="manuscript" style={{ left: "23.2%", top: "79%", width: "69%", height: "21%" }} pos="50% 80%" />
+              <Photo p={last} style={{ left: "0%", top: "9.3%", width: "87.5%", height: "81.1%" }} pos="50% 96%" />
+              <Cut art={art} k="flower-red" className="lt-sway" style={{ left: "66.1%", top: "24.6%", width: "30.4%", aspectRatio: "800 / 726" }} />
+              <Cut art={art} k="washi" style={{ left: "27%", top: "87.4%", width: "73%", aspectRatio: "1500 / 134" }} />
             </div>
           </Reveal>
         )}
