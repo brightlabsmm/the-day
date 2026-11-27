@@ -1,4 +1,3 @@
-import { TheDayPromo } from "@/components/the-day-promo";
 import type { Locale } from "@/lib/i18n/numerals";
 import { s } from "@/lib/i18n/strings";
 import type { AlbumPhoto } from "@/lib/album";
@@ -36,7 +35,7 @@ export function TplGallery({
   );
 }
 
-export function TplFooter({ v, locale, thanks = true, promo = true, strong = false }: { v: TemplateView; locale: Locale; thanks?: boolean; promo?: boolean; strong?: boolean }) {
+export function TplFooter({ v, locale, thanks = true, strong = false }: { v: TemplateView; locale: Locale; thanks?: boolean; strong?: boolean }) {
   return (
     <footer lang={locale} className="px-6 pt-6 pb-[46px] text-center">
       {thanks && <p className={`tpl-display text-[color:var(--navy)] ${locale === "my" ? "text-[1.05rem]" : "text-[1.3rem]"}`}>{s("closingThanks", locale)}</p>}
@@ -44,7 +43,6 @@ export function TplFooter({ v, locale, thanks = true, promo = true, strong = fal
         {v.names.one} &amp; {v.names.two}
         {v.year ? ` • ${v.year}` : ""}
       </p>
-      {promo && <TheDayPromo locale={locale} />}
     </footer>
   );
 }

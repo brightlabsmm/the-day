@@ -34,6 +34,7 @@ import { RibbonPage } from "@/components/templates/ribbon-page";
 import { RenewalPage } from "@/components/templates/renewal-page";
 import { ScrapbookPage } from "@/components/templates/scrapbook-page";
 import { LettersPage } from "@/components/templates/letters-page";
+import { TheDayFooter } from "@/components/the-day-footer";
 import { SilkPage } from "@/components/templates/silk-page";
 import { TheatrePage } from "@/components/templates/theatre-page";
 import { markOpened } from "./actions";
@@ -152,6 +153,7 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
         ) : (
           <ScratchPage {...props} />
         )}
+        <TheDayFooter />
       </>
     );
   }
@@ -174,6 +176,7 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
         preview={preview}
       >
         <InvitationBody invitation={invitation} locale={locale} monogram={monogram} token={guest ? (token ?? null) : null} />
+        <TheDayFooter />
       </Opening>
     </>
   );
