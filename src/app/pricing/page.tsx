@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Check, Minus, MessageCircle, Plus, Sparkles } from "lucide-react";
 import { FACEBOOK_URL, SiteFooter, SiteHeader } from "@/components/site-chrome";
-import { LEVELS, finalPrice, fmt, type Level } from "@/lib/pricing";
+import { Suspense } from "react";
+import { CURRENCY_REGION, LEVELS, discountOf, fmt, type Currency, type Level } from "@/lib/pricing";
+import { visitorCurrency } from "@/lib/currency";
+import { CurrencySwitch } from "@/components/currency-switch";
 
 export const metadata: Metadata = {
   title: "Pricing",
@@ -81,20 +84,10 @@ export default function PricingPage() {
 
         {/* Level cards */}
         <section aria-label="Levels" className="px-4 pb-16 sm:px-8">
-          <ul className="mx-auto grid max-w-6xl gap-5 lg:grid-cols-3 lg:gap-x-6 lg:gap-y-0">
-            {LEVELS.map((l) => (
-              <li key={l.id} className="lg:row-span-6 lg:grid lg:grid-rows-subgrid">
-                <LevelCard level={l} />
-              </li>
-            ))}
-          </ul>
-          <p className="mx-auto mt-6 max-w-2xl text-center text-sm text-[#6e5f53]">
-            All prices are in Myanmar kyat (MMK), per invitation. Still deciding?{" "}
-            <Link href="/showcase" className="underline decoration-[#a8823f] underline-offset-4 hover:text-[#1f1b18]">
-              Browse the designs
-            </Link>{" "}
-            first.
-          </p>
+          {/* Prices depend on the visitor's country (or their choice on the switch), so this part streams in. */}
+          <Suspense fallback={<Levels currency="MMK" />}>
+            <VisitorLevels />
+          </Suspense>
         </section>
 
         {/* Comparison */}
@@ -140,17 +133,9 @@ export default function PricingPage() {
                       ))}
                     </tr>
                   ))}
-                  <tr>
-                    <th scope="row" className="px-4 py-4 font-normal text-[#2f2925] sm:px-6">
-                      Launch price
-                    </th>
-                    {LEVELS.map((l) => (
-                      <td key={l.id} className={`px-3 py-4 text-center ${l.featured ? "bg-[#f6efe1]" : ""}`}>
-                        <span className="font-display block text-xl font-semibold text-[#1f1b18]">{fmt(finalPrice(l))}</span>
-                        <span className="block text-xs text-[#8a7766] line-through">{fmt(l.price)}</span>
-                      </td>
-                    ))}
-                  </tr>
+                  <Suspense fallback={<PriceRow currency="MMK" />}>
+                    <VisitorPriceRow />
+                  </Suspense>
                 </tbody>
               </table>
             </div>
@@ -217,8 +202,60 @@ export default function PricingPage() {
   );
 }
 
-function LevelCard({ level: l }: { level: Level }) {
-  const price = finalPrice(l);
+/** The three level cards and the note under them, priced in one currency. */
+function Levels({ currency }: { currency: Currency }) {
+  return (
+    <>
+      <ul className="mx-auto grid max-w-6xl gap-5 lg:grid-cols-3 lg:gap-x-6 lg:gap-y-0">
+        {LEVELS.map((l) => (
+          <li key={l.id} className="lg:row-span-6 lg:grid lg:grid-rows-subgrid">
+            <LevelCard level={l} currency={currency} />
+          </li>
+        ))}
+      </ul>
+      <div className="mx-auto mt-6 flex max-w-2xl flex-col items-center gap-3 text-center text-sm text-[#6e5f53]">
+        <p>
+          Prices for {CURRENCY_REGION[currency]}, in {currency === "MMK" ? "Myanmar kyat (MMK)" : "US dollars (USD)"}, per
+          invitation. Still deciding?{" "}
+          <Link href="/showcase" className="underline decoration-[#a8823f] underline-offset-4 hover:text-[#1f1b18]">
+            Browse the designs
+          </Link>{" "}
+          first.
+        </p>
+        <CurrencySwitch current={currency} />
+      </div>
+    </>
+  );
+}
+
+async function VisitorLevels() {
+  return <Levels currency={await visitorCurrency()} />;
+}
+
+/** Last row of the comparison table: each level's launch price and usual price. */
+function PriceRow({ currency }: { currency: Currency }) {
+  return (
+    <tr>
+      <th scope="row" className="px-4 py-4 font-normal text-[#2f2925] sm:px-6">
+        Launch price <span className="text-sm text-[#8a7766]">({currency})</span>
+      </th>
+      {LEVELS.map((l) => (
+        <td key={l.id} className={`px-3 py-4 text-center ${l.featured ? "bg-[#f6efe1]" : ""}`}>
+          <span className="font-display block text-xl font-semibold text-[#1f1b18]">{fmt(l.prices[currency].launch)}</span>
+          <span className="block text-xs text-[#8a7766] line-through">{fmt(l.prices[currency].usual)}</span>
+        </td>
+      ))}
+    </tr>
+  );
+}
+
+async function VisitorPriceRow() {
+  return <PriceRow currency={await visitorCurrency()} />;
+}
+
+function LevelCard({ level: l, currency }: { level: Level; currency: Currency }) {
+  const offer = l.prices[currency];
+  const price = offer.launch;
   const dark = l.featured;
   return (
     <article
@@ -246,7 +283,7 @@ function LevelCard({ level: l }: { level: Level }) {
             dark ? "bg-[#a8823f] text-white" : "bg-[#a8823f]/12 text-[#7f6129]"
           }`}
         >
-          {l.discount}% off
+          {discountOf(offer)}% off
         </span>
       </div>
       <h2 id={`level-${l.id}`} className={`script mt-2 text-5xl leading-none ${dark ? "text-[#f6f1e7]" : "text-[#1f1b18]"}`}>
@@ -257,17 +294,17 @@ function LevelCard({ level: l }: { level: Level }) {
       <div className="mt-6">
         <p className={`text-sm line-through ${dark ? "text-[#b9ad9c]" : "text-[#8a7766]"}`}>
           <span className="sr-only">Usual price </span>
-          {fmt(l.price)} MMK
+          {fmt(offer.usual)} {currency}
         </p>
         <p className="mt-1 flex items-baseline gap-2">
           <span className="sr-only">Launch price </span>
           <span className={`font-display text-5xl font-semibold tracking-tight ${dark ? "text-white" : "text-[#1f1b18]"}`}>
             {fmt(price)}
           </span>
-          <span className={`text-sm ${dark ? "text-[#e6dccb]" : "text-[#5c5048]"}`}>MMK</span>
+          <span className={`text-sm ${dark ? "text-[#e6dccb]" : "text-[#5c5048]"}`}>{currency}</span>
         </p>
         <p className={`mt-1 text-sm font-medium ${dark ? "text-[#d9c49a]" : "text-[#7f6129]"}`}>
-          You save {fmt(l.price - price)} MMK
+          You save {fmt(offer.usual - price)} {currency}
         </p>
       </div>
 

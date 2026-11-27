@@ -7,7 +7,10 @@ import "./landing.css";
 import { Reveal } from "@/components/templates/reveal";
 import { LandingNav } from "@/components/landing-nav";
 import { CurrentYear } from "@/components/current-year";
-import { fmt, startingPrice } from "@/lib/pricing";
+import { Suspense } from "react";
+import { CURRENCY_REGION, fmt, startingPrice, type Currency } from "@/lib/pricing";
+import { visitorCurrency } from "@/lib/currency";
+import { CurrencySwitch } from "@/components/currency-switch";
 import { TemplateCarousel, type TemplateCard } from "@/components/landing-carousel";
 import { FACEBOOK_URL } from "@/components/site-chrome";
 
@@ -159,6 +162,26 @@ const Svg = ({ children, sw = 1.4, className = "" }: { children: ReactNode; sw?:
   </svg>
 );
 
+/** "Launch prices from ..." in one currency, with the switch to the other. */
+function PriceLine({ currency }: { currency: Currency }) {
+  return (
+    <div className="flex flex-col items-center gap-2 min-[900px]:items-start">
+      <p>
+        Launch prices from <strong className="font-semibold text-[#2f2925]">{fmt(startingPrice(currency))} {currency}</strong>
+        <span className="sr-only"> in {CURRENCY_REGION[currency]}</span>
+        <span className="text-[#b8913f]"> &middot; </span>
+        <Link href="/pricing" className="text-[#7d6230] underline decoration-[#b8913f]/60 underline-offset-4 hover:text-[#2f2925]">See pricing</Link>
+      </p>
+      <CurrencySwitch current={currency} />
+    </div>
+  );
+}
+
+/** The price line for this visitor (reads their country or saved choice, so it streams in). */
+async function VisitorPriceLine() {
+  return <PriceLine currency={await visitorCurrency()} />;
+}
+
 export default function Home() {
   return (
     <div id="top" className="landing lp min-h-svh overflow-x-clip">
@@ -177,11 +200,11 @@ export default function Home() {
           <div className="grp flex flex-col items-center gap-3 sm:flex-row">
             <B x={70} y={397} w={216} h={46} fs={21} v="left"><a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer" className="gbtn">Book a demo session</a></B>
           </div>
-          {/* Starting price, read from the same plans as /pricing. */}
-          <B x={70} y={462} w={440} fs={16} m="1rem" as="p" cls="text-[#5c524b]">
-            Launch prices from <strong className="font-semibold text-[#2f2925]">{fmt(startingPrice())} MMK</strong>
-            <span className="text-[#b8913f]"> &middot; </span>
-            <Link href="/pricing" className="text-[#7d6230] underline decoration-[#b8913f]/60 underline-offset-4 hover:text-[#2f2925]">See pricing</Link>
+          {/* Starting price in the visitor's currency (Myanmar: MMK, Taiwan & Thailand: USD), with a switch. */}
+          <B x={70} y={458} w={470} fs={16} m="1rem" cls="text-[#5c524b]">
+            <Suspense fallback={<PriceLine currency="MMK" />}>
+              <VisitorPriceLine />
+            </Suspense>
           </B>
 
           {/* monitor, tablet and phone, built in code */}
