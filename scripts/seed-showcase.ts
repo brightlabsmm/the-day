@@ -570,7 +570,7 @@ function scrapbookFixed() {
 
 /**
  * Love Letters follows one published save-the-date: Riley & Lin, Venston Bay, July 15. English only,
- * like the other copied designs; its contact rows and paper artwork are part of the demo.
+ * like the other copied designs; its paper artwork is part of the demo.
  */
 function lettersFixed() {
   const place = { en: "Venston Bay" };
@@ -591,14 +591,7 @@ function lettersFixed() {
       en: "We met with a letter and we are marrying with one. Please keep the date, bring your warmest smile, and celebrate with us by the bay. [Sample wording]",
     },
     closing_quote: { en: "Yours, always." },
-    cover_text: {
-      english_only: true,
-      contact: [
-        { label: "Phone", text: "(123) 456-7890" },
-        { label: "Email", text: "hello@reallygreatsite.com" },
-        { label: "Social", text: "@reallygreatsite" },
-      ],
-    },
+    cover_text: { english_only: true },
     dress_code: {
       text: { en: "Garden party chic. Soft, natural tones photograph beautifully." },
       colors: [

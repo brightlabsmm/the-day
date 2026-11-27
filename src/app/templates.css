@@ -1504,13 +1504,7 @@ html:has(.tpl) {
   outline: 2px solid var(--navy);
   outline-offset: 4px;
 }
-/* A dry-brush stroke under a heading. */
-.lt-brush {
-  display: block;
-  height: 0.6rem;
-  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 14' preserveAspectRatio='none'><path d='M2 9 C60 4 120 11 200 7 S340 3 398 8 L397 12 C330 9 260 13 190 11 S60 13 3 13Z' fill='%23a5913f'/><path d='M8 7 C90 5 170 8 260 6 S360 5 392 6' stroke='%23c2ad5a' stroke-width='1.4' fill='none' opacity='.7'/></svg>") center / 100% 100% no-repeat;
-}
-/* A rust rule under each contact row and programme line. */
+/* A rust rule under each programme and detail row. */
 .lt-rule {
   border-bottom: 2px solid var(--navy);
 }

@@ -17,8 +17,6 @@ import { viewOf, type TemplateProps } from "./view";
 
 const text = z.object({ my: z.string().optional(), en: z.string().optional() }).partial();
 const Tips = z.array(z.object({ title: text.optional(), text: text.optional() }));
-/** Contact rows for "Questions?": a label (PHONE, EMAIL, SOCIAL), the value, and an optional link. */
-const Contact = z.array(z.object({ label: z.string().optional(), text: z.string(), href: z.string().startsWith("https://").optional() }));
 /** Paper cut-outs uploaded with the wedding (tape, torn paper, pressed flowers, old letters, a polaroid frame). */
 const Art = z.record(z.string(), z.object({ p: z.string(), w: z.number(), h: z.number() }));
 type ArtMap = z.infer<typeof Art>;
@@ -77,7 +75,7 @@ function Polaroid({ art, p, style }: { art: ArtMap; p: AlbumPhoto | null; style:
  * labels ("Save the date.", the place and date), the couple's names in tall rust capitals with a
  * handwritten "forever." across them, and three collages of photographs with tape, torn paper,
  * pressed flowers and old letters. The details follow in typewriter rows with rust rules, and the
- * page closes with "Questions?" and the couple's contact rows.
+ * page closes with a last collage and "forever.".
  */
 export function LettersPage({ invitation, locale, monogram, token, onOpenAction, preview }: TemplateProps) {
   const v = viewOf(invitation, locale);
@@ -85,7 +83,6 @@ export function LettersPage({ invitation, locale, monogram, token, onOpenAction,
   const my = locale === "my";
   const cover = (wedding.cover_text as Record<string, unknown> | null) ?? {};
   const art: ArtMap = Art.safeParse(cover.art).data ?? {};
-  const contact = Contact.safeParse(cover.contact).data ?? [];
   const englishOnly = cover.english_only === true;
 
   const message = t(wedding.invitation_text, locale);
@@ -310,34 +307,7 @@ export function LettersPage({ invitation, locale, monogram, token, onOpenAction,
           <WishesSection invitation={invitation} locale={locale} token={token} plain />
         </Reveal>
 
-        {/* 6 · Questions? and the couple's contact rows */}
-        {contact.length > 0 && (
-          <section id="contact" aria-label={s("lettersQuestions", locale)} lang={locale} className="px-5 pt-[clamp(3rem,8vw,5rem)]">
-            <div className="mx-auto max-w-xl">
-              <Reveal>
-                <h2 className={`lt-big text-right ${my ? "text-[clamp(2rem,8vw,3rem)]" : "text-[clamp(4.2rem,19vw,8rem)]"}`}>{s("lettersQuestions", locale)}</h2>
-                <span aria-hidden className="lt-brush -mt-1 ml-[-4%] w-[104%]" />
-              </Reveal>
-              <ul className="mt-8 ml-auto w-[min(100%,24rem)]">
-                {contact.map((c, i) => (
-                  <Reveal as="li" key={`${c.label}${c.text}`} delay={i * 110} className="lt-rule py-3 text-right">
-                    {c.label && <p className="text-[1.3rem] tracking-[0.04em] text-[color:var(--navy)] uppercase">{c.label}</p>}
-                    {c.href ? (
-                      <a href={c.href} target="_blank" rel="noopener noreferrer" className="text-[1rem] text-[color:var(--ink)] underline-offset-4 hover:underline">
-                        {c.text}
-                        <span className="sr-only"> {s("opensNewTab", locale)}</span>
-                      </a>
-                    ) : (
-                      <p className="text-[1rem] text-[color:var(--ink)]">{c.text}</p>
-                    )}
-                  </Reveal>
-                ))}
-              </ul>
-            </div>
-          </section>
-        )}
-
-        {/* 7 · The last collage: yellow striped paper, a photo, a pressed red flower and a strip of manuscript */}
+        {/* 6 · The last collage: yellow striped paper, a photo, a pressed red flower and a strip of manuscript */}
         {last && (
           <Reveal variant="photo">
             <div className="relative mx-auto mt-[clamp(3rem,8vw,5rem)] aspect-[1/1.02] w-[min(94vw,32rem)]">
