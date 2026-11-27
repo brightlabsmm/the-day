@@ -117,16 +117,15 @@ export default function Home() {
       {/* 1 · Hero */}
       <section className="lp-scr lp-hero" style={{ background: "#fbf3ea" }} aria-labelledby="hero-h">
         <div className="in pt-24">
-          <B x={65} y={118} fs={38} m="2.2rem" as="p" cls="script text-[#c9a25a]">Template Demo</B>
-          <B x={65} y={165} w={520} fs={56} lh={0.96} m="2.8rem" as="h1" cls="font-display text-[#3b3632]">
+          <B x={65} y={140} w={520} fs={56} lh={0.96} m="2.8rem" as="h1" cls="font-display text-[#3b3632]">
             <span id="hero-h">Find the Invitation <br className="hidden min-[900px]:inline" />That Feels Like You</span>
           </B>
-          <Rule x={70} y={292} w={115} />
-          <B x={65} y={321} w={440} fs={21.5} lh={1.07} m="1.25rem" as="p" cls="text-[#66584d] max-w-sm">
+          <Rule x={70} y={267} w={115} />
+          <B x={65} y={296} w={440} fs={21.5} lh={1.07} m="1.25rem" as="p" cls="text-[#66584d] max-w-sm">
             Join a personalised demo session and explore our beautiful collection of digital invitation templates for every celebration.
           </B>
           <div className="grp flex flex-col items-center gap-3 sm:flex-row">
-            <B x={70} y={422} w={216} h={46} fs={21} v="left"><a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer" className="gbtn">Book a demo session</a></B>
+            <B x={70} y={397} w={216} h={46} fs={21} v="left"><a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer" className="gbtn">Book a demo session</a></B>
           </div>
 
           {/* monitor, tablet and phone, built in code */}
@@ -151,7 +150,7 @@ export default function Home() {
       {/* Templates: screenshots of the real designs */}
       <section id="templates" className="relative overflow-hidden px-6 py-20 text-center min-[900px]:py-28" style={{ background: "#f9f1e7" }}>
         <img src="/landing/leaf-c.webp" alt="" className="pointer-events-none absolute top-10 left-2 w-16 opacity-90 sm:left-8 sm:w-24 min-[1200px]:left-[8%] min-[1200px]:w-28" />
-        <img src="/landing/bouq-gold.webp" alt="" className="pointer-events-none absolute top-8 right-2 w-24 sm:right-8 sm:w-36 min-[1200px]:right-[8%] min-[1200px]:w-44" />
+        <img src="/landing/celebrate-line.webp" alt="" className="pointer-events-none absolute top-8 right-2 w-24 sm:right-8 sm:w-36 min-[1200px]:right-[8%] min-[1200px]:w-44" />
         <Reveal>
           <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.4rem)] leading-tight text-[#2b2623]">Our templates</h2>
           <div className="rule mx-auto mt-6" style={{ fontSize: 16 }} aria-hidden><Heart /></div>
