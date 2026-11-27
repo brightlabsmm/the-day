@@ -18,7 +18,7 @@ export type TemplateCard = {
 
 /**
  * One row of template cards that slides sideways: three at a time on desktop, two on tablets and
- * one and a bit on phones. Arrows move a page, dots show where you are, and it also scrolls by
+ * one and a bit on phones. Arrows move one card at a time, dots show where you are, and it also scrolls by
  * swipe or trackpad (scroll snap keeps cards aligned). Blank invitation cards in the pictures can
  * carry their own wording. Tapping a card opens a larger preview (no demo pages) with a button to
  * ask about that design on Messenger.
@@ -52,9 +52,10 @@ export function TemplateCarousel({ cards, contactUrl }: { cards: TemplateCard[];
     const base = kids[0].offsetLeft;
     const step = Math.max(1, (kids[1]?.offsetLeft ?? base + kids[0].offsetWidth) - base);
     const per = Math.max(1, Math.round(el.clientWidth / step));
-    const total = Math.max(1, Math.ceil(Math.max(0, kids.length - per) / per) + 1);
-    /** Card that starts page p. */
-    const cardOf = (p: number) => Math.min(p * per, Math.max(0, kids.length - per));
+    // One step per card: the row can start at any card until the last ones fill the view.
+    const total = Math.max(1, kids.length - per + 1);
+    /** Card at the left edge at step p. */
+    const cardOf = (p: number) => Math.min(p, Math.max(0, kids.length - per));
     return { el, kids, base, step, per, total, cardOf };
   }, []);
 
@@ -62,8 +63,7 @@ export function TemplateCarousel({ cards, contactUrl }: { cards: TemplateCard[];
     const l = layout();
     if (!l) return;
     setPages(l.total);
-    const index = Math.round(l.el.scrollLeft / l.step);
-    setPage(index >= l.cardOf(l.total - 1) ? l.total - 1 : Math.min(l.total - 1, Math.round(index / l.per)));
+    setPage(Math.min(l.total - 1, Math.round(l.el.scrollLeft / l.step)));
   }, [layout]);
 
   useEffect(() => {
@@ -100,10 +100,10 @@ export function TemplateCarousel({ cards, contactUrl }: { cards: TemplateCard[];
             </li>
           ))}
         </ul>
-        <button type="button" className="tcar-arrow left-0" onClick={() => go(page - 1)} disabled={page === 0} aria-label="Previous templates">
+        <button type="button" className="tcar-arrow left-0" onClick={() => go(page - 1)} disabled={page === 0} aria-label="Previous template">
           <svg viewBox="0 0 24 24" aria-hidden><path d="M15 5l-7 7 7 7" /></svg>
         </button>
-        <button type="button" className="tcar-arrow right-0" onClick={() => go(page + 1)} disabled={page >= pages - 1} aria-label="Next templates">
+        <button type="button" className="tcar-arrow right-0" onClick={() => go(page + 1)} disabled={page >= pages - 1} aria-label="Next template">
           <svg viewBox="0 0 24 24" aria-hidden><path d="M9 5l7 7-7 7" /></svg>
         </button>
       </div>
