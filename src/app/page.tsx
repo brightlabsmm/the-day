@@ -97,16 +97,16 @@ const GALA_CARD = {
 
 // Our templates carousel: real designs mixed with other celebrations. Pictures only, no links to demo pages.
 const TEMPLATES: TemplateCard[] = [
-  { name: "Sepia Garden", img: "shot-garden", event: "Wedding" },
+  { name: "Sepia Garden", img: "shot-garden", event: "Wedding", demo: "/w/showcase-garden?lang=en" },
   firstPicture({ name: "Golden Birthday", img: "inv-birthday", event: "Birthday", card: BIRTHDAY_CARD }, { name: "Classic Floral", img: "inv-floral", event: "Wedding" }),
-  { name: "Blue Ribbon", img: "shot-ribbon", event: "Wedding" },
+  { name: "Blue Ribbon", img: "shot-ribbon", event: "Wedding", demo: "/w/showcase-ribbon?lang=en" },
   firstPicture({ name: "Sage Baby Shower", img: "inv-baby", event: "Baby Celebration", card: BABY_CARD }, { name: "Modern Portrait", img: "inv-veil", event: "Wedding" }),
-  { name: "Golden Renewal", img: "shot-renewal", event: "Anniversary" },
+  { name: "Golden Renewal", img: "shot-renewal", event: "Anniversary", demo: "/w/showcase-renewal?lang=en" },
   ...[
     { name: "Evening Gala", img: "inv-corporate", event: "Corporate Event", card: GALA_CARD },
     { name: "Lantern Festival", img: "inv-cultural", event: "Cultural Celebration" },
   ].filter((t) => hasPicture(t.img)),
-  { name: "Pressed Scrapbook", img: "shot-scrapbook", event: "Wedding" },
+  { name: "Pressed Scrapbook", img: "shot-scrapbook", event: "Wedding", demo: "/w/showcase-scrapbook?lang=en" },
 ];
 
 const EVENTS: { name: string; img: string; icon: ReactNode }[] = [
@@ -387,11 +387,7 @@ export default function Home() {
           <B x={150} y={382} w={450} fs={15.8} lh={1.22} m="1.1rem" as="p" cls="text-center text-[#6b625c] max-w-sm">
             We’d love to hear about your celebration. Get in touch to create a beautiful digital invitation that reflects your style and makes your day unforgettable.
           </B>
-          <B x={197} y={486} w={420} h={40} cls="ct" v="left">
-            <span className="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3.5c-4.900 0-8.700 3.500-8.700 8 0 2.400 1.100 4.500 2.900 6v3l2.800-1.600c1 .3 2 .4 3 .4 4.900 0 8.700-3.500 8.700-8s-3.800-8-8.700-8z" /><path d="M7.800 13.400l2.800-3 2.100 2 2.700-3" /></svg></span>
-            <a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer">Messenger: Message us</a>
-          </B>
-          <B x={263} y={550} w={183} h={44} fs={22} v="zoom"><a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer" className="gbtn">Get in touch</a></B>
+          <B x={224} y={492} w={260} h={46} fs={21} v="zoom"><a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer" className="gbtn">Message us on Messenger</a></B>
         </div>
       </section>
 

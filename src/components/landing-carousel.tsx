@@ -12,6 +12,8 @@ export type TemplateCard = {
    * over the card as CSS inset percentages, `content` is the text. Sizes inside use cqw (1% of the picture's width).
    */
   card?: { inset: string; content: ReactNode };
+  /** Live demo of the design (real designs only); the preview offers it as "View live demo". */
+  demo?: string;
 };
 
 /**
@@ -126,7 +128,12 @@ export function TemplateCarousel({ cards, contactUrl }: { cards: TemplateCard[];
               <p className="tprev-copy">
                 Names, dates, wording, colours and language are all set for your celebration, in English, Burmese or both.
               </p>
-              <a href={contactUrl} target="_blank" rel="noopener noreferrer" className="gbtn">Ask about this design</a>
+              <div className="tprev-actions">
+                <a href={contactUrl} target="_blank" rel="noopener noreferrer" className="gbtn">Ask about this design</a>
+                {shown.demo && (
+                  <a href={shown.demo} target="_blank" rel="noopener noreferrer" className="obtn">View live demo</a>
+                )}
+              </div>
               <div className="tprev-nav">
                 <button type="button" onClick={() => step(-1)} aria-label="Previous template">
                   <svg viewBox="0 0 24 24" aria-hidden><path d="M15 5l-7 7 7 7" /></svg>

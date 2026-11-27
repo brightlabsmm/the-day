@@ -91,6 +91,9 @@
 .tprev-info h3 { font-size: 2rem; color: #2b2623; margin-top: .2rem; line-height: 1.1; }
 .tprev-rule { display: block; width: 3.5rem; height: 1px; background: var(--gold); margin: 1rem auto; }
 .tprev-copy { color: #5c524b; font-size: 1.05rem; line-height: 1.45; margin-bottom: 1.4rem; }
+/* Messenger button, and a live demo link for real designs, side by side when there is room. */
+.tprev-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: .7rem; }
+.tprev-actions .gbtn, .tprev-actions .obtn { padding: .7rem 1.3rem; font-size: 1.05rem; }
 .tprev-nav { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1.4rem; color: #5c524b; font-size: .9rem; }
 .tprev-nav button, .tprev-close { width: 2.3rem; height: 2.3rem; border-radius: 999px; border: 1px solid rgba(184, 145, 63, .55); color: var(--gold-d); display: grid; place-items: center; background: rgba(255, 255, 255, .5); }
 .tprev-nav button:hover, .tprev-close:hover { background: var(--btn); color: #fff; }
@@ -101,6 +104,7 @@
   .tprev-info { text-align: left; }
   .tprev-rule { margin-left: 0; }
   .tprev-nav { justify-content: flex-start; }
+  .tprev-actions { justify-content: flex-start; }
 }
 
 /* Event picture behind the icon: a soft cream veil keeps the gold icon and the name readable; it clears a little on hover. */
