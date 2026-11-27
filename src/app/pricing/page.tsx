@@ -99,45 +99,11 @@ export default function PricingPage() {
               </h2>
               <span className="mx-auto mt-4 block h-px w-16 bg-[#a8823f]" aria-hidden />
             </div>
-            <div className="mt-10 overflow-x-auto rounded-xl border border-[#2f2925]/10 bg-white">
-              <table className="w-full min-w-[560px] border-collapse text-left text-[0.95rem]">
-                <caption className="sr-only">Features included in each level</caption>
-                <thead>
-                  <tr className="border-b border-[#2f2925]/10">
-                    <th scope="col" className="px-4 py-4 font-normal text-[#6e5f53] sm:px-6">
-                      What you get
-                    </th>
-                    {LEVELS.map((l) => (
-                      <th
-                        key={l.id}
-                        scope="col"
-                        className={`px-3 py-4 text-center ${l.featured ? "bg-[#f6efe1]" : ""}`}
-                      >
-                        <span className="caps block text-[0.65rem] text-[#8a7766]">Level {l.id}</span>
-                        <span className="font-display block text-lg font-semibold text-[#1f1b18]">{l.name}</span>
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {COMPARE.map((row) => (
-                    <tr key={row.label} className="border-b border-[#2f2925]/[0.06] last:border-0">
-                      <th scope="row" className="px-4 py-3 font-normal text-[#2f2925] sm:px-6">
-                        {row.label}
-                      </th>
-                      {row.values.map((v, i) => (
-                        <td key={i} className={`px-3 py-3 text-center ${LEVELS[i].featured ? "bg-[#f6efe1]" : ""}`}>
-                          <Cell value={v} />
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                  <Suspense fallback={<PriceRow currency="MMK" />}>
-                    <VisitorPriceRow />
-                  </Suspense>
-                </tbody>
-              </table>
-            </div>
+            {/* The whole table streams in with the visitor's prices. Streaming only its last row would place that
+                row outside the table for a moment, which made the page wider than a phone screen. */}
+            <Suspense fallback={<ComparisonTable currency="MMK" />}>
+              <VisitorComparisonTable />
+            </Suspense>
           </div>
         </section>
 
@@ -246,8 +212,53 @@ function PriceRow({ currency }: { currency: Currency }) {
   );
 }
 
-async function VisitorPriceRow() {
-  return <PriceRow currency={await visitorCurrency()} />;
+/** The feature comparison table, with each level's price in one currency in the last row. */
+function ComparisonTable({ currency }: { currency: Currency }) {
+  // `relative` keeps the hidden screen-reader labels inside this scrolling box; without it they escaped and made
+  // the whole page wider than a phone screen.
+  return (
+      <div className="relative mt-10 overflow-x-auto rounded-xl border border-[#2f2925]/10 bg-white">
+      <table className="w-full min-w-[560px] border-collapse text-left text-[0.95rem]">
+        <caption className="sr-only">Features included in each level</caption>
+        <thead>
+          <tr className="border-b border-[#2f2925]/10">
+            <th scope="col" className="px-4 py-4 font-normal text-[#6e5f53] sm:px-6">
+              What you get
+            </th>
+            {LEVELS.map((l) => (
+              <th
+                key={l.id}
+                scope="col"
+                className={`px-3 py-4 text-center ${l.featured ? "bg-[#f6efe1]" : ""}`}
+              >
+                <span className="caps block text-[0.65rem] text-[#8a7766]">Level {l.id}</span>
+                <span className="font-display block text-lg font-semibold text-[#1f1b18]">{l.name}</span>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {COMPARE.map((row) => (
+            <tr key={row.label} className="border-b border-[#2f2925]/[0.06] last:border-0">
+              <th scope="row" className="px-4 py-3 font-normal text-[#2f2925] sm:px-6">
+                {row.label}
+              </th>
+              {row.values.map((v, i) => (
+                <td key={i} className={`px-3 py-3 text-center ${LEVELS[i].featured ? "bg-[#f6efe1]" : ""}`}>
+                  <Cell value={v} />
+                </td>
+              ))}
+            </tr>
+          ))}
+          <PriceRow currency={currency} />
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+async function VisitorComparisonTable() {
+  return <ComparisonTable currency={await visitorCurrency()} />;
 }
 
 function LevelCard({ level: l, currency }: { level: Level; currency: Currency }) {
