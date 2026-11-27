@@ -3,9 +3,8 @@ import Link from "next/link";
 import { ArrowRight, Check, Minus, MessageCircle, Plus, Sparkles } from "lucide-react";
 import { FACEBOOK_URL, SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { Suspense } from "react";
-import { CURRENCY_REGION, LEVELS, discountOf, fmt, type Currency, type Level } from "@/lib/pricing";
+import { LEVELS, discountOf, fmt, type Currency, type Level } from "@/lib/pricing";
 import { visitorCurrency } from "@/lib/currency";
-import { CurrencySwitch } from "@/components/currency-switch";
 
 export const metadata: Metadata = {
   title: "Pricing",
@@ -84,7 +83,7 @@ export default function PricingPage() {
 
         {/* Level cards */}
         <section aria-label="Levels" className="px-4 pb-16 sm:px-8">
-          {/* Prices depend on the visitor's country (or their choice on the switch), so this part streams in. */}
+          {/* Prices depend on the visitor's country (MMK in Myanmar, USD elsewhere), so this part streams in. */}
           <Suspense fallback={<Levels currency="MMK" />}>
             <VisitorLevels />
           </Suspense>
@@ -213,16 +212,14 @@ function Levels({ currency }: { currency: Currency }) {
           </li>
         ))}
       </ul>
-      <div className="mx-auto mt-6 flex max-w-2xl flex-col items-center gap-3 text-center text-sm text-[#6e5f53]">
+      <div className="mx-auto mt-6 max-w-2xl text-center text-sm text-[#6e5f53]">
         <p>
-          Prices for {CURRENCY_REGION[currency]}, in {currency === "MMK" ? "Myanmar kyat (MMK)" : "US dollars (USD)"}, per
-          invitation. Still deciding?{" "}
+          Prices in {currency === "MMK" ? "Myanmar kyat (MMK)" : "US dollars (USD)"}, per invitation. Still deciding?{" "}
           <Link href="/showcase" className="underline decoration-[#a8823f] underline-offset-4 hover:text-[#1f1b18]">
             Browse the designs
           </Link>{" "}
           first.
         </p>
-        <CurrencySwitch current={currency} />
       </div>
     </>
   );

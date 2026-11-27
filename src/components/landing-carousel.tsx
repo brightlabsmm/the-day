@@ -12,7 +12,7 @@ export type TemplateCard = {
    * over the card as CSS inset percentages, `content` is the text. Sizes inside use cqw (1% of the picture's width).
    */
   card?: { inset: string; content: ReactNode };
-  /** Live demo of the design (real designs only); the preview offers it as "View live demo". */
+  /** Live demo of the design (real designs only): the preview runs it inside a phone, with a link to open it full screen. */
   demo?: string;
 };
 
@@ -119,7 +119,16 @@ export function TemplateCarousel({ cards, contactUrl }: { cards: TemplateCard[];
         {shown && (
           <div className="tprev-body">
             <div className="tprev-pic">
-              <Picture card={shown} full />
+              {shown.demo ? (
+                // The real invitation, live, inside a phone: it scrolls inside the screen like on a guest's phone.
+                <div className="tprev-phone">
+                  <div className="tprev-screen">
+                    <iframe key={shown.demo} src={shown.demo} title={`${shown.name} live demo`} />
+                  </div>
+                </div>
+              ) : (
+                <Picture card={shown} full />
+              )}
             </div>
             <div className="tprev-info">
               <p className="tprev-event">{shown.event}</p>
@@ -131,7 +140,7 @@ export function TemplateCarousel({ cards, contactUrl }: { cards: TemplateCard[];
               <div className="tprev-actions">
                 <a href={contactUrl} target="_blank" rel="noopener noreferrer" className="gbtn">Ask about this design</a>
                 {shown.demo && (
-                  <a href={shown.demo} target="_blank" rel="noopener noreferrer" className="obtn">View live demo</a>
+                  <a href={shown.demo} target="_blank" rel="noopener noreferrer" className="obtn">Open full screen</a>
                 )}
               </div>
               <div className="tprev-nav">

@@ -8,9 +8,8 @@ import { Reveal } from "@/components/templates/reveal";
 import { LandingNav } from "@/components/landing-nav";
 import { CurrentYear } from "@/components/current-year";
 import { Suspense } from "react";
-import { CURRENCY_REGION, fmt, startingPrice, type Currency } from "@/lib/pricing";
+import { fmt, startingPrice, type Currency } from "@/lib/pricing";
 import { visitorCurrency } from "@/lib/currency";
-import { CurrencySwitch } from "@/components/currency-switch";
 import { TemplateCarousel, type TemplateCard } from "@/components/landing-carousel";
 import { FACEBOOK_URL } from "@/components/site-chrome";
 
@@ -162,18 +161,14 @@ const Svg = ({ children, sw = 1.4, className = "" }: { children: ReactNode; sw?:
   </svg>
 );
 
-/** "Launch prices from ..." in one currency, with the switch to the other. */
+/** "Launch prices from ..." in the visitor's currency. */
 function PriceLine({ currency }: { currency: Currency }) {
   return (
-    <div className="flex flex-col items-center gap-2 min-[900px]:items-start">
-      <p>
+    <p>
         Launch prices from <strong className="font-semibold text-[#2f2925]">{fmt(startingPrice(currency))} {currency}</strong>
-        <span className="sr-only"> in {CURRENCY_REGION[currency]}</span>
         <span className="text-[#b8913f]"> &middot; </span>
         <Link href="/pricing" className="text-[#7d6230] underline decoration-[#b8913f]/60 underline-offset-4 hover:text-[#2f2925]">See pricing</Link>
-      </p>
-      <CurrencySwitch current={currency} />
-    </div>
+    </p>
   );
 }
 
@@ -200,7 +195,7 @@ export default function Home() {
           <div className="grp flex flex-col items-center gap-3 sm:flex-row">
             <B x={70} y={397} w={216} h={46} fs={21} v="left"><a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer" className="gbtn">Book a demo session</a></B>
           </div>
-          {/* Starting price in the visitor's currency (Myanmar: MMK, Taiwan & Thailand: USD), with a switch. */}
+          {/* Starting price in the visitor's currency: MMK in Myanmar, USD everywhere else. */}
           <B x={70} y={458} w={470} fs={16} m="1rem" cls="text-[#5c524b]">
             <Suspense fallback={<PriceLine currency="MMK" />}>
               <VisitorPriceLine />

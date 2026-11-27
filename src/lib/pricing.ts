@@ -2,16 +2,11 @@
  * Invitation levels and prices, shared by the pricing page and the landing page so the
  * "from" price on the landing page always matches the plans.
  *
- * Prices depend on where the customer is: Myanmar pays in kyat (MMK); Taiwan and Thailand pay in
- * US dollars. Each price is a usual price and a launch price; the "% off" is worked out from the two.
+ * Prices depend on where the customer is: Myanmar pays in kyat (MMK); every other country
+ * (Taiwan, Thailand and the rest) pays in US dollars. Each price is a usual price and a launch price; the "% off" is worked out from the two.
  */
 export const CURRENCIES = ["MMK", "USD"] as const;
 export type Currency = (typeof CURRENCIES)[number];
-/** Who each currency is for, as shown on the switch. */
-export const CURRENCY_REGION: Record<Currency, string> = { MMK: "Myanmar", USD: "Taiwan & Thailand" };
-/** Cookie that remembers a visitor's choice on the switch. */
-export const CURRENCY_COOKIE = "theday_currency";
-export const isCurrency = (v: unknown): v is Currency => typeof v === "string" && (CURRENCIES as readonly string[]).includes(v);
 
 export type Offer = { usual: number; launch: number };
 

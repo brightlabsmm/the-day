@@ -86,6 +86,12 @@
 .tprev-pic .tcar-pic { height: min(58vh, 36rem); box-shadow: 0 18px 34px -20px rgba(70, 50, 25, .6); }
 .tprev-pic .tcar-pic img { width: 100%; height: 100%; object-fit: cover; border-radius: 3px; display: block; }
 .tprev-shot img { display: block; height: min(58vh, 36rem); width: auto; border-radius: 6px; box-shadow: 0 18px 34px -20px rgba(70, 50, 25, .6); }
+/* Live demo in a phone: the page renders at a real phone width (390 x 844) and is scaled to fit, so it scrolls inside the screen. */
+.tprev-phone { --s: .56; padding: 9px; border-radius: 2.3rem; background: #1d1a18; box-shadow: 0 30px 50px -24px rgba(30, 20, 10, .7), inset 0 0 0 1.5px #3a332e; }
+.tprev-screen { position: relative; width: calc(390px * var(--s)); height: calc(844px * var(--s)); overflow: hidden; border-radius: 1.75rem; background: #f3e8dc; }
+.tprev-screen iframe { position: absolute; top: 0; left: 0; width: 390px; height: 844px; border: 0; transform: scale(var(--s)); transform-origin: top left; }
+@media (min-height: 760px) { .tprev-phone { --s: .66; } }
+@media (min-height: 900px) { .tprev-phone { --s: .74; } }
 .tprev-info { text-align: center; max-width: 20rem; }
 .tprev-event { font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--gold-d); }
 .tprev-info h3 { font-size: 2rem; color: #2b2623; margin-top: .2rem; line-height: 1.1; }
