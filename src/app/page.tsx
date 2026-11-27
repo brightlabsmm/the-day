@@ -366,10 +366,8 @@ export default function Home() {
           </B>
           <B x={263} y={594} w={183} h={44} fs={22} v="zoom"><a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer" className="gbtn">Get in touch</a></B>
 
-          <B x={0} y={638} w={160} h={74} cls="hide-m">
-            <svg viewBox="0 0 160 74" className="h-full w-full text-[#c9a96a]" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"><path d="M0 70C30 66 60 56 80 40c12-10 10-34-4-34-14 0-12 22 6 38 18 12 40 22 78 24" /><path d="M72 6c-4-4-9 0-5 5l7 8 7-8c4-5-1-9-5-5z" /></svg>
-          </B>
-          <B x={0} y={705} w={1338} h={2} cls="hide-m"><span className="block h-px w-full bg-[#c9a96a]/70" /></B>
+          {/* Footer divider: a thin gold line that fades in from both edges, with a small heart in the middle. */}
+          <B x={40} y={705} w={1286} h={2} cls="hide-m"><span className="block h-px w-full" style={{ background: "linear-gradient(90deg, transparent, rgba(201,169,106,.75) 18%, rgba(201,169,106,.75) 82%, transparent)" }} /></B>
           <B x={672} y={697} w={16} h={16} cls="hide-m text-[#b8913f]"><Heart /></B>
           <div className="grp mt-10 flex flex-col items-center gap-3 text-[#8d837c]">
             <B x={425} y={712} w={150} fs={34} m="2.2rem" as="p" cls="script whitespace-nowrap">The Day</B>
