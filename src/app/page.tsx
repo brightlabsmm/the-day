@@ -167,7 +167,7 @@ function PriceLine({ currency }: { currency: Currency }) {
     <p>
         Launch prices from <strong className="font-semibold text-[#2f2925]">{fmt(startingPrice(currency))} {currency}</strong>
         <span className="text-[#b8913f]"> &middot; </span>
-        <Link href="/pricing" className="text-[#7d6230] underline decoration-[#b8913f]/60 underline-offset-4 hover:text-[#2f2925]">See pricing</Link>
+        <Link href="/pricing" className="inline-block py-2 text-[#7d6230] underline decoration-[#b8913f]/60 underline-offset-4 hover:text-[#2f2925]">See pricing</Link>
     </p>
   );
 }
@@ -223,8 +223,8 @@ export default function Home() {
 
       {/* Templates: a sliding row of designs for every kind of celebration */}
       <section id="templates" className="relative overflow-hidden px-6 py-20 text-center min-[900px]:py-28" style={{ background: "#f9f1e7" }}>
-        <img src="/landing/leaf-c.webp" alt="" className="pointer-events-none absolute top-10 left-2 w-16 opacity-90 sm:left-8 sm:w-24 min-[1200px]:left-[8%] min-[1200px]:w-28" />
-        <img src="/landing/celebrate-line.webp" alt="" className="pointer-events-none absolute top-8 right-2 w-24 sm:right-8 sm:w-36 min-[1200px]:right-[8%] min-[1200px]:w-44" />
+        <img src="/landing/leaf-c.webp" alt="" className="pointer-events-none absolute top-4 left-1 w-11 opacity-80 sm:top-10 sm:left-8 sm:w-24 sm:opacity-90 min-[1200px]:left-[8%] min-[1200px]:w-28" />
+        <img src="/landing/celebrate-line.webp" alt="" className="pointer-events-none absolute top-3 right-1 w-16 opacity-80 sm:top-8 sm:right-8 sm:w-36 sm:opacity-100 min-[1200px]:right-[8%] min-[1200px]:w-44" />
         <Reveal>
           <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.4rem)] leading-tight text-[#2b2623]">Our templates</h2>
           <div className="rule mx-auto mt-6" style={{ fontSize: 16 }} aria-hidden><Heart /></div>
@@ -269,7 +269,7 @@ export default function Home() {
         <img src="/landing/bouq-gold.webp" alt="" className="hide-d mx-auto w-36" />
         <B x={1050} y={140} w={238} v="right" cls="hide-m"><img src="/landing/bouq-gold.webp" alt="" className="lp-img" /></B>
         <B x={1205} y={375} w={120} v="right" cls="hide-m"><img src="/landing/leaf-c.webp" alt="" className="lp-img" /></B>
-        <div className="in pt-20">
+        <div className="in pt-6">
           <B x={560} y={62} w={314} fs={18} m="1.1rem" as="p" cls="text-center text-[#3b3632]">Services</B>
           <Rule x={682} y={97} w={80} fs={14} />
           <B x={520} y={105} w={384} fs={55} lh={1.04} m="2.8rem" as="h2" cls="font-display text-center text-[#2b2623]">For Every Kind <br className="hidden min-[900px]:inline" />of Celebration</B>
@@ -307,7 +307,7 @@ export default function Home() {
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center" style={{ transform: "rotate(-8.6deg)", paddingLeft: "12%" }}>
               <img src="/landing/bouq-line.webp" alt="" className="w-[28%]" />
               <span className="script text-2xl text-[#6f655d]">The Day</span>
-              <span className="caps2 text-[0.55rem] text-[#6f655d]">Digital Invitations</span>
+              <span className="caps2 text-[0.62rem] text-[#6f655d]">Digital Invitations</span>
             </div>
           </div>
           <B x={95} y={88} w={460} fs={47} lh={1.04} m="2.6rem" as="h2" cls="font-display text-center">Thoughtfully <br className="hidden min-[900px]:inline" />Designed for Your Day</B>
@@ -353,7 +353,7 @@ export default function Home() {
           <B x={766} y={613} w={108} h={108} cls="mt-3 w-24 text-[#b8913f] min-[900px]:mt-0">
             <Svg sw={1}><circle cx="22" cy="22" r="19" /><ellipse cx="22" cy="22" rx="8" ry="19" /><path d="M3 22h38M6 13h32M6 31h32M22 3v38" /></Svg>
           </B>
-          <B x={896} y={640} w={380} fs={20.5} as="p" cls="font-display text-[#3b3632]">Worldwide service</B>
+          <B x={896} y={640} w={380} fs={20.5} as="p" cls="font-display text-[#3b3632]">Now serving couples in</B>
           <B x={894} y={676} w={400} fs={20.5} as="p" cls="font-display text-[#8a6d33]">Taiwan · Thailand · Myanmar</B>
           <B x={1160} y={578} w={140} cls="hide-m"><img src="/landing/envelope-line.webp" alt="" className="lp-img" /></B>
         </div>
@@ -392,15 +392,15 @@ export default function Home() {
           <div className="flex flex-col items-center gap-x-5 gap-y-1 sm:flex-row">
             <a href="#top" className="flex items-baseline gap-2.5">
               <span className="script text-[1.9rem] leading-none text-[#3b3632]">The Day</span>
-              <span className="caps2 text-[0.62rem] text-[#6b625c]">Digital Invitations</span>
+              <span className="caps2 text-[0.68rem] text-[#6b625c]">Digital Invitations</span>
             </a>
             <span className="hidden h-5 w-px bg-[#c9a96a]/50 sm:block" aria-hidden />
             <nav className="font-display text-[1.02rem]" aria-label="Footer">
-              <a href="#templates" className="hover:text-[#2f2925]">Templates</a>
+              <a href="#templates" className="inline-block py-2.5 hover:text-[#2f2925]">Templates</a>
               <span className="px-2 text-[#b8913f]" aria-hidden>&middot;</span>
-              <Link href="/pricing" className="hover:text-[#2f2925]">Pricing</Link>
+              <Link href="/pricing" className="inline-block py-2.5 hover:text-[#2f2925]">Pricing</Link>
               <span className="px-2 text-[#b8913f]" aria-hidden>&middot;</span>
-              <a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer" className="hover:text-[#2f2925]">Messenger</a>
+              <a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer" className="inline-block py-2.5 hover:text-[#2f2925]">Messenger</a>
             </nav>
           </div>
           <p className="text-sm text-[#6b625c]">&copy; <CurrentYear /> The Day by Bright Labs. All rights reserved.</p>

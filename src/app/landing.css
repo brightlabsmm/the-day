@@ -40,27 +40,29 @@
 .tcar-track::-webkit-scrollbar { display: none; }
 .tcar-item { flex: 0 0 calc((100% - 1.5rem) / 1.2); scroll-snap-align: start; display: flex; flex-direction: column; align-items: center; text-align: center; }
 /* Every card shares one 2:3 shape; taller phone screenshots are cropped from the centre to fit. */
-.tcar-item img { height: 20rem; width: auto; max-width: 100%; aspect-ratio: 2 / 3; object-fit: cover; object-position: center; border-radius: 3px; box-shadow: 0 18px 34px -20px rgba(70, 50, 25, .6); transition: transform .4s ease; }
+.tcar-item img { height: 22.5rem; width: auto; max-width: 100%; aspect-ratio: 2 / 3; object-fit: cover; object-position: center; border-radius: 3px; box-shadow: 0 18px 34px -20px rgba(70, 50, 25, .6); transition: transform .4s ease; }
 .tcar-item:hover img, .tcar-item:hover .tcar-pic, .tcar-item:hover .tcar-shot { transform: translateY(-4px); }
 /* A tall phone screenshot shown whole, centred on a soft 2:3 panel so every card has the same shape. */
-.tcar-shot { height: 20rem; aspect-ratio: 2 / 3; display: flex; align-items: center; justify-content: center; border-radius: 3px; background: linear-gradient(160deg, #f2e8da, #e5d5c1); box-shadow: 0 18px 34px -20px rgba(70, 50, 25, .6); transition: transform .4s ease; }
+.tcar-shot { height: 22.5rem; aspect-ratio: 2 / 3; display: flex; align-items: center; justify-content: center; border-radius: 3px; background: linear-gradient(160deg, #f2e8da, #e5d5c1); box-shadow: 0 18px 34px -20px rgba(70, 50, 25, .6); transition: transform .4s ease; }
 .tcar-item .tcar-shot img, .tcar-item:hover .tcar-shot img { height: 88%; width: auto; aspect-ratio: 560 / 1212; object-fit: contain; border-radius: 10px; box-shadow: 0 14px 26px -14px rgba(60, 40, 20, .55); transform: none; }
 /* A picture with wording on its blank card: sized by height and a 2:3 shape, so text can scale with it (cqw). */
-.tcar-pic { position: relative; height: 20rem; aspect-ratio: 2 / 3; container-type: inline-size; border-radius: 3px; box-shadow: 0 18px 34px -20px rgba(70, 50, 25, .6); transition: transform .4s ease; }
+.tcar-pic { position: relative; height: 22.5rem; aspect-ratio: 2 / 3; container-type: inline-size; border-radius: 3px; box-shadow: 0 18px 34px -20px rgba(70, 50, 25, .6); transition: transform .4s ease; }
 .tcar-item .tcar-pic img { width: 100%; height: 100%; box-shadow: none; transform: none; }
 .tcar-text { position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: #3b3632; line-height: 1.15; }
-.tcar-text .caps2 { font-size: 2.9cqw; color: #6b5d52; }
+.tcar-text .caps2 { font-size: max(2.9cqw, 7px); color: #6b5d52; }
 .tcar-text .rule-s { display: block; width: 14cqw; height: 1px; background: var(--gold); margin: 3.2cqw auto; opacity: .8; }
 .tcar-text .mark { margin-top: 4cqw; font-size: 5.6cqw; color: var(--gold-d); }
 .tcar-item h3 { margin-top: 1.1rem; font-size: 1.5rem; color: #3b3632; }
 .tcar-item p { margin-top: .15rem; font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--gold-d); }
-.tcar-arrow { position: absolute; top: 10rem; transform: translateY(-50%); width: 2.5rem; height: 2.5rem; border-radius: 999px; border: 1px solid rgba(184, 145, 63, .55); background: rgba(251, 243, 234, .9); color: var(--gold-d); display: grid; place-items: center; transition: background .2s, opacity .2s; }
+.tcar-arrow { position: absolute; top: 11.25rem; transform: translateY(-50%); width: 2.5rem; height: 2.5rem; border-radius: 999px; border: 1px solid rgba(184, 145, 63, .55); background: rgba(251, 243, 234, .9); color: var(--gold-d); display: grid; place-items: center; transition: background .2s, opacity .2s; }
 .tcar-arrow:hover:not(:disabled) { background: var(--gold); color: #fff; }
 .tcar-arrow:disabled { opacity: .3; cursor: default; }
 .tcar-arrow svg { width: 1.1rem; height: 1.1rem; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-.tcar-dots { display: flex; justify-content: center; gap: .55rem; margin-top: .5rem; }
-.tcar-dots button { width: .5rem; height: .5rem; border-radius: 999px; background: rgba(184, 145, 63, .3); transition: background .2s, width .2s; }
-.tcar-dots button[aria-selected="true"] { width: 1.4rem; background: var(--gold); }
+.tcar-dots { display: flex; justify-content: center; gap: 0; margin-top: 0; }
+/* Each button is an invisible 30px-tall tap area; the small dot is drawn inside it. */
+.tcar-dots button { display: grid; place-items: center; padding: .7rem .3rem; background: none; }
+.tcar-dots button::before { content: ""; display: block; width: .5rem; height: .5rem; border-radius: 999px; background: rgba(184, 145, 63, .3); transition: background .2s, width .2s; }
+.tcar-dots button[aria-selected="true"]::before { width: 1.4rem; background: var(--gold); }
 @media (min-width: 640px) {
   .tcar-item { flex-basis: calc((100% - 1.5rem) / 2); }
   .tcar-item img, .tcar-pic, .tcar-shot { height: 24rem; }
@@ -150,8 +152,11 @@
 .ct .ring svg { width: 1.2rem; height: 1.2rem; }
 
 .nav a { color: #4a413b; padding: .35rem .6rem; position: relative; }
+/* Phones: taller tap areas, and narrower sides so all four links fit even at 360px wide. */
+@media (max-width: 639px) { .nav a { padding: .8rem .45rem; } .nav a[aria-current="true"]::after { left: .45rem; right: .45rem; bottom: .5rem; } }
+@media (max-width: 399px) { .nav a { padding: .8rem .32rem; } .nav a[aria-current="true"]::after { left: .32rem; right: .32rem; } }
 .nav a[aria-current="true"] { color: var(--gold-d); }
-.nav a[aria-current="true"]::after { content: ""; position: absolute; left: .6rem; right: .6rem; bottom: 0; height: 1.5px; background: var(--gold); }
+.nav a[aria-current="true"]::after { content: ""; position: absolute; left: .6rem; right: .6rem; bottom: .25rem; height: 1.5px; background: var(--gold); }
 
 @media (min-width: 900px) {
   .lp-scr.lp-hero { aspect-ratio: 1366 / 540; }
