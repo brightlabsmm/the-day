@@ -6,6 +6,7 @@ import type { CSSProperties, ElementType, ReactNode } from "react";
 import "./landing.css";
 import { Reveal } from "@/components/templates/reveal";
 import { LandingNav } from "@/components/landing-nav";
+import { TemplateCarousel, type TemplateCard } from "@/components/landing-carousel";
 import { BRAND_URL, FACEBOOK_URL } from "@/components/site-chrome";
 
 type V = "up" | "left" | "right" | "photo" | "drift" | "zoom";
@@ -42,18 +43,18 @@ function firstPicture<T extends { img: string }>(...options: T[]): T {
   return options.find((o) => hasPicture(o.img)) ?? options[options.length - 1];
 }
 
-const TEMPLATES: { name: string; img: string; href?: string }[] = [
-  { name: "Sepia Garden", img: "shot-garden", href: "/w/showcase-garden?lang=en" },
-  { name: "Blue Ribbon", img: "shot-ribbon", href: "/w/showcase-ribbon?lang=en" },
-  { name: "Golden Renewal", img: "shot-renewal", href: "/w/showcase-renewal?lang=en" },
-  { name: "Pressed Scrapbook", img: "shot-scrapbook", href: "/w/showcase-scrapbook?lang=en" },
-  // Non-wedding mock-ups, so the row shows other celebrations; the wedding cards stay until they are added.
-  firstPicture({ name: "Golden Birthday", img: "inv-birthday" }, { name: "Classic Floral", img: "inv-floral" }),
-  firstPicture({ name: "Sage Baby Shower", img: "inv-baby" }, { name: "Modern Portrait", img: "inv-veil" }),
+// Our templates carousel: real designs mixed with other celebrations. Pictures only, no links to demo pages.
+const TEMPLATES: TemplateCard[] = [
+  { name: "Sepia Garden", img: "shot-garden", event: "Wedding" },
+  firstPicture({ name: "Golden Birthday", img: "inv-birthday", event: "Birthday" }, { name: "Classic Floral", img: "inv-floral", event: "Wedding" }),
+  { name: "Blue Ribbon", img: "shot-ribbon", event: "Wedding" },
+  firstPicture({ name: "Sage Baby Shower", img: "inv-baby", event: "Baby Celebration" }, { name: "Modern Portrait", img: "inv-veil", event: "Wedding" }),
+  { name: "Golden Renewal", img: "shot-renewal", event: "Anniversary" },
   ...[
-    { name: "Evening Gala", img: "inv-corporate" },
-    { name: "Lantern Festival", img: "inv-cultural" },
+    { name: "Evening Gala", img: "inv-corporate", event: "Corporate Event" },
+    { name: "Lantern Festival", img: "inv-cultural", event: "Cultural Celebration" },
   ].filter((t) => hasPicture(t.img)),
+  { name: "Pressed Scrapbook", img: "shot-scrapbook", event: "Wedding" },
 ];
 
 const EVENTS: { name: string; img: string; icon: ReactNode }[] = [
@@ -147,7 +148,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Templates: screenshots of the real designs */}
+      {/* Templates: a sliding row of designs for every kind of celebration */}
       <section id="templates" className="relative overflow-hidden px-6 py-20 text-center min-[900px]:py-28" style={{ background: "#f9f1e7" }}>
         <img src="/landing/leaf-c.webp" alt="" className="pointer-events-none absolute top-10 left-2 w-16 opacity-90 sm:left-8 sm:w-24 min-[1200px]:left-[8%] min-[1200px]:w-28" />
         <img src="/landing/celebrate-line.webp" alt="" className="pointer-events-none absolute top-8 right-2 w-24 sm:right-8 sm:w-36 min-[1200px]:right-[8%] min-[1200px]:w-44" />
@@ -155,32 +156,12 @@ export default function Home() {
           <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.4rem)] leading-tight text-[#2b2623]">Our templates</h2>
           <div className="rule mx-auto mt-6" style={{ fontSize: 16 }} aria-hidden><Heart /></div>
         </Reveal>
-        {/* Flex rather than grid, so a last row that is not full (7 or 8 cards) sits in the middle. */}
-        <ul className="panel mx-auto mt-12 flex max-w-6xl list-none flex-wrap items-end justify-center gap-x-5 gap-y-12 px-5 py-10 min-[900px]:gap-x-8 min-[900px]:px-10">
-          {TEMPLATES.map((t, i) => {
-            const pic = (
-              <>
-                <img src={`/landing/${t.img}.webp`} alt={`${t.name} invitation design`} className="mx-auto h-[15rem] w-auto rounded-sm shadow-[0_18px_34px_-20px_rgba(70,50,25,.6)] transition group-hover:-translate-y-1 sm:h-[24rem]" />
-                <h3 className="font-display mt-5 text-2xl text-[#3b3632]">{t.name}</h3>
-              </>
-            );
-            return (
-              <Reveal as="li" key={t.name} variant="photo" delay={(i % 3) * 120} className="w-[calc(50%-0.625rem)] min-[900px]:w-[calc((100%-4rem)/3)]">
-                {t.href ? (
-                  <a href={t.href} target="_blank" rel="noopener noreferrer" className="group block">{pic}</a>
-                ) : (
-                  <div className="group">{pic}</div>
-                )}
-              </Reveal>
-            );
-          })}
-          <li className="w-full pt-2 text-lg text-[#3b3632] sm:text-xl">
-            <span className="text-[#b8913f]">❦</span> Every template can be customised for any celebration.
-          </li>
-        </ul>
-        <Reveal delay={150}>
-          <Link href="/showcase" className="gbtn mt-12" style={{ display: "inline-flex" }}>Explore templates</Link>
+        <Reveal variant="photo">
+          <TemplateCarousel cards={TEMPLATES} />
         </Reveal>
+        <p className="mt-8 text-lg text-[#3b3632] sm:text-xl">
+          <span className="text-[#b8913f]">❦</span> Every template can be customised for any celebration.
+        </p>
       </section>
 
       {/* 2 · Services */}
