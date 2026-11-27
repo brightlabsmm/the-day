@@ -49,3 +49,6 @@ next-env.d.ts
 
 # third-party stock photos used only for the garden showcase demo
 /supabase/seed-media/
+
+# marketing video: large, kept on disk and in Google Drive, not in git
+/docs/marketing/*.mp4
