@@ -130,7 +130,8 @@ export function LettersPage({ invitation, locale, monogram, token, onOpenAction,
         <TemplateNav locale={locale} monogram={monogram} items={navItemsFor(v, invitation, locale)} over="light" hideLang={englishOnly} />
 
         {/* 1 · Save the date, the names, and the first collage */}
-        <header id="top" className="px-5 pt-24 pb-[clamp(3rem,8vw,5rem)] text-center sm:pt-28">
+        <header id="top" className="lt-hero px-5 pt-24 pb-[clamp(3rem,8vw,5rem)] text-center sm:pt-28">
+          <div className="lt-hero-text">
           <Reveal>
             <p className="lt-chip">{s("lettersSaveDate", locale)}</p>
           </Reveal>
@@ -155,11 +156,12 @@ export function LettersPage({ invitation, locale, monogram, token, onOpenAction,
               {ctaLabel}
             </a>
           </Reveal>
+          </div>
 
           {/* Collage: an old love letter, torn rust paper, the cover photo, a polaroid and a pressed flower */}
           {hero && (
             <Reveal variant="photo" delay={150}>
-              <div className="relative mx-auto mt-4 aspect-[343/367] w-[min(91.5vw,30rem)]">
+              <div className="lt-collage relative mx-auto mt-4 aspect-[343/367] w-[min(91.5vw,30rem)]">
                 <Cut art={art} k="love-letter" style={{ left: "19%", top: "0%", width: "64%", height: "64%" }} pos="0% 50%" />
                 <Cut art={art} k="torn" style={{ left: "11.7%", top: "5.2%", width: "34.4%", height: "16.4%" }} />
                 <Photo p={hero} style={{ left: "29.4%", top: "9.5%", width: "61.8%", height: "82.8%" }} pos="58% 50%" />
@@ -172,8 +174,9 @@ export function LettersPage({ invitation, locale, monogram, token, onOpenAction,
 
         {/* 2 · The second collage, straight after the first, as in the published design: a polaroid, old letters, a tall photo held by clear tape */}
         {tall && (
+          <div className="lt-sec2">
           <Reveal variant="photo">
-            <div className="relative mx-auto mb-[clamp(3rem,8vw,5rem)] aspect-[343/273] w-[min(91.5vw,30rem)]">
+            <div className="lt-collage relative mx-auto mb-[clamp(3rem,8vw,5rem)] aspect-[343/273] w-[min(91.5vw,30rem)]">
               <Cut art={art} k="letters" style={{ left: "12.5%", top: "41%", width: "33.2%", height: "34.8%" }} pos="50% 30%" />
               <Polaroid art={art} p={snapB} style={{ left: "0%", top: "17.2%", width: "41.7%", aspectRatio: "800 / 636" }} />
               <Photo p={small} style={{ left: "32%", top: "66%", width: "27.1%", height: "34%" }} />
@@ -182,6 +185,7 @@ export function LettersPage({ invitation, locale, monogram, token, onOpenAction,
               <Cut art={art} k="flower-yellow" className="lt-sway" style={{ left: "0%", top: "60.4%", width: "21.9%", aspectRatio: "756 / 800" }} />
             </div>
           </Reveal>
+          </div>
         )}
 
         {/* 3 · The invitation, typed out */}
@@ -304,8 +308,9 @@ export function LettersPage({ invitation, locale, monogram, token, onOpenAction,
         <Reveal><TplSeat invitation={invitation} locale={locale} /></Reveal>
         <Reveal><TplFaq invitation={invitation} locale={locale} /></Reveal>
 
-        {/* 7 · Wishes, set like the published "QUESTIONS?" block */}
-        <div className="px-5 pt-[clamp(3rem,8vw,5rem)]">
+        {/* 7 · Wishes, set like the published "QUESTIONS?" block, beside the last collage on wide screens */}
+        <div className="lt-end">
+        <div className="lt-end-wishes px-5 pt-[clamp(3rem,8vw,5rem)]">
           <div className="mx-auto max-w-xl">
             <WishesSection
               invitation={invitation}
@@ -325,8 +330,8 @@ export function LettersPage({ invitation, locale, monogram, token, onOpenAction,
 
         {/* 8 · The last collage: yellow striped paper, a photo, a pressed red flower and a strip of manuscript */}
         {last && (
-          <Reveal variant="photo">
-            <div className="relative mx-auto mt-4 aspect-[345/334] w-[min(92vw,30rem)]">
+          <Reveal variant="photo" className="lt-end-collage">
+            <div className="lt-collage relative mx-auto mt-4 aspect-[345/334] w-[min(92vw,30rem)]">
               <div aria-hidden className="lt-stripes absolute" style={{ left: "62.9%", top: "0%", width: "37.1%", height: "37.7%" }} />
               <Cut art={art} k="manuscript" style={{ left: "23.2%", top: "79%", width: "69%", height: "21%" }} pos="50% 80%" />
               <Photo p={last} style={{ left: "0%", top: "9.3%", width: "87.5%", height: "81.1%" }} pos="50% 96%" />
@@ -335,6 +340,7 @@ export function LettersPage({ invitation, locale, monogram, token, onOpenAction,
             </div>
           </Reveal>
         )}
+        </div>
 
         <footer lang={locale} className="px-6 pt-[clamp(3rem,8vw,4.5rem)] pb-14 text-center">
           <p className={`lt-script ${my ? "text-[1.6rem]" : "text-[clamp(3rem,12vw,4.5rem)]"}`}>{s("lettersForever", locale)}</p>

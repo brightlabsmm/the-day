@@ -1632,3 +1632,86 @@ html:has(.tpl) {
   font-size: 0.95rem;
   letter-spacing: 0.06em;
 }
+
+/*
+ * Love Letters on wide screens follows the published desktop canvas: three bands, each 1200 units tall
+ * on a 1280-unit-wide canvas (93.75vw). Band one: the save-the-date text centred in the left half, the
+ * first collage on the right. Band two: the second collage on its own. Band three: the wishes (where
+ * "QUESTIONS?" sits) on the left, the last collage on the right. Sizes are in vw so the whole canvas
+ * scales with the window, as the published page does.
+ */
+@media (min-width: 768px) {
+  .tpl-letters .lt-hero {
+    display: grid;
+    grid-template-columns: 54fr 46fr;
+    align-items: center;
+    min-height: 93.75vw;
+    padding: 0;
+  }
+  .tpl-letters .lt-hero-text {
+    padding-top: 2vw;
+  }
+  .tpl-letters .lt-hero .lt-chip {
+    font-size: max(0.82rem, 1.45vw);
+  }
+  .tpl-letters .lt-hero h1 {
+    margin-top: 2.6vw;
+    font-size: 10.65vw;
+  }
+  .tpl-letters .lt-hero .lt-script {
+    font-size: 8.4vw;
+  }
+  .tpl-letters .lt-hero .lt-button {
+    margin-top: 1.8vw;
+    font-size: max(0.82rem, 1.3vw);
+  }
+  .tpl-letters .lt-hero .lt-collage {
+    width: 42vw;
+    margin: 0 0 0 -2vw;
+  }
+  .tpl-letters .lt-sec2 {
+    display: grid;
+    place-items: center;
+    min-height: 93.75vw;
+  }
+  .tpl-letters .lt-sec2 .lt-collage {
+    width: 56.5vw;
+    margin: 0 auto;
+  }
+  .tpl-letters .lt-end {
+    display: grid;
+    grid-template-columns: 5.5vw 39vw 3.5vw 46.5vw;
+    align-items: center;
+    min-height: 93.75vw;
+  }
+  .tpl-letters .lt-end-wishes {
+    grid-column: 2;
+    padding: 0;
+  }
+  .tpl-letters .lt-end-wishes > div {
+    max-width: none;
+  }
+  .tpl-letters .lt-end-collage {
+    grid-column: 4;
+  }
+  .tpl-letters .lt-end .lt-collage {
+    width: 46.5vw;
+    margin: 0;
+  }
+  .tpl-letters .lt-end #wishes-heading {
+    font-size: 12vw;
+  }
+  .tpl-letters .lt-end .wishes-own form,
+  .tpl-letters .lt-end .wishes-own .wish-list {
+    width: 58.5%;
+  }
+  .tpl-letters .lt-end .wishes-own label {
+    font-size: max(0.9rem, 1.45vw);
+  }
+  .tpl-letters .lt-end .wishes-own :is(input, textarea) {
+    font-size: max(0.85rem, 1.2vw);
+  }
+  .tpl-letters .lt-end .wishes-own button[type="submit"] {
+    font-size: max(0.8rem, 1.1vw);
+  }
+}
