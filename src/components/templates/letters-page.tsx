@@ -291,7 +291,6 @@ export function LettersPage({ invitation, locale, monogram, token, onOpenAction,
           </section>
         )}
 
-        {/* 5 · Gift beside the reply form, and the seat finder beside the questions (side by side on wide screens) */}
         {/* 6 · Gifts beside the reply, then the seat finder beside the questions: set like "The plan." */}
         {(v.hasGift || wedding.rsvp_enabled) && (
           <div className={`lt-duo ${v.hasGift && wedding.rsvp_enabled ? "" : "lt-duo-one"}`}>
@@ -308,7 +307,8 @@ export function LettersPage({ invitation, locale, monogram, token, onOpenAction,
               </section>
             )}
             {wedding.rsvp_enabled && (
-              <section id="rsvp" aria-labelledby="rsvp-heading" lang={locale}>
+              <section id="rsvp" aria-labelledby="rsvp-heading" lang={locale} className="relative">
+                <Cut art={art} k="flower-white" className="lt-sway lt-deco right-[-1.5rem] top-[-3rem] w-[clamp(5.5rem,20vw,8rem)]" style={{ aspectRatio: "726 / 800" }} />
                 <Reveal>
                   <h2 id="rsvp-heading" className="lt-big text-[clamp(3rem,12vw,5rem)]">{s("lettersRsvp", locale)}</h2>
                 </Reveal>
@@ -326,19 +326,22 @@ export function LettersPage({ invitation, locale, monogram, token, onOpenAction,
         {(hasSeat(invitation) || faq.length > 0) && (
           <div className={`lt-duo ${hasSeat(invitation) && faq.length > 0 ? "" : "lt-duo-one"}`}>
             {hasSeat(invitation) && (
-              <section id="seat" aria-labelledby="seat-heading" lang={locale}>
+              <section id="seat" aria-labelledby="seat-heading" lang={locale} className="relative">
+                <Cut art={art} k="washi" className="lt-deco right-[-0.75rem] top-[1.6rem] w-[clamp(8rem,34vw,12.5rem)] rotate-[-7deg]" style={{ aspectRatio: "1500 / 134" }} />
                 <Reveal>
                   <h2 id="seat-heading" className="lt-big text-[clamp(3rem,12vw,5rem)]">{s("lettersSeat", locale)}</h2>
                 </Reveal>
                 <Reveal delay={150}>
-                  <div className="lt-form lt-seat mt-10">
+                  <p className="lt-note mt-8">{s("lettersSeatNote", locale)}</p>
+                  <div className="lt-form lt-seat mt-4">
                     <FindSeat slug={wedding.slug} locale={locale} />
                   </div>
                 </Reveal>
               </section>
             )}
             {faq.length > 0 && (
-              <section id="faq" aria-labelledby="faq-heading" lang={locale}>
+              <section id="faq" aria-labelledby="faq-heading" lang={locale} className="relative">
+                <Cut art={art} k="flower-yellow" className="lt-sway lt-deco right-[-1.2rem] bottom-[-3.2rem] w-[clamp(4.5rem,18vw,7rem)]" style={{ aspectRatio: "756 / 800" }} />
                 <Reveal>
                   <h2 id="faq-heading" className="lt-big text-[clamp(3rem,12vw,5rem)]">{s("lettersFaq", locale)}</h2>
                 </Reveal>

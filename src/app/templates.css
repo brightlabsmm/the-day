@@ -1831,3 +1831,39 @@ html:has(.tpl) {
 .tpl-letters .lt-faq h3 span:lang(my) { font-family: var(--font-myanmar); text-transform: none; }
 .tpl-letters .lt-faq h3 svg { color: var(--navy); }
 .tpl-letters .lt-faq [role="region"] p { color: var(--ink-soft); font-size: 0.98rem; line-height: 1.85; }
+
+/* Collage pieces among the forms: they sit behind the text and never take a tap. */
+.tpl-letters .lt-deco {
+  z-index: 0;
+  opacity: 0.95;
+}
+.tpl-letters .lt-duo section > :not(.lt-deco) {
+  position: relative;
+  z-index: 1;
+}
+/* Gift QR codes become tags of paper, tilted and held on with a strip of clear tape. */
+.tpl-letters .lt-gift li {
+  overflow: visible;
+  rotate: -3deg;
+  box-shadow: 0 12px 22px -14px rgba(46, 42, 38, 0.6);
+}
+.tpl-letters .lt-gift li:nth-child(even) {
+  rotate: 2.5deg;
+}
+.tpl-letters .lt-gift li::after {
+  content: "";
+  position: absolute;
+  top: -0.7rem;
+  left: 50%;
+  width: 62%;
+  height: 1.5rem;
+  translate: -50% 0;
+  rotate: -4deg;
+  background: rgba(250, 246, 236, 0.55);
+  box-shadow: 0 1px 3px rgba(46, 42, 38, 0.18);
+  backdrop-filter: blur(0.5px);
+  z-index: 2;
+}
+.tpl-letters .lt-gift ul { gap: 1.6rem; padding-top: 0.5rem; }
+/* No blank line above "Send RSVP" until there is a message to show. */
+.tpl-letters .lt-form p[role="status"]:empty { min-height: 0; margin: 0; }

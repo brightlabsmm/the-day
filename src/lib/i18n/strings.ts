@@ -164,6 +164,7 @@ const STRINGS = {
   lettersWishes: { my: "ဆုမွန်ကောင်းများ", en: "Wishes." },
   lettersRsvp: { my: "အကြောင်းပြန်ရန်", en: "RSVP." },
   lettersSeat: { my: "ထိုင်ခုံ ရှာရန်", en: "Your seat." },
+  lettersSeatNote: { my: "သင့်အမည်ကို ရိုက်ထည့်ပြီး သင့်စားပွဲကို ရှာပါ။", en: "A table is waiting for you. Type your name to find it." },
   lettersFaq: { my: "မေးခွန်းများ", en: "Questions." },
   seatEyebrow: { my: "နေရာရှာရန်", en: "Find your seat" },
   seatHeading: { my: "သင့်စားပွဲကို ရှာပါ", en: "Find Your Seat" },
