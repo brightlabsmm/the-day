@@ -15,7 +15,8 @@ import { MusicPlayer } from "@/components/invite/music-player";
 import { Snowfall } from "@/components/invite/snowfall";
 import { themeOf } from "@/lib/theme";
 import { mediaUrl } from "@/lib/media";
-import { templateKey } from "@/lib/templates";
+import { templateFor, templateKey } from "@/lib/templates";
+import { invitationTitle, occasionOf } from "@/lib/occasion";
 import { EditorialPage } from "@/components/templates/editorial-page";
 import { EnvelopePage } from "@/components/templates/envelope-page";
 import { ScratchPage } from "@/components/templates/scratch-page";
@@ -34,6 +35,7 @@ import { RibbonPage } from "@/components/templates/ribbon-page";
 import { RenewalPage } from "@/components/templates/renewal-page";
 import { ScrapbookPage } from "@/components/templates/scrapbook-page";
 import { LettersPage } from "@/components/templates/letters-page";
+import { BloomPage } from "@/components/templates/bloom-page";
 import { TheDayFooter } from "@/components/the-day-footer";
 import { SilkPage } from "@/components/templates/silk-page";
 import { TheatrePage } from "@/components/templates/theatre-page";
@@ -49,9 +51,9 @@ export async function generateMetadata({ params }: PageProps<"/w/[slug]">): Prom
   if (!invitation) return { title: "Invitation", robots: { index: false, follow: false } };
 
   const { wedding, photos } = invitation;
-  const names = `${t(wedding.partner_one_name, "en")} & ${t(wedding.partner_two_name, "en")}`;
-  const title = `${names} — Wedding Invitation`;
-  const description = t(wedding.tagline, "en") || "You are warmly invited to our wedding.";
+  const birthday = occasionOf(wedding.cover_text) === "birthday";
+  const title = `${invitationTitle(wedding, "en")} — ${birthday ? "Birthday" : "Wedding"} Invitation`;
+  const description = t(wedding.tagline, "en") || (birthday ? "You are warmly invited to the birthday party." : "You are warmly invited to our wedding.");
   const cover = photos.find((p) => p.is_cover) ?? photos[0];
   return {
     title,
@@ -91,12 +93,17 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
   const englishOnly = (wedding.cover_text as Record<string, unknown> | null)?.english_only === true;
   const locale: Locale = englishOnly ? "en" : chosen;
   const theme = themeOf(invitation);
+  const occasion = occasionOf(wedding.cover_text);
   const monogram =
     wedding.monogram ??
-    `${t(wedding.partner_one_name, "en").charAt(0)}&${t(wedding.partner_two_name, "en").charAt(0)}`;
+    (occasion === "birthday"
+      ? t(wedding.partner_one_name, "en").charAt(0)
+      : `${t(wedding.partner_one_name, "en").charAt(0)}&${t(wedding.partner_two_name, "en").charAt(0)}`);
 
-  // On a developer machine only, `?design=<key>` previews any design with this wedding's content.
-  const key = templateKey(process.env.NODE_ENV !== "production" && typeof query.design === "string" ? query.design : wedding.template_key);
+  // A birthday always gets a birthday design and a wedding a wedding design, whatever was saved.
+  // On a developer machine only, `?design=<key>` previews any design with this invitation's content.
+  const tryDesign = process.env.NODE_ENV !== "production" && typeof query.design === "string" ? query.design : null;
+  const key = tryDesign ? templateKey(tryDesign) : templateFor(wedding.template_key, occasion);
   if (key !== "classic") {
     const props = {
       invitation,
@@ -112,7 +119,9 @@ async function InvitationRoute({ params, searchParams }: PageProps<"/w/[slug]">)
           <MusicPlayer src={mediaUrl(wedding.music_path)} title={wedding.music_title} locale={locale} />
         )}
         {theme.snow && <Snowfall />}
-        {key === "editorial" ? (
+        {key === "bloom" ? (
+          <BloomPage {...props} />
+        ) : key === "editorial" ? (
           <EditorialPage {...props} />
         ) : key === "envelope" ? (
           <EnvelopePage {...props} />

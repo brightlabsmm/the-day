@@ -1,4 +1,6 @@
-/** Page designs a wedding can use. Stored in weddings.template_key. */
+import type { Occasion } from "./occasion";
+
+/** Page designs. Stored in weddings.template_key; birthday designs are marked `occasion: "birthday"`. */
 export const TEMPLATES = [
   {
     key: "classic",
@@ -126,10 +128,31 @@ export const TEMPLATES = [
     blurb: "A playful rose-pink invitation: scratch the heart to reveal it, then a calendar and hearts.",
     mood: "Playful · rose pink · interactive",
   },
+  {
+    key: "bloom",
+    name: "Watercolour Bloom",
+    blurb: "A birthday card in soft pink watercolour: painted roses in the corners, the photo in a wreath with a fine gold ring, a flowing script name and little gold stars.",
+    mood: "Birthday · blush watercolour · roses",
+    occasion: "birthday",
+  },
 ] as const;
 
 export type TemplateKey = (typeof TEMPLATES)[number]["key"];
 
 export function templateKey(value: unknown): TemplateKey {
   return TEMPLATES.some((t) => t.key === value) ? (value as TemplateKey) : "classic";
+}
+
+/** Which occasion a design is made for. */
+export const occasionOfTemplate = (key: string): Occasion =>
+  (TEMPLATES.find((t) => t.key === key) as { occasion?: Occasion } | undefined)?.occasion ?? "wedding";
+
+/** The designs a wedding or a birthday can choose from. */
+export const templatesFor = (occasion: Occasion) => TEMPLATES.filter((t) => occasionOfTemplate(t.key) === occasion);
+
+/** The design to show: the chosen one when it suits the occasion, otherwise that occasion's default. */
+export function templateFor(value: unknown, occasion: Occasion): TemplateKey {
+  const key = templateKey(value);
+  if (occasionOfTemplate(key) === occasion && (key !== "classic" || value === "classic")) return key;
+  return occasion === "birthday" ? "bloom" : "classic";
 }

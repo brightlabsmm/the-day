@@ -38,6 +38,7 @@ const PALETTES: Record<string, Palette> = {
   scrapbook: { sky: ["#fbf8f3","#efe7da"], sun: "#ffffff", hills: ["#d8b9aa","#c98a73","#a53a22"], bloom: ["#fbf8f3","#e9c7c0","#d7a58c"], suit: "#2c2a27", gown: "#ffffff" },
   letters: { sky: ["#9fb3cf","#d9cfbd"], sun: "#fff6e4", hills: ["#d8c79f","#b9a26f","#8a7a4f"], bloom: ["#b23a1e","#e7dbc6","#f2d37b"], suit: "#ece4d6", gown: "#e9dcc6" },
   spotlight: { sky: ["#1b1d12", "#3b3f26"], sun: "#e8d9a8", hills: ["#2c3020", "#4a5030", "#6b7144"], bloom: ["#e8d9a8", "#c9b36a", "#f3ecd2"], suit: "#14150e", gown: "#f4efdd" },
+  bloom: { sky: ["#fdf1ec", "#f6dcd3"], sun: "#fff8f4", hills: ["#e9c3b6", "#d99f8f", "#b9806c"], bloom: ["#f4c9c0", "#fbe3dc", "#d9ad35"], suit: "#7a4a2e", gown: "#fffaf7" },
   scratch: { sky: ["#fde3e7", "#f6b8c6"], sun: "#fff6f2", hills: ["#e7a3b4", "#c97d94", "#9e5a75"], bloom: ["#ffd9df", "#f7a3b7", "#fff2f4"], suit: "#4a2b3a", gown: "#fff7f6" },
 };
 
@@ -127,6 +128,7 @@ const DEMOS = [
   { key: "renewal", one: ["Alaia", "အလိုင်ယာ"], two: ["Jeremy", "ဂျယ်ရမီ"], mono: "A&J", tag: ["Celebrate 50 years together on February 20, 2030", "၂၀၃၀ ပြည့်နှစ် ဖေဖော်ဝါရီ ၂၀ ရက်တွင် ၅၀ နှစ်ပြည့်ကို အတူကျင်းပကြပါစို့"] },
   { key: "scrapbook", one: ["Arman Buhay", "အာမန်"], two: ["Lovely Tan", "လာဗ်လီ"], mono: "A&L", tag: ["Our love for gardens (and each other!) grows", "ကျွန်ုပ်တို့၏ ချစ်ခြင်း ကြီးထွားနေသည်"] },
   { key: "letters", one: ["Riley", "Riley"], two: ["Lin", "Lin"], mono: "R&L", tag: ["Forever starts here", "Forever starts here"] },
+  { key: "bloom", one: ["Sacha", "ဆာချာ"], two: ["", ""], mono: "S", tag: ["Our little one turns one", "ကျွန်ုပ်တို့ သမီးလေး တစ်နှစ်ပြည့်ပြီ"] },
   { key: "scratch", one: ["Kaung Myat", "ကောင်းမြတ်"], two: ["Phoo Pwint", "ဖူးပွင့်"], mono: "K&P", tag: ["Love, one scratch at a time", "ချစ်ခြင်းမေတ္တာ"] },
 ] as const;
 
@@ -636,6 +638,50 @@ function lettersFixed() {
   };
 }
 
+/**
+ * Watercolour Bloom is the first birthday design: one name, an age line and party wording. Its painted
+ * pieces (corner, wreath, watercolor) come from supabase/seed-media/bloom when present.
+ */
+function bloomFixed() {
+  const place = { en: "Rose Garden Café", my: "နှင်းဆီဥယျာဉ် ကဖေး" };
+  const address = { en: "No. 12, Inya Road, Yangon", my: "အမှတ် ၁၂၊ အင်းယားလမ်း၊ ရန်ကုန်မြို့" };
+  const ev = (time: string, kind: "ceremony" | "reception" | "other", en: string, my: string) => ({
+    kind,
+    title: { en, my },
+    starts_at_local: `2030-06-15T${time}`,
+    venue_name: place,
+    venue_address: address,
+    map_url: "https://www.google.com/maps/search/?api=1&query=Inya+Road+Yangon",
+  });
+  return {
+    partner_one_name: { en: "Sacha", my: "ဆာချာ" },
+    partner_two_name: {},
+    monogram: "S",
+    tagline: { en: "Our little one turns one", my: "ကျွန်ုပ်တို့ သမီးလေး တစ်နှစ်ပြည့်ပြီ" },
+    invitation_text: {
+      en: "One year of giggles, first steps and sleepy cuddles. Please join us for cake, games and lots of love as Sacha turns one. [Sample wording]",
+      my: "ရယ်မောသံ၊ ပထမဆုံး ခြေလှမ်းများနှင့် ပြည့်နှက်ခဲ့သော တစ်နှစ်တာ။ ဆာချာ၏ ပထမ မွေးနေ့ပွဲသို့ ကြွရောက်ပေးကြပါ။ [နမူနာစာသား]",
+    },
+    closing_quote: { en: "Thank you for loving our little one.", my: "ကျွန်ုပ်တို့ သမီးလေးကို ချစ်ခင်ပေးသည့်အတွက် ကျေးဇူးတင်ပါသည်။" },
+    cover_text: { occasion: "birthday", age: { en: "1st", my: "ပထမ" }, rsvp_contact: "+95 9 123 456 789" },
+    dress_code: {},
+    good_to_know: [],
+    seating_enabled: false,
+    story: [],
+    faq: [
+      { q: { en: "Can I bring my children?", my: "ကလေးများ ခေါ်လာနိုင်ပါသလား?" }, a: { en: "Of course! There will be games and a play corner.", my: "ခေါ်လာနိုင်ပါသည်။ ကစားစရာ ထောင့်လေး ရှိပါသည်။" } },
+      { q: { en: "Is parking available?", my: "ကားရပ်နားရန် နေရာရှိပါသလား?" }, a: { en: "Yes, free parking at the café.", my: "ရှိပါသည်။ ကဖေးတွင် အခမဲ့ ရပ်နားနိုင်ပါသည်။" } },
+    ],
+    guests: [],
+    events: [
+      ev("15:00", "ceremony", "Birthday party", "မွေးနေ့ပွဲ"),
+      ev("16:00", "other", "Cake cutting", "ကိတ်မုန့် ဖြတ်ခြင်း"),
+      ev("16:30", "reception", "Tea and games", "လက်ဖက်ရည်နှင့် ကစားပွဲ"),
+    ],
+    art: {} as Record<string, string>,
+  };
+}
+
 async function main() {
   const only = process.argv.slice(2);
   for (const [n, d] of DEMOS.entries()) {
@@ -657,12 +703,23 @@ async function main() {
       const qr = `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="480"><rect width="480" height="480" fill="#fff"/><rect x="24" y="24" width="432" height="432" fill="none" stroke="#555" stroke-width="6" stroke-dasharray="14 10"/><text x="240" y="230" font-family="sans-serif" font-size="40" text-anchor="middle" fill="#555">DEMO</text><text x="240" y="280" font-family="sans-serif" font-size="40" text-anchor="middle" fill="#555">QR CODE</text></svg>`;
       await sharp(Buffer.from(qr)).png().toFile(path.join(dir, "qr.png"));
       const song = d.key === "record" ? await demoTrack(dir) : null;
-      const cfg = { ...config(d), ...(d.key === "garden" ? gardenFixed() : d.key === "ribbon" ? ribbonFixed() : d.key === "renewal" ? renewalFixed() : d.key === "scrapbook" ? scrapbookFixed() : d.key === "letters" ? lettersFixed() : {}) };
+      const cfg = { ...config(d), ...(d.key === "garden" ? gardenFixed() : d.key === "ribbon" ? ribbonFixed() : d.key === "renewal" ? renewalFixed() : d.key === "scrapbook" ? scrapbookFixed() : d.key === "letters" ? lettersFixed() : d.key === "bloom" ? bloomFixed() : {}) };
+      // Bloom's painted pieces ride along when they are in its media folder (its photos stay generated).
+      if (d.key === "bloom") {
+        const art: Record<string, string> = {};
+        for (const k of ["corner", "wreath", "watercolor"]) {
+          const f = real.find((x) => x.startsWith(`${k}.`));
+          if (!f) continue;
+          if (!useReal) await copyFile(path.join(mediaDir, f), path.join(dir, f));
+          art[k] = f;
+        }
+        (cfg as { art?: Record<string, string> }).art = art;
+      }
       if (useReal) {
         cfg.photos = real
-          .filter((f) => f.endsWith(".jpg"))
+          .filter((f) => f.endsWith(".jpg") && !["watercolor.jpg"].includes(f))
           .sort((a, b) => (a === "cover.jpg" ? -1 : b === "cover.jpg" ? 1 : a.localeCompare(b, undefined, { numeric: true })))
-          .map((f) => ({ file: f, kind: "portrait" as const, cover: f === "cover.jpg", alt: { en: "Wedding photo", my: "မင်္ဂလာဓာတ်ပုံ" }, _i: 0 }));
+          .map((f) => ({ file: f, kind: "portrait" as const, cover: f === "cover.jpg", alt: d.key === "bloom" ? { en: "The birthday girl", my: "မွေးနေ့ရှင်လေး" } : { en: "Wedding photo", my: "မင်္ဂလာဓာတ်ပုံ" }, _i: 0 }));
       }
       await writeFile(
         path.join(dir, "wedding.json"),

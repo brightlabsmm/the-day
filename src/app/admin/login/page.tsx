@@ -1,36 +1,42 @@
 import { Suspense } from "react";
-import { signIn } from "../actions";
+import { signIn } from "@/lib/admin/actions/auth";
+import { buttonClass, Field, Input } from "@/components/admin/ui";
 
 export default function LoginPage(props: PageProps<"/admin/login">) {
   return (
-    <main className="mx-auto grid min-h-svh w-full max-w-sm place-items-center px-4">
-      <Suspense fallback={null}>
-        <LoginForm {...props} />
-      </Suspense>
+    <main className="grid min-h-svh place-items-center px-4">
+      <div className="w-full max-w-sm">
+        <p className="mb-6 text-center">
+          <span className="block text-[2.6rem] leading-none" style={{ fontFamily: 'var(--font-script), "Great Vibes", cursive' }}>
+            The Day
+          </span>
+          <span className="mt-1 block text-[0.7rem] font-medium tracking-[0.25em] text-[#8a7f75] uppercase">Admin</span>
+        </p>
+        <Suspense fallback={null}>
+          <LoginForm {...props} />
+        </Suspense>
+      </div>
     </main>
   );
 }
 
 async function LoginForm({ searchParams }: PageProps<"/admin/login">) {
   const { error } = await searchParams;
-  const input = "mt-1 block w-full border border-navy/40 bg-white/70 px-3 py-2 outline-none focus:border-gold";
   return (
-    <form action={signIn} className="paper frame-double w-full space-y-4 p-8 text-navy">
-      <h1 className="foil font-display text-3xl font-semibold">Admin</h1>
-      <label className="label-caps block">
-        Email
-        <input name="email" type="email" required autoComplete="username" className={input} />
-      </label>
-      <label className="label-caps block">
-        Password
-        <input name="password" type="password" required autoComplete="current-password" className={input} />
-      </label>
+    <form action={signIn} className="space-y-4 rounded-2xl border border-[#e7dccb] bg-white p-6 shadow-[0_1px_2px_rgba(60,40,20,0.05)]">
+      <h1 className="text-lg font-semibold">Sign in</h1>
+      <Field label="Email">
+        <Input name="email" type="email" required autoComplete="username" />
+      </Field>
+      <Field label="Password">
+        <Input name="password" type="password" required autoComplete="current-password" />
+      </Field>
       {error && (
-        <p role="alert" className="text-sm text-red-800">
+        <p role="alert" className="text-sm text-[#a3392f]">
           {error === "forbidden" ? "This account is not an admin." : "Incorrect email or password."}
         </p>
       )}
-      <button className="label-caps w-full border border-navy bg-navy px-6 py-2.5 text-ivory">Sign in</button>
+      <button className={`${buttonClass.primary} w-full py-2.5`}>Sign in</button>
     </form>
   );
 }

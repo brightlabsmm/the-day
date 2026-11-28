@@ -1428,3 +1428,4 @@ function LettersFace({ opening, onOpen, locale, names, dateLabel }: Omit<FacePro
     </div>
   );
 }
+

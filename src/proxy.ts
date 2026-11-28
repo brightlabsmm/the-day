@@ -24,8 +24,16 @@ export async function proxy(request: NextRequest) {
     },
   );
 
-  const { data } = await supabase.auth.getClaims();
   const path = request.nextUrl.pathname;
+  // Weddings used to live at /admin/<slug>/...; they now live at /admin/weddings/<slug>/...
+  const old = /^\/admin\/([a-z0-9]+(?:-[a-z0-9]+)*)(\/.*)?$/.exec(path);
+  if (old && !["login", "weddings", "gifts"].includes(old[1])) {
+    const url = request.nextUrl.clone();
+    url.pathname = `/admin/weddings/${old[1]}${old[2] ?? ""}`;
+    return NextResponse.redirect(url, 308);
+  }
+
+  const { data } = await supabase.auth.getClaims();
   if (!data?.claims && path !== "/admin/login") {
     return NextResponse.redirect(new URL("/admin/login", request.url));
   }

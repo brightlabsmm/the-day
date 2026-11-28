@@ -18,6 +18,8 @@ type Props = {
   slug: string;
   locale: Locale;
   defaultName: string;
+  /** A line above the form in place of "Leave a blessing for the couple", e.g. for a birthday. */
+  intro?: string;
 } & (
   | { mode: "guest"; token: string; existing: string | null; canEdit: boolean }
   | { mode: "public" }
@@ -50,7 +52,7 @@ export function WishForm(props: Props) {
 
   return (
     <form action={formAction} className="mt-6 space-y-3 text-left">
-      <p className="card-body text-center">{s("wishesIntro", locale)}</p>
+      <p className="card-body text-center">{props.intro ?? s("wishesIntro", locale)}</p>
       <div>
         <label htmlFor="wish-name" className="label-caps text-ink-soft">
           {s("wishName", locale)}

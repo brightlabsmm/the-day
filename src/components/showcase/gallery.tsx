@@ -8,7 +8,7 @@ export type ShowcaseDesign = {
   name: string;
   mood: string;
   blurb: string;
-  category?: "wedding" | "gift";
+  category?: "wedding" | "birthday" | "gift";
   badge?: string;
   previewUrl?: string;
   viewUrl?: string;
@@ -74,17 +74,19 @@ function Preview({ design, device, lang }: { design: ShowcaseDesign; device: Dev
 export function ShowcaseGallery({ designs }: { designs: ShowcaseDesign[] }) {
   const [device, setDevice] = useState<DeviceKey>("phone");
   const [lang, setLang] = useState<"en" | "my">("en");
-  const [filter, setFilter] = useState<"all" | "wedding" | "gift">("all");
+  const [filter, setFilter] = useState<"all" | "wedding" | "birthday" | "gift">("all");
   const d = DEVICES[device];
 
   const pill = (on: boolean) =>
     `inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition ${on ? "border-[#4a3a2e] bg-[#4a3a2e] text-[#f6efe2]" : "border-[#4a3a2e]/30 hover:border-[#4a3a2e]"}`;
 
-  const weddingCount = designs.filter((d) => d.category !== "gift").length;
+  const weddingCount = designs.filter((d) => !d.category || d.category === "wedding").length;
+  const birthdayCount = designs.filter((d) => d.category === "birthday").length;
   const giftCount = designs.filter((d) => d.category === "gift").length;
 
   const filtered = designs.filter((d) => {
-    if (filter === "wedding") return d.category !== "gift";
+    if (filter === "wedding") return !d.category || d.category === "wedding";
+    if (filter === "birthday") return d.category === "birthday";
     if (filter === "gift") return d.category === "gift";
     return true;
   });
@@ -100,6 +102,11 @@ export function ShowcaseGallery({ designs }: { designs: ShowcaseDesign[] }) {
             <button type="button" aria-pressed={filter === "wedding"} onClick={() => setFilter("wedding")} className={pill(filter === "wedding")}>
               Weddings ({weddingCount})
             </button>
+            {birthdayCount > 0 && (
+              <button type="button" aria-pressed={filter === "birthday"} onClick={() => setFilter("birthday")} className={pill(filter === "birthday")}>
+                Birthdays ({birthdayCount})
+              </button>
+            )}
             <button type="button" aria-pressed={filter === "gift"} onClick={() => setFilter("gift")} className={pill(filter === "gift")}>
               Gift Sanctuaries ({giftCount})
             </button>

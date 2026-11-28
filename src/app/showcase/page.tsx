@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { TEMPLATES } from "@/lib/templates";
+import { TEMPLATES, occasionOfTemplate } from "@/lib/templates";
 import { ShowcaseGallery, type ShowcaseDesign } from "@/components/showcase/gallery";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 
 export const metadata: Metadata = {
   title: "Page designs",
-  description: "Choose how your invitation looks. Interactive designs for weddings and sacred gift sanctuaries in Burmese and English.",
+  description: "Choose how your invitation looks. Interactive designs for weddings, birthdays and sacred gift sanctuaries in Burmese and English.",
 };
 
 const LOTUS_SANCTUARY_DESIGN: ShowcaseDesign = {
@@ -26,7 +26,7 @@ export default function ShowcasePage() {
       name: t.name,
       mood: t.mood,
       blurb: t.blurb,
-      category: "wedding" as const,
+      category: occasionOfTemplate(t.key),
     })),
     LOTUS_SANCTUARY_DESIGN,
   ];
@@ -36,10 +36,10 @@ export default function ShowcasePage() {
       <SiteHeader current="showcase" />
       <main className="flex-1 px-4 pt-6 pb-16 sm:px-8 sm:pt-8 sm:pb-20">
         <header className="mx-auto max-w-3xl text-center">
-          <p className="label-caps text-xs text-[#8a7766]">Seventeen designs</p>
+          <p className="label-caps text-xs text-[#8a7766]">{designs.length} designs</p>
           <h1 className="font-display mt-3 text-[clamp(2rem,6vw,3.6rem)] leading-tight font-semibold">Choose your invitation</h1>
           <p className="mx-auto mt-4 max-w-xl text-[1.05rem] text-[#6e5f53] sm:text-lg">
-            Seventeen interactive designs across wedding invitations and sacred gift sanctuaries, each in Burmese and English. Switch the screen size to see how each one adapts.
+            {designs.length} interactive designs across wedding and birthday invitations and sacred gift sanctuaries, each in Burmese and English. Switch the screen size to see how each one adapts.
           </p>
         </header>
 

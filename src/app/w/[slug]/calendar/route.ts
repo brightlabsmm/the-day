@@ -1,3 +1,4 @@
+import { invitationTitle, occasionOf } from "@/lib/occasion";
 import { connection } from "next/server";
 import { getInvitation } from "@/lib/invitation";
 import { t } from "@/lib/i18n/numerals";
@@ -13,18 +14,18 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
   const e = invitation?.events.find((x) => x.kind === "ceremony") ?? invitation?.events[0];
   if (!invitation || !e) return new Response("Not found", { status: 404 });
 
-  const names = `${t(invitation.wedding.partner_one_name, "en")} & ${t(invitation.wedding.partner_two_name, "en")}`;
+  const names = invitationTitle(invitation.wedding, "en");
   const end = e.ends_at ?? new Date(Date.parse(e.starts_at) + 2 * 3600_000).toISOString();
   const body = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//THE DAY//Wedding invitation//EN",
+    "PRODID:-//THE DAY//Invitation//EN",
     "BEGIN:VEVENT",
     `UID:${invitation.wedding.id}-${e.id}@theday`,
     `DTSTAMP:${stamp(new Date().toISOString())}`,
     `DTSTART:${stamp(e.starts_at)}`,
     `DTEND:${stamp(end)}`,
-    `SUMMARY:${esc(`${names} — Wedding`)}`,
+    `SUMMARY:${esc(occasionOf(invitation.wedding.cover_text) === "birthday" ? names : `${names} — Wedding`)}`,
     `LOCATION:${esc([t(e.venue_name, "en"), t(e.venue_address, "en")].filter(Boolean).join(", "))}`,
     "END:VEVENT",
     "END:VCALENDAR",

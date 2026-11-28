@@ -3,6 +3,7 @@ import type { AlbumPhoto } from "@/lib/album";
 import { t, type Locale } from "@/lib/i18n/numerals";
 import { formatLongDate, formatShortDate, formatTimeRange, weddingYear } from "@/lib/i18n/datetime";
 import { mediaUrl } from "@/lib/media";
+import { ageOf, birthdayLine, invitationTitle, occasionOf } from "@/lib/occasion";
 
 export type TemplateProps = {
   invitation: Invitation;
@@ -46,7 +47,12 @@ export function viewOf(invitation: Invitation, locale: Locale) {
     gallery,
     venues,
     hasLineage: lineage,
-    names: { one: t(wedding.partner_one_name, locale), two: t(wedding.partner_two_name, locale) },
+    occasion: occasionOf(wedding.cover_text),
+    names: { one: t(wedding.partner_one_name, locale), two: occasionOf(wedding.cover_text) === "birthday" ? "" : t(wedding.partner_two_name, locale) },
+    /** "Sacha's 1st Birthday" or "Thiha & Yadanar". */
+    title: invitationTitle(wedding, locale),
+    /** "1st Birthday"; empty for a wedding. */
+    birthday: occasionOf(wedding.cover_text) === "birthday" ? birthdayLine(ageOf(wedding.cover_text, locale), locale) : "",
     year: main ? weddingYear(main.starts_at, tz) : null,
     dateShort: main ? formatShortDate(main.starts_at, tz, locale) : "",
     dateLong: main ? formatLongDate(main.starts_at, tz, locale) : "",

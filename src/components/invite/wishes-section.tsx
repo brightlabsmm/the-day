@@ -17,6 +17,7 @@ export async function WishesSection({
   token,
   plain,
   heading,
+  intro,
 }: {
   invitation: Invitation;
   locale: Locale;
@@ -24,6 +25,8 @@ export async function WishesSection({
   plain?: boolean;
   /** A design's own heading. The section then has no card around it, so the design can style it all. */
   heading?: React.ReactNode;
+  /** Replaces the default line above the form ("Leave a blessing for the couple"). */
+  intro?: string;
 }) {
   const { wedding, guest } = invitation;
   if (!wedding.wishes_enabled) return null;
@@ -32,7 +35,7 @@ export async function WishesSection({
     const wishes = await getPublicWishes(wedding.slug);
     return (
       <Card locale={locale} wishes={wishes} plain={plain} heading={heading}>
-        <WishForm mode="public" slug={wedding.slug} locale={locale} defaultName="" />
+        <WishForm mode="public" slug={wedding.slug} locale={locale} defaultName="" intro={intro} />
       </Card>
     );
   }
@@ -50,6 +53,7 @@ export async function WishesSection({
         defaultName={mine?.author_name ?? guestName(guest, locale)}
         existing={mine?.message ?? null}
         canEdit={wedding.wishes_editable}
+        intro={intro}
       />
     </Card>
   );

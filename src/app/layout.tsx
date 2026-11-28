@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Cutive, DM_Mono, Great_Vibes, Jost, League_Gothic, Libre_Caslon_Text, Mr_Dafoe, Noto_Serif_Myanmar, Pacifico, Playfair_Display, Sacramento, Special_Elite, Yellowtail } from "next/font/google";
+import { Cormorant_Garamond, Dancing_Script, Gaegu, Cutive, DM_Mono, Great_Vibes, Jost, Mea_Culpa, League_Gothic, Libre_Caslon_Text, Mr_Dafoe, Noto_Serif_Myanmar, Pacifico, Playfair_Display, Sacramento, Special_Elite, Yellowtail } from "next/font/google";
 import "./globals.css";
 import "./templates.css";
 
@@ -46,6 +46,12 @@ const elite = Special_Elite({ variable: "--font-scrap-type", subsets: ["latin"],
 const leagueGothic = League_Gothic({ variable: "--font-letters-display", subsets: ["latin"], display: "swap" });
 const cutive = Cutive({ variable: "--font-letters-type", subsets: ["latin"], weight: "400", display: "swap" });
 
+// Used only by the Watercolour Bloom birthday design, chosen to match its card: a brush script for the
+// name, a fine tall script for "1st Birthday", and a rounded handwriting for everything else.
+const dancing = Dancing_Script({ variable: "--font-bloom-name", subsets: ["latin"], weight: "600", display: "swap" });
+const meaCulpa = Mea_Culpa({ variable: "--font-bloom-script", subsets: ["latin"], weight: "400", display: "swap" });
+const gaegu = Gaegu({ variable: "--font-bloom-hand", subsets: ["latin"], weight: ["400", "700"], display: "swap" });
+
 const jost = Jost({
   variable: "--font-jost",
   subsets: ["latin"],
@@ -73,7 +79,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="my"
       // Browser extensions add attributes to <html> and <body> before React loads; ignore those differences.
       suppressHydrationWarning
-      className={`${cormorant.variable} ${notoMyanmar.variable} ${jost.variable} ${playfair.variable} ${greatVibes.variable} ${pacifico.variable} ${dmMono.variable} ${mrDafoe.variable} ${yellowtail.variable} ${caslon.variable} ${rainbow.variable} ${elite.variable} ${leagueGothic.variable} ${cutive.variable} h-full`}
+      className={`${cormorant.variable} ${notoMyanmar.variable} ${jost.variable} ${playfair.variable} ${greatVibes.variable} ${pacifico.variable} ${dmMono.variable} ${mrDafoe.variable} ${yellowtail.variable} ${caslon.variable} ${rainbow.variable} ${elite.variable} ${leagueGothic.variable} ${cutive.variable} ${dancing.variable} ${meaCulpa.variable} ${gaegu.variable} h-full`}
     >
       <body className="min-h-full" suppressHydrationWarning>
         {children}

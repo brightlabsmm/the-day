@@ -1,0 +1,33 @@
+/* The admin's own few rules; everything else is Tailwind in src/components/admin/ui.tsx. */
+
+/* "Saved" fades away a few seconds after it appears. */
+@keyframes admin-fade {
+  0%,
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.admin-fade {
+  animation: admin-fade 3.5s ease forwards;
+}
+
+.admin [lang="my"] {
+  font-family: var(--font-noto-myanmar), "Noto Serif Myanmar", "Myanmar Text", serif;
+}
+
+/* Scrollable tab rows without a visible scrollbar. */
+.admin-scroll {
+  scrollbar-width: none;
+}
+.admin-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-fade {
+    animation: none;
+  }
+}
